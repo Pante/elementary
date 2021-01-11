@@ -1,4 +1,4 @@
-name: Chimera CI/CD
+name: Elementary CI/CD
 
 on:
   push:
