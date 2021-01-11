@@ -1,7 +1,3 @@
-<p align = "center">
-  <img src = "https://i.imgur.com/iHgSlXk.png">
-</p>
-
 Elementary is  mono-repository for annotation processing libraries and tools. 
 
 **Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
