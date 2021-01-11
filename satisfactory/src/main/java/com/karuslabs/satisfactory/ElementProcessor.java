@@ -23,8 +23,6 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.annotations.VisibleForOverride;
-
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
@@ -43,7 +41,6 @@ public abstract class ElementProcessor extends AnnotationProcessor {
     
     protected abstract void process(Element element);
     
-    @VisibleForOverride
     protected void clear() {}
     
 }

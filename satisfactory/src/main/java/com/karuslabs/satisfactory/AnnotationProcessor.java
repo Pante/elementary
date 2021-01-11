@@ -23,13 +23,13 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.type.TypeMirrors;
 import com.karuslabs.annotations.*;
+import com.karuslabs.satisfactory.type.TypeMirrors;
 
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
-public abstract class AnnotationProcessor extends AbstractProcessor {    
+public abstract class AnnotationProcessor extends AbstractProcessor { 
     
     protected @Lazy Elements elements;
     protected @Lazy TypeMirrors types;

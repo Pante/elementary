@@ -25,11 +25,30 @@
         </snapshotRepository>
     </distributionManagement>
     
+    <repositories>
+        <repository>
+            <id>chimera-releases</id>
+            <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
+        </repository>
+        
+        <repository>
+            <id>chimera-snapshots</id>
+            <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
+        </repository>
+    </repositories>
+    
     <modules>
         <module>satisfactory</module>
     </modules>
     
-    <dependencies>      
+    <dependencies>
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>annotations</artifactId>
+            <version>4.9.0-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+         
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
