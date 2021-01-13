@@ -21,76 +21,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary;
-
-import com.karuslabs.annotations.Lazy;
+package com.karuslabs.elementary.diagnostics;
 
 import java.util.*;
 import javax.tools.*;
 
-import static javax.tools.Diagnostic.Kind.*;
+public abstract class Diagnostics {
 
-public class Diagnostics implements DiagnosticListener<JavaFileObject> {
-    
     public final List<Diagnostic<? extends JavaFileObject>> all = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> errors = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> warnings = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> notes = new ArrayList<>();
     
-    @Override
-    public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-        all.add(diagnostic);
-        switch (diagnostic.getKind()) {
-            case ERROR:
-                errors.add(diagnostic);
-                break;
-                
-            case MANDATORY_WARNING:
-            case WARNING:
-                warnings.add(diagnostic);
-                break;
-            
-            case NOTE:
-                notes.add(diagnostic);
-                break;
-        }
-    }
-    
-    public Finder find() {
-        return new Finder();
-    }
-    
-    
-    public class Finder {
-        
-        private @Lazy List<Diagnostic<? extends JavaFileObject>> diagnostics;
-        
-        public Finder match(Kind... kinds)
-        
-        
-        public Finder errors() {
-            return kind(errors);
-        }
-        
-        public Finder warnings() {
-            return kind(warnings);
-        }
-        
-        public Finder notes() {
-            return kind(notes);
-        }
-        
-        private Finder kind(List<Diagnostic<? extends JavaFileObject>> source) {
-            if (diagnostics == null) {
-                diagnostics = new ArrayList<>(source);
-                
-            } else {
-                diagnostics.retainAll(source);
+    public static class Listener extends Diagnostics implements DiagnosticListener<JavaFileObject> {
+        @Override
+        public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
+            all.add(diagnostic);
+            switch (diagnostic.getKind()) {
+                case ERROR:
+                    errors.add(diagnostic);
+                    
+                case MANDATORY_WARNING:
+                case WARNING:
+                    warnings.add(diagnostic);
+                    
+                case NOTE:
+                    notes.add(diagnostic);
             }
-            
-            return this;
-        }
-        
+        } 
     }
-
+    
 }
