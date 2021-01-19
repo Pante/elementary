@@ -31,7 +31,7 @@ import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Finder<Self extends Finder> {
+public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
     private final List<Diagnostic<? extends JavaFileObject>> results;
     private final Diagnostics diagnostics;
@@ -41,48 +41,69 @@ public abstract class Finder<Self extends Finder> {
         this.diagnostics = diagnostics;
     }
     
-    public Self kind(Kind... kinds) {
+    @Override
+    public Iterator<Diagnostic<? extends JavaFileObject>> iterator() {
+        return results.iterator();
+    }
+    
+    public Finder kind(Kind... kinds) {
         var allowed = Set.of(kinds);
         results.removeIf(result -> !allowed.contains(result.getKind()));
-        return self();
+        return this;
     }
     
-    public Self errors() {
+    public Finder errors() {
         results.retainAll(diagnostics.errors);
-        return self();
+        return this;
     }
     
-    public Self warnings() {
+    public Finder warnings() {
         results.retainAll(diagnostics.warnings);
-        return self();
+        return this;
     }
     
-    public Self notes() {
+    public Finder notes() {
         results.retainAll(diagnostics.notes);
-        return self();
+        return this;
     }
     
     
-    public Self where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
+    public Finder in(JavaFileObject file) {
+        var path = file.toUri().getPath();
+        results.removeIf(result -> !result.getSource().toUri().getPath().equals(path));
+        return this;
+    }
+    
+    public Finder on(long line) {
+        results.removeIf(result -> result.getLineNumber() != line);
+        return this;
+    }
+    
+    public Finder at(long column) {
+        results.removeIf(result -> result.getColumnNumber() != column);
+        return this;
+    }
+    
+    
+    public Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
         results.removeIf(Predicate.not(condition));
-        return self();
+        return this;
     }
     
     
-    public Self matches(String message) {
+    public Finder matches(String message) {
         results.removeIf(result -> !result.getMessage(Locale.getDefault()).equals(message));
-        return self();
+        return this;
     }
     
-    
-    public Self contains(String substring) {
+    public Finder contains(String substring) {
         results.removeIf(result -> !result.getMessage(Locale.getDefault()).contains(substring));
-        return self();
+        return this;
     }
     
-    public Self contains(Pattern pattern) {
+    public Finder contains(Pattern pattern) {
         results.removeIf(result -> !pattern.matcher(result.getMessage(Locale.getDefault())).matches());
-        return self();
+        return this;
     }
     
     
@@ -111,8 +132,5 @@ public abstract class Finder<Self extends Finder> {
     public int count() {
         return results.size();
     }
-    
-    
-    protected abstract Self self();
     
 }

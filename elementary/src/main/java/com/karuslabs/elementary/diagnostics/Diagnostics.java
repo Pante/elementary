@@ -51,4 +51,8 @@ public abstract class Diagnostics {
         } 
     }
     
+    public Finder find() {
+        return new Finder(this);
+    }
+    
 }
