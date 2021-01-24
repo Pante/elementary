@@ -26,30 +26,28 @@ package com.karuslabs.elementary.diagnostics;
 import java.util.*;
 import javax.tools.*;
 
-public abstract class Diagnostics {
+public abstract class Diagnostics implements DiagnosticListener<JavaFileObject> {
 
     public final List<Diagnostic<? extends JavaFileObject>> all = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> errors = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> warnings = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> notes = new ArrayList<>();
     
-    public static class Listener extends Diagnostics implements DiagnosticListener<JavaFileObject> {
-        @Override
-        public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-            all.add(diagnostic);
-            switch (diagnostic.getKind()) {
-                case ERROR:
-                    errors.add(diagnostic);
-                    
-                case MANDATORY_WARNING:
-                case WARNING:
-                    warnings.add(diagnostic);
-                    
-                case NOTE:
-                    notes.add(diagnostic);
-            }
-        } 
-    }
+    @Override
+    public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
+        all.add(diagnostic);
+        switch (diagnostic.getKind()) {
+            case ERROR:
+                errors.add(diagnostic);
+
+            case MANDATORY_WARNING:
+            case WARNING:
+                warnings.add(diagnostic);
+
+            case NOTE:
+                notes.add(diagnostic);
+        }
+    } 
     
     public Finder find() {
         return new Finder(this);

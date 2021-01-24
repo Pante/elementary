@@ -46,9 +46,13 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
         return results.iterator();
     }
     
+    
     public Finder kind(Kind... kinds) {
-        var allowed = Set.of(kinds);
-        results.removeIf(result -> !allowed.contains(result.getKind()));
+        return kind(Set.of(kinds));
+    }
+    
+    public Finder kind(Collection<Kind> kinds) {
+        results.removeIf(result -> !kinds.contains(result.getKind()));
         return this;
     }
     
