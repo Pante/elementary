@@ -39,10 +39,12 @@ public abstract class Diagnostics implements DiagnosticListener<JavaFileObject> 
         switch (diagnostic.getKind()) {
             case ERROR:
                 errors.add(diagnostic);
+                return;
 
             case MANDATORY_WARNING:
             case WARNING:
                 warnings.add(diagnostic);
+                return;
 
             case NOTE:
                 notes.add(diagnostic);
