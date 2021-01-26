@@ -24,6 +24,7 @@
 package com.karuslabs.elementary.file;
 
 import java.io.*;
+import java.nio.file.Path;
 import java.util.*;
 import javax.tools.*;
 
@@ -40,6 +41,7 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
         return manager.isSameFile(a, b);
     }
 
+    
     @Override
     public Iterable<? extends JavaFileObject> getJavaFileObjectsFromFiles(Iterable<? extends File> files) {
         return manager.getJavaFileObjectsFromFiles(files);
@@ -61,40 +63,11 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
     }
 
     @Override
-    public void setLocation(Location location, Iterable<? extends File> files) throws IOException {
-        manager.setLocation(location, files);
-    }
-
-    @Override
     public Iterable<? extends File> getLocation(Location location) {
         return manager.getLocation(location);
     }
-
-    @Override
-    public ClassLoader getClassLoader(Location location) {
-        return manager.getClassLoader(location);
-    }
-
-    @Override
-    public Iterable<JavaFileObject> list(Location location, String pack, Set<JavaFileObject.Kind> kinds, boolean recursive) throws IOException {
-        return manager.list(location, pack, kinds, recursive);
-    }
-
-    @Override
-    public String inferBinaryName(Location location, JavaFileObject file) {
-        return manager.inferBinaryName(location, file);
-    }
-
-    @Override
-    public boolean handleOption(String current, Iterator<String> remaining) {
-        return manager.handleOption(current, remaining);
-    }
-
-    @Override
-    public boolean hasLocation(Location location) {
-        return manager.hasLocation(location);
-    }
-
+    
+    
     @Override
     public JavaFileObject getJavaFileForInput(Location location, String className, JavaFileObject.Kind kind) throws IOException {
         return manager.getJavaFileForInput(location, className, kind);
@@ -114,6 +87,62 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
     public FileObject getFileForOutput(Location location, String packageName, String relativeName, FileObject sibling) throws IOException {
         return manager.getFileForOutput(location, packageName, relativeName, sibling);
     }
+    
+    
+    @Override
+    public void setLocation(Location location, Iterable<? extends File> files) throws IOException {
+        manager.setLocation(location, files);
+    }
+    
+    @Override
+    public void setLocationForModule(Location location, String moduleName, Collection<? extends Path> paths) throws IOException {
+        manager.setLocationForModule(location, moduleName, paths);
+    }
+    
+    @Override
+    public void setLocationFromPaths(Location location, Collection<? extends Path> paths) throws IOException {
+        manager.setLocationFromPaths(location, paths);
+    }
+    
+    @Override
+    public void setPathFactory(PathFactory factory) {
+        manager.setPathFactory(factory);
+    }
+    
+    
+    @Override
+    public boolean hasLocation(Location location) {
+        return manager.hasLocation(location);
+    }
+    
+
+    @Override
+    public ClassLoader getClassLoader(Location location) {
+        return manager.getClassLoader(location);
+    }
+
+    
+    @Override
+    public Iterable<JavaFileObject> list(Location location, String pack, Set<JavaFileObject.Kind> kinds, boolean recursive) throws IOException {
+        return manager.list(location, pack, kinds, recursive);
+    }
+
+    @Override
+    public String inferBinaryName(Location location, JavaFileObject file) {
+        return manager.inferBinaryName(location, file);
+    }
+
+    
+    @Override
+    public boolean handleOption(String current, Iterator<String> remaining) {
+        return manager.handleOption(current, remaining);
+    }
+    
+    @Override
+    public int isSupportedOption(String option) {
+        return manager.isSupportedOption(option);
+    }
+
 
     @Override
     public void flush() throws IOException {
@@ -124,12 +153,5 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
     public void close() throws IOException {
         manager.close();
     }
-
-    @Override
-    public int isSupportedOption(String option) {
-        return manager.isSupportedOption(option);
-    }
-    
-    SimpleJavaFileObject object
 
 }

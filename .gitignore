@@ -53,3 +53,5 @@ Temporary Items
 /satisfactory/target/
 
 *.iml
+/elementary/target/
+/elementary-core/target/
