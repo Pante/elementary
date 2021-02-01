@@ -23,20 +23,33 @@
  */
 package com.karuslabs.elementary;
 
+import com.karuslabs.elementary.file.MemoryFileManager;
+
+import java.io.File;
+import java.util.*;
+import javax.annotation.processing.Processor;
 import javax.tools.*;
 
 public class Compiler {
-
-    private final JavaCompiler compiler;
-    private final StandardJavaFileManager manager;
     
-    Compiler(JavaCompiler compiler, StandardJavaFileManager manager) {
-        this.compiler = compiler;
-        this.manager = manager;
+    public static Compiler javac() {
+        return new Compiler(ToolProvider.getSystemJavaCompiler());
     }
     
     
+    private final JavaCompiler compiler;
+    private List<Processor> processors = new ArrayList<>();
+    private List<String> options = new ArrayList<>();
+    private List<File> classpath = new ArrayList<>();
+    private List<File> annotationProcessorPath = new ArrayList<>();
     
+    Compiler(JavaCompiler compiler) {
+        this.compiler = compiler;
+    }
+    
+    public Compiler classpath(ClassLoader loader) {
+        
+    }
     
     
 }

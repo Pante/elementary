@@ -25,7 +25,8 @@ package com.karuslabs.elementary.file;
 
 import com.karuslabs.annotations.*;
 
-import java.net.URI;
+import java.io.*;
+import java.net.*;
 import javax.tools.*;
 
 import static javax.tools.JavaFileObject.Kind.SOURCE;
@@ -45,6 +46,34 @@ public @Static class FileObjects {
     }
     
     
+    public static JavaFileObject ofResource(String resource) {
+        return ofResource(FileObjects.class.getClassLoader().getResource(resource));
+    }
+    
+    public static JavaFileObject ofResource(URL resource) {        
+        try (var stream = resource.openStream()) {
+            var uri = uri(resource);
+            return new ByteFileObject(uri, deduce(uri), stream.readAllBytes());
+            
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+            
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
+        }
+    }
+    
+    static URI uri(URL resource) throws URISyntaxException {
+        if (!resource.getProtocol().equals("jar")) {
+            return resource.toURI();
+        }
+        
+        return URI.create(resource.getPath().split("!")[1]);
+    }
+    
+    
+    
+    
     public static JavaFileObject.Kind deduce(URI uri) {
         var path = uri.getPath();
         for (var kind : JavaFileObject.Kind.values()) {
@@ -52,7 +81,6 @@ public @Static class FileObjects {
                 return kind;
             }
         }
-        
         return JavaFileObject.Kind.OTHER;
     }
     

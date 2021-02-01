@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * diagnostics copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.diagnostics;
+package com.karuslabs.elementary;
 
 import java.util.*;
 import java.util.function.Predicate;
@@ -33,17 +33,17 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
-    private final List<Diagnostic<? extends JavaFileObject>> results;
-    private final Diagnostics diagnostics;
+    private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
+    private final Results results;
     
-    public Finder(Diagnostics diagnostics) {
-        results = new ArrayList<>(diagnostics.all);
-        this.diagnostics = diagnostics;
+    public Finder(Results results) {
+        diagnostics = new ArrayList<>(results.diagnostics);
+        this.results = results;
     }
     
     @Override
     public Iterator<Diagnostic<? extends JavaFileObject>> iterator() {
-        return results.iterator();
+        return diagnostics.iterator();
     }
     
     
@@ -52,76 +52,76 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     public Finder kind(Collection<Kind> kinds) {
-        results.removeIf(result -> !kinds.contains(result.getKind()));
+        diagnostics.removeIf(result -> !kinds.contains(result.getKind()));
         return this;
     }
     
     public Finder errors() {
-        results.retainAll(diagnostics.errors);
+        diagnostics.retainAll(results.errors);
         return this;
     }
     
     public Finder warnings() {
-        results.retainAll(diagnostics.warnings);
+        diagnostics.retainAll(results.warnings);
         return this;
     }
     
     public Finder notes() {
-        results.retainAll(diagnostics.notes);
+        diagnostics.retainAll(results.notes);
         return this;
     }
     
     
     public Finder in(JavaFileObject file) {
         var path = file.toUri().getPath();
-        results.removeIf(result -> !result.getSource().toUri().getPath().equals(path));
+        diagnostics.removeIf(result -> !result.getSource().toUri().getPath().equals(path));
         return this;
     }
     
     public Finder on(long line) {
-        results.removeIf(result -> result.getLineNumber() != line);
+        diagnostics.removeIf(result -> result.getLineNumber() != line);
         return this;
     }
     
     public Finder at(long column) {
-        results.removeIf(result -> result.getColumnNumber() != column);
+        diagnostics.removeIf(result -> result.getColumnNumber() != column);
         return this;
     }
     
     
     public Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
-        results.removeIf(Predicate.not(condition));
+        diagnostics.removeIf(Predicate.not(condition));
         return this;
     }
     
     
     public Finder matches(String message) {
-        results.removeIf(result -> !result.getMessage(Locale.getDefault()).equals(message));
+        diagnostics.removeIf(result -> !result.getMessage(Locale.getDefault()).equals(message));
         return this;
     }
     
     public Finder contains(String substring) {
-        results.removeIf(result -> !result.getMessage(Locale.getDefault()).contains(substring));
+        diagnostics.removeIf(result -> !result.getMessage(Locale.getDefault()).contains(substring));
         return this;
     }
     
     public Finder contains(Pattern pattern) {
-        results.removeIf(result -> !pattern.matcher(result.getMessage(Locale.getDefault())).matches());
+        diagnostics.removeIf(result -> !pattern.matcher(result.getMessage(Locale.getDefault())).matches());
         return this;
     }
     
     
     public @Nullable Diagnostic<? extends JavaFileObject> one() {
-        return results.size() == 1 ? results.get(0) : null;
+        return diagnostics.size() == 1 ? diagnostics.get(0) : null;
     }
     
     public List<Diagnostic<? extends JavaFileObject>> list() {
-        return results;
+        return diagnostics;
     }
     
     public Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
         var map = new HashMap<Kind, List<Diagnostic<? extends JavaFileObject>>>();
-        for (var result : results) {
+        for (var result : diagnostics) {
             var list = map.get(result.getKind());
             if (list == null) {
                 map.put(result.getKind(), list = new ArrayList<>());
@@ -134,7 +134,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     public int count() {
-        return results.size();
+        return diagnostics.size();
     }
     
 }
