@@ -37,6 +37,11 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
     }
     
     @Override
+    public boolean contains(Location location, FileObject fo) throws IOException {
+        return manager.contains(location, fo);
+    }
+    
+    @Override
     public boolean isSameFile(FileObject a, FileObject b) {
         return manager.isSameFile(a, b);
     }
@@ -62,9 +67,25 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
         return manager.getJavaFileObjects(strings);
     }
 
+    
     @Override
     public Iterable<? extends File> getLocation(Location location) {
         return manager.getLocation(location);
+    }
+    
+    @Override
+    public Location getLocationForModule(Location location, String moduleName) throws IOException {
+        return manager.getLocationForModule(location, moduleName);
+    }
+    
+    @Override
+    public Location getLocationForModule(Location location, JavaFileObject file) throws IOException {
+        return manager.getLocationForModule(location, file);
+    }
+    
+    @Override
+    public Iterable<Set<Location>> listLocationsForModules(Location location) throws IOException {
+        return manager.listLocationsForModules(location);
     }
     
     
@@ -115,10 +136,15 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
         return manager.hasLocation(location);
     }
     
-
+    
     @Override
     public ClassLoader getClassLoader(Location location) {
         return manager.getClassLoader(location);
+    }
+    
+    @Override
+    public <S> ServiceLoader<S> getServiceLoader(Location location, Class<S> service) throws  IOException {
+        return manager.getServiceLoader(location, service);
     }
 
     
@@ -127,9 +153,20 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
         return manager.list(location, pack, kinds, recursive);
     }
 
+    
+    @Override
+    public Path asPath(FileObject file) {
+        return manager.asPath(file);
+    }
+    
     @Override
     public String inferBinaryName(Location location, JavaFileObject file) {
         return manager.inferBinaryName(location, file);
+    }
+    
+    @Override
+    public String inferModuleName(Location location) throws IOException {
+        return manager.inferModuleName(location);
     }
 
     

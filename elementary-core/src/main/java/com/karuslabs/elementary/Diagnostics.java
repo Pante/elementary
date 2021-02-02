@@ -11,7 +11,7 @@
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * diagnostics copies or substantial portions of the Software.
+ * all copies or substantial portions of the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -26,16 +26,16 @@ package com.karuslabs.elementary;
 import java.util.*;
 import javax.tools.*;
 
-public abstract class Results implements DiagnosticListener<JavaFileObject> {
-
-    public final List<Diagnostic<? extends JavaFileObject>> diagnostics = new ArrayList<>();
+ public class Diagnostics implements DiagnosticListener<JavaFileObject> {
+        
+    public final List<Diagnostic<? extends JavaFileObject>> all = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> errors = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> warnings = new ArrayList<>();
     public final List<Diagnostic<? extends JavaFileObject>> notes = new ArrayList<>();
-    
+
     @Override
     public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
-        diagnostics.add(diagnostic);
+        all.add(diagnostic);
         switch (diagnostic.getKind()) {
             case ERROR:
                 errors.add(diagnostic);
@@ -50,9 +50,5 @@ public abstract class Results implements DiagnosticListener<JavaFileObject> {
                 notes.add(diagnostic);
         }
     } 
-    
-    public Finder find() {
-        return new Finder(this);
-    }
-    
+
 }

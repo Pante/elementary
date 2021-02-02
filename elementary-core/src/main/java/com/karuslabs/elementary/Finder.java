@@ -34,11 +34,11 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
-    private final Results results;
+    private final Result result;
     
-    public Finder(Results results) {
-        diagnostics = new ArrayList<>(results.diagnostics);
-        this.results = results;
+    public Finder(Result result) {
+        diagnostics = new ArrayList<>(result.diagnostics);
+        this.result = result;
     }
     
     @Override
@@ -52,39 +52,39 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     public Finder kind(Collection<Kind> kinds) {
-        diagnostics.removeIf(result -> !kinds.contains(result.getKind()));
+        diagnostics.removeIf(diagnostic -> !kinds.contains(diagnostic.getKind()));
         return this;
     }
     
     public Finder errors() {
-        diagnostics.retainAll(results.errors);
+        diagnostics.retainAll(result.errors);
         return this;
     }
     
     public Finder warnings() {
-        diagnostics.retainAll(results.warnings);
+        diagnostics.retainAll(result.warnings);
         return this;
     }
     
     public Finder notes() {
-        diagnostics.retainAll(results.notes);
+        diagnostics.retainAll(result.notes);
         return this;
     }
     
     
     public Finder in(JavaFileObject file) {
         var path = file.toUri().getPath();
-        diagnostics.removeIf(result -> !result.getSource().toUri().getPath().equals(path));
+        diagnostics.removeIf(diagnostic -> !diagnostic.getSource().toUri().getPath().equals(path));
         return this;
     }
     
     public Finder on(long line) {
-        diagnostics.removeIf(result -> result.getLineNumber() != line);
+        diagnostics.removeIf(diagnostic -> diagnostic.getLineNumber() != line);
         return this;
     }
     
     public Finder at(long column) {
-        diagnostics.removeIf(result -> result.getColumnNumber() != column);
+        diagnostics.removeIf(diagnostic -> diagnostic.getColumnNumber() != column);
         return this;
     }
     
@@ -96,17 +96,17 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     
     public Finder matches(String message) {
-        diagnostics.removeIf(result -> !result.getMessage(Locale.getDefault()).equals(message));
+        diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).equals(message));
         return this;
     }
     
     public Finder contains(String substring) {
-        diagnostics.removeIf(result -> !result.getMessage(Locale.getDefault()).contains(substring));
+        diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).contains(substring));
         return this;
     }
     
     public Finder contains(Pattern pattern) {
-        diagnostics.removeIf(result -> !pattern.matcher(result.getMessage(Locale.getDefault())).matches());
+        diagnostics.removeIf(diagnostic -> !pattern.matcher(diagnostic.getMessage(Locale.getDefault())).matches());
         return this;
     }
     
@@ -121,13 +121,13 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     public Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
         var map = new HashMap<Kind, List<Diagnostic<? extends JavaFileObject>>>();
-        for (var result : diagnostics) {
-            var list = map.get(result.getKind());
+        for (var diagnostic : diagnostics) {
+            var list = map.get(diagnostic.getKind());
             if (list == null) {
-                map.put(result.getKind(), list = new ArrayList<>());
+                map.put(diagnostic.getKind(), list = new ArrayList<>());
             }
             
-            list.add(result);
+            list.add(diagnostic);
         }
         
         return map;
