@@ -41,6 +41,7 @@
     <modules>
         <module>elementary-core</module>
         <module>satisfactory</module>
+        <module>utilitary</module>
     </modules>
     
     <dependencies>

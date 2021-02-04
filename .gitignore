@@ -55,3 +55,4 @@ Temporary Items
 *.iml
 /elementary/target/
 /elementary-core/target/
+/utilitary/target/

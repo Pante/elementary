@@ -17,6 +17,15 @@
         <maven.compiler.release>11</maven.compiler.release>
     </properties>
     
+    <dependencies>
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>utilitary</artifactId>
+            <version>${project.version}</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    
     <build>
         <plugins>  
             <plugin>
