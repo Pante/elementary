@@ -21,14 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.assertion.SkeletonAssertion;
-import com.karuslabs.satisfactory.type.TypeMirrors;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.SkeletonAssertion;
 
 import javax.lang.model.element.Element;
 
-import static com.karuslabs.satisfactory.Texts.join;
+import static com.karuslabs.utilitary.Texts.join;
 
 public final class Or<T> extends SkeletonAssertion implements Timeable<T> {
 

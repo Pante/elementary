@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.type.TypeMirrors;
-import com.karuslabs.satisfactory.assertion.SkeletonAssertion;
+import com.karuslabs.satisfactory.SkeletonAssertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;
@@ -35,8 +35,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import java.util.function.Supplier;
 
-import static com.karuslabs.satisfactory.Texts.join;
-import static com.karuslabs.satisfactory.assertion.Assertions.*;
+import static com.karuslabs.utilitary.Texts.join;
+import static com.karuslabs.satisfactory.Assertions.*;
 
 public class Variable extends SkeletonAssertion implements Timeable<VariableElement> {
 

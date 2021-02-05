@@ -39,11 +39,11 @@ class AssertionsTest {
     
 //    TypeMirrors types = mock(TypeMirrors.class);
 //    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
-    Toolkit kit = ToolkitProcessor.toolkit();
-    TypeMirror type = kit.types.type(boolean.class);
     
     @Test
     void is_typekind() {
+        Toolkit kit = ToolkitProcessor.toolkit();
+        TypeMirror type = kit.types.type(boolean.class);
         assertTrue(is(TypeKind.BOOLEAN).test(kit.types, type));
     }
     

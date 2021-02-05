@@ -1,3 +1,5 @@
+package a;
+
 /*
  * The MIT License
  *
@@ -21,44 +23,44 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.SkeletonAssertion;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import a.ToolkitProcessor.Toolkit;
+import javax.lang.model.type.*;
 
-import javax.lang.model.element.Element;
+import org.junit.jupiter.api.*;
 
-import static com.karuslabs.utilitary.Texts.join;
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-public final class And<T> extends SkeletonAssertion implements Timeable<T> {
-
-    private final Match<T> left;
-    private final Match<T> right;
+@ExtendWith(Extendy.class)
+class AssertionsTest {
     
-    protected And(Match<T> left, Match<T> right) {
-        super(join(left.condition(), ", and ", right.condition()), join(left.conditions(), ", and ", right.conditions()));
-        this.left = left;
-        this.right = right;
-    }
-
-    @Override
-    public boolean test(TypeMirrors types, Element element) {
-        return left.test(types, element) && right.test(types, element);
+//    TypeMirrors types = mock(TypeMirrors.class);
+//    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
+    
+    Toolkit kit;
+    TypeMirror type;
+    
+    AssertionsTest(Toolkit kit) {
+        this.kit = kit;
+        type = kit.types.getPrimitiveType(TypeKind.BOOLEAN);
     }
     
-    @Override
-    public boolean test(TypeMirrors types, T value) {
-        return left.test(types, value) && right.test(types, value);
+    @Test
+    void s() {
+        assertNotNull(kit.elements);
+        System.out.println(kit);
     }
-
-    @Override
-    public String describe(Element element) {
-        return left.describe(element);
-    }
-
-    @Override
-    public String describe(T value) {
-        return left.describe(value);
-    }
-
+    
+//    @Test
+//    void is_typekind(Object object) {
+//        javac().currentClasspath().processors(new ToolkitProcessor() {
+//            @Override
+//            public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
+//                TypeMirror type = toolkit().types.type(boolean.class);
+//                return false;
+//            }
+//        }).compile(ofLines("com.karuslabs.Help", "package com.karuslabs.help; class Help {}"));
+//    }
+    
 }

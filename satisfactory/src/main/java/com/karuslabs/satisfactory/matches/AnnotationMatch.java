@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.Texts;
-import com.karuslabs.satisfactory.assertion.SkeletonAssertion;
-import com.karuslabs.satisfactory.type.TypeMirrors;
-import com.karuslabs.satisfactory.type.TypePrinter;
+import com.karuslabs.satisfactory.SkeletonAssertion;
+import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.type.*;
 
 import java.lang.annotation.Annotation;
 import java.util.function.BiConsumer;

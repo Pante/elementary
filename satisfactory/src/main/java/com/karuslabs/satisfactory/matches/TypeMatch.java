@@ -21,17 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.Texts;
-import com.karuslabs.satisfactory.assertion.SkeletonAssertion;
-import com.karuslabs.satisfactory.assertion.matches.TypeMatch.Relation;
-import com.karuslabs.satisfactory.type.*;
+import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.type.*;
+import com.karuslabs.satisfactory.SkeletonAssertion;
+import com.karuslabs.satisfactory.matches.TypeMatch.Relation;
 
 import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
-import javax.lang.model.type.TypeKind;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 

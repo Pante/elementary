@@ -21,13 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.sequences;
+package com.karuslabs.satisfactory.sequences;
 
-import com.karuslabs.satisfactory.Texts;
-import com.karuslabs.satisfactory.assertion.*;
-import com.karuslabs.satisfactory.assertion.matches.Match;
-import com.karuslabs.satisfactory.assertion.times.Times;
-import com.karuslabs.satisfactory.type.TypeMirrors;
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.matches.Match;
+import com.karuslabs.satisfactory.times.Times;
+import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 import javax.lang.model.element.VariableElement;

@@ -1,3 +1,5 @@
+package a;
+
 /*
  * The MIT License
  *
@@ -21,34 +23,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.processors;
-
-import com.karuslabs.annotations.Lazy;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.Semaphore;
 import javax.annotation.processing.*;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
-import static com.karuslabs.elementary.Compiler.javac;
-import static com.karuslabs.elementary.file.FileObjects.ofLines;
 import static javax.lang.model.SourceVersion.RELEASE_11;
 
 @SupportedSourceVersion(RELEASE_11)
-@SupportedAnnotationTypes({"com.karuslabs.annotations.Lazy"})
+@SupportedAnnotationTypes({"*"})
 public class ToolkitProcessor extends AbstractProcessor {
     
-    public static Toolkit toolkit() {
-        var processor = new ToolkitProcessor();
-        javac().currentClasspath().processors(processor).compile(ofLines("com.karuslabs.Help", "package com.karuslabs.help class Help {}"));
-        return processor.value();
-    }
 
-    private @Lazy Toolkit kit;
+    public volatile Toolkit kit;
+    public final List<Invocation<Void>> invocations = new ArrayList<>();
+    public final Semaphore semaphore = new Semaphore(0);
     
     @Override
     public void init(ProcessingEnvironment environment) {
@@ -58,12 +53,20 @@ public class ToolkitProcessor extends AbstractProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
-        System.out.println("Hello");
-        return true;
-    }
-    
-    public @Nullable Toolkit value() {
-        return kit;
+        if (round.processingOver()) {
+            try {
+                semaphore.acquire();
+                for (var invocation : invocations) {
+                    invocation.proceed();
+                }
+                semaphore.release(2);
+                
+            } catch (Throwable ex) {
+                
+            }
+        }
+
+        return false;
     }
         
     
@@ -74,7 +77,7 @@ public class ToolkitProcessor extends AbstractProcessor {
         public final Logger logger;
         public final TypeMirrors types;
         
-        Toolkit(Elements elements, Filer filer, Messager messager, Types types) {
+        public Toolkit(Elements elements, Filer filer, Messager messager, Types types) {
             this.elements = elements;
             this.filer = filer;
             this.logger = new Logger(messager);

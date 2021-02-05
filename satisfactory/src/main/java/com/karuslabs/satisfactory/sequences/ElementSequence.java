@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.sequences;
+package com.karuslabs.satisfactory.sequences;
 
-import com.karuslabs.satisfactory.Texts;
-import com.karuslabs.satisfactory.type.*;
+import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.type.*;
 
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 import java.util.Collection;
 
-import static com.karuslabs.satisfactory.assertion.Assertions.*;
+import static com.karuslabs.satisfactory.Assertions.*;
 
 class AnyParameter extends Sequence<VariableElement> {
     

@@ -21,16 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.Texts;
-import com.karuslabs.satisfactory.assertion.SkeletonAssertion;
-import com.karuslabs.satisfactory.type.TypeMirrors;
+import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.SkeletonAssertion;
 
 import java.util.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.satisfactory.Texts.*;
+import static com.karuslabs.utilitary.Texts.*;
 
 public abstract class ModifierMatch extends SkeletonAssertion implements Match<Set<Modifier>> {
     

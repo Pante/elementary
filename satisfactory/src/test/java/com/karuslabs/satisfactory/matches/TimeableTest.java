@@ -21,15 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.type.TypeMirrors;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.assertion.Assertions.*;
+import static com.karuslabs.satisfactory.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

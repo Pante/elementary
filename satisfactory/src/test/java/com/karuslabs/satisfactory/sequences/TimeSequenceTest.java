@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.sequences;
+package com.karuslabs.satisfactory.sequences;
 
-import com.karuslabs.satisfactory.type.*;
-import com.karuslabs.satisfactory.assertion.times.Times;
+import com.karuslabs.satisfactory.times.Times;
+import com.karuslabs.utilitary.type.*;
 
 import java.util.*;
 import javax.lang.model.element.VariableElement;
@@ -32,7 +32,7 @@ import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.assertion.Assertions.*;
+import static com.karuslabs.satisfactory.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;

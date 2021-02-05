@@ -23,10 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertion.matches;
+package com.karuslabs.satisfactory.matches;
 
-import com.karuslabs.satisfactory.type.TypeMirrors;
-import com.karuslabs.satisfactory.assertion.Assertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.Assertion;
 
 import javax.lang.model.element.Element;
 
