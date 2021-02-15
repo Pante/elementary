@@ -27,6 +27,7 @@ import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
+import java.util.concurrent.Exchanger;
 import java.util.concurrent.Semaphore;
 import javax.annotation.processing.*;
 import javax.lang.model.element.TypeElement;
@@ -42,7 +43,7 @@ public class ToolkitProcessor extends AbstractProcessor {
     
 
     public volatile Toolkit kit;
-    public final List<Invocation<Void>> invocations = new ArrayList<>();
+    public final Exchanger<Object> exchanger = new Exchanger<>();
     public final Semaphore semaphore = new Semaphore(0);
     
     @Override
@@ -54,12 +55,31 @@ public class ToolkitProcessor extends AbstractProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
         if (round.processingOver()) {
+           // Exchange
+           // var invocation = queue.get();
+           // do something;
+           // Signal done / throw exception
+            exchanger.exchange(null);
+            
+            try {
+                while (true) {
+                    
+                }
+                
+            } catch (InterruptedException e) {
+                
+            }
+            
+            return false;
+            
             try {
                 semaphore.acquire();
                 for (var invocation : invocations) {
                     invocation.proceed();
                 }
                 semaphore.release(2);
+                
+            } catch(InterruptedException e) {
                 
             } catch (Throwable ex) {
                 

@@ -1,20 +1,31 @@
 package a;
 
 
+import a.ToolkitProcessor.Toolkit;
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.ofLines;
 
 import java.lang.reflect.Method;
+import javax.lang.model.util.Elements;
+import org.junit.jupiter.api.extension.BeforeEachCallback;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.InvocationInterceptor;
-import org.junit.jupiter.api.extension.ParameterContext;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
 import org.junit.jupiter.api.extension.ReflectiveInvocationContext;
-import org.junit.jupiter.api.extension.support.TypeBasedParameterResolver;
+import org.junit.jupiter.api.extension.TestInstanceFactory;
+import org.junit.jupiter.api.extension.TestInstanceFactoryContext;
+import org.junit.jupiter.api.extension.TestInstantiationException;
+
+import static org.junit.platform.commons.util.ReflectionUtils.newInstance;
 
 
-public class Extendy extends TypeBasedParameterResolver<ToolkitProcessor.Toolkit> implements InvocationInterceptor {
+public class Extendy implements BeforeEachCallback, TestInstanceFactory, InvocationInterceptor {
+    
+    public static Toolkit kit() {
+        return kit
+    }
+    
+    static Toolkit kit;
     
     private ToolkitProcessor processor = new ToolkitProcessor();
     private Thread thread = new Thread() {
@@ -26,13 +37,9 @@ public class Extendy extends TypeBasedParameterResolver<ToolkitProcessor.Toolkit
     };
     
     @Override
-    public ToolkitProcessor.Toolkit resolveParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
-        thread.start();
-        while (processor.kit == null) {
-            
-        }
+    public void beforeEach(ExtensionContext ec) throws Exception {
         
-        return processor.kit;
+        System.out.println("Before each");
     }
     
     
@@ -42,5 +49,16 @@ public class Extendy extends TypeBasedParameterResolver<ToolkitProcessor.Toolkit
         processor.semaphore.release(1);
         processor.semaphore.acquire(2);
     }
+
+    @Override
+    public Object createTestInstance(TestInstanceFactoryContext c, ExtensionContext e) throws TestInstantiationException {
+        thread.start();
+        while (processor.kit == null) {}
+        kit = processor.kit;
+        
+        return newInstance(c.getTestClass());
+    }
+
+    
 
 }

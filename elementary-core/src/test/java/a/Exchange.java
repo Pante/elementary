@@ -1,9 +1,7 @@
-package a;
-
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,29 +21,12 @@ package a;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package a;
 
-import a.ToolkitProcessor.Toolkit;
-import javax.lang.model.type.*;
+import java.util.Queue;
 
-import org.junit.jupiter.api.*;
+public class Exchange<T, U> {
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.extension.ExtendWith;
-
-@ExtendWith(Extendy.class)
-class AssertionsTest {
-    
-//    TypeMirrors types = mock(TypeMirrors.class);
-//    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
-    
-    Toolkit kit = Extendy.kit();
-    TypeMirror type = kit.types.getPrimitiveType(TypeKind.BOOLEAN);
-    
-    @Test
-    void s() {
-        assertNotNull(kit.elements);
-        assertTrue(kit.types.isSameType(kit.types.type(AssertionsTest.class), kit.types.type(AssertionsTest.class)));
-        System.out.println(kit);
-    }
+    private final Queue<T> queue = new 
     
 }
