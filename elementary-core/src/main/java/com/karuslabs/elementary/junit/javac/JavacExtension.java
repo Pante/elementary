@@ -21,12 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package a;
+package com.karuslabs.elementary.junit.javac;
 
-import java.util.Queue;
+import org.junit.jupiter.api.extension.*;
 
-public class Exchange<T, U> {
+public class JavacExtension implements ParameterResolver {
 
-    private final Queue<T> queue = new 
-    
+    @Override
+    public boolean supportsParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
+    }
+
+    @Override
+    public Object resolveParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
+    }
+
 }

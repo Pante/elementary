@@ -6,7 +6,6 @@ import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.ofLines;
 
 import java.lang.reflect.Method;
-import javax.lang.model.util.Elements;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 
 import org.junit.jupiter.api.extension.ExtensionContext;
@@ -52,6 +51,7 @@ public class Extendy implements BeforeEachCallback, TestInstanceFactory, Invocat
 
     @Override
     public Object createTestInstance(TestInstanceFactoryContext c, ExtensionContext e) throws TestInstantiationException {
+        e.get
         thread.start();
         while (processor.kit == null) {}
         kit = processor.kit;
