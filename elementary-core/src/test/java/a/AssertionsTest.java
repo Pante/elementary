@@ -35,11 +35,21 @@ import org.junit.jupiter.api.extension.ExtendWith;
 @ExtendWith(Extendy.class)
 class AssertionsTest {
     
+<<<<<<< Updated upstream
 //    TypeMirrors types = mock(TypeMirrors.class);
 //    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
     
     Toolkit kit = Extendy.kit();
     TypeMirror type = kit.types.getPrimitiveType(TypeKind.BOOLEAN);
+=======
+    Toolkit kit;
+    TypeMirror type;
+    
+    AssertionsTest(Toolkit kit) {
+        this.kit = kit;
+        type = kit.types.getPrimitiveType(TypeKind.BOOLEAN);
+    }
+>>>>>>> Stashed changes
     
     @Test
     void s() {

@@ -3,11 +3,11 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.karuslabs</groupId>
-        <artifactId>elementary</artifactId>
+        <artifactId>elementary-project</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
     
-    <artifactId>elementary-core</artifactId>
+    <artifactId>elementary</artifactId>
     <packaging>jar</packaging>
     
     <name>Elementary</name>
