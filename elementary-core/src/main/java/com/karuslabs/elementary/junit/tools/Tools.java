@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.processor;
+package com.karuslabs.elementary.junit.tools;
 
-import com.karuslabs.elementary.junit.processor.DaemonProcessor.Environment;
+import com.karuslabs.annotations.Static;
+import com.karuslabs.elementary.junit.tools.DaemonProcessor.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -32,13 +33,11 @@ import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import org.junit.jupiter.api.extension.*;
-
-public class ProcessorExtension implements TestInstanceFactory {
-
-    private static @Nullable Environment environment;
+public @Static class Tools {
     
-    private static Environment environment() {
+    static @Nullable Environment environment;
+    
+    private static DaemonProcessor.Environment environment() {
         if (environment == null) {
             throw new IllegalStateException("Class should be annotated with '@ExtendWith(ProcessorExtension.class)', "
                                           + "static methods are not supported with parallel test execution");
@@ -69,12 +68,6 @@ public class ProcessorExtension implements TestInstanceFactory {
     
     public static Logger logger() {
         return environment().logger;
-    }
-    
-    
-    @Override
-    public Object createTestInstance(TestInstanceFactoryContext factory, ExtensionContext context) throws TestInstantiationException {
-        
     }
 
 }

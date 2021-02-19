@@ -24,14 +24,14 @@
 package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.junit.javac.JavacExtension;
-import com.karuslabs.elementary.junit.processor.ProcessorExtension;
+import com.karuslabs.elementary.junit.tools.ToolsExtension;
 
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Usage({JavacExtension.class, ProcessorExtension.class})
+@Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
