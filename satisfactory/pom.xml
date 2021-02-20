@@ -27,7 +27,7 @@
         
         <dependency>
             <groupId>com.karuslabs</groupId>
-            <artifactId>elementary-core</artifactId>
+            <artifactId>elementary</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
