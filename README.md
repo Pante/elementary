@@ -1,4 +1,4 @@
-Elementary is  mono-repository for annotation processing libraries and tools. 
+**Elementary is mono-repository that includes a JUnit extension library for testing annotation processors inside an _actual_ javac instance.**
 
 **Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
 
@@ -9,6 +9,10 @@ Elementary is  mono-repository for annotation processing libraries and tools.
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/elementart/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
+
+_"If I have seen further that others, it is by standing on the shoulder of giants"_
+
+This library is heavily inspired by Google's [compile-testing](https://github.com/google/compile-testing).
 
 #### Maven Repository
 ```XML
