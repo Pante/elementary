@@ -1,4 +1,4 @@
-**Elementary is mono-repository that includes a JUnit extension library for testing annotation processors inside an _actual_ javac instance.**
+**Elementary is mono-repository that includes a JUnit extension library for testing annotation processors. Instead of mocking/re-implementing [`javax.lang.model`](https://docs.oracle.com/javase/8/docs/api/javax/lang/model/package-summary.html), tests are excuted inside a real _javac_ environment.**
 
 **Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
 
@@ -12,7 +12,7 @@
 
 _"If I have seen further that others, it is by standing on the shoulder of giants"_
 
-This library is heavily inspired by Google's [compile-testing](https://github.com/google/compile-testing).
+This project is heavily inspired by Google's own [compile-testing](https://github.com/google/compile-testing) project.
 
 #### Maven Repository
 ```XML
