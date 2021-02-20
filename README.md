@@ -10,7 +10,7 @@
 [![Stable Source Code](https://img.shields.io/badge/stable-branch-blue.svg)](https://github.com/Pante/elementart/tree/stable)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
->> _"If I have seen further that others, it is by standing on the shoulder of giants"_
+> _"If I have seen further that others, it is by standing on the shoulder of giants"_
 
 This project is heavily inspired by Google's own [compile-testing](https://github.com/google/compile-testing) project.
 
