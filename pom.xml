@@ -39,7 +39,7 @@
     </repositories>
     
     <modules>
-        <module>elementary-core</module>
+        <module>elementary</module>
         <module>satisfactory</module>
         <module>utilitary</module>
     </modules>

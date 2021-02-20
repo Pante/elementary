@@ -24,51 +24,74 @@
 package com.karuslabs.elementary.junit.tools;
 
 import com.karuslabs.elementary.Compiler;
-import com.karuslabs.elementary.file.FileObjects;
+import com.karuslabs.elementary.CompilationException;
 import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.tools.DaemonProcessor.Environment;
 
 import java.util.*;
 import javax.tools.JavaFileObject;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import org.junit.jupiter.api.extension.TestInstantiationException;
+
 import static com.karuslabs.elementary.Compiler.javac;
+import static com.karuslabs.elementary.file.FileObjects.*;
 
 public class DaemonCompiler extends Thread {
     
-    public static DaemonCompiler of(Classpath[] classClasspaths, Inline[] classInlines, Classpath[] methodClasspaths, Inline[] methodInlines) {
+    private static final JavaFileObject SOURCE = ofLines("Dummy", "final class Dummy {}");
+    
+    public static DaemonCompiler of(Class<?> type) {
         var files = new ArrayList<JavaFileObject>();
-        for (var classpath : classClasspaths) {
-            files.add(FileObjects.ofResource(classpath.value()));
+        files.add(SOURCE);
+        
+        for (var classpath : type.getAnnotationsByType(Classpath.class)) {
+            files.add(ofResource(classpath.value()));
         }
         
-        for (var classpath : methodClasspaths) {
-            files.add(FileObjects.ofResource(classpath.value()));
+        for (var inline : type.getAnnotationsByType(Inline.class)) {
+            files.add(ofLines(inline.name(), inline.source()));
         }
         
-        for (var inline : classInlines) {
-            files.add(FileObjects.ofLines(inline.name(), inline.value()));
-        }
-        
-        for (var inline : methodInlines) {
-            files.add(FileObjects.ofLines(inline.name(), inline.value()));
-        }
-        
-        return new DaemonCompiler(javac().currentClasspath(), files);
+        return new DaemonCompiler(Thread.currentThread(), javac().currentClasspath(), files);
     }
     
     
     public final DaemonProcessor processor = new DaemonProcessor();
+    private final Thread parent;
     private final Compiler compiler;
     private final List<JavaFileObject> files;
+    private @Nullable volatile Throwable thrown;
     
-    DaemonCompiler(Compiler compiler, List<JavaFileObject> files) {
+    DaemonCompiler(Thread parent, Compiler compiler, List<JavaFileObject> files) {
+        this.parent = parent;
         this.compiler = compiler.processors(processor);
         this.files = files;
     }
     
     @Override
     public void run() {
-        var results = compiler.compile(files);
-        // TODO: handle results
+        try {
+            var results = compiler.compile(files);
+            if (!results.success) {
+                throw new CompilationException(results.find().errors().full());
+            }
+            
+        } catch (Throwable e) {
+            thrown = e;
+            parent.interrupt();
+        }
+        
+    }
+    
+    public Environment environment() throws TestInstantiationException {
+        try {
+            return processor.environment();
+            
+        } catch (InterruptedException e) {
+            throw new TestInstantiationException("Failed to start javac", thrown == null ? e: thrown);
+        }
     }
     
 }

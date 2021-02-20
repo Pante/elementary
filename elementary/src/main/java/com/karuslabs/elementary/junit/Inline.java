@@ -34,9 +34,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Inlines {
+@Target(TYPE)
+@Repeatable(Inlines.class)
+public @interface Inline {
     
-    Inline[] value();
-
+    String name();
+    
+    String[] source();
+    
 }

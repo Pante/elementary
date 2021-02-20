@@ -21,23 +21,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package com.test;
 
-import com.karuslabs.elementary.junit.javac.JavacExtension;
+import com.karuslabs.elementary.junit.Classpath;
+import com.karuslabs.elementary.junit.Inline;
+import com.karuslabs.elementary.junit.tools.Tools;
 import com.karuslabs.elementary.junit.tools.ToolsExtension;
+import com.karuslabs.utilitary.Logger;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.lang.annotation.*;
+import javax.annotation.processing.Messager;
+import javax.lang.model.util.Elements;
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-@Usage({JavacExtension.class, ToolsExtension.class})
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-@Repeatable(Classpaths.class)
-public @interface Classpath {
+import static org.junit.jupiter.api.Assertions.*;
 
-    String value();
+@ExtendWith(ToolsExtension.class)
+@Classpath("A.java")
+@Inline(name = "Derp", source = "class Derp {}")
+public class SomeTest {
+
+    Logger logger;
+    Elements elements = Tools.elements();
+    TypeMirrors types = Tools.typeMirrors();
+    
+    SomeTest(Logger logger) {
+        this.logger = logger;
+    }
+    
+    
+    @Test
+    void test() {
+        var a = types.type(String.class);
+        var b = types.type(String.class);
+        
+        assertTrue(types.isSameType(a, b));
+    }
+    
+    
+    @Test
+    void inject(Messager messager, Elements elements) {
+        assertNotNull(messager);
+        assertNotNull(elements);
+    }
     
 }

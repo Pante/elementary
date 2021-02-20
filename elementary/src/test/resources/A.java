@@ -1,7 +1,10 @@
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +24,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
-
-import com.karuslabs.utilitary.type.TypeMirrors;
-
-import javax.lang.model.type.*;
-
-import org.junit.jupiter.api.*;
-
-import static com.karuslabs.satisfactory.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-
-class AssertionsTest {
+public class A {
     
-    TypeMirrors types = mock(TypeMirrors.class);
-    TypeMirror type = when(mock(TypeMirror.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
-    
-    @Test
-    void is_typekind() {
-        assertTrue(is(TypeKind.BOOLEAN).test(types, type));
+    public @Nullable String method() {
+        return null;
     }
+    
     
 }

@@ -47,10 +47,15 @@ public @Static class FileObjects {
     
     
     public static JavaFileObject ofResource(String resource) {
-        return ofResource(FileObjects.class.getClassLoader().getResource(resource));
+        var url = FileObjects.class.getClassLoader().getResource(resource);
+        if (url == null) {
+            throw new IllegalArgumentException("\"" + resource + "\" does not exist on the current classpath");
+        }
+        
+        return ofResource(url);
     }
     
-    public static JavaFileObject ofResource(URL resource) {        
+    public static JavaFileObject ofResource(URL resource) {
         try (var stream = resource.openStream()) {
             var uri = uri(resource);
             return new ByteFileObject(uri, deduce(uri), stream.readAllBytes());

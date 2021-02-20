@@ -31,17 +31,41 @@ import java.lang.reflect.Constructor;
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import org.junit.jupiter.api.extension.*;
 
-public class ToolsExtension extends Daemon {
+public class ToolsExtension extends Daemon implements ParameterResolver {
 
     @Override
-    protected Object construct(Constructor constructor, Environment environment) throws TestInstantiationException {
+    public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
+        return resolve(compiler(context).environment(), parameter.getParameter().getType()) != null;
+    }
+    
+    @Override
+    public Object resolveParameter(ParameterContext parameter, ExtensionContext context) throws ParameterResolutionException {
+        var type = parameter.getParameter().getType();
+        var resolved = resolve(compiler(context).environment(), type);
+        if (resolved == null) {
+            throw new ParameterResolutionException("Unable to resolve parameter of type: " + type.getName());
+        }
+        
+        return resolved;
+    }
+    
+    
+    @Override
+    protected Object construct(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
         var types = constructor.getParameterTypes();
         var parameters = new Object[types.length];
         
         for (int i = 0; i < types.length; i++) {
-            parameters[i] = resolve(environment, types[i]);
+            var parameter = resolve(environment, types[i]);
+            if (parameter == null) {
+                throw new ParameterResolutionException("Unable to resolve parameter of type: " + types[i].getName());
+            }
+            
+            parameters[i] = parameter;
         }
         
         try {
@@ -53,7 +77,8 @@ public class ToolsExtension extends Daemon {
         }
     }
     
-    private static Object resolve(Environment environment, Class<?> type) throws TestInstantiationException {
+    
+    static @Nullable Object resolve(Environment environment, Class<?> type) throws TestInstantiationException {
         if (type == Elements.class) {
             return environment.elements;
                 
@@ -73,7 +98,7 @@ public class ToolsExtension extends Daemon {
             return environment.logger;
             
         } else {
-            throw new TestInstantiationException("Unable to resolve parameter of type: " + type.getName());
+            return null;
         }
     }
 

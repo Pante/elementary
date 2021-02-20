@@ -34,9 +34,10 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Classpaths {
+@Target({TYPE})
+@Repeatable(Classpaths.class)
+public @interface Classpath {
 
-    Classpath[] value();
+    String value();
     
 }

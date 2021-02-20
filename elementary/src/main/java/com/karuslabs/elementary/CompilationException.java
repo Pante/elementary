@@ -21,25 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package com.karuslabs.elementary;
 
-import com.karuslabs.elementary.junit.javac.JavacExtension;
-import com.karuslabs.elementary.junit.tools.ToolsExtension;
+import java.util.List;
 
-import java.lang.annotation.*;
+public class CompilationException extends RuntimeException {
 
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-@Usage({JavacExtension.class, ToolsExtension.class})
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-@Repeatable(Inlines.class)
-public @interface Inline {
+    public CompilationException(List<String> messages) {
+        this(String.join(",\n", messages));
+    }
     
-    String name();
-    
-    String[] value();
+    public CompilationException(String message) {
+        super(message);
+    }
     
 }

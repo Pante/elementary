@@ -55,14 +55,9 @@ public class DaemonProcessor extends AbstractProcessor {
         initialization.countDown();
     }
     
-    public @Nullable Environment environment() {
-        try {
-            initialization.await();
-            return environment;
-            
-        } catch (InterruptedException e) {
-            return null;
-        }
+    public Environment environment() throws InterruptedException {
+        initialization.await();
+        return environment;
     }
     
     

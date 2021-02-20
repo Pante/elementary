@@ -31,6 +31,8 @@ import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static java.util.stream.Collectors.toList;
+
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
@@ -111,6 +113,31 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     
+    public List<String> full() {
+        return diagnostics.stream().map(Diagnostic::toString).collect(toList());
+    }
+    
+    public List<String> messages() {
+        return diagnostics.stream().map(diagnostic -> diagnostic.getMessage(Locale.getDefault())).collect(toList());
+    }
+    
+    public List<Long> lines() {
+        return diagnostics.stream().map(Diagnostic::getLineNumber).collect(toList());
+    }
+    
+    public List<Long> columns() {
+        return diagnostics.stream().map(Diagnostic::getColumnNumber).collect(toList());
+    }
+    
+    public List<Long> positions() {
+        return diagnostics.stream().map(Diagnostic::getPosition).collect(toList());
+    }
+    
+    public List<String> codes() {
+        return diagnostics.stream().map(Diagnostic::getCode).collect(toList());
+    }
+    
+    
     public @Nullable Diagnostic<? extends JavaFileObject> one() {
         return diagnostics.size() == 1 ? diagnostics.get(0) : null;
     }
@@ -132,6 +159,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
         
         return map;
     }
+    
     
     public int count() {
         return diagnostics.size();
