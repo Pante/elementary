@@ -28,13 +28,13 @@ import org.junit.jupiter.api.extension.*;
 public class JavacExtension implements ParameterResolver {
 
     @Override
-    public boolean supportsParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
-        return false;
-    }
-
-    @Override
     public Object resolveParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
         return null;
+    }
+    
+    @Override
+    public boolean supportsParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
+        return false;
     }
 
 }

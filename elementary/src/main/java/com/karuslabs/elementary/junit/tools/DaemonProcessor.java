@@ -41,7 +41,7 @@ import static javax.lang.model.SourceVersion.RELEASE_11;
 
 @SupportedAnnotationTypes({"*"})
 @SupportedSourceVersion(RELEASE_11)
-public class DaemonProcessor extends AbstractProcessor {
+class DaemonProcessor extends AbstractProcessor {
     
     private final CountDownLatch initialization = new CountDownLatch(1);
     private final Exchanger<Invocation> invocations = new Exchanger<>();

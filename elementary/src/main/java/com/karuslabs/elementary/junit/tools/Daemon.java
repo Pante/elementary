@@ -23,7 +23,7 @@
  */
 package com.karuslabs.elementary.junit.tools;
 
-import com.karuslabs.annotations.Ignored;
+import com.karuslabs.elementary.junit.*;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -32,7 +32,7 @@ import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.*;
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
-public abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, AfterAllCallback {
+abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, AfterAllCallback {
     
     private static final String PARALLEL = "junit.jupiter.execution.parallel.mode.default";
     private static final String PARALLEL_CLASS_MODE = "junit.jupiter.execution.parallel.mode.classes.default";
@@ -80,7 +80,12 @@ public abstract class Daemon implements TestInstanceFactory, InvocationIntercept
     
     
     @Override
-    public void interceptTestMethod(Invocation<Void> invocation, @Ignored ReflectiveInvocationContext<Method> c, ExtensionContext context) throws Throwable {
+    public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> method, ExtensionContext context) throws Throwable {
+        var executable = method.getExecutable();
+        if (executable.getAnnotationsByType(Classpath.class).length > 0 || executable.getAnnotationsByType(Inline.class).length > 0) {
+            throw new IllegalArgumentException("Method cannot be annotated with @Classpath and @Inline when using ToolsExtension");
+        }
+        
         var throwable = compiler(context).processor.exchange(invocation);
         if (throwable != null) {
             throw throwable;

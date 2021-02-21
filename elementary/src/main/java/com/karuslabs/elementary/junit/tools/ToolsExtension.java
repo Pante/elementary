@@ -36,11 +36,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.junit.jupiter.api.extension.*;
 
 public class ToolsExtension extends Daemon implements ParameterResolver {
-
-    @Override
-    public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
-        return resolve(compiler(context).environment(), parameter.getParameter().getType()) != null;
-    }
     
     @Override
     public Object resolveParameter(ParameterContext parameter, ExtensionContext context) throws ParameterResolutionException {
@@ -51,6 +46,11 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
         }
         
         return resolved;
+    }
+    
+    @Override
+    public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
+        return resolve(compiler(context).environment(), parameter.getParameter().getType()) != null;
     }
     
     

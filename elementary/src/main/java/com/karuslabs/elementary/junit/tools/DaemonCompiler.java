@@ -38,7 +38,7 @@ import org.junit.jupiter.api.extension.TestInstantiationException;
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
 
-public class DaemonCompiler extends Thread {
+class DaemonCompiler extends Thread {
     
     private static final JavaFileObject SOURCE = ofLines("Dummy", "final class Dummy {}");
     
