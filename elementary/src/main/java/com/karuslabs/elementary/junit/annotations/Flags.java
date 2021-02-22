@@ -25,7 +25,6 @@ package com.karuslabs.elementary.junit.annotations;
 
 
 import com.karuslabs.elementary.junit.JavacExtension;
-import com.karuslabs.elementary.junit.annotations.Usage;
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;

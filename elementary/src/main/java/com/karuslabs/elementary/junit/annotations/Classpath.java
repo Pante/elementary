@@ -23,9 +23,7 @@
  */
 package com.karuslabs.elementary.junit.annotations;
 
-import com.karuslabs.elementary.junit.JavacExtension;
-import com.karuslabs.elementary.junit.annotations.Usage;
-import com.karuslabs.elementary.junit.ToolsExtension;
+import com.karuslabs.elementary.junit.*;
 
 import java.lang.annotation.*;
 
@@ -35,7 +33,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE})
+@Target({TYPE, METHOD})
 @Repeatable(Classpaths.class)
 public @interface Classpath {
 

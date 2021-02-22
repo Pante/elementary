@@ -34,8 +34,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Documented
 @Retention(RUNTIME)
 @Target({TYPE, METHOD})
-public @interface Processor {
+public @interface Processors {
 
-    Class<? extends javax.annotation.processing.Processor> value();
+    Class<? extends javax.annotation.processing.Processor>[] value();
     
 }
