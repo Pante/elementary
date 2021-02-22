@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.tools;
+package com.karuslabs.elementary.junit;
 
 import com.karuslabs.annotations.Lazy;
 import com.karuslabs.utilitary.Logger;

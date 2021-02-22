@@ -21,20 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.javac;
+package com.karuslabs.elementary.junit.annotations;
 
-import org.junit.jupiter.api.extension.*;
+import java.lang.annotation.*;
 
-public class JavacExtension implements ParameterResolver {
+import org.junit.jupiter.api.extension.Extension;
 
-    @Override
-    public Object resolveParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
-        return null;
-    }
+import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+@Documented
+@Retention(RUNTIME)
+@Target({ANNOTATION_TYPE})
+public @interface Usage {
+
+    Class<? extends Extension>[] value();
     
-    @Override
-    public boolean supportsParameter(ParameterContext pc, ExtensionContext ec) throws ParameterResolutionException {
-        return false;
-    }
-
 }

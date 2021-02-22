@@ -21,50 +21,53 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.test;
+package com.karuslabs.elementary.junit;
 
-import com.karuslabs.elementary.junit.Classpath;
-import com.karuslabs.elementary.junit.Inline;
-import com.karuslabs.elementary.junit.tools.Tools;
-import com.karuslabs.elementary.junit.tools.ToolsExtension;
+import com.karuslabs.annotations.Static;
+import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import javax.annotation.processing.Messager;
-import javax.lang.model.util.Elements;
+import javax.annotation.processing.*;
+import javax.lang.model.util.*;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(ToolsExtension.class)
-@Classpath("A.java")
-@Inline(name = "Derp", source = "class Derp {}")
-public class SomeTest {
-
-    Logger logger;
-    Elements elements = Tools.elements();
-    TypeMirrors types = Tools.typeMirrors();
+public @Static class Tools {
     
-    SomeTest(Logger logger) {
-        this.logger = logger;
-    }
+    static @Nullable Environment environment;
     
-    
-    @Test
-    void test() {
-        var a = types.type(String.class);
-        var b = types.type(String.class);
+    private static DaemonProcessor.Environment environment() {
+        if (environment == null) {
+            throw new IllegalStateException("Class should be annotated with '@ExtendWith(ProcessorExtension.class)', "
+                                          + "static methods are not supported with parallel test execution");
+        }
         
-        assertTrue(types.isSameType(a, b));
+        return environment;
     }
     
-    
-    @Test
-    void inject(Messager messager, Elements elements) {
-        assertNotNull(messager);
-        assertNotNull(elements);
+    public static Elements elements() {
+        return environment().elements;
     }
     
+    public static Types types() {
+        return environment().types;
+    }
+    
+    public static Messager messager() {
+        return environment().messager;
+    }
+    
+    public static Filer filer() {
+        return environment().filer;
+    }
+    
+    public static TypeMirrors typeMirrors() {
+        return environment().typeMirrors;
+    }
+    
+    public static Logger logger() {
+        return environment().logger;
+    }
+
 }

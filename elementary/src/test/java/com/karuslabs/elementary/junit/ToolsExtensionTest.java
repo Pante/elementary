@@ -21,53 +21,48 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.tools;
+package com.karuslabs.elementary.junit;
 
-import com.karuslabs.annotations.Static;
-import com.karuslabs.elementary.junit.tools.DaemonProcessor.Environment;
+import com.karuslabs.elementary.junit.annotations.Classpath;
+import com.karuslabs.elementary.junit.annotations.Inline;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import javax.annotation.processing.*;
-import javax.lang.model.util.*;
+import javax.annotation.processing.Messager;
+import javax.lang.model.util.Elements;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-public @Static class Tools {
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(ToolsExtension.class)
+@Classpath("A.java")
+@Inline(name = "Derp", source = "class Derp {}")
+class ToolsExtensionTest {
+
+    Logger logger;
+    Elements elements = Tools.elements();
+    TypeMirrors types = Tools.typeMirrors();
     
-    static @Nullable Environment environment;
+    ToolsExtensionTest(Logger logger) {
+        this.logger = logger;
+    }
     
-    private static DaemonProcessor.Environment environment() {
-        if (environment == null) {
-            throw new IllegalStateException("Class should be annotated with '@ExtendWith(ProcessorExtension.class)', "
-                                          + "static methods are not supported with parallel test execution");
-        }
+    
+    @Test
+    void test() {
+        var a = types.type(String.class);
+        var b = types.type(String.class);
         
-        return environment;
+        assertTrue(types.isSameType(a, b));
     }
     
-    public static Elements elements() {
-        return environment().elements;
+    
+    @Test
+    void inject(Messager messager, Elements elements) {
+        assertNotNull(messager);
+        assertNotNull(elements);
     }
     
-    public static Types types() {
-        return environment().types;
-    }
-    
-    public static Messager messager() {
-        return environment().messager;
-    }
-    
-    public static Filer filer() {
-        return environment().filer;
-    }
-    
-    public static TypeMirrors typeMirrors() {
-        return environment().typeMirrors;
-    }
-    
-    public static Logger logger() {
-        return environment().logger;
-    }
-
 }

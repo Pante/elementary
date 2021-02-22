@@ -21,9 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.tools;
+package com.karuslabs.elementary.junit;
 
-import com.karuslabs.elementary.junit.tools.DaemonProcessor.Environment;
+import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 

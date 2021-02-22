@@ -47,10 +47,10 @@ public class Compiler {
     
     
     private final JavaCompiler compiler;
-    private Iterable<Processor> processors = List.of();
-    private Iterable<String> options = List.of();
-    private @Nullable Iterable<File> classpath;
-    private @Nullable Iterable<File> annotationProcessorPath;
+    private final List<Processor> processors = new ArrayList<>();
+    private final List<String> options = new ArrayList<>();
+    private @Nullable List<File> classpath;
+    private @Nullable List<File> annotationProcessorPath;
     
     Compiler(JavaCompiler compiler) {
         this.compiler = compiler;
@@ -90,23 +90,23 @@ public class Compiler {
     
     
     public Compiler processors(Processor... processors) {
-        this.processors = List.of(processors);
+        Collections.addAll(this.processors, processors);
         return this;
     }
     
-    public Compiler processors(Iterable<Processor> processors) {
-        this.processors = processors;
+    public Compiler processors(Collection<Processor> processors) {
+        this.processors.addAll(processors);
         return this;
     }
     
     
     public Compiler options(String... options) {
-        this.options = List.of(options);
+        Collections.addAll(this.options, options);
         return this;
     }
     
-    public Compiler options(Iterable<String> options) {
-        this.options = options;
+    public Compiler options(Collection<String> options) {
+        this.options.addAll(options);
         return this;
     }
     
@@ -148,14 +148,22 @@ public class Compiler {
         return this;
     }
     
-    public Compiler classpath(Iterable<File> classpath) {
-        this.classpath = classpath;
+    public Compiler classpath(Collection<File> classpath) {
+        if (this.classpath == null) {
+            this.classpath = new ArrayList<>();
+        }
+        
+        this.classpath.addAll(classpath);
         return this;
     }
     
     
-    public Compiler annotationProcessorPath(Iterable<File> path) {
-        this.annotationProcessorPath = path;
+    public Compiler annotationProcessorPath(Collection<File> path) {
+        if (annotationProcessorPath == null) {
+            annotationProcessorPath = new ArrayList<>();
+        }
+        
+        annotationProcessorPath.addAll(path);
         return this;
     }
     

@@ -21,12 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.tools;
+package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.CompilationException;
-import com.karuslabs.elementary.junit.*;
-import com.karuslabs.elementary.junit.tools.DaemonProcessor.Environment;
+import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
 
 import java.util.*;
 import javax.tools.JavaFileObject;
@@ -43,16 +42,8 @@ class DaemonCompiler extends Thread {
     private static final JavaFileObject SOURCE = ofLines("Dummy", "final class Dummy {}");
     
     public static DaemonCompiler of(Class<?> type) {
-        var files = new ArrayList<JavaFileObject>();
+        var files = scan(type);
         files.add(SOURCE);
-        
-        for (var classpath : type.getAnnotationsByType(Classpath.class)) {
-            files.add(ofResource(classpath.value()));
-        }
-        
-        for (var inline : type.getAnnotationsByType(Inline.class)) {
-            files.add(ofLines(inline.name(), inline.source()));
-        }
         
         return new DaemonCompiler(Thread.currentThread(), javac().currentClasspath(), files);
     }
@@ -62,7 +53,7 @@ class DaemonCompiler extends Thread {
     private final Thread parent;
     private final Compiler compiler;
     private final List<JavaFileObject> files;
-    private @Nullable volatile Throwable thrown;
+    private volatile @Nullable Throwable thrown;
     
     DaemonCompiler(Thread parent, Compiler compiler, List<JavaFileObject> files) {
         this.parent = parent;

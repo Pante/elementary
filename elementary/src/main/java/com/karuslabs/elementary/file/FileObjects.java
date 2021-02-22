@@ -24,14 +24,31 @@
 package com.karuslabs.elementary.file;
 
 import com.karuslabs.annotations.*;
+import com.karuslabs.elementary.junit.annotations.*;
 
 import java.io.*;
+import java.lang.reflect.AnnotatedElement;
 import java.net.*;
+import java.util.*;
 import javax.tools.*;
 
 import static javax.tools.JavaFileObject.Kind.SOURCE;
 
 public @Static class FileObjects {
+    
+    public static List<JavaFileObject> scan(AnnotatedElement annotated) {
+        var files = new ArrayList<JavaFileObject>();
+        for (var classpath : annotated.getAnnotationsByType(Classpath.class)) {
+            files.add(ofResource(classpath.value()));
+        }
+        
+        for (var inline : annotated.getAnnotationsByType(Inline.class)) {
+            files.add(ofLines(inline.name(), inline.source()));
+        }
+        
+        return files;
+    }
+    
     
     public static JavaFileObject ofLines(String fullyQualifiedName, Iterable<String> lines) {
         return ofLines(fullyQualifiedName, String.join(System.lineSeparator(), lines));

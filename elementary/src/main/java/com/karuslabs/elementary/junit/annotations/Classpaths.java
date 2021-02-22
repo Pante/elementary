@@ -21,21 +21,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package com.karuslabs.elementary.junit.annotations;
 
-import com.karuslabs.elementary.junit.javac.JavacExtension;
+import com.karuslabs.elementary.junit.JavacExtension;
+import com.karuslabs.elementary.junit.annotations.Usage;
+import com.karuslabs.elementary.junit.ToolsExtension;
 
 import java.lang.annotation.*;
 
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@Usage({JavacExtension.class})
+@Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Flags {
+@Target(TYPE)
+public @interface Classpaths {
 
-    String value();
+    Classpath[] value();
     
 }
