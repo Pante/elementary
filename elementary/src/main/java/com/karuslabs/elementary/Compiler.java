@@ -50,18 +50,17 @@ public class Compiler {
     private final List<Processor> processors = new ArrayList<>();
     private final List<String> options = new ArrayList<>();
     private @Nullable List<File> classpath;
-    private @Nullable List<File> annotationProcessorPath;
     
     Compiler(JavaCompiler compiler) {
         this.compiler = compiler;
     }
     
     
-    public Result compile(JavaFileObject... files) {
+    public Results compile(JavaFileObject... files) {
         return compile(List.of(files));
     }
     
-    public Result compile(Iterable<? extends JavaFileObject> files) {
+    public Results compile(Iterable<? extends JavaFileObject> files) {
         var diagnostics = new Diagnostics();
         var manager = new MemoryFileManager(compiler.getStandardFileManager(diagnostics, Locale.getDefault(), UTF_8));
         
@@ -69,14 +68,10 @@ public class Compiler {
             setLocation(manager, StandardLocation.CLASS_PATH, classpath);
         }
         
-        if (annotationProcessorPath != null) {
-            setLocation(manager, StandardLocation.ANNOTATION_PROCESSOR_PATH, annotationProcessorPath);
-        }
-        
         var task = compiler.getTask(null, manager, diagnostics, options, null, files);
         task.setProcessors(processors);
         
-        return new Result(manager.outputFiles(), manager.generatedSources(), diagnostics, task.call());
+        return new Results(manager.outputFiles(), manager.generatedSources(), diagnostics, task.call());
     }
     
     void setLocation(StandardJavaFileManager manager, StandardLocation location, Iterable<File> paths) {
@@ -154,16 +149,6 @@ public class Compiler {
         }
         
         this.classpath.addAll(classpath);
-        return this;
-    }
-    
-    
-    public Compiler annotationProcessorPath(Collection<File> path) {
-        if (annotationProcessorPath == null) {
-            annotationProcessorPath = new ArrayList<>();
-        }
-        
-        annotationProcessorPath.addAll(path);
         return this;
     }
     

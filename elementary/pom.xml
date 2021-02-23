@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     
     <name>Elementary</name>
-    <description>Elementary is a library to simplify annotation processing, and test Javac and annotation processing</description>
+    <description>Elementary is a JUnit testing tool for Javac and annotation processors</description>
     
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
@@ -28,8 +28,15 @@
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
-            <version>5.7.0</version>
+            <version>5.7.1</version>
             <scope>compile</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>com.google.auto.service</groupId>
+            <artifactId>auto-service</artifactId>
+            <version>1.0-rc7</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
     
@@ -39,7 +46,6 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <trimStackTrace>false</trimStackTrace>
                     <release>${release}</release>
                 </configuration>
             </plugin>

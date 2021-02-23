@@ -21,8 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package example;
 
+import com.karuslabs.elementary.junit.Tools;
+import com.karuslabs.elementary.junit.ToolsExtension;
 import com.karuslabs.elementary.junit.annotations.Classpath;
 import com.karuslabs.elementary.junit.annotations.Inline;
 import com.karuslabs.utilitary.Logger;
@@ -39,13 +41,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(ToolsExtension.class)
 @Classpath("A.java")
 @Inline(name = "Derp", source = "class Derp {}")
-class ToolsExtensionTest {
+class ToolsExtensionExampleTest {
 
     Logger logger;
     Elements elements = Tools.elements();
     TypeMirrors types = Tools.typeMirrors();
     
-    ToolsExtensionTest(Logger logger) {
+    ToolsExtensionExampleTest(Logger logger) {
         this.logger = logger;
     }
     

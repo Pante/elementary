@@ -24,7 +24,7 @@
 package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.Compiler;
-import com.karuslabs.elementary.Result;
+import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.util.*;
@@ -66,7 +66,9 @@ public class JavacExtension implements ParameterResolver {
         if (annotation != null) {
             for (var type : annotation.value()) {
                 try {
-                    processors.add(type.getDeclaredConstructor().newInstance());
+                    var constructor = type.getDeclaredConstructor();
+                    constructor.setAccessible(true);
+                    processors.add(constructor.newInstance());
 
                 } catch (ReflectiveOperationException e) {
                     throw new ParameterResolutionException("Failed to create \"" + type.getName() + "\", annotation processor should have a constructor with no arguments", e);
@@ -80,7 +82,7 @@ public class JavacExtension implements ParameterResolver {
     
     @Override
     public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
-        return parameter.getParameter().getType() == Result.class;
+        return parameter.getParameter().getType() == Results.class;
     }
 
 }

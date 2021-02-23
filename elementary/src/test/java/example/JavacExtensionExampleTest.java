@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package example;
 
-import com.karuslabs.elementary.Result;
+import com.karuslabs.elementary.Results;
+import com.karuslabs.elementary.junit.JavacExtension;
 import com.karuslabs.elementary.junit.annotations.Classpath;
 import com.karuslabs.elementary.junit.annotations.Flags;
 import com.karuslabs.elementary.junit.annotations.Inline;
@@ -46,14 +47,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Classpath("A.java")
 @Inline(name = "Derp", source = "class Derp {}")
 @Flags("-g")
-class JavacExtensionTest {
+class JavacExtensionExampleTest {
 
     @Test
     @Processors({SomeProcessor.class})
     @Inline(name = "MethodInline", source = "")
     @Flags("-nowarn")
-    void test(Result result) {
-        assertTrue(result.find().errors().count() == 0);
+    void test(Results results) {
+        assertTrue(results.find().errors().count() == 0);
     }
     
 }

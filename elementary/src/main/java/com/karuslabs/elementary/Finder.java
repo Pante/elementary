@@ -36,11 +36,11 @@ import static java.util.stream.Collectors.toList;
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
-    private final Result result;
+    private final Results results;
     
-    public Finder(Result result) {
-        diagnostics = new ArrayList<>(result.diagnostics);
-        this.result = result;
+    public Finder(Results results) {
+        diagnostics = new ArrayList<>(results.diagnostics);
+        this.results = results;
     }
     
     @Override
@@ -59,17 +59,17 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     public Finder errors() {
-        diagnostics.retainAll(result.errors);
+        diagnostics.retainAll(results.errors);
         return this;
     }
     
     public Finder warnings() {
-        diagnostics.retainAll(result.warnings);
+        diagnostics.retainAll(results.warnings);
         return this;
     }
     
     public Finder notes() {
-        diagnostics.retainAll(result.notes);
+        diagnostics.retainAll(results.notes);
         return this;
     }
     
@@ -113,7 +113,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     
-    public List<String> full() {
+    public List<String> diagnostics() {
         return diagnostics.stream().map(Diagnostic::toString).collect(toList());
     }
     

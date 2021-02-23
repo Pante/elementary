@@ -1,6 +1,3 @@
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 /*
  * The MIT License
  *
@@ -24,11 +21,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.elementary;
 
-public class A {
-    
-    public @Nullable String method() {
-        throw new UnsupportedOperationException();
+import java.util.List;
+
+import org.junit.jupiter.api.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+class CompilationExceptionTest {
+
+    @Test
+    void messages() {
+        assertEquals("A,\nB", new CompilationException(List.of("A", "B")).getMessage());
     }
     
 }

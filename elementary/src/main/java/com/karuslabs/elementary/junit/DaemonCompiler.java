@@ -64,9 +64,9 @@ class DaemonCompiler extends Thread {
     @Override
     public void run() {
         try {
-            var results = compiler.compile(files);
-            if (!results.success) {
-                throw new CompilationException(results.find().errors().full());
+            var resultss = compiler.compile(files);
+            if (!resultss.success) {
+                throw new CompilationException(resultss.find().errors().diagnostics());
             }
             
         } catch (Throwable e) {

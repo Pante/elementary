@@ -103,7 +103,9 @@ public @Static class FileObjects {
                 return kind;
             }
         }
-        return JavaFileObject.Kind.OTHER;
+        
+        
+        return null; // Will never occur
     }
     
 }

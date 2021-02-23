@@ -26,7 +26,7 @@ package com.karuslabs.elementary;
 import java.util.*;
 import javax.tools.*;
 
-public class Result {
+public class Results {
     
     public final List<JavaFileObject> sources;
     public final List<JavaFileObject> generated;
@@ -36,7 +36,7 @@ public class Result {
     public final List<Diagnostic<? extends JavaFileObject>> notes;
     public final boolean success;
     
-    public Result(List<JavaFileObject> sources, List<JavaFileObject> generated, Diagnostics diagnostics, boolean success) {
+    public Results(List<JavaFileObject> sources, List<JavaFileObject> generated, Diagnostics diagnostics, boolean success) {
         this.sources = sources;
         this.generated = generated;
         this.diagnostics = diagnostics.all;

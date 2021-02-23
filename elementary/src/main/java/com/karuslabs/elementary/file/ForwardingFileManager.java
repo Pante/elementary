@@ -51,15 +51,16 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
     public Iterable<? extends JavaFileObject> getJavaFileObjectsFromFiles(Iterable<? extends File> files) {
         return manager.getJavaFileObjectsFromFiles(files);
     }
+    
+    @Override
+    public Iterable<? extends JavaFileObject> getJavaFileObjectsFromStrings(Iterable<String> strings) {
+        return manager.getJavaFileObjectsFromStrings(strings);
+    }
+
 
     @Override
     public Iterable<? extends JavaFileObject> getJavaFileObjects(File... files) {
         return manager.getJavaFileObjects(files);
-    }
-
-    @Override
-    public Iterable<? extends JavaFileObject> getJavaFileObjectsFromStrings(Iterable<String> strings) {
-        return manager.getJavaFileObjectsFromStrings(strings);
     }
 
     @Override
@@ -99,6 +100,7 @@ public abstract class ForwardingFileManager implements StandardJavaFileManager {
         return manager.getJavaFileForOutput(location, className, kind, sibling);
     }
 
+    
     @Override
     public FileObject getFileForInput(Location location, String packageName, String relativeName) throws IOException {
         return manager.getFileForInput(location, packageName, relativeName);
