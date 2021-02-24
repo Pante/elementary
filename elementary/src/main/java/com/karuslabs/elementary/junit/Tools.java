@@ -24,7 +24,7 @@
 package com.karuslabs.elementary.junit;
 
 import com.karuslabs.annotations.Static;
-import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
+import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -37,7 +37,7 @@ public @Static class Tools {
     
     static @Nullable Environment environment;
     
-    private static DaemonProcessor.Environment environment() {
+    private static Environment environment() {
         if (environment == null) {
             throw new IllegalStateException("Class should be annotated with '@ExtendWith(ProcessorExtension.class)', "
                                           + "static methods are not supported with parallel test execution");

@@ -33,7 +33,7 @@ class CompilationExceptionTest {
 
     @Test
     void messages() {
-        assertEquals("A,\nB", new CompilationException(List.of("A", "B")).getMessage());
+        assertEquals("A\nB", new CompilationException(List.of("A", "B")).getMessage());
     }
     
 }

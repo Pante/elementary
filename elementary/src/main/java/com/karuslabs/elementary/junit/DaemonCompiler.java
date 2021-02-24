@@ -25,17 +25,19 @@ package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.CompilationException;
-import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
+import com.karuslabs.utilitary.Logger;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
+import java.util.concurrent.*;
+import javax.annotation.processing.*;
+import javax.lang.model.element.TypeElement;
+import javax.lang.model.util.*;
 import javax.tools.JavaFileObject;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-import org.junit.jupiter.api.extension.TestInstantiationException;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
+import static javax.lang.model.SourceVersion.RELEASE_11;
 
 class DaemonCompiler extends Thread {
     
@@ -45,18 +47,15 @@ class DaemonCompiler extends Thread {
         var files = scan(type);
         files.add(SOURCE);
         
-        return new DaemonCompiler(Thread.currentThread(), javac().currentClasspath(), files);
+        return new DaemonCompiler(javac().currentClasspath(), files);
     }
     
     
-    public final DaemonProcessor processor = new DaemonProcessor();
-    private final Thread parent;
+    private final DaemonProcessor processor = new DaemonProcessor();
     private final Compiler compiler;
     private final List<JavaFileObject> files;
-    private volatile @Nullable Throwable thrown;
     
-    DaemonCompiler(Thread parent, Compiler compiler, List<JavaFileObject> files) {
-        this.parent = parent;
+    DaemonCompiler(Compiler compiler, List<JavaFileObject> files) {
         this.compiler = compiler.processors(processor);
         this.files = files;
     }
@@ -64,24 +63,67 @@ class DaemonCompiler extends Thread {
     @Override
     public void run() {
         try {
-            var resultss = compiler.compile(files);
-            if (!resultss.success) {
-                throw new CompilationException(resultss.find().errors().diagnostics());
+            var results = compiler.compile(files);
+            if (!results.success) {
+                throw new CompilationException(results.find().diagnostics());
             }
             
         } catch (Throwable e) {
-            thrown = e;
-            parent.interrupt();
+            processor.environment.completeExceptionally(new CompilationException("Failed to start javac", e));
+        }
+    }
+    
+    public Environment environment() {
+        return processor.environment.join();
+    }
+    
+    public void shutdown() {
+        processor.completion.countDown();
+    }
+    
+    
+    @SupportedAnnotationTypes({"*"})
+    @SupportedSourceVersion(RELEASE_11)
+    static class DaemonProcessor extends AbstractProcessor {
+        
+        final CompletableFuture<Environment> environment = new CompletableFuture<>();
+        final CountDownLatch completion = new CountDownLatch(1);
+
+        @Override
+        public void init(ProcessingEnvironment env) {
+            super.init(env);
+            environment.complete(new Environment(env.getElementUtils(), env.getTypeUtils(), env.getMessager(), env.getFiler()));
+        }
+
+        @Override
+        public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
+            if (round.processingOver()) {
+                try {
+                    completion.await();
+                } catch (InterruptedException e) {
+                    // ignored 
+                }
+            }
+            return false;
         }
         
     }
     
-    public Environment environment() throws TestInstantiationException {
-        try {
-            return processor.environment();
-            
-        } catch (InterruptedException e) {
-            throw new TestInstantiationException("Failed to start javac", thrown == null ? e: thrown);
+    static class Environment {
+        public final Elements elements;
+        public final Types types;
+        public final Messager messager;
+        public final Filer filer;
+        public final TypeMirrors typeMirrors;
+        public final Logger logger;
+        
+        Environment(Elements elements, Types types, Messager messager, Filer filer) {
+            this.elements = elements;
+            this.types = types;
+            this.messager = messager;
+            this.filer = filer;
+            typeMirrors = new TypeMirrors(elements, types);
+            logger = new Logger(messager);
         }
     }
     

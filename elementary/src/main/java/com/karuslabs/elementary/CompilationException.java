@@ -28,11 +28,15 @@ import java.util.List;
 public class CompilationException extends RuntimeException {
 
     public CompilationException(List<String> messages) {
-        this(String.join(",\n", messages));
+        this(String.join("\n", messages));
     }
     
     public CompilationException(String message) {
-        super(message);
+        this(message, null);
+    }
+    
+    public CompilationException(String message, Throwable e) {
+        super(message, e);
     }
     
 }

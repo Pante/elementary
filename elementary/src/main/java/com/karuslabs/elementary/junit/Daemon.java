@@ -23,6 +23,7 @@
  */
 package com.karuslabs.elementary.junit;
 
+import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.lang.reflect.*;
@@ -52,9 +53,9 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
         return construct(constructors[0], initialize(context));
     }
     
-    protected abstract Object construct(Constructor constructor, DaemonProcessor.Environment environment) throws TestInstantiationException;
+    abstract Object construct(Constructor constructor, Environment environment) throws TestInstantiationException;
     
-    protected DaemonProcessor.Environment initialize(ExtensionContext context) {
+    Environment initialize(ExtensionContext context) {
         var compiler = compiler(context);
         
         if (compiler == null) {
@@ -85,19 +86,12 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
             throw new IllegalArgumentException("Method cannot be annotated with @Classpath and @Inline when using ToolsExtension");
         }
         
-        var throwable = compiler(context).processor.exchange(invocation);
-        if (throwable != null) {
-            throw throwable;
-        }
+        invocation.proceed();
     }
 
     @Override
     public void afterAll(ExtensionContext context) {
-        var compiler = compiler(context);
-        if (compiler != null) {
-            compiler.interrupt();
-        }
-        
+        compiler(context).shutdown();        
         Tools.environment = null;
     }
     
@@ -105,4 +99,5 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
     DaemonCompiler compiler(ExtensionContext context) { 
         return context.getStore(Namespace.create(getClass(), context.getRequiredTestClass())).get(COMPILER, DaemonCompiler.class);
     }
+    
 }

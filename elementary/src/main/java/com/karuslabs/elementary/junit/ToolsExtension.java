@@ -23,7 +23,7 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.elementary.junit.DaemonProcessor.Environment;
+import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -55,7 +55,7 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
     
     
     @Override
-    protected Object construct(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
+    Object construct(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
         var types = constructor.getParameterTypes();
         var parameters = new Object[types.length];
         
