@@ -31,13 +31,14 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.*;
 import java.util.concurrent.*;
 import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.*;
 import javax.tools.JavaFileObject;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
-import static javax.lang.model.SourceVersion.RELEASE_11;
+import static javax.lang.model.SourceVersion.latest;
 
 class DaemonCompiler extends Thread {
     
@@ -83,7 +84,6 @@ class DaemonCompiler extends Thread {
     
     
     @SupportedAnnotationTypes({"*"})
-    @SupportedSourceVersion(RELEASE_11)
     static class DaemonProcessor extends AbstractProcessor {
         
         final CompletableFuture<Environment> environment = new CompletableFuture<>();
@@ -105,6 +105,11 @@ class DaemonCompiler extends Thread {
                 }
             }
             return false;
+        }
+        
+        @Override
+        public SourceVersion getSupportedSourceVersion() {
+            return latest();
         }
         
     }

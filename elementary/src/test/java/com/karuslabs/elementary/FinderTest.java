@@ -31,13 +31,14 @@ import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.karuslabs.elementary.file.FileObjects.ofLines;
-import static javax.lang.model.SourceVersion.RELEASE_11;
+import static javax.lang.model.SourceVersion.latest;
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -182,7 +183,6 @@ class FinderTest {
 
 
 @SupportedAnnotationTypes({"*"})
-@SupportedSourceVersion(RELEASE_11)
 class ErrorProcessor extends AnnotationProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
@@ -192,10 +192,14 @@ class ErrorProcessor extends AnnotationProcessor {
         
         return false;
     }
+    
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return latest();
+    }
 }
 
 @SupportedAnnotationTypes({"*"})
-@SupportedSourceVersion(RELEASE_11)
 class WarningProcessor extends AnnotationProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
@@ -205,10 +209,14 @@ class WarningProcessor extends AnnotationProcessor {
         
         return false;
     }
+    
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return latest();
+    }
 }
 
 @SupportedAnnotationTypes({"*"})
-@SupportedSourceVersion(RELEASE_11)
 class NoteProcessor extends AnnotationProcessor {
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
@@ -217,5 +225,10 @@ class NoteProcessor extends AnnotationProcessor {
         }
         
         return false;
+    }
+    
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return latest();
     }
 }
