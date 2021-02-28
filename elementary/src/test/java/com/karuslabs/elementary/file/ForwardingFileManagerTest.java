@@ -28,7 +28,6 @@ import java.util.List;
 import javax.tools.*;
 import javax.tools.JavaFileManager.Location;
 import javax.tools.StandardJavaFileManager;
-import javax.tools.StandardJavaFileManager.PathFactory;
 
 import org.junit.jupiter.api.*;
 
@@ -97,73 +96,26 @@ class ForwardingFileManagerTest {
         verify(internal).getLocationForModule(location, "name");
     }
     
-//    @Test
-//    void getLocationForModule_file() throws IOException {
-//        manager.getLocationForModule(location, a);
-//        verify(internal).getLocationForModule(location, a);
-//    }
-//    
-//    
-//    @Test
-//    void getJavaFileForOutput_class_name() throws IOException {
-//        manager.getJavaFileForOutput(location, "type", JavaFileObject.Kind.HTML, a);
-//        verify(internal).getJavaFileForOutput(location, "type", JavaFileObject.Kind.HTML, a);
-//    }
-//    
-//    
-//    @Test
-//    void getFileForInput_package_name() throws IOException {
-//        manager.getFileForInput(location, "package", "relative");
-//        verify(internal).getFileForInput(location, "package", "relative");
-//    }
-//    
-//    @Test
-//    void getFileForOutput_package_name() throws IOException {
-//        manager.getFileForOutput(location, "package", "relative", a);
-//        verify(internal).getFileForOutput(location, "package", "relative", a);
-//    }
-//    
-//    
-//    @Test
-//    void setLocationForModule() throws IOException {
-//        manager.setLocationForModule(location, "module", List.of());
-//        verify(internal).setLocationForModule(location, "module", List.of());
-//    }
-//    
-//    
-//    @Test
-//    void setLocationFromPaths() throws IOException {
-//        manager.setLocationFromPaths(location, List.of());
-//        verify(internal).setLocationFromPaths(location, List.of());
-//    }
-//    
-//    
-//    @Test
-//    void setPathFactory() {
-//        var factory = mock(PathFactory.class);
-//        manager.setPathFactory(factory);
-//        
-//        verify(internal).setPathFactory(factory);
-//    }
-//    
-//    
-//    @Test
-//    void getServiceLoader() throws IOException {
-//        manager.getServiceLoader(location, String.class);
-//        verify(internal).getServiceLoader(location, String.class);
-//    }
-//    
-//    
-//    @Test
-//    void asPath() {
-//        manager.asPath(a);
-//        verify(internal).asPath(a);
-//    }
-//    
-//    @Test
-//    void close() throws IOException {
-//        manager.close();
-//        verify(internal).close();
-//    }
+    @Test
+    void getLocationForModule_file() throws IOException {
+        manager.getLocationForModule(location, a);
+        verify(internal).getLocationForModule(location, a);
+    }
+     
+    @Test
+    void getJavaFileForOutput_class_name() throws IOException {
+        manager.getJavaFileForOutput(location, "type", JavaFileObject.Kind.HTML, a);
+        verify(internal).getJavaFileForOutput(location, "type", JavaFileObject.Kind.HTML, a);
+    }
+    
+    
+    @Test
+    void getFileForInput_package_name() throws IOException {
+        manager.getFileForInput(location, "package", "relative");
+        verify(internal).getFileForInput(location, "package", "relative");
+    }
+    
+
     
 }
+

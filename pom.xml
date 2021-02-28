@@ -6,7 +6,7 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     
-    <name>Elementary</name>
+    <name>Elementary Project</name>
     <description>Elementary is a collection of annotation processing libraries and tools</description>
     
     <properties>
