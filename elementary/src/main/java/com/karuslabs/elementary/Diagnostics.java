@@ -26,13 +26,28 @@ package com.karuslabs.elementary;
 import java.util.*;
 import javax.tools.*;
 
- public class Diagnostics implements DiagnosticListener<JavaFileObject> {
-        
+/**
+ * Contains the resultant diagnostic messages of a compilation.
+ */
+public class Diagnostics implements DiagnosticListener<JavaFileObject> {
+    
+    /**
+     * All diagnostics messages.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> all = new ArrayList<>();
+    /**
+     * All errors.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> errors = new ArrayList<>();
+    /**
+     * Both mandatory and non-mandatory warnings.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> warnings = new ArrayList<>();
+    /**
+     * All notes.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> notes = new ArrayList<>();
-
+    
     @Override
     public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
         all.add(diagnostic);

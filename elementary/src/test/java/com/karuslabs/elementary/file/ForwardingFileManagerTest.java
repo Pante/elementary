@@ -115,7 +115,5 @@ class ForwardingFileManagerTest {
         verify(internal).getFileForInput(location, "package", "relative");
     }
     
-
-    
 }
 

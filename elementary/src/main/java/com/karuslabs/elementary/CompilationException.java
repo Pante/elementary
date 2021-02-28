@@ -25,16 +25,36 @@ package com.karuslabs.elementary;
 
 import java.util.List;
 
+/**
+ * Indicates that compilation has failed. 
+ */
 public class CompilationException extends RuntimeException {
-
+    
+    /**
+     * Creates a {@code CompilationException} with the given error messages.
+     * 
+     * @param messages the error messages
+     */
     public CompilationException(List<String> messages) {
         this(String.join("\n", messages));
     }
     
+    /**
+     * Creates a {@code CompilationException} with the given error message.
+     * 
+     * @param message the error message
+     */
     public CompilationException(String message) {
         this(message, null);
     }
     
+    /**
+     * Creates a {@code CompilationException} with the given error message and
+     * underlying exception.
+     * 
+     * @param message the error message
+     * @param e the underlying exception
+     */
     public CompilationException(String message, Throwable e) {
         super(message, e);
     }
