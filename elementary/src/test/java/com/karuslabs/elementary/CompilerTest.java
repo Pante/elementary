@@ -31,13 +31,11 @@ import javax.tools.*;
 import org.junit.jupiter.api.*;
 
 import static com.karuslabs.elementary.Compiler.javac;
-import static com.karuslabs.elementary.file.FileObjects.ofLines;
+import static com.karuslabs.elementary.file.FileObjects.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CompilerTest {
-
-    static final JavaFileObject SOURCE = ofLines("Dummy", "class Dummy {}");
     
     @Test
     void setLocation() throws IOException {
@@ -49,14 +47,27 @@ class CompilerTest {
     
     
     @Test
+    void processors_varargs() {
+        var results = javac().processors(new WarningProcessor()).compile(DUMMY);
+        assertEquals(1, results.warnings.size());
+    }
+    
+    @Test
+    void processors_collection() {
+        var results = javac().processors(List.of(new WarningProcessor())).compile(DUMMY);
+        assertEquals(1, results.warnings.size());
+    }
+    
+    
+    @Test
     void options_varargs() throws IOException, URISyntaxException {
-        var results = javac().options("-nowarn").processors(new WarningProcessor()).compile(SOURCE);
+        var results = javac().options("-nowarn").processors(new WarningProcessor()).compile(DUMMY);
         assertEquals(0, results.warnings.size());
     }
     
     @Test
-    void options_iterable() throws IOException, URISyntaxException {
-        var results = javac().options(List.of("-nowarn")).processors(new WarningProcessor()).compile(SOURCE);
+    void options_collection() throws IOException, URISyntaxException {
+        var results = javac().options(List.of("-nowarn")).processors(new WarningProcessor()).compile(DUMMY);
         assertEquals(0, results.warnings.size());
     }
     
@@ -64,7 +75,7 @@ class CompilerTest {
     @Test
     void classpath_classloader() throws MalformedURLException {
         var loader = new URLClassLoader(new URL[] {new URL("file", "", 0, "")}, getClass().getClassLoader());
-        var results = javac().classpath(loader).compile(SOURCE);
+        var results = javac().classpath(loader).compile(DUMMY);
         
         assertTrue(results.diagnostics.isEmpty());
     }

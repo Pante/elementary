@@ -42,11 +42,9 @@ import static javax.lang.model.SourceVersion.latest;
 
 class DaemonCompiler extends Thread {
     
-    private static final JavaFileObject SOURCE = ofLines("Dummy", "final class Dummy {}");
-    
     public static DaemonCompiler of(Class<?> type) {
         var files = scan(type);
-        files.add(SOURCE);
+        files.add(DUMMY);
         
         return new DaemonCompiler(javac().currentClasspath(), files);
     }

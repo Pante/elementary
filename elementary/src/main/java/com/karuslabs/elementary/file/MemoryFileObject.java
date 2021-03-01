@@ -31,10 +31,18 @@ import javax.tools.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code JavaFileObject} that is stored in memory.
+ */
 class MemoryFileObject extends SimpleJavaFileObject {
     
     @Nullable ImmutableFileObject source;
     
+    /**
+     * Creates a {@code MemoryFileObject} with the given URI.
+     * 
+     * @param uri the URI
+     */
     MemoryFileObject(URI uri) {
         super(uri, FileObjects.deduce(uri));
     }
@@ -82,7 +90,7 @@ class MemoryFileObject extends SimpleJavaFileObject {
     
     @Override
     public CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors) throws FileNotFoundException {
-        return source().toString();
+        return source().getCharContent(ignoreEncodingErrors);
     }
     
     @Override
@@ -91,6 +99,12 @@ class MemoryFileObject extends SimpleJavaFileObject {
     }
     
     
+    /**
+     * Returns the underlying source.
+     * 
+     * @return the underlying source
+     * @throws FileNotFoundException if the underlying source is not initialized
+     */
     ImmutableFileObject source() throws FileNotFoundException {
         if (source != null) {
             return source;

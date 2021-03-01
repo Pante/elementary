@@ -23,19 +23,53 @@
  */
 package com.karuslabs.elementary;
 
+import com.karuslabs.annotations.ValueType;
+
 import java.util.*;
 import javax.tools.*;
 
-public class Results {
+/**
+ * Represent the results of a compilation.
+ */
+public @ValueType final class Results {
     
+    /**
+     * The source files.
+     */
     public final List<JavaFileObject> sources;
+    /**
+     * The generated source files.
+     */
     public final List<JavaFileObject> generated;
+    /**
+     * The diagnostic messages.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> diagnostics;
+    /**
+     * The errors.
+     */
     public final List<Diagnostic<? extends JavaFileObject>> errors;
+    /**
+     * The warnings
+     */
     public final List<Diagnostic<? extends JavaFileObject>> warnings;
+    /**
+     * The notes
+     */
     public final List<Diagnostic<? extends JavaFileObject>> notes;
+    /**
+     * Whether the compilation was successful.
+     */
     public final boolean success;
     
+    /**
+     * Creates a {@code Results} with the given parameters.
+     * 
+     * @param sources the sources
+     * @param generated the generated sources
+     * @param diagnostics the diagnostic messages
+     * @param success whether this compilation was successful
+     */
     public Results(List<JavaFileObject> sources, List<JavaFileObject> generated, Diagnostics diagnostics, boolean success) {
         this.sources = sources;
         this.generated = generated;
@@ -46,6 +80,11 @@ public class Results {
         this.success = success;
     }
     
+    /**
+     * Returns a {@code Finder} that operates on this {@code Results}.
+     * 
+     * @return a {@code Finder}
+     */
     public Finder find() {
         return new Finder(this);
     }

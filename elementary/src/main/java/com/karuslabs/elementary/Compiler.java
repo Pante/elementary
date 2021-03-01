@@ -107,7 +107,7 @@ public class Compiler {
      * @param paths the search paths
      * 
      * @throws UncheckedIOException if {@code location} is an output location and
-     * does not represent an existing directory
+     *         does not represent an existing directory
      */
     void setLocation(StandardJavaFileManager manager, StandardLocation location, Iterable<File> paths) {
         try {
@@ -145,10 +145,10 @@ public class Compiler {
     /**
      * Adds the given compiler options to be applied during compilation.
      * 
-     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
-     * 
      * @param options the options
      * @return {@code this}
+     * 
+     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
      */
     public Compiler options(String... options) {
         Collections.addAll(this.options, options);
@@ -158,10 +158,10 @@ public class Compiler {
     /**
      * Adds the given compiler options to be applied during compilation.
      * 
-     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
-     * 
      * @param options the options
      * @return {@code this}
+     * 
+     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
      */
     public Compiler options(Collection<String> options) {
         this.options.addAll(options);
@@ -186,9 +186,8 @@ public class Compiler {
      * @return {@code this}
      * 
      * @throws IllegalArgumentException if the given {@code ClassLoader} or its parents are not
-     *                                  the system/platform {@code ClassLoader} or {@code URLClassLoader}s,
-     *                                  or if the given {@code ClassLoader} or its parents contains a classpath
-     *                                  that consists of folders
+     *         the system/platform {@code ClassLoader} or {@code URLClassLoader}s, or if the given 
+     *         {@code ClassLoader} or its parents contains a classpath  that consists of folders
      */
     public Compiler classpath(ClassLoader loader) {
         var paths = new HashSet<String>();

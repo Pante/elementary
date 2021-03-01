@@ -23,6 +23,8 @@
  */
 package com.karuslabs.elementary;
 
+import com.karuslabs.annotations.*;
+
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -33,11 +35,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Contains methods to filter and map the results of a compilation.
+ */
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
     private final List<Diagnostic<? extends JavaFileObject>> diagnostics;
     private final Results results;
     
+    /**
+     * Creates a {@code Finder} for the given results.
+     * 
+     * @param results the results of a compilation
+     */
     public Finder(Results results) {
         diagnostics = new ArrayList<>(results.diagnostics);
         this.results = results;
@@ -49,104 +59,220 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     
-    public Finder kind(Kind... kinds) {
+    /**
+     * Returns a {@code Finder} where each diagnostic message's kind matches the
+     * given kinds.
+     * 
+     * @param kinds the kinds which all diagnostic messages should match
+     * @return {@code this}
+     */
+    public @Intermediate Finder kind(Kind... kinds) {
         return kind(Set.of(kinds));
     }
     
-    public Finder kind(Collection<Kind> kinds) {
+    /**
+     * Returns a {@code Finder} where each diagnostic message's kind matches the
+     * given kinds.
+     * 
+     * @param kinds the kinds which all diagnostic messages should match
+     * @return {@code this}
+     */
+    public @Intermediate Finder kind(Collection<Kind> kinds) {
         diagnostics.removeIf(diagnostic -> !kinds.contains(diagnostic.getKind()));
         return this;
     }
     
-    public Finder errors() {
+    /**
+     * Returns a {@code Finder} with only errors.
+     * 
+     * @return {@code this}
+     */
+    public @Intermediate Finder errors() {
         diagnostics.retainAll(results.errors);
         return this;
     }
     
-    public Finder warnings() {
+    /**
+     * Returns a {@code Finder} with only warnings.
+     * 
+     * @return {@code this}
+     */
+    public @Intermediate Finder warnings() {
         diagnostics.retainAll(results.warnings);
         return this;
     }
     
-    public Finder notes() {
+    /**
+     * Returns a {@code Finder} with only notes.
+     * 
+     * @return {@code this}
+     */
+    public @Intermediate Finder notes() {
         diagnostics.retainAll(results.notes);
         return this;
     }
     
     
-    public Finder in(JavaFileObject file) {
+    /**
+     * Returns a {@code Finder} with only diagnostic messages in the given Java source file.
+     * 
+     * @param file the Java source file
+     * @return {@code this}
+     */
+    public @Intermediate Finder in(JavaFileObject file) {
         var path = file.toUri().getPath();
         diagnostics.removeIf(diagnostic -> !diagnostic.getSource().toUri().getPath().equals(path));
         return this;
     }
     
-    public Finder on(long line) {
+    /**
+     * Returns a {@code Finder} with only diagnostic messages that appear on the given line.
+     * 
+     * @param line the line
+     * @return {@code this}
+     */
+    public @Intermediate Finder on(long line) {
         diagnostics.removeIf(diagnostic -> diagnostic.getLineNumber() != line);
         return this;
     }
     
-    public Finder at(long column) {
+    /**
+     * Returns a {@code Finder} with only diagnostic messages that appear at the given column.
+     * 
+     * @param column the column
+     * @return {@code this}
+     */
+    public @Intermediate Finder at(long column) {
         diagnostics.removeIf(diagnostic -> diagnostic.getColumnNumber() != column);
         return this;
     }
     
-    
-    public Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
+    /**
+     * Returns a {@code Finder} with diagnostic messages that satisfy the given predicate.
+     * 
+     * @param condition the condition
+     * @return {@code this}
+     */
+    public @Intermediate Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
         diagnostics.removeIf(Predicate.not(condition));
         return this;
     }
     
     
-    public Finder matches(String message) {
+    /**
+     * Returns a {@code Finder} with diagnostic messages that exactly match the given message.
+     * 
+     * @param message the message
+     * @return {@code this}
+     */
+    public @Intermediate Finder matches(String message) {
         diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).equals(message));
         return this;
     }
     
-    public Finder contains(String substring) {
+    /**
+     * Returns a {@code Finder} with diagnostic messages that contain the given substring.
+     * 
+     * @param substring the substring
+     * @return {@code this}
+     */
+    public @Intermediate Finder contains(String substring) {
         diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).contains(substring));
         return this;
     }
     
-    public Finder contains(Pattern pattern) {
+    /**
+     * Returns a {code Finder} with diagnostic messages that match the given pattern.
+     * 
+     * @param pattern the pattern
+     * @return {@code this}
+     */
+    public @Intermediate Finder contains(Pattern pattern) {
         diagnostics.removeIf(diagnostic -> !pattern.matcher(diagnostic.getMessage(Locale.getDefault())).matches());
         return this;
     }
     
     
-    public List<String> diagnostics() {
+    /**
+     * Returns the full string representations of the diagnostic messages.
+     * 
+     * @return the full diagnostic messages
+     */
+    public @Terminal List<String> diagnostics() {
         return diagnostics.stream().map(Diagnostic::toString).collect(toList());
     }
     
-    public List<String> messages() {
+    /**
+     * Returns only the message portions of the diagnostic messages.
+     * 
+     * @return the message portions
+     */
+    public @Terminal List<String> messages() {
         return diagnostics.stream().map(diagnostic -> diagnostic.getMessage(Locale.getDefault())).collect(toList());
     }
     
-    public List<Long> lines() {
+    /**
+     * Returns the line numbers of the diagnostic messages.
+     * 
+     * @return the line numbers
+     */
+    public @Terminal List<Long> lines() {
         return diagnostics.stream().map(Diagnostic::getLineNumber).collect(toList());
     }
     
-    public List<Long> columns() {
+    /**
+     * Returns the column numbers of the diagnostic messages.
+     * 
+     * @return the column numbers
+     */
+    public @Terminal List<Long> columns() {
         return diagnostics.stream().map(Diagnostic::getColumnNumber).collect(toList());
     }
     
-    public List<Long> positions() {
+    /**
+     * Return the positions of the diagnostic messages from the start of a source file.
+     * 
+     * @return the positions
+     */
+    public @Terminal List<Long> positions() {
         return diagnostics.stream().map(Diagnostic::getPosition).collect(toList());
     }
     
-    public List<String> codes() {
+    /**
+     * Return the codes of the diagnostic messages.
+     * 
+     * @return the codes
+     */
+    public @Terminal List<String> codes() {
         return diagnostics.stream().map(Diagnostic::getCode).collect(toList());
     }
     
     
-    public @Nullable Diagnostic<? extends JavaFileObject> one() {
+    /**
+     * Returns the diagnostic message if this {@code Finder} contains exactly one
+     * diagnostic message. Otherwise returns {@code null}.
+     * 
+     * @return the diagnostic message if this {@code Finder} contains exactly one diagnostic message
+     */
+    public @Terminal @Nullable Diagnostic<? extends JavaFileObject> one() {
         return diagnostics.size() == 1 ? diagnostics.get(0) : null;
     }
     
-    public List<Diagnostic<? extends JavaFileObject>> list() {
+    /**
+     * Returns the diagnostic messages.
+     * 
+     * @return the diagnostic messages
+     */
+    public @Terminal List<Diagnostic<? extends JavaFileObject>> list() {
         return diagnostics;
     }
     
-    public Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
+    /**
+     * Returns a map of diagnostic messages associated with their {@code Kind}s.
+     * 
+     * @return the map
+     */
+    public @Terminal Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
         var map = new HashMap<Kind, List<Diagnostic<? extends JavaFileObject>>>();
         for (var diagnostic : diagnostics) {
             var list = map.get(diagnostic.getKind());
@@ -161,6 +287,11 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     
+    /**
+     * Returns the current number of diagnostic messages.
+     * 
+     * @return the current number of diagnostic messages
+     */
     public int count() {
         return diagnostics.size();
     }

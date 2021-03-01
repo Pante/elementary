@@ -28,10 +28,19 @@ import java.nio.file.Path;
 import java.util.*;
 import javax.tools.*;
 
+/**
+ * A {@code StandardJavaFileManager} that forwards all calls to an underlying
+ * {@code StandardJavaFileManager}.
+ */
 public abstract class ForwardingFileManager implements StandardJavaFileManager {
 
     private final StandardJavaFileManager manager;
     
+    /**
+     * Creates a {@code FowardingFileManager} with the given underlying manager.
+     * 
+     * @param manager the underlying manager to which all calls are forwarded
+     */
     public ForwardingFileManager(StandardJavaFileManager manager) {
         this.manager = manager;
     }

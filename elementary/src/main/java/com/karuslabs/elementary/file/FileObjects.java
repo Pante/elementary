@@ -34,8 +34,23 @@ import javax.tools.*;
 
 import static javax.tools.JavaFileObject.Kind.SOURCE;
 
+/**
+ * A utility class for creating {@code JavaFileObject}s.
+ */
 public @Static class FileObjects {
     
+    /**
+     * A dummy Java source file.
+     */
+    public static final JavaFileObject DUMMY = ofLines("Dummy", "class Dummy {}");
+    
+    /**
+     * Creates {@code JavaFileObject}s from {@code @Classpath} and {@code @Inline} 
+     * annotations on the given annotated element.
+     * 
+     * @param annotated the annotated element
+     * @return the {@code JavaFileObject}s
+     */
     public static List<JavaFileObject> scan(AnnotatedElement annotated) {
         var files = new ArrayList<JavaFileObject>();
         for (var classpath : annotated.getAnnotationsByType(Classpath.class)) {
@@ -49,20 +64,51 @@ public @Static class FileObjects {
         return files;
     }
     
-    
-    public static JavaFileObject ofLines(String fullyQualifiedName, Iterable<String> lines) {
-        return ofLines(fullyQualifiedName, String.join(System.lineSeparator(), lines));
-    }
-    
+    /**
+     * Creates a {@code JavaFileObject} using the given fully qualified class name
+     * and source code.
+     * 
+     * @param fullyQualifiedName the fully qualified class name
+     * @param lines the source code
+     * @return a {@code JavaFileObject}
+     */
     public static JavaFileObject ofLines(String fullyQualifiedName, String... lines) {
         return ofLines(fullyQualifiedName, String.join(System.lineSeparator(), lines));
     }
     
+    /**
+     * Creates a {@code JavaFileObject} using the given fully qualified class name
+     * and source code.
+     * 
+     * @param fullyQualifiedName the fully qualified class name
+     * @param lines the source code
+     * @return a {@code JavaFileObject}
+     */
+    public static JavaFileObject ofLines(String fullyQualifiedName, Iterable<String> lines) {
+        return ofLines(fullyQualifiedName, String.join(System.lineSeparator(), lines));
+    }
+    
+    /**
+     * Creates a {@code JavaFileObject} using the given fully qualified class name
+     * and source code.
+     * 
+     * @param fullyQualifiedName the fully qualified class name
+     * @param source the source code
+     * @return a {@code JavaFileObject}
+     */
     public static JavaFileObject ofLines(String fullyQualifiedName, String source) {
         return new StringFileObject(URI.create(fullyQualifiedName.replace('.', '/') + SOURCE.extension), SOURCE, source);
     }
     
-    
+    /**
+     * Creates a {@code JavaFileObject} from the given resource.
+     * 
+     * @param resource the path to a resource, relative to the current ClassLoader
+     * @return a {@code JavaFileObject}
+     * @throws IllegalArgumentException if the given resource does not exist on the
+     *         current clssspath
+     * @throws UncheckedIOException if the resource could not be opened
+     */
     public static JavaFileObject ofResource(String resource) {
         var url = FileObjects.class.getClassLoader().getResource(resource);
         if (url == null) {
@@ -72,6 +118,15 @@ public @Static class FileObjects {
         return ofResource(url);
     }
     
+    /**
+     * Creates a {@code JavaFileObject} from the given resource.
+     * 
+     * @param resource the path to a resource, relative to the current ClassLoader
+     * @return a {@code JavaFileObject}
+     * @throws IllegalArgumentException if the given resource does not exist on the
+     *         current clssspath
+     * @throws UncheckedIOException if the resource could not be opened
+     */
     public static JavaFileObject ofResource(URL resource) {
         try (var stream = resource.openStream()) {
             var uri = uri(resource);
@@ -85,6 +140,15 @@ public @Static class FileObjects {
         }
     }
     
+    /**
+     * Creates a URI from the path portion of the given URL if it represents an
+     * resource in a JAR.
+     * 
+     * @param resource
+     * @return the URI
+     * @throws URISyntaxException if this URL is not formatted strictly according to
+     *         to RFC2396 and cannot be converted to a URI.
+     */
     static URI uri(URL resource) throws URISyntaxException {
         if (!resource.getProtocol().equals("jar")) {
             return resource.toURI();
@@ -95,7 +159,12 @@ public @Static class FileObjects {
     
     
     
-    
+    /**
+     * Deduces the kind of the given URI based on its extension.
+     * 
+     * @param uri the URI
+     * @return the kind of the file that the given URI represents
+     */
     public static JavaFileObject.Kind deduce(URI uri) {
         var path = uri.getPath();
         for (var kind : JavaFileObject.Kind.values()) {

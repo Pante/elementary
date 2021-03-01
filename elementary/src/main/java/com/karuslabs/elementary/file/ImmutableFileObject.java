@@ -30,10 +30,22 @@ import java.net.URI;
 import java.nio.charset.Charset;
 import javax.tools.*;
 
+/**
+ * An immutable {@code SimpleJavaFileObject}.
+ */
 abstract class ImmutableFileObject extends SimpleJavaFileObject {
     
+    /**
+     * The timestamp at which this {@code ImmutableFileObject} was created.
+     */
     final long timestamp = System.currentTimeMillis();
     
+    /**
+     * Creates an {@code ImmutableFileObject} with the given URI and kind.
+     * 
+     * @param uri the URI
+     * @param kind the kind
+     */
     ImmutableFileObject(URI uri, JavaFileObject.Kind kind) {
         super(uri, kind);
     }
@@ -49,11 +61,21 @@ abstract class ImmutableFileObject extends SimpleJavaFileObject {
     
 }
 
+/**
+ * An immutable {@code JavaFileObject} backed by a byte array.
+ */
 class ByteFileObject extends ImmutableFileObject {
 
     private final byte[] bytes;
     private @Lazy String string;
     
+    /**
+     * Creates a {@code ByteFileObject} with the given paraemters.
+     * 
+     * @param uri the URI
+     * @param kind the kind
+     * @param bytes the backing byte array
+     */
     ByteFileObject(URI uri, JavaFileObject.Kind kind, byte[] bytes) {
         super(uri, kind);
         this.bytes = bytes;
@@ -80,11 +102,21 @@ class ByteFileObject extends ImmutableFileObject {
     
 }
 
+/**
+ * An immutable {@code JavaFileObject} backed by a string.
+ */
 class StringFileObject extends ImmutableFileObject {
     
     private final String string;
     private @Lazy byte[] bytes;
     
+    /**
+     * Creates a {@code StringFileObject} with the given parameters,
+     * 
+     * @param uri the URI
+     * @param kind the kind
+     * @param string the backing string
+     */
     StringFileObject(URI uri, Kind kind, String string) {
         super(uri, kind);
         this.string = string;

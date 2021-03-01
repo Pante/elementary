@@ -23,6 +23,8 @@
  */
 package com.karuslabs.elementary.file;
 
+import com.karuslabs.elementary.junit.annotations.*;
+
 import java.io.*;
 import java.net.*;
 import java.util.List;
@@ -35,8 +37,20 @@ import static com.karuslabs.elementary.file.FileObjects.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@Classpath("A.java")
+@Inline(name = "Dummy", source = "class Dummy {}")
 class FileObjectsTest {
 
+    @Test
+    void scan() {
+        assertTrue(javac().compile(FileObjects.scan(FileObjectsTest.class)).success);
+    }
+    
+    @Test
+    void ofLines_varargs() {
+        assertTrue(javac().compile(ofLines("Dummy", List.of("class Dummy {}"))).success);
+    }
+    
     @Test
     void ofLines_iterable() {
         assertTrue(javac().compile(ofLines("Dummy", List.of("class Dummy {}"))).success);

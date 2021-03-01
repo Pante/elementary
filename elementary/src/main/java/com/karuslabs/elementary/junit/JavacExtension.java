@@ -30,16 +30,14 @@ import com.karuslabs.elementary.junit.annotations.*;
 import java.util.*;
 import java.lang.reflect.AnnotatedElement;
 import javax.annotation.processing.Processor;
-import javax.tools.JavaFileObject;
 
 import org.junit.jupiter.api.extension.*;
 
 import static com.karuslabs.elementary.Compiler.javac;
-import static com.karuslabs.elementary.file.FileObjects.*;
+import static com.karuslabs.elementary.file.FileObjects.scan;
 
 public class JavacExtension implements ParameterResolver {
 
-    private static final JavaFileObject SOURCE = ofLines("Dummy", "final class Dummy {}");
     private static final String[] EMPTY = new String[] {};
     
     @Override

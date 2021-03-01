@@ -33,12 +33,31 @@ import javax.tools.JavaFileObject.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code StandardJavaFileManager} that stores all output in memory.
+ */
 public class MemoryFileManager extends ForwardingFileManager {
 
+    /**
+     * Creates a URI using the given location, package and relative file name.
+     * 
+     * @param location the location
+     * @param pack the package
+     * @param relative the relative file name
+     * @return a URI
+     */
     static URI of(Location location, String pack, String relative) {
         return URI.create("mem:///" + location.getName() + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
     }
     
+    /**
+     * Creates a URI using the given location, class name and file kind.
+     * 
+     * @param location the location
+     * @param type the class name
+     * @param kind the file kind
+     * @return a URI
+     */
     static URI of(Location location, String type, Kind kind) {
         return URI.create("mem:///" + location.getName() + "/" + type.replace('.', '/') + kind.extension);
     }
@@ -46,6 +65,11 @@ public class MemoryFileManager extends ForwardingFileManager {
     
     private final Map<URI, JavaFileObject> files = new HashMap<>();
     
+    /**
+     * Creates a {@code MemoryFileManager} with the given underlying {@code StandardJavaFileManager}.
+     * 
+     * @param manager the underlying file manager
+     */
     public MemoryFileManager(StandardJavaFileManager manager) {
         super(manager);
     }
@@ -89,6 +113,11 @@ public class MemoryFileManager extends ForwardingFileManager {
     }
     
     
+    /**
+     * Returns the generated Java source files.
+     * 
+     * @return the generated Java source files
+     */
     public List<JavaFileObject> generatedSources() {
         var sources = new ArrayList<JavaFileObject>();
         var prefix = "/" + StandardLocation.SOURCE_OUTPUT.name();
@@ -102,6 +131,11 @@ public class MemoryFileManager extends ForwardingFileManager {
         return sources;
     }
     
+    /**
+     * Returns the output files.
+     * 
+     * @return the output files
+     */
     public List<JavaFileObject> outputFiles() {
         return new ArrayList<>(files.values());
     }
