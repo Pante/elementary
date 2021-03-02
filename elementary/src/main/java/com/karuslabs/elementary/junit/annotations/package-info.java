@@ -21,23 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.annotations;
-
-import java.lang.annotation.*;
-
-import org.junit.jupiter.api.extension.Extension;
-
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * A meta-annotation that denotes usage of the annotated annotation by a JUnit extension.
+ * Contains annotations used by the JUnit extensions in {@link com.karuslabs.elementary.junit}.
  */
-@Documented
-@Retention(SOURCE)
-@Target({ANNOTATION_TYPE})
-public @interface Usage {
-
-    Class<? extends Extension>[] value();
-    
-}
+package com.karuslabs.elementary.junit.annotations;

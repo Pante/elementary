@@ -23,8 +23,6 @@
  */
 package com.karuslabs.elementary;
 
-import com.karuslabs.annotations.*;
-
 import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
@@ -66,7 +64,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param kinds the kinds which all diagnostic messages should match
      * @return {@code this}
      */
-    public @Intermediate Finder kind(Kind... kinds) {
+    public Finder kind(Kind... kinds) {
         return kind(Set.of(kinds));
     }
     
@@ -77,7 +75,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param kinds the kinds which all diagnostic messages should match
      * @return {@code this}
      */
-    public @Intermediate Finder kind(Collection<Kind> kinds) {
+    public Finder kind(Collection<Kind> kinds) {
         diagnostics.removeIf(diagnostic -> !kinds.contains(diagnostic.getKind()));
         return this;
     }
@@ -87,7 +85,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return {@code this}
      */
-    public @Intermediate Finder errors() {
+    public Finder errors() {
         diagnostics.retainAll(results.errors);
         return this;
     }
@@ -97,7 +95,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return {@code this}
      */
-    public @Intermediate Finder warnings() {
+    public Finder warnings() {
         diagnostics.retainAll(results.warnings);
         return this;
     }
@@ -107,7 +105,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return {@code this}
      */
-    public @Intermediate Finder notes() {
+    public Finder notes() {
         diagnostics.retainAll(results.notes);
         return this;
     }
@@ -119,7 +117,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param file the Java source file
      * @return {@code this}
      */
-    public @Intermediate Finder in(JavaFileObject file) {
+    public Finder in(JavaFileObject file) {
         var path = file.toUri().getPath();
         diagnostics.removeIf(diagnostic -> !diagnostic.getSource().toUri().getPath().equals(path));
         return this;
@@ -131,7 +129,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param line the line
      * @return {@code this}
      */
-    public @Intermediate Finder on(long line) {
+    public Finder on(long line) {
         diagnostics.removeIf(diagnostic -> diagnostic.getLineNumber() != line);
         return this;
     }
@@ -142,7 +140,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param column the column
      * @return {@code this}
      */
-    public @Intermediate Finder at(long column) {
+    public Finder at(long column) {
         diagnostics.removeIf(diagnostic -> diagnostic.getColumnNumber() != column);
         return this;
     }
@@ -153,7 +151,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param condition the condition
      * @return {@code this}
      */
-    public @Intermediate Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
+    public Finder where(Predicate<Diagnostic<? extends JavaFileObject>> condition) {
         diagnostics.removeIf(Predicate.not(condition));
         return this;
     }
@@ -165,7 +163,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param message the message
      * @return {@code this}
      */
-    public @Intermediate Finder matches(String message) {
+    public Finder matches(String message) {
         diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).equals(message));
         return this;
     }
@@ -176,7 +174,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param substring the substring
      * @return {@code this}
      */
-    public @Intermediate Finder contains(String substring) {
+    public Finder contains(String substring) {
         diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).contains(substring));
         return this;
     }
@@ -187,7 +185,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * @param pattern the pattern
      * @return {@code this}
      */
-    public @Intermediate Finder contains(Pattern pattern) {
+    public Finder contains(Pattern pattern) {
         diagnostics.removeIf(diagnostic -> !pattern.matcher(diagnostic.getMessage(Locale.getDefault())).matches());
         return this;
     }
@@ -198,7 +196,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the full diagnostic messages
      */
-    public @Terminal List<String> diagnostics() {
+    public List<String> diagnostics() {
         return diagnostics.stream().map(Diagnostic::toString).collect(toList());
     }
     
@@ -207,7 +205,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the message portions
      */
-    public @Terminal List<String> messages() {
+    public List<String> messages() {
         return diagnostics.stream().map(diagnostic -> diagnostic.getMessage(Locale.getDefault())).collect(toList());
     }
     
@@ -216,7 +214,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the line numbers
      */
-    public @Terminal List<Long> lines() {
+    public List<Long> lines() {
         return diagnostics.stream().map(Diagnostic::getLineNumber).collect(toList());
     }
     
@@ -225,7 +223,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the column numbers
      */
-    public @Terminal List<Long> columns() {
+    public List<Long> columns() {
         return diagnostics.stream().map(Diagnostic::getColumnNumber).collect(toList());
     }
     
@@ -234,7 +232,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the positions
      */
-    public @Terminal List<Long> positions() {
+    public List<Long> positions() {
         return diagnostics.stream().map(Diagnostic::getPosition).collect(toList());
     }
     
@@ -243,7 +241,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the codes
      */
-    public @Terminal List<String> codes() {
+    public List<String> codes() {
         return diagnostics.stream().map(Diagnostic::getCode).collect(toList());
     }
     
@@ -254,7 +252,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the diagnostic message if this {@code Finder} contains exactly one diagnostic message
      */
-    public @Terminal @Nullable Diagnostic<? extends JavaFileObject> one() {
+    public @Nullable Diagnostic<? extends JavaFileObject> one() {
         return diagnostics.size() == 1 ? diagnostics.get(0) : null;
     }
     
@@ -263,7 +261,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the diagnostic messages
      */
-    public @Terminal List<Diagnostic<? extends JavaFileObject>> list() {
+    public List<Diagnostic<? extends JavaFileObject>> list() {
         return diagnostics;
     }
     
@@ -272,7 +270,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * 
      * @return the map
      */
-    public @Terminal Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
+    public Map<Kind, List<Diagnostic<? extends JavaFileObject>>> map() {
         var map = new HashMap<Kind, List<Diagnostic<? extends JavaFileObject>>>();
         for (var diagnostic : diagnostics) {
             var list = map.get(diagnostic.getKind());

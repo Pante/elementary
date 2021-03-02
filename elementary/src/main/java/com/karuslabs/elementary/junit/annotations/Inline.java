@@ -31,6 +31,9 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Represents an inline Java source file to be included for compilation.
+ */
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
@@ -38,8 +41,14 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Inlines.class)
 public @interface Inline {
     
+    /**
+     * @return the fully qualified class name
+     */
     String name();
     
+    /**
+     * @return the lines of the Java source file.
+     */
     String[] source();
     
 }

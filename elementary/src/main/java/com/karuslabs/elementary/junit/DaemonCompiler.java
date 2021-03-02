@@ -23,6 +23,7 @@
  */
 package com.karuslabs.elementary.junit;
 
+import com.karuslabs.annotations.*;
 import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.CompilationException;
 import com.karuslabs.utilitary.Logger;
@@ -30,6 +31,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 import java.util.concurrent.*;
+import java.lang.reflect.AnnotatedElement;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
@@ -40,10 +42,25 @@ import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
 import static javax.lang.model.SourceVersion.latest;
 
+/**
+ * Represents a Java compiler that is invoked on a daemon thread. The compiler 
+ * is invoked with a blocking annotation processor to allow other threads to use
+ * facilities accessible only in an annotation processing environment, i.e.
+ * {@code javax.lang.model.*}. Said facilities can be accessed safely via {@code DaemonCompiler.environment()}.
+ * {@code DaemonCompiler.shutdown()} should be called once the environment is no longer needed.
+ */
 class DaemonCompiler extends Thread {
     
-    public static DaemonCompiler of(Class<?> type) {
-        var files = scan(type);
+    /**
+     * Creates a {@code DaemonCompiler} that compiles the Java source files provided
+     * by {@code @Classpath} and {@code Inline} annotations on the given annotated
+     * element.
+     * 
+     * @param annotated the annotated elements
+     * @return a {@code DaemonCompiler}
+     */
+    public static DaemonCompiler of(AnnotatedElement annotated) {
+        var files = scan(annotated);
         files.add(DUMMY);
         
         return new DaemonCompiler(javac().currentClasspath(), files);
@@ -54,6 +71,13 @@ class DaemonCompiler extends Thread {
     private final Compiler compiler;
     private final List<JavaFileObject> files;
     
+    /**
+     * Creates a DaemonCompiler with the given compiler and Java source files to
+     * be compiled.
+     * 
+     * @param compiler the compiler
+     * @param files the Java source files to be compiled
+     */
     DaemonCompiler(Compiler compiler, List<JavaFileObject> files) {
         this.compiler = compiler.processors(processor);
         this.files = files;
@@ -72,30 +96,43 @@ class DaemonCompiler extends Thread {
         }
     }
     
+    /**
+     * Returns the current annotation processing environment.
+     * 
+     * @return the current annotation processing environment
+     */
     public Environment environment() {
         return processor.environment.join();
     }
     
+    /**
+     * Shuts down this {@code DaemonCompiler}.
+     */
     public void shutdown() {
         processor.completion.countDown();
     }
     
     
+    /**
+     * An annotation processor that blocks until otherwise signalled.
+     */
     @SupportedAnnotationTypes({"*"})
     static class DaemonProcessor extends AbstractProcessor {
         
         final CompletableFuture<Environment> environment = new CompletableFuture<>();
         final CountDownLatch completion = new CountDownLatch(1);
+        @Lazy ProcessingEnvironment env;
 
         @Override
         public void init(ProcessingEnvironment env) {
             super.init(env);
-            environment.complete(new Environment(env.getElementUtils(), env.getTypeUtils(), env.getMessager(), env.getFiler()));
+            this.env = env;
         }
 
         @Override
         public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
             if (round.processingOver()) {
+                environment.complete(new Environment(env.getElementUtils(), env.getTypeUtils(), env.getMessager(), env.getFiler()));
                 try {
                     completion.await();
                 } catch (InterruptedException e) {
@@ -112,7 +149,10 @@ class DaemonCompiler extends Thread {
         
     }
     
-    static class Environment {
+    /**
+     * An annotation processing environment.
+     */
+    static @ValueType final class Environment {
         public final Elements elements;
         public final Types types;
         public final Messager messager;

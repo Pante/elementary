@@ -21,23 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.annotations;
+package com.karuslabs.elementary.junit;
 
-import java.lang.annotation.*;
+import com.karuslabs.elementary.junit.annotations.Processors;
 
-import org.junit.jupiter.api.extension.Extension;
+import java.util.Set;
+import javax.annotation.processing.*;
+import javax.lang.model.element.TypeElement;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ParameterResolutionException;
 
-/**
- * A meta-annotation that denotes usage of the annotated annotation by a JUnit extension.
- */
-@Documented
-@Retention(SOURCE)
-@Target({ANNOTATION_TYPE})
-public @interface Usage {
+import static com.karuslabs.elementary.Compiler.javac;
+import static org.junit.jupiter.api.Assertions.*;
 
-    Class<? extends Extension>[] value();
+@Processors(InvalidProcessor.class)
+class JavacExtensionTest {
+
+    JavacExtension extension = new JavacExtension();
+    
+    @Test
+    void resolve_fails() {
+        assertEquals(
+            "Failed to create \"" + InvalidProcessor.class.getName() + "\", annotation processor should have a constructor with no arguments",
+            assertThrows(ParameterResolutionException.class, () -> extension.resolve(javac(), JavacExtensionTest.class)).getMessage()
+        );
+    }
+    
+}
+
+class InvalidProcessor extends AbstractProcessor {
+    
+    InvalidProcessor(String a) {}
+
+    @Override
+    public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
+        return false;
+    }
     
 }

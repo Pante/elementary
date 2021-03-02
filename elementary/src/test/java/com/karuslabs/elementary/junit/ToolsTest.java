@@ -21,23 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.annotations;
+package com.karuslabs.elementary.junit;
 
-import java.lang.annotation.*;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.extension.Extension;
+import static org.junit.jupiter.api.Assertions.*;
 
-import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
+class ToolsTest {
 
-/**
- * A meta-annotation that denotes usage of the annotated annotation by a JUnit extension.
- */
-@Documented
-@Retention(SOURCE)
-@Target({ANNOTATION_TYPE})
-public @interface Usage {
-
-    Class<? extends Extension>[] value();
+    @Test
+    void method_unitialized() {
+        assertEquals(
+            "Test class should be annotated with \"@ExtendWith(ToolsExtension.class)\"",
+            assertThrows(IllegalStateException.class, () -> Tools.filer()).getMessage()
+        );
+    }
     
 }

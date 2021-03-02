@@ -39,8 +39,7 @@ public @Static class Tools {
     
     private static Environment environment() {
         if (environment == null) {
-            throw new IllegalStateException("Class should be annotated with '@ExtendWith(ProcessorExtension.class)', "
-                                          + "static methods are not supported with parallel test execution");
+            throw new IllegalStateException("Test class should be annotated with \"@ExtendWith(ToolsExtension.class)\"");
         }
         
         return environment;

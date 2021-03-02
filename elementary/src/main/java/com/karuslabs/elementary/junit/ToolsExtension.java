@@ -35,6 +35,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.junit.jupiter.api.extension.*;
 
+/**
+ * A JUnit extension that provides an annotation processing environment in which
+ * to execute tests. The annotation processing utilities can be accessed either
+ * through {@link Tools} or dependency injection in the test class's constructor
+ * or test method's parameters.
+ * 
+ * Java source files can be included for compilation by annotating the test class
+ * with {@code @Classpath} and/or {@code @Inline}.
+ */
 public class ToolsExtension extends Daemon implements ParameterResolver {
     
     @Override
@@ -55,7 +64,7 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
     
     
     @Override
-    Object construct(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
+    Object create(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
         var types = constructor.getParameterTypes();
         var parameters = new Object[types.length];
         

@@ -30,6 +30,11 @@ import java.lang.annotation.*;
 import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+/**
+ * Represents the flags to be passed to javac during compilation.
+ * 
+ * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
+ */
 @Usage({JavacExtension.class})
 @Documented
 @Retention(RUNTIME)
