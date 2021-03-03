@@ -115,7 +115,7 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      * @param method the method
      * @param context the context
      * @throws IllegalArgumentException if the test method is annotated with {@code @Classpath} or {@code @Inline}
-     * @throws Throwable
+     * @throws Throwable if the invocation throws an exception
      */
     @Override
     public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> method, @Ignored ExtensionContext context) throws Throwable {

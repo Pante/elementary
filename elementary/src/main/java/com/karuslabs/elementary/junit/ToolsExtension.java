@@ -41,7 +41,7 @@ import org.junit.jupiter.api.extension.*;
  * through {@link Tools} or dependency injection in the test class's constructor
  * or test method's parameters.
  * 
- * Java source files can be included for compilation by annotating the test class
+ * Java source files may be included for compilation by annotating the test class
  * with {@code @Classpath} and/or {@code @Inline}.
  */
 public class ToolsExtension extends Daemon implements ParameterResolver {
@@ -87,7 +87,14 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
     }
     
     
-    static @Nullable Object resolve(Environment environment, Class<?> type) throws TestInstantiationException {
+    /**
+     * Returns an instance of the given type using the fields in the given environment.
+     * 
+     * @param environment the environment
+     * @param type the type
+     * @return an instance of the type if resolvable, else {@code null}
+     */
+    static @Nullable Object resolve(Environment environment, Class<?> type) {
         if (type == Elements.class) {
             return environment.elements;
                 

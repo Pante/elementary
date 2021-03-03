@@ -36,6 +36,13 @@ import org.junit.jupiter.api.extension.*;
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.scan;
 
+/**
+ * A JUnit extension that compiles Java source files specified by {@link Classpath}
+ * and/or {@link Inline} annotations on the test class and method. Results of the
+ * compilation may be obtained in the test method by specifying {@link Results}
+ * as a method parameter. Behaviour of the compiler may be modified by annotations
+ * in {@link com.karuslabs.elementary.junit.annotations}.
+ */
 public class JavacExtension implements ParameterResolver {
 
     private static final String[] EMPTY = new String[] {};
@@ -55,6 +62,13 @@ public class JavacExtension implements ParameterResolver {
         return compiler.currentClasspath().compile(files);
     }
     
+    /**
+     * Resolves the annotations on the given annotated element, modifying the 
+     * compiler accordingly.
+     * 
+     * @param compiler the compiler
+     * @param annotated the annotated element
+     */
     void resolve(Compiler compiler, AnnotatedElement annotated) {
         var flags = annotated.getAnnotation(Flags.class);
         compiler.options(flags == null ? EMPTY : flags.value().split(" -"));

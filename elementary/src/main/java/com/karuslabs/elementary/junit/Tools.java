@@ -33,6 +33,13 @@ import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A utility class from which annotation processing utilities can be accessed when
+ * used in conjunction with {@link ToolsExtension}. All methods throw an exception
+ * when accessed outside a test class extended by {@code ToolsExtension}.
+ * 
+ * @see ToolsExtension
+ */
 public @Static class Tools {
     
     static @Nullable Environment environment;
@@ -45,26 +52,44 @@ public @Static class Tools {
         return environment;
     }
     
+    /**
+     * @return an {@code Elements}
+     */
     public static Elements elements() {
         return environment().elements;
     }
     
+    /**
+     * @return a {@code Types}
+     */
     public static Types types() {
         return environment().types;
     }
     
+    /**
+     * @return a {@code Messager}
+     */
     public static Messager messager() {
         return environment().messager;
     }
     
+    /**
+     * @return a {@code Filer}
+     */
     public static Filer filer() {
         return environment().filer;
     }
     
+    /**
+     * @return a {@code TypeMirrors}
+     */
     public static TypeMirrors typeMirrors() {
         return environment().typeMirrors;
     }
     
+    /**
+     * @return a {@code Logger}
+     */
     public static Logger logger() {
         return environment().logger;
     }
