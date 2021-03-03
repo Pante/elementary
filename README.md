@@ -1,4 +1,4 @@
-**Elementary is mono-repository for multiple libraries that simplify the creating and unit testing annotation processors.**
+**Elementary is suite of libraries that simplify creating and unit testing annotation processors.**
 
 **Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
 
