@@ -37,11 +37,11 @@ import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.scan;
 
 /**
- * A JUnit extension that compiles Java source files specified by {@link Classpath}
- * and/or {@link Inline} annotations on the test class and method. Results of the
- * compilation may be obtained in the test method by specifying {@link Results}
- * as a method parameter. Behaviour of the compiler may be modified by annotations
- * in {@link com.karuslabs.elementary.junit.annotations}.
+ * A JUnit extension that compiles Java source files specified by {@code @Classpath}
+ * and {@code @Inline} annotations on the test class and method. Results of the
+ * compilation may be obtained by specifying {@link Results} as a test method parameter.
+ * 
+ * @see com.karuslabs.elementary.junit.annotations
  */
 public class JavacExtension implements ParameterResolver {
 
@@ -63,14 +63,13 @@ public class JavacExtension implements ParameterResolver {
     }
     
     /**
-     * Resolves the annotations on the given annotated element, modifying the 
-     * compiler accordingly.
+     * Modifies the compiler using the annotations on the given annotated element.
      * 
      * @param compiler the compiler
      * @param annotated the annotated element
      */
     void resolve(Compiler compiler, AnnotatedElement annotated) {
-        var flags = annotated.getAnnotation(Flags.class);
+        var flags = annotated.getAnnotation(Options.class);
         compiler.options(flags == null ? EMPTY : flags.value().split(" -"));
         
         var processors = new ArrayList<Processor>();

@@ -26,8 +26,8 @@ package example;
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
 import com.karuslabs.elementary.junit.annotations.Classpath;
-import com.karuslabs.elementary.junit.annotations.Flags;
 import com.karuslabs.elementary.junit.annotations.Inline;
+import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
 import com.karuslabs.utilitary.AnnotationProcessor;
 
@@ -46,13 +46,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @ExtendWith(JavacExtension.class)
 @Classpath("A.java")
 @Inline(name = "Derp", source = "class Derp {}")
-@Flags("-g")
+@Options("-g")
 class JavacExtensionExampleTest {
 
     @Test
     @Processors({SomeProcessor.class})
     @Inline(name = "MethodInline", source = "")
-    @Flags("-nowarn")
+    @Options("-nowarn")
     void test(Results results) {
         assertTrue(results.find().errors().count() == 0);
     }

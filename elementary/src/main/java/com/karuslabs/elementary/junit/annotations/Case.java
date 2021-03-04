@@ -21,9 +21,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.elementary.junit.annotations;
+
+import com.karuslabs.elementary.junit.ToolsExtension;
+
+import java.lang.annotation.*;
+
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Contains classes that facilitate compilation of Java source files and the subsequent
- * mapping of results.
+ * An annotation to mark and simplify retrieval of elements in tests extended  with {@code ToolsExtension}.
  */
-package com.karuslabs.elementary;
+@Usage(ToolsExtension.class)
+@Documented
+@Retention(RUNTIME)
+public @interface Case {
+    
+    String value() default "";
+    
+}

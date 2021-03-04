@@ -21,9 +21,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.elementary.junit.annotations;
+
+
+import com.karuslabs.elementary.junit.JavacExtension;
+import java.lang.annotation.*;
+
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Contains classes that facilitate compilation of Java source files and the subsequent
- * mapping of results.
+ * Represents the javac options to use during compilation.
+ * 
+ * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
  */
-package com.karuslabs.elementary;
+@Usage({JavacExtension.class})
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+public @interface Options {
+
+    String value();
+    
+}

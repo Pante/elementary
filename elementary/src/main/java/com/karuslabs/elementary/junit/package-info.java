@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains JUnit extensions for testing Java compilation and annotation processors.
+ * Contains JUnit extensions for testing annotation processors and compilation.
  */
 package com.karuslabs.elementary.junit;

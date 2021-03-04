@@ -21,9 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.elementary.junit;
 
-/**
- * Contains classes that facilitate compilation of Java source files and the subsequent
- * mapping of results.
- */
-package com.karuslabs.elementary;
+import com.karuslabs.elementary.junit.annotations.*;
+
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(ToolsExtension.class)
+@Classpath("CasesCases.java")
+class CasesTest {
+
+    Cases cases = Tools.cases();
+    
+    @Test
+    void one() {
+        assertNull(cases.one());
+    }
+    
+    
+    @Test
+    void one_label() {
+        assertNotNull(cases.one("a"));
+    }
+    
+    @Test
+    void one_label_not_found() {
+        assertNull(cases.one("invalid"));
+    }
+    
+    
+    @Test
+    void get_index() {
+        assertEquals("a", cases.get(1).getAnnotation(Case.class).value());
+    }
+    
+    @Test
+    void get_label() {
+        assertEquals(1, cases.get("a").size());
+    }
+    
+    
+    @Test
+    void list() {
+        assertEquals(2, cases.list().size());
+    }
+    
+    @Test
+    void count() {
+        assertEquals(2, cases.count());
+    }
+    
+}

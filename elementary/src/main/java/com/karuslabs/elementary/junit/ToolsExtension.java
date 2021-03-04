@@ -38,7 +38,7 @@ import org.junit.jupiter.api.extension.*;
 /**
  * A JUnit extension that provides an annotation processing environment in which
  * to execute tests. The annotation processing utilities can be accessed either
- * through {@link Tools} or dependency injection in the test class's constructor
+ * via {@link Tools} or dependency injection in the test class's constructor
  * or test method's parameters.
  * 
  * Java source files may be included for compilation by annotating the test class
@@ -95,7 +95,13 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
      * @return an instance of the type if resolvable, else {@code null}
      */
     static @Nullable Object resolve(Environment environment, Class<?> type) {
-        if (type == Elements.class) {
+        if (type == Cases.class) {
+            return environment.cases;
+            
+        } else if (type == RoundEnvironment.class) {
+            return environment.round;
+            
+        } else if (type == Elements.class) {
             return environment.elements;
                 
         } else if (type == Types.class) {

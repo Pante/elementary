@@ -23,7 +23,7 @@
  */
 
 /**
- * Contains classes that represent Java source files and handle file management
- * during compilation.
+ * Contains classes that handle file management and represent Java source files
+ *  during compilation.
  */
 package com.karuslabs.elementary.file;

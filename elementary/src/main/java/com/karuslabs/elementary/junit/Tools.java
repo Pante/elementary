@@ -34,9 +34,9 @@ import javax.lang.model.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * A utility class from which annotation processing utilities can be accessed when
- * used in conjunction with {@link ToolsExtension}. All methods throw an exception
- * when accessed outside a test class extended by {@code ToolsExtension}.
+ * A utility class from which an annotation processing environment can be accessed
+ * when used in conjunction with {@link ToolsExtension}. All methods throw an exception
+ * when called outside a test class extended with {@code ToolsExtension}.
  * 
  * @see ToolsExtension
  */
@@ -53,6 +53,26 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code Cases}.
+     * 
+     * @return a {@code Casses}
+     */
+    public static Cases cases() {
+        return environment().cases;
+    }
+    
+    /**
+     * Returns a {@code RoundEnvironment}.
+     * 
+     * @return a {@code RoundEnvironment}
+     */
+    public static RoundEnvironment round() {
+        return environment().round;
+    }
+    
+    /**
+     * Returns an {@code Elements}.
+     * 
      * @return an {@code Elements}
      */
     public static Elements elements() {
@@ -60,6 +80,8 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code Types}.
+     * 
      * @return a {@code Types}
      */
     public static Types types() {
@@ -67,6 +89,8 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code Messager}.
+     * 
      * @return a {@code Messager}
      */
     public static Messager messager() {
@@ -74,6 +98,8 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code Filer}.
+     * 
      * @return a {@code Filer}
      */
     public static Filer filer() {
@@ -88,6 +114,8 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code Logger}.
+     * 
      * @return a {@code Logger}
      */
     public static Logger logger() {

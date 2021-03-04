@@ -70,7 +70,7 @@ class ByteFileObject extends ImmutableFileObject {
     private @Lazy String string;
     
     /**
-     * Creates a {@code ByteFileObject} with the given paraemters.
+     * Creates a {@code ByteFileObject} with the given parameters.
      * 
      * @param uri the URI
      * @param kind the kind

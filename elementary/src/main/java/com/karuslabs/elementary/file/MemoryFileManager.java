@@ -34,7 +34,7 @@ import javax.tools.JavaFileObject.Kind;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * A {@code StandardJavaFileManager} that stores all output in memory.
+ * A file manager that stores all output in memory.
  */
 public class MemoryFileManager extends ForwardingFileManager {
 
@@ -66,7 +66,7 @@ public class MemoryFileManager extends ForwardingFileManager {
     private final Map<URI, JavaFileObject> files = new HashMap<>();
     
     /**
-     * Creates a {@code MemoryFileManager} with the given underlying {@code StandardJavaFileManager}.
+     * Creates a {@code MemoryFileManager} with the given underlying manager.
      * 
      * @param manager the underlying file manager
      */

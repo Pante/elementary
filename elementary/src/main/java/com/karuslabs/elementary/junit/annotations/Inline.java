@@ -32,7 +32,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Represents an inline Java source file to be included for compilation.
+ * Denotes an inline Java source file to be included for compilation.
  */
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented

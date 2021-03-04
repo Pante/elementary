@@ -31,7 +31,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Denotes the annotation processors to be used during compilation.
+ * Denotes the annotation processors to be applied during compilation.
  */
 @Usage(JavacExtension.class)
 @Documented

@@ -29,8 +29,7 @@ import java.util.*;
 import javax.tools.*;
 
 /**
- * A {@code StandardJavaFileManager} that forwards all calls to an underlying
- * {@code StandardJavaFileManager}.
+ * A file manager that forwards all calls to an underlying {@code StandardJavaFileManager}.
  */
 public abstract class ForwardingFileManager implements StandardJavaFileManager {
 

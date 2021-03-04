@@ -64,17 +64,16 @@ class ToolsExtensionTest {
         );
     }
     
+    
     @Test
-    void create_fails() throws ReflectiveOperationException {
-        var constructor = spy(ValidConstructor.class.getDeclaredConstructors()[0]);
-        doThrow(InstantiationException.class).when(constructor).newInstance(any());
-        
-        assertEquals(
-            "Unable to create test instance",
-            assertThrows(TestInstantiationException.class, () -> extension.create(constructor, null)).getMessage()
-        );
+    void cases(Cases cases) {
+        assertNotNull(cases);
     }
     
+    @Test
+    void round(RoundEnvironment round) {
+        assertNotNull(round);
+    }
     
     @Test
     void elements(Elements elements) {

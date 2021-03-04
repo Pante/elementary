@@ -51,6 +51,11 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
         this.results = results;
     }
     
+    /**
+     * Returns an iterator over {@code Diagnostic<? extends JavaFileObject>}s.
+     * 
+     * @return an iterator
+     */
     @Override
     public Iterator<Diagnostic<? extends JavaFileObject>> iterator() {
         return diagnostics.iterator();
@@ -58,8 +63,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     
     /**
-     * Returns a {@code Finder} where each diagnostic message's kind matches the
-     * given kinds.
+     * Removes all diagnostic messages which kind does not match the given kinds.
      * 
      * @param kinds the kinds which all diagnostic messages should match
      * @return {@code this}
@@ -69,8 +73,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} where each diagnostic message's kind matches the
-     * given kinds.
+     * Removes all diagnostic messages which kind does not match the given kinds.
      * 
      * @param kinds the kinds which all diagnostic messages should match
      * @return {@code this}
@@ -81,7 +84,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with only errors.
+     * Retains only errors.
      * 
      * @return {@code this}
      */
@@ -91,7 +94,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with only warnings.
+     * Retains only warnings.
      * 
      * @return {@code this}
      */
@@ -101,7 +104,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with only notes.
+     * Retains only notes.
      * 
      * @return {@code this}
      */
@@ -112,7 +115,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     
     /**
-     * Returns a {@code Finder} with only diagnostic messages in the given Java source file.
+     * Retains only diagnostic messages in the given Java source file.
      * 
      * @param file the Java source file
      * @return {@code this}
@@ -124,7 +127,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with only diagnostic messages that appear on the given line.
+     * Retains only diagnostic messages that appear on the given line.
      * 
      * @param line the line
      * @return {@code this}
@@ -135,7 +138,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with only diagnostic messages that appear at the given column.
+     * Retains only diagnostic messages that appear at the given column.
      * 
      * @param column the column
      * @return {@code this}
@@ -146,7 +149,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with diagnostic messages that satisfy the given predicate.
+     * Retains only diagnostic messages that satisfy the given predicate.
      * 
      * @param condition the condition
      * @return {@code this}
@@ -158,7 +161,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     
     /**
-     * Returns a {@code Finder} with diagnostic messages that exactly match the given message.
+     * Retains only diagnostic messages that exactly match the given message.
      * 
      * @param message the message
      * @return {@code this}
@@ -169,7 +172,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {@code Finder} with diagnostic messages that contain the given substring.
+     * Retain only diagnostic messages that contain the given substring.
      * 
      * @param substring the substring
      * @return {@code this}
@@ -180,7 +183,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a {code Finder} with diagnostic messages that match the given pattern.
+     * Retain only diagnostic messages that match the given pattern.
      * 
      * @param pattern the pattern
      * @return {@code this}
@@ -266,7 +269,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
-     * Returns a map of diagnostic messages associated with their {@code Kind}s.
+     * Returns a map of diagnostic messages and associated {@code Kind}s.
      * 
      * @return the map
      */

@@ -25,10 +25,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * THE SOFTWARE.
  */
 
-public class A {
-    
-    public @Nullable String method() {
-        throw new UnsupportedOperationException();
-    }
+public @interface A {
     
 }

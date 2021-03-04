@@ -37,7 +37,7 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Represents a compiler that may compile Java source files.
+ * Represents a Java compiler.
  */
 public class Compiler {
     
@@ -120,7 +120,7 @@ public class Compiler {
     
     
     /**
-     * Adds the given annotation processors to be applied during compilation.
+     * Adds the given annotation processors to this {@code Compiler}.
      * 
      * @param processors the annotation processors
      * @return {@code this}
@@ -131,7 +131,7 @@ public class Compiler {
     }
     
     /**
-     * Adds the given annotation processors to be applied during compilation.
+     * Adds the given annotation processors to this {@code Compiler}.
      * 
      * @param processors the annotation processors
      * @return {@code this}
@@ -143,12 +143,12 @@ public class Compiler {
     
     
     /**
-     * Adds the given compiler options to be applied during compilation.
+     * Adds the given compiler options to this {@code Compiler}.
      * 
-     * @param options the options
+     * @param options the compiler options
      * @return {@code this}
      * 
-     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
+     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac options</a>
      */
     public Compiler options(String... options) {
         Collections.addAll(this.options, options);
@@ -156,12 +156,12 @@ public class Compiler {
     }
     
     /**
-     * Adds the given compiler options to be applied during compilation.
+     * Adds the given compiler options to this {@code Compiler}.
      * 
-     * @param options the options
+     * @param options the compiler options
      * @return {@code this}
      * 
-     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
+     * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac options</a>
      */
     public Compiler options(Collection<String> options) {
         this.options.addAll(options);
@@ -170,7 +170,7 @@ public class Compiler {
     
     
     /**
-     * Sets the current classpath as the the compilation classpath.
+     * Sets the current classpath as the compilation classpath.
      * 
      * @return {@code this}
      */
@@ -180,14 +180,14 @@ public class Compiler {
     
     
     /**
-     * Sets the classpath of the given {@code ClassLoader} as the the compilation classpath.
+     * Sets the classpath of the given {@code ClassLoader} as the compilation classpath.
      * 
      * @param loader the {@code ClassLoader} which classpath is to be used during compilation
      * @return {@code this}
      * 
-     * @throws IllegalArgumentException if the given {@code ClassLoader} or its parents are not
-     *         the system/platform {@code ClassLoader} or {@code URLClassLoader}s, or if the given 
-     *         {@code ClassLoader} or its parents contains a classpath  that consists of folders
+     * @throws IllegalArgumentException if the given {@code ClassLoader} or its parents are neither
+     *         {@code URLClassLoader}s nor the system/platform, or if they contain a classpath with 
+     *         folders
      */
     public Compiler classpath(ClassLoader loader) {
         var paths = new HashSet<String>();

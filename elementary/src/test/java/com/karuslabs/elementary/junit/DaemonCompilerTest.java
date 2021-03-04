@@ -64,10 +64,10 @@ class DaemonProcessorTest {
     
     DaemonProcessor processor = new DaemonProcessor();
     ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
+    RoundEnvironment round = mock(RoundEnvironment.class);
     
     @Test
     void process() {
-        RoundEnvironment round = when(mock(RoundEnvironment.class).processingOver()).thenReturn(true).getMock(); 
         new Thread(() -> processor.completion.countDown()).start();
         
         processor.init(mock(ProcessingEnvironment.class));
@@ -80,7 +80,8 @@ class DaemonProcessorTest {
     void process_ignored() {
         processor.init(mock(ProcessingEnvironment.class));
         
-        RoundEnvironment round = when(mock(RoundEnvironment.class).processingOver()).thenReturn(false).getMock();
+        processor.environment.complete(null);
+        
         assertFalse(processor.process(Set.of(), round));
         assertEquals(1L, processor.completion.getCount());
     }

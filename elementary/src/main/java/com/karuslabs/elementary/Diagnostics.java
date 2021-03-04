@@ -29,7 +29,7 @@ import java.util.*;
 import javax.tools.*;
 
 /**
- * The resultant diagnostic messages of a compilation.
+ * The diagnostic messages for the result of a compilation.
  */
 public @ValueType final class Diagnostics implements DiagnosticListener<JavaFileObject> {
     
@@ -42,7 +42,7 @@ public @ValueType final class Diagnostics implements DiagnosticListener<JavaFile
      */
     public final List<Diagnostic<? extends JavaFileObject>> errors = new ArrayList<>();
     /**
-     * Both mandatory and non-mandatory warnings.
+     * Mandatory and non-mandatory warnings.
      */
     public final List<Diagnostic<? extends JavaFileObject>> warnings = new ArrayList<>();
     /**

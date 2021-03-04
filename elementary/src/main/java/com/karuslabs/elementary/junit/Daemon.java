@@ -36,7 +36,7 @@ import org.junit.jupiter.api.extension.ExtensionContext.*;
 import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
 
 /**
- * An extension that manages the lifecycle of a daemon compiler.
+ * An extension that manages the lifecycle of a compiler.
  */
 abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, AfterAllCallback {
     
@@ -109,7 +109,8 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
     
     
     /**
-     * Intercepts the test method to determine if it is annotated with {@code @Classpath} or {@code @Inline}. 
+     * Intercepts a test method invocation to determine if it is annotated with 
+     * {@code @Classpath} or {@code @Inline}. 
      * 
      * @param invocation the invocation
      * @param method the method
@@ -128,7 +129,7 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
     }
 
     /**
-     * Tears down the daemon compiler.
+     * Tears down the compiler.
      * 
      * @param context the context
      */
@@ -140,7 +141,7 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
     
     
     /**
-     * Retrieves a cached instance of the compiler for the test class.
+     * Returns a cached compiler for the test class.
      * 
      * @param context the context
      * @return a cached instance of the compiler if available; else {@code null}

@@ -1,3 +1,6 @@
+
+import com.karuslabs.elementary.junit.annotations.Case;
+
 /*
  * The MIT License
  *
@@ -21,26 +24,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.annotations;
+public class CasesCases {
 
-
-import com.karuslabs.elementary.junit.JavacExtension;
-import java.lang.annotation.*;
-
-import static java.lang.annotation.ElementType.*;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-/**
- * Represents the flags to be passed to javac during compilation.
- * 
- * @see <a href = "https://docs.oracle.com/en/java/javase/11/tools/javac.html">javac flags</a>
- */
-@Usage({JavacExtension.class})
-@Documented
-@Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Flags {
-
-    String value();
+    @Case("a") public void a() {}
+    
+    @Case static class A {}
     
 }

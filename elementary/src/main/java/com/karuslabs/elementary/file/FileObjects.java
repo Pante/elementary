@@ -45,8 +45,8 @@ public @Static class FileObjects {
     public static final JavaFileObject DUMMY = ofLines("Dummy", "class Dummy {}");
     
     /**
-     * Creates {@code JavaFileObject}s from {@code @Classpath} and {@code @Inline} 
-     * annotations on the given annotated element.
+     * Creates {@code JavaFileObject}s using the {@code @Classpath} and {@code @Inline} 
+     * annotations on the given element.
      * 
      * @param annotated the annotated element
      * @return the {@code JavaFileObject}s
@@ -141,10 +141,10 @@ public @Static class FileObjects {
     }
     
     /**
-     * Creates a URI from the path portion of the given URL if it represents an
+     * Creates a URI from the path portion of the given URL if it represents a
      * resource in a JAR.
      * 
-     * @param resource
+     * @param resource the resource
      * @return the URI
      * @throws URISyntaxException if this URL is not formatted strictly according to
      *         to RFC2396 and cannot be converted to a URI.
@@ -160,10 +160,10 @@ public @Static class FileObjects {
     
     
     /**
-     * Deduces the kind of the given URI based on its extension.
+     * Deduces the file kind of the given URI.
      * 
      * @param uri the URI
-     * @return the kind of the file that the given URI represents
+     * @return the file kind that the given URI represents
      */
     public static JavaFileObject.Kind deduce(URI uri) {
         var path = uri.getPath();

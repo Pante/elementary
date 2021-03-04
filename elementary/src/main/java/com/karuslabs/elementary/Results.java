@@ -50,15 +50,15 @@ public @ValueType final class Results {
      */
     public final List<Diagnostic<? extends JavaFileObject>> errors;
     /**
-     * The warnings
+     * The warnings.
      */
     public final List<Diagnostic<? extends JavaFileObject>> warnings;
     /**
-     * The notes
+     * The notes.
      */
     public final List<Diagnostic<? extends JavaFileObject>> notes;
     /**
-     * Whether the compilation was successful.
+     * Whether compilation was successful.
      */
     public final boolean success;
     
@@ -68,7 +68,7 @@ public @ValueType final class Results {
      * @param sources the sources
      * @param generated the generated sources
      * @param diagnostics the diagnostic messages
-     * @param success whether this compilation was successful
+     * @param success whether compilation was successful
      */
     public Results(List<JavaFileObject> sources, List<JavaFileObject> generated, Diagnostics diagnostics, boolean success) {
         this.sources = sources;
@@ -81,7 +81,7 @@ public @ValueType final class Results {
     }
     
     /**
-     * Returns a {@code Finder} that operates on this {@code Results}.
+     * Returns a {@code Finder} for this {@code Results}.
      * 
      * @return a {@code Finder}
      */

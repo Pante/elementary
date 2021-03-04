@@ -23,48 +23,92 @@
  */
 package example;
 
+import com.karuslabs.elementary.junit.Cases;
 import com.karuslabs.elementary.junit.Tools;
 import com.karuslabs.elementary.junit.ToolsExtension;
-import com.karuslabs.elementary.junit.annotations.Classpath;
 import com.karuslabs.elementary.junit.annotations.Inline;
-import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import javax.annotation.processing.Messager;
-import javax.lang.model.util.Elements;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.VariableElement;
+import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This example demonstrates how to use ToolsExtension to test a lint, described below,
+ * which checks if an element is a string variable. 
+ * 
+ * We use the @Inline annotation to define test samples for the lint to check. 
+ * Each test sample is annotated with @Case to simplify retrieval of test samples.
+ * 
+ * Alternatively, we can also use the @Classpath annotation to include the class
+ * which contains test samples for compilation if it is available on the current
+ * classpath, i.e. "@Classpath("Samples.java")".
+ * 
+ * Other annotations can also be used to mark test samples, but we provide specialized
+ * utilities to simplify retrieval of elements annotated with @Case.
+ * 
+ * In a real world context, the lint may be found in annotation processors to perform a 
+ * variety of other checks.
+ */
 @ExtendWith(ToolsExtension.class)
-@Classpath("A.java")
-@Inline(name = "Derp", source = "class Derp {}")
+@Inline(name = "Samples", source = {
+"import com.karuslabs.elementary.junit.annotations.Case;",
+"",
+"class Samples {",
+"  @Case(\"first\") String first;",
+"  @Case String second() { return \"\";}",
+"}"})
 class ToolsExtensionExampleTest {
+    
+    // We can also obtain an instance of TypeMirrors via dependency injection in
+    // the constructor and test methods.
+    Lint lint = new Lint(Tools.typeMirrors());
+    
+    @Test
+    void lint_string_variable(Cases cases) { // Cases can also be obtained via Tools.cases() and used to initialize a field
+        var first = cases.one("first");
+        assertTrue(lint.lint(first));
+    }
+    
+    @Test
+    void lint_method_that_returns_string(Cases cases) {
+        var second = cases.get(1);
+        assertFalse(lint.lint(second));
+    }
+    
+}
 
-    Logger logger;
-    Elements elements = Tools.elements();
-    TypeMirrors types = Tools.typeMirrors();
+/**
+ * This is a simple lint that checks if an element is a string variable.
+ */
+class Lint {
     
-    ToolsExtensionExampleTest(Logger logger) {
-        this.logger = logger;
+    final TypeMirrors types;
+    final TypeMirror expectedType;
+    
+    Lint(TypeMirrors types) {
+        this.types = types;
+        this.expectedType = types.type(String.class);
     }
     
-    
-    @Test
-    void test() {
-        var a = types.type(String.class);
-        var b = types.type(String.class);
+    /**
+     * Determines if the given element is a string variable.
+     * 
+     * @param element the element
+     * @return {@code true} if the given element is a string variable
+     */
+    public boolean lint(Element element) {
+        if (!(element instanceof VariableElement)) {
+            return false;
+        }
         
-        assertTrue(types.isSameType(a, b));
-    }
-    
-    
-    @Test
-    void inject(Messager messager, Elements elements) {
-        assertNotNull(messager);
-        assertNotNull(elements);
+        var variable = (VariableElement) element;
+        return types.isSameType(expectedType, variable.asType());
     }
     
 }
