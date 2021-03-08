@@ -21,7 +21,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 ```
 
 ***
-### Elementary - A suite of tools and JUnit extensions to test annotation processors and compilation
+#### Elementary - A suite of tools and JUnit extensions to test annotation processors and compilation
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/elementary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-1.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/1.0.0/elementary/apidocs/index.html)
@@ -33,8 +33,6 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
     <version>1.0.0</version>
 </dependency>
 ```
-
-
 
 ***
 #### Satisfactory - A composable `Element` and `TypeMirror` matching library

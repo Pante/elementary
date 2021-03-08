@@ -25,8 +25,8 @@ package example;
 
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
+import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.elementary.junit.annotations.Classpath;
-import com.karuslabs.elementary.junit.annotations.Inline;
 import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
 import com.karuslabs.utilitary.AnnotationProcessor;
@@ -34,39 +34,76 @@ import com.karuslabs.utilitary.AnnotationProcessor;
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
-import javax.annotation.processing.SupportedSourceVersion;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.lang.model.element.VariableElement;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static javax.lang.model.SourceVersion.RELEASE_11;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * This example demonstrates how to use JavacExtension to test the results of
+ * the annotation processors which check if an element is a string field.
+ * 
+ * Compiler flags can be configured via the @Options annotation. In this example,
+ * we enable the "-Werror" flag which causes the compiler to treat all warnings as
+ * errors.
+ * 
+ * We can specify annotation processors to be called during compilation via the
+ * @Processors annotation.
+ * 
+ * The @Classpath, @Inline, @Options and @Processors annotations obey the same
+ * variable scoping rules as Java. Annotations declared on the test class is applied
+ * for all tests inside the annotated test class. On the other hand, annotations
+ * declared on test methods are limited to that specific method.
+ * 
+ * The @Classpath source files for this example can be found under src/test/resources.
+ **/
 @ExtendWith(JavacExtension.class)
-@Classpath("A.java")
-@Inline(name = "Derp", source = "class Derp {}")
-@Options("-g")
+@Options("-Werror")
+@Processors({StringFieldProcessor.class})
+@Classpath("ValidCase.java")
 class JavacExtensionExampleTest {
 
     @Test
-    @Processors({SomeProcessor.class})
-    @Inline(name = "MethodInline", source = "")
-    @Options("-nowarn")
-    void test(Results results) {
-        assertTrue(results.find().errors().count() == 0);
+    void process_string_field(Results results) {
+        assertEquals(0, results.find().errors().count());
+    }
+    
+    @Test
+    @Classpath("InvalidCase.java")
+    void process_int_field(Results results) {
+        assertEquals(1, results.find().errors().contains("Element is not a string").count());
     }
     
 }
 
-@SupportedAnnotationTypes({"*"})
-@SupportedSourceVersion(RELEASE_11)
-class SomeProcessor extends AnnotationProcessor {
+@SupportedAnnotationTypes({"com.karuslabs.elementary.junit.annotations.Case"})
+class StringFieldProcessor extends AnnotationProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
-        logger.note(null, "Message");
+        var elements = round.getElementsAnnotatedWith(Case.class);
+        for (var element : elements) {
+            if (!(element instanceof VariableElement)) {
+                logger.error(element, "Element is not a variable");
+                continue;
+            }
+            
+            var variable = (VariableElement) element;
+            if (!types.isSameType(variable.asType(), types.type(String.class))) {
+                logger.error(element, "Element is not a string");
+                continue;
+            }
+        }
         return false;
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latest();
     }
 
 }

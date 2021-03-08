@@ -42,14 +42,14 @@ import static org.junit.jupiter.api.Assertions.*;
  * This example demonstrates how to use ToolsExtension to test a lint, described below,
  * which checks if an element is a string variable. 
  * 
- * We use the @Inline annotation to define test samples for the lint to check. 
- * Each test sample is annotated with @Case to simplify retrieval of test samples.
+ * We use the @Inline annotation to define test cases for the lint to check. 
+ * Each test case is annotated with @Case to simplify retrieval.
  * 
  * Alternatively, we can also use the @Classpath annotation to include the class
- * which contains test samples for compilation if it is available on the current
+ * which contains test cases for compilation if it is available on the current
  * classpath, i.e. "@Classpath("Samples.java")".
  * 
- * Other annotations can also be used to mark test samples, but we provide specialized
+ * Other annotations can also be used to mark test cases, but we provide specialized
  * utilities to simplify retrieval of elements annotated with @Case.
  * 
  * In a real world context, the lint may be found in annotation processors to perform a 
