@@ -54,3 +54,16 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
     <version>1.0.0</version>
 </dependency>
 ```
+
+***
+#### Utilitary - Contains frequently used utilities to simplify implementation of annotation processors.
+[![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/utilitary/)
+[![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/utilitary/)
+[![javadoc](https://img.shields.io/badge/javadoc-1.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/1.0.0/utilitary/apidocs/index.html)
+```XML
+<dependency>
+    <groupId>com.karuslabs</groupId>
+    <artifactId>satisfactory</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
