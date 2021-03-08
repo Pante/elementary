@@ -27,6 +27,14 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 [![javadoc](https://img.shields.io/badge/javadoc-1.0.0-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/1.0.0/elementary/apidocs/index.html)
 
 ```XML
+<!-- Requires JUnit 5.7.1 & above -->
+<dependency>
+    <groupId>org.junit.jupiter</groupId>
+    <artifactId>junit-jupiter-api</artifactId>
+    <version>5.7.1</version>
+    <scope>test</scope>
+</dependency>
+
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>elementary</artifactId>
