@@ -3,15 +3,17 @@ name: Elementary CI/CD
 on:
   push:
     branches:
-      - staging
-      - stable
-
+      - master
+  pull_request:
+    branches:
+      - '**'
+      
 env:
   SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
   SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
-  
+
 jobs:
-  site:
+  nightly:
     runs-on: ubuntu-20.04
     steps:
       - uses: styfle/cancel-workflow-action@0.4.1

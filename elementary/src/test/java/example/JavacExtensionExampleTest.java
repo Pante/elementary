@@ -95,7 +95,6 @@ class StringFieldProcessor extends AnnotationProcessor {
             var variable = (VariableElement) element;
             if (!types.isSameType(variable.asType(), types.type(String.class))) {
                 logger.error(element, "Element is not a string");
-                continue;
             }
         }
         return false;

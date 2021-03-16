@@ -203,7 +203,7 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>
                 <configuration>
-                    <inputDirectory>${project.basedir/target/site/apidocs/}</inputDirectory>
+                    <url>dav:https://repo.karuslabs.com/repository/elementary/latest/</url>
                 </configuration>
                 <dependencies>
                     <dependency>
