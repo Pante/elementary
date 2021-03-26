@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,26 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.old;
+package com.karuslabs.satisfactory;
 
-import java.util.function.Supplier;
+public interface Part {
+    
+    public Class<?> type();
 
-public interface Timeable<T> extends Match<T> {
-
-    default Timeable<T> and(Supplier<? extends Timeable<T>> other) {
-        return and(other.get());
-    }
-    
-    default Timeable<T> and(Timeable<T> other) {
-        return new And<>(this, other);
-    }
-    
-    default Timeable<T> or(Supplier<? extends Timeable<T>> other) {
-        return or(other.get());
-    }
-    
-    default Timeable<T> or(Timeable<T> other) {
-        return new Or<>(this, other);
-    }
-    
 }

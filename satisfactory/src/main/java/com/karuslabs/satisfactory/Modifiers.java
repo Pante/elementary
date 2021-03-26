@@ -65,6 +65,11 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
     public String condition() {
         return condition;
     }
+    
+    @Override
+    public Class<Modifier> type() {
+        return Modifier.class;
+    }
 
 }
 

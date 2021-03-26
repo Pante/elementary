@@ -35,17 +35,27 @@ public abstract class Type implements Assertion<TypeMirror> {
     
     protected final Relation relation;
     protected final TypeMirror[] expectations;
-    private final String condition;
+    private final String types;
     
-    public Type(Relation relation, TypeMirror[] expectations, String condition) {
+    public Type(Relation relation, TypeMirror[] expectations, String types) {
         this.relation = relation;
         this.expectations = expectations;
-        this.condition = condition;
+        this.types = types;
     }
     
     @Override
     public String condition() {
-        return condition;
+        return relation.clause() + types;
+    }
+    
+    @Override
+    public String conditions() {
+        return relation.clauses() + types;
+    }
+    
+    @Override
+    public Class<TypeMirror> type() {
+        return TypeMirror.class;
     }
     
     public static abstract class Relation {
@@ -66,7 +76,9 @@ public abstract class Type implements Assertion<TypeMirror> {
 
         protected abstract boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual);
 
-        public abstract String relation();
+        public abstract String clause();
+        
+        public abstract String clauses();
         
     }
     
@@ -77,7 +89,12 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String relation() {
+        public String clause() {
+            return "";
+        }
+        
+        @Override
+        public String clauses() {
             return "";
         }
     }
@@ -89,8 +106,13 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String relation() {
+        public String clause() {
             return "subtype of ";
+        }
+        
+        @Override
+        public String clauses() {
+            return "subtypes of ";
         }
     }
 
@@ -101,8 +123,13 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String relation() {
+        public String clause() {
             return "supertype of ";
+        }
+        
+        @Override
+        public String clauses() {
+            return "supertypes of ";
         }
     }
     
@@ -120,10 +147,20 @@ class Primitive implements Assertion<TypeMirror> {
     public boolean test(TypeMirrors types, TypeMirror element) {
         return element.getKind() == kind;
     }
-
+    
     @Override
     public String condition() {
         return kind.toString().toLowerCase();
+    }
+    
+    @Override
+    public String conditions() {
+        return kind.toString().toLowerCase() + "s";
+    }
+    
+    @Override
+    public Class<TypeMirror> type() {
+        return TypeMirror.class;
     }
     
 }

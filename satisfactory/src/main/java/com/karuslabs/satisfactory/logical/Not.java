@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 public final class Not<T> implements Assertion<T> {
@@ -42,6 +42,11 @@ public final class Not<T> implements Assertion<T> {
     @Override
     public String condition() {
         return "!(" + assertion.condition() + ")";
+    }
+    
+    @Override
+    public Class<?> type() {
+        return assertion.type();
     }
 
 }

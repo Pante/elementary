@@ -21,12 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.times;
+package com.karuslabs.satisfactory.sequence;
 
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.Collection;
 
-public class AnySequence<T> implements Sequence<T> {
+public class AnySequence<T> extends Sequence<T> {
+
+    private final Class<?> type;
+    
+    public AnySequence(Class<?> type) {
+        super("");
+        this.type = type;
+    }
 
     @Override
     public boolean test(TypeMirrors types, Collection<? extends T> values) {
@@ -34,8 +42,8 @@ public class AnySequence<T> implements Sequence<T> {
     }
 
     @Override
-    public String condition() {
-        return "";
+    public Class<?> type() {
+        return type;
     }
 
 }

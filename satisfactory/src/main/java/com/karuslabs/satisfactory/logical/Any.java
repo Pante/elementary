@@ -23,10 +23,16 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 public class Any<T> implements Assertion<T> {
+    
+    private final Class<?> type;
+    
+    public Any(Class<?> type) {
+        this.type = type;
+    }
     
     @Override
     public boolean test(TypeMirrors types, T value) {
@@ -36,6 +42,11 @@ public class Any<T> implements Assertion<T> {
     @Override
     public String condition() {
         return "";
+    }
+    
+    @Override
+    public Class<?> type() {
+        return type;
     }
     
 }

@@ -1,3 +1,4 @@
+
 /*
  * The MIT License
  *
@@ -21,34 +22,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.times;
+package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 import java.util.function.BiConsumer;
 
-public interface Sequence<T> {
+public abstract class Sequence<T> implements Part {
     
     static final BiConsumer<Assertion<?>, StringBuilder> FORMAT = (assertion, builder) -> builder.append(assertion.condition());
     
-
-    boolean test(TypeMirrors types, Collection<? extends T> values);
+    private final String condition;
     
-    String condition(); 
+    public Sequence(String condition) {
+        this.condition = condition;
+    }
+    
+
+    public abstract boolean test(TypeMirrors types, Collection<? extends T> values);
+    
+    public String condition() {
+        return condition;
+    }
     
 }
 
-class EqualSequence<T> implements Sequence<T> {
+class EqualSequence<T> extends Sequence<T> {
+    
+    static String format(Assertion<?>... assertions) {
+        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ", ");
+    }
     
     private final Assertion<T>[] assertions;
-    private final String condition;
     
     EqualSequence(Assertion<T>... assertions) {
+        super("equal " + format(assertions));
         this.assertions = assertions;
-        condition = "equal [" + Texts.join(assertions, FORMAT, ", ") + "]";
     }
     
     @Override
@@ -66,27 +78,26 @@ class EqualSequence<T> implements Sequence<T> {
         
         return true;
     }
-
+    
     @Override
-    public String condition() {
-        return condition;
+    public Class<?> type() {
+        return assertions[0].type();
     }
     
 }
 
-class EachSequence<T> implements Sequence<T> {
+class EachSequence<T> extends Sequence<T> {
     
     private final Assertion<T> assertion;
-    private final String condition;
     
     EachSequence(Assertion<T> assertion) {
+        super("each [" + assertion.condition() + "]");
         this.assertion = assertion;
-        condition = "each [" + assertion.condition() + "]";
     }
 
     @Override
     public boolean test(TypeMirrors types, Collection<? extends T> values) {
-         for (var value : values) {
+        for (var value : values) {
             if (!assertion.test(types, value)) {
                 return false;
             }
@@ -96,8 +107,29 @@ class EachSequence<T> implements Sequence<T> {
     }
 
     @Override
-    public String condition() {
-        return condition;
+    public Class<?> type() {
+        return assertion.type();
+    }
+    
+}
+
+class NoSequence<T> extends Sequence<T> {
+    
+    private final Class<?> type;
+    
+    NoSequence(Class<?> type) {
+        super("empty");
+        this.type = type;
+    }
+
+    @Override
+    public boolean test(TypeMirrors types, Collection<? extends T> values) {
+        return values.isEmpty();
+    }
+
+    @Override
+    public Class<?> type() {
+        return type;
     }
     
 }

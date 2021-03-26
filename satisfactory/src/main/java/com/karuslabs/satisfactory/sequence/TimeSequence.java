@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,37 +21,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.old;
+package com.karuslabs.satisfactory.sequence;
 
 import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 
-import static com.karuslabs.old.Sequence.format;
-
-abstract class TimeSequence<T> extends Sequence<T> {
-
-    final Times<T>[] times;
+public abstract class TimeSequence<T> extends Sequence<T> {
     
-    TimeSequence(String prefix, Times<T>... times) {
-        super(prefix + format(times));
+    static String format(Times<?>... times) {
+        return Texts.join(times, (time, builder) -> builder.append('[').append(time.condition()).append(']'), ", ");
+    }
+    
+    protected final Times<T>[] times;
+    
+    public TimeSequence(String prefix, Times<T>... times) {
+        super(prefix + " " + format(times));
         this.times = times;
-    }
-    
-    @Override
-    public String describe(TypeMirrors types, Collection<? extends T> values) {
-        test(types, values);
-        var description = Texts.join(times, (time, builder) -> builder.append('[').append(time.describe()).append(']'), ", ");
-        reset();
-        
-        return description;
-    }
-    
-    protected void reset() {
-        for (var time : times) {
-            time.reset();
-        }
     }
     
 }
@@ -59,7 +46,7 @@ abstract class TimeSequence<T> extends Sequence<T> {
 class ContainsSequence<T> extends TimeSequence<T> {
     
     ContainsSequence(Times<T>... times) {
-        super("contains ", times);
+        super("contains", times);
     }
 
     @Override
@@ -79,28 +66,38 @@ class ContainsSequence<T> extends TimeSequence<T> {
         return true;
     }
 
+    @Override
+    public Class<?> type() {
+        return times[0].type();
+    }
+    
 }
 
-class MatchTimeSequence<T> extends TimeSequence<T> {
-    
-    MatchTimeSequence(Times<T>... times) {
-        super("match ", times);
+class EqualTimeSequence<T> extends TimeSequence<T> {
+
+    EqualTimeSequence(Times<T>... times) {
+        super("equal", times);
     }
     
     @Override
     public boolean test(TypeMirrors types, Collection<? extends T> values) {
         for (var value : values) {
-            var match = false;
+            var equal = false;
             for (var time : times) {
-                match |= time.add(types, value);
+                equal |= time.add(types, value);
             }
             
-            if (!match) {
+            if (!equal) {
                 return false;
             }
         }
         
         return true;
+    }
+
+    @Override
+    public Class<?> type() {
+        return times[0].type();
     }
     
 }

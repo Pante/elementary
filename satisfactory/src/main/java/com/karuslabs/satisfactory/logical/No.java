@@ -23,12 +23,27 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-public final class No<T> {
+import java.lang.annotation.Annotation;
+import javax.lang.model.element.Modifier;
+
+public class No<T> {
     
-    public final T[] elements;
+    public final T[] values;
     
     public No(T... elements) {
-        this.elements = elements;
+        this.values = elements;
+    }
+    
+    public static class Annotations extends No<Class<? extends Annotation>> {
+        public Annotations(Class<? extends Annotation>... annotations) {
+            super(annotations);
+        }
+    }
+    
+    public static class Modifiers extends No<Modifier> {
+        public Modifiers(Modifier... modifiers) {
+            super(modifiers);
+        }
     }
     
 }

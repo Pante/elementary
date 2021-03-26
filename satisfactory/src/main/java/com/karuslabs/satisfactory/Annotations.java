@@ -46,6 +46,11 @@ public abstract class Annotations implements Assertion<Element> {
     public String condition() {
         return condition;
     }
+    
+    @Override
+    public Class<Annotation> type() {
+        return Annotation.class;
+    }
 
 }
 

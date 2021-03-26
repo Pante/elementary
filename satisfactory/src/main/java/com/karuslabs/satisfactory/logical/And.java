@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 public final class And<T> implements Assertion<T> {
@@ -39,6 +39,11 @@ public final class And<T> implements Assertion<T> {
     @Override
     public boolean test(TypeMirrors types, T value) {
         return left.test(types, value) && right.test(types, value);
+    }
+    
+    @Override
+    public Class<?> type() {
+        return left.type();
     }
 
     @Override

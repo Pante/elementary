@@ -26,19 +26,33 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.logical.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-public interface Assertion<T> {
+import java.util.function.Supplier;
+
+public interface Assertion<T> extends Part {
 
     boolean test(TypeMirrors types, T value);
     
     String condition();
+    
+    default String conditions() {
+        return condition();
+    }
     
     
     default Assertion<T> and(Assertion<T> other) {
         return new And<>(this, other);
     }
     
+    default Assertion<T> and(Supplier<Assertion<T>> other) {
+        return new And<>(this, other.get());
+    }
+    
     default Assertion<T> or(Assertion<T> other) {
         return new Or<>(this, other);
+    }
+    
+    default Assertion<T> or(Supplier<Assertion<T>> other) {
+        return new Or<>(this, other.get());
     }
     
 }
