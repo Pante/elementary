@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory.matches;
 
+import com.karuslabs.old.Variable;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;

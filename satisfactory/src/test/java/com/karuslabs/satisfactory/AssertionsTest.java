@@ -29,7 +29,7 @@ import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

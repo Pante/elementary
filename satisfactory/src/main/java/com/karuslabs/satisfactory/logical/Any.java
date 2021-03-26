@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,44 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.matches;
+package com.karuslabs.satisfactory.logical;
 
+import com.karuslabs.satisfactory.Assertion;
 import com.karuslabs.utilitary.type.TypeMirrors;
-import com.karuslabs.satisfactory.SkeletonAssertion;
 
-import javax.lang.model.element.Element;
-
-import static com.karuslabs.utilitary.Texts.join;
-
-public final class Or<T> extends SkeletonAssertion implements Timeable<T> {
-
-    private final Match<T> left;
-    private final Match<T> right;
+public class Any<T> implements Assertion<T> {
     
-    public Or(Match<T> left, Match<T> right) {
-        super(join(left.condition(), ", or ", right.condition()), join(left.conditions(), ", or ", right.conditions()));
-        this.left = left;
-        this.right = right;
-    }
-    
-    @Override
-    public boolean test(TypeMirrors types, Element element) {
-        return left.test(types, element) || right.test(types, element);
-    }
-
     @Override
     public boolean test(TypeMirrors types, T value) {
-        return left.test(types, value) || right.test(types, value);
-    }
-
-    @Override
-    public String describe(Element value) {
-        return left.describe(value);
+        return true;
     }
     
     @Override
-    public String describe(T value) {
-        return left.describe(value);
+    public String condition() {
+        return "";
     }
     
 }

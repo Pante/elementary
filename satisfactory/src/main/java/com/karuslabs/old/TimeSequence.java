@@ -21,15 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.sequences;
+package com.karuslabs.old;
 
-import com.karuslabs.satisfactory.times.Times;
 import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 
-import static com.karuslabs.satisfactory.sequences.Sequence.format;
+import static com.karuslabs.old.Sequence.format;
 
 abstract class TimeSequence<T> extends Sequence<T> {
 

@@ -21,13 +21,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.old;
 
+import com.karuslabs.old.Match;
+import com.karuslabs.old.ModifierMatch;
+import com.karuslabs.old.AnnotationMatch;
+import com.karuslabs.old.TypeMatch;
+import com.karuslabs.old.Not;
+import com.karuslabs.old.Timeable;
+import com.karuslabs.old.Variable;
 import com.karuslabs.annotations.Static;
 
-import com.karuslabs.satisfactory.matches.*;
-import com.karuslabs.satisfactory.sequences.Sequence;
-import com.karuslabs.satisfactory.times.Times;
+import com.karuslabs.old.Sequence;
 
 import java.lang.annotation.Annotation;
 import java.util.Set;

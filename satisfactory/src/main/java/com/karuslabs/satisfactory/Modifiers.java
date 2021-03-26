@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,35 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.matches;
+package com.karuslabs.satisfactory;
 
 import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
-import com.karuslabs.satisfactory.SkeletonAssertion;
 
 import java.util.*;
-import javax.lang.model.element.*;
+import javax.lang.model.element.Modifier;
 
-import static com.karuslabs.utilitary.Texts.*;
+import static com.karuslabs.utilitary.Texts.SCREAMING_CASE;
 
-public abstract class ModifierMatch extends SkeletonAssertion implements Match<Set<Modifier>> {
-    
-    public static final Match<Set<Modifier>> ANY = new AnyModifier();
-    
-    public static final Match<Set<Modifier>> contains(Modifier... modifiers) {
-        return new ContainsModifier(modifiers);
-    }
-    
-    public static final Match<Set<Modifier>> match(Modifier... modifiers) {
-        return new MatchModifier(modifiers);
-    }
-    
-    
-    public static List<Modifier> sort(Collection<Modifier> modifiers) {
-        var list = new ArrayList<>(modifiers);
-        list.sort((a, b) -> Integer.compare(order(a), order(b)));
-        return list;
-    }
+public abstract class Modifiers implements Assertion<Set<Modifier>> {
     
     public static Modifier[] sort(Modifier... modifiers) {
         Arrays.sort(modifiers, (a, b) -> Integer.compare(order(a), order(b)));
@@ -70,51 +52,28 @@ public abstract class ModifierMatch extends SkeletonAssertion implements Match<S
                 return 3;
         }
     }
+
+    protected final Set<Modifier> modifiers;
+    protected final String condition;
     
-    
-    final Set<Modifier> modifiers;
-    
-    public ModifierMatch(Set<Modifier> modifiers, String condition) {
-        super(condition);
+    public Modifiers(Set<Modifier> modifiers, String condition) {
         this.modifiers = modifiers;
-    }
-
-    @Override
-    public boolean test(TypeMirrors types, Element element) {
-        return test(types, element.getModifiers());
-    }
-
-    @Override
-    public String describe(Element element) {
-        return describe(element.getModifiers());
-    }
-
-    @Override
-    public String describe(Set<Modifier> modifiers) {
-        return Texts.join(sort(modifiers), SCREAMING_CASE, " ");
-    }
-
-}
-
-class AnyModifier extends ModifierMatch {
-
-    public AnyModifier() {
-        super(Set.of(), "");
-    }
-
-    @Override
-    public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
-        return true;
+        this.condition = condition;
     }
     
+    @Override
+    public String condition() {
+        return condition;
+    }
+
 }
 
-class ContainsModifier extends ModifierMatch {
-
-    ContainsModifier(Modifier... modifiers) {
+class ContainsModifiers extends Modifiers {
+    
+    ContainsModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
     }
-    
+
     @Override
     public boolean test(TypeMirrors types, Set<Modifier> modifiers) {
         return modifiers.containsAll(this.modifiers);
@@ -122,9 +81,9 @@ class ContainsModifier extends ModifierMatch {
     
 }
 
-class MatchModifier extends ModifierMatch {
+class EqualModifiers extends Modifiers {
 
-    MatchModifier(Modifier... modifiers) {
+    EqualModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
     }
     

@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,30 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logical;
 
-public abstract class SkeletonAssertion implements Assertion {
-
-    protected final String condition;
-    protected final String conditions;
+public final class No<T> {
     
-    public SkeletonAssertion(String condition) {
-        this(condition, condition);
+    public final T[] elements;
+    
+    public No(T... elements) {
+        this.elements = elements;
     }
     
-    public SkeletonAssertion(String condition, String conditions) {
-        this.condition = condition;
-        this.conditions = conditions;
-    }
-    
-    @Override
-    public String condition() {
-        return condition;
-    }
-    
-    @Override
-    public String conditions() {
-        return conditions;
-    }
-
 }

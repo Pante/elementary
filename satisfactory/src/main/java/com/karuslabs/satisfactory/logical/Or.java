@@ -1,9 +1,7 @@
-
-
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,30 +21,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.matches;
+package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.utilitary.type.TypeMirrors;
 import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-import javax.lang.model.element.Element;
+public final class Or<T> implements Assertion<T> {
 
-public interface Match<T> extends Assertion {
+    public final Assertion<T> left;
+    public final Assertion<T> right;
     
-    public boolean test(TypeMirrors types, Element element);
-        
-    public boolean test(TypeMirrors types, T value);
-    
-    
-    public String describe(Element element);
-    
-    public String describe(T value);
-    
-    public default Match<T> and(Match<T> other) {
-        return new And<>(this, other);
+    public Or(Assertion<T> left, Assertion<T> right) {
+        this.left = left;
+        this.right = right;
     }
     
-    public default Match<T> or(Match<T> other) {
-        return new Or<>(this, other);
+    @Override
+    public boolean test(TypeMirrors types, T value) {
+        return left.test(types, value) || right.test(types, value);
     }
-    
+
+    @Override
+    public String condition() {
+        return left.condition() + " | " + right.condition();
+    }
 }

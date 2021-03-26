@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory.matches;
 
+import com.karuslabs.old.Match;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.lang.annotation.*;
@@ -34,7 +35,7 @@ import org.junit.jupiter.api.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

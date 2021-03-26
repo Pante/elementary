@@ -23,22 +23,47 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.logical.*;
+import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-public interface Assertion<T> {
+import java.lang.annotation.Annotation;
+import java.util.function.BiConsumer;
+import javax.lang.model.element.Element;
 
-    boolean test(TypeMirrors types, T value);
+public abstract class Annotations implements Assertion<Element> {
     
-    String condition();
+    public static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
+    protected final Class<? extends Annotation>[] annotations;
+    private final String condition;
     
-    default Assertion<T> and(Assertion<T> other) {
-        return new And<>(this, other);
+    public Annotations(Class<? extends Annotation>[] annotations, String condition) {
+        this.annotations = annotations;
+        this.condition = condition;
     }
     
-    default Assertion<T> or(Assertion<T> other) {
-        return new Or<>(this, other);
+    @Override
+    public String condition() {
+        return condition;
+    }
+
+}
+
+class ContainsAnnotations extends Annotations {
+    
+    ContainsAnnotations(Class<? extends Annotation>... annotations) {
+        super(annotations, "contains [" + Texts.join(annotations, FORMAT, ", ") + "]");
+    }
+
+    @Override
+    public boolean test(TypeMirrors types, Element element) {
+        for (var annotation : annotations) {
+            if (element.getAnnotationsByType(annotation).length == 0) {
+                return false;
+            }
+        }
+        
+        return true;
     }
     
 }

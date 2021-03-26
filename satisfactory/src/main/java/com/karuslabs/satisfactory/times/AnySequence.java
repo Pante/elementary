@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,21 +21,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.times;
 
-import com.karuslabs.old.SkeletonAssertion;
-import org.junit.jupiter.api.*;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.Collection;
 
-import static org.junit.jupiter.api.Assertions.*;
+public class AnySequence<T> implements Sequence<T> {
 
-class SkeletonAssertionTest {
-
-    SkeletonAssertion assertion = new SkeletonAssertion("help") {};
-    
-    @Test
-    void condition() {
-        assertEquals("help", assertion.condition());
-        assertEquals("help", assertion.conditions());
+    @Override
+    public boolean test(TypeMirrors types, Collection<? extends T> values) {
+        return true;
     }
-    
+
+    @Override
+    public String condition() {
+        return "";
+    }
+
 }

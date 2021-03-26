@@ -21,10 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.old;
 
-import com.karuslabs.satisfactory.matches.Match;
-import com.karuslabs.satisfactory.sequences.Sequence;
+import com.karuslabs.old.Match;
+import com.karuslabs.old.Sequence;
+import com.karuslabs.satisfactory.A;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
@@ -36,7 +37,7 @@ import javax.lang.model.type.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.utilitary.Texts.*;
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 
 public class Method extends SkeletonAssertion {
 
@@ -113,6 +114,36 @@ public class Method extends SkeletonAssertion {
             exceptions.describe(types, method.getThrownTypes())
         );
     }
+    
+    
+    var minimallyOneLetAnnotated;
+    
+    method()
+    variable(supertype(), not(contains(Let.classs)));
+    
+    Method(
+        parameters(match(
+            exactly(1, variable(supertype(types.context), annotations(not(contains(Let.class))))),
+            exactly(1, variable(supertype(types.sender), annotatins(not(contains(Let.class))))),
+            min(0, variable().annotations(contains(Let.class)))
+        )),
+        exceptions(match(
+            max(1, subtype(CommandSyntaxException.class)),
+            min(0, subtype(RuntimeException.class))
+        ))
+    );
+    
+    A, B, C, D, E
+            
+    A
+    B
+    C
+    D
+    E
+    AB, AC, AD, AE
+    BC, BD, BE,
+    CD, CE,
+    DE
     
     
     public static class Builder implements Supplier<Method> {

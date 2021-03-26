@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,50 +21,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.matches;
+package com.karuslabs.satisfactory.logical;
 
+import com.karuslabs.satisfactory.Assertion;
 import com.karuslabs.utilitary.type.TypeMirrors;
-import com.karuslabs.satisfactory.SkeletonAssertion;
 
-import javax.lang.model.element.Element;
-
-public final class Not<T> extends SkeletonAssertion implements Timeable<T> {
-
-    public static <T> Timeable<T> of(Timeable<T> match) {
-        return new Not<>(match);
-    }
+public final class Not<T> implements Assertion<T> {
     
-    public static <T> Match<T> of(Match<T> match) {
-        return new Not<>(match);
-    }
+    public final Assertion<T> assertion;
     
-    
-    private final Match<T> match;
-    
-    private Not(Match<T> match) {
-        super("not " + match.condition(), "not " + match.conditions());
-        this.match = match;
-    }
-    
-    
-    @Override
-    public boolean test(TypeMirrors types, Element element) {
-        return !match.test(types, element);
+    public Not(Assertion<T> assertion) {
+        this.assertion = assertion;
     }
 
     @Override
     public boolean test(TypeMirrors types, T value) {
-        return !match.test(types, value);
+        return !assertion.test(types, value);
     }
 
     @Override
-    public String describe(Element element) {
-        return match.describe(element);
-    }
-
-    @Override
-    public String describe(T value) {
-        return match.describe(value);
+    public String condition() {
+        return "!(" + assertion.condition() + ")";
     }
 
 }

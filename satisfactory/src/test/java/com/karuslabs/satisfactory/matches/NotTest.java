@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory.matches;
 
+import com.karuslabs.old.Match;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Set;
@@ -31,7 +32,7 @@ import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.old.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
