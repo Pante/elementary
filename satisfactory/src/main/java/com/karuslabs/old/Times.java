@@ -21,10 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.times;
+package com.karuslabs.old;
 
-import com.karuslabs.satisfactory.SkeletonAssertion;
-import com.karuslabs.satisfactory.matches.Timeable;
+import com.karuslabs.old.SkeletonAssertion;
+import com.karuslabs.old.Timeable;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
