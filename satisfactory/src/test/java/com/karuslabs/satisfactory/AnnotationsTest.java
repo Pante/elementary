@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,19 +23,21 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.old.SkeletonAssertion;
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
+
+import org.mockito.Spy;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
+import static org.mockito.Mockito.*;
 
-class SkeletonAssertionTest {
+class AnnotationsTest {
+    
+    
 
-    SkeletonAssertion assertion = new SkeletonAssertion("help") {};
-    
-    @Test
-    void condition() {
-        assertEquals("help", assertion.condition());
-        assertEquals("help", assertion.conditions());
-    }
-    
-}
+} 

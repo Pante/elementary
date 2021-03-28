@@ -26,7 +26,6 @@ package com.karuslabs.satisfactory.sequence;
 import com.karuslabs.satisfactory.Assertion;
 
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
@@ -49,16 +48,20 @@ public class Sequences {
     
     
     public static <T> Sequence<T> equal(Supplier<Assertion<T>>... assertions) {
-        var values = new Assertion<?>[] {};
-        for (var supplier : assertions) {
-            supplier.get()
+        var supplied = new Assertion[assertions.length];
+        for (int i = 0; i < assertions.length; i++) {
+            supplied[i] = assertions[i].get();
         }
         
-        return equal()
+        return equal(supplied);
     }
     
     public static <T> Sequence<T> equal(Assertion<T>... assertions) {
         return new EqualSequence<>(assertions);
+    }
+    
+    public static <T> Sequence<T> each(Supplier<Assertion<T>> assertion) {
+        return each(assertion.get());
     }
     
     public static <T> Sequence<T> each(Assertion<T> assertion) {
@@ -75,20 +78,40 @@ public class Sequences {
     }
     
     
+    public static <T> Times<T> zero(Supplier<Assertion<T>> assertion) {
+        return zero(assertion.get());
+    }
+    
     public static <T> Times<T> zero(Assertion<T> assertion) {
         return new Exact(0, assertion);
+    }
+    
+    public static <T> Times<T> times(int times, Supplier<Assertion<T>> assertion) {
+        return times(times, assertion.get());
     }
     
     public static <T> Times<T> times(int times, Assertion<T> assertion) {
         return new Exact(times, assertion);
     }
     
+    public static <T> Times<T> range(int min, int max, Supplier<Assertion<T>> assertion) {
+        return new Range<>(min, max, assertion.get());
+    }
+    
     public static <T> Times<T> range(int min, int max, Assertion<T> assertion) {
         return new Range<>(min, max, assertion);
     }
     
+    public static <T> Times<T> min(int min, Supplier<Assertion<T>> assertion) {
+        return new Min<>(min, assertion.get());
+    }
+    
     public static <T> Times<T> min(int min, Assertion<T> assertion) {
         return new Min<>(min, assertion);
+    }
+    
+    public static <T> Times<T> max(int max, Supplier<Assertion<T>> assertion) {
+        return new Max<>(max, assertion.get());
     }
     
     public static <T> Times<T> max(int max, Assertion<T> assertion) {

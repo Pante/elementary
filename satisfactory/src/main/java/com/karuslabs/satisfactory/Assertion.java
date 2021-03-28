@@ -28,6 +28,12 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.function.Supplier;
 
+/**
+ * Represents an assertion for a syntactical construct in an annotation processing
+ * environment.
+ * 
+ * @param <T> a type which this {@code Assertion} tests
+ */
 public interface Assertion<T> extends Part {
 
     boolean test(TypeMirrors types, T value);
