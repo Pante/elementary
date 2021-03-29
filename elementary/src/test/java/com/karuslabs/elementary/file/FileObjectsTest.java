@@ -37,8 +37,10 @@ import static com.karuslabs.elementary.file.FileObjects.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@Classpath("A.java")
+@Classpath("com.karuslabs.elementary.junit.CasesCases")
+@Resource("com/karuslabs/elementary/junit/A.java")
 @Inline(name = "Dummy", source = "class Dummy {}")
+@Quine
 class FileObjectsTest {
 
     @Test
@@ -55,6 +57,7 @@ class FileObjectsTest {
     void ofLines_iterable() {
         assertTrue(javac().compile(ofLines("Dummy", List.of("class Dummy {}"))).success);
     }
+    
     
     @Test
     void ofResource_invalid_url() {

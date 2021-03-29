@@ -21,57 +21,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+import com.karuslabs.elementary.junit.annotations.Case;
 
-import com.karuslabs.elementary.junit.annotations.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+public class AnnotationsCase {
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(ToolsExtension.class)
-@Classpath("com.karuslabs.elementary.junit.CasesCases")
-class CasesTest {
-
-    Cases cases = Tools.cases();
+    @Case
+    public @Nullable String one() { return ""; }
     
-    @Test
-    void one() {
-        assertNull(cases.one());
-    }
-    
-    
-    @Test
-    void one_label() {
-        assertNotNull(cases.one("a"));
-    }
-    
-    @Test
-    void one_label_not_found() {
-        assertNull(cases.one("invalid"));
-    }
-    
-    
-    @Test
-    void get_index() {
-        assertEquals("a", cases.get(1).getAnnotation(Case.class).value());
-    }
-    
-    @Test
-    void get_label() {
-        assertEquals(1, cases.get("a").size());
-    }
-    
-    
-    @Test
-    void list() {
-        assertEquals(2, cases.list().size());
-    }
-    
-    @Test
-    void count() {
-        assertEquals(2, cases.count());
-    }
+    @Case
+    public String two() { return null; }
     
 }

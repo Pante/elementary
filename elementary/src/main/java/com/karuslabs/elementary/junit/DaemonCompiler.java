@@ -55,12 +55,12 @@ class DaemonCompiler extends Thread {
     /**
      * Creates a {@code DaemonCompiler} that compiles the Java source files provided
      * by {@code @Classpath} and {@code Inline} annotations on the given annotated
-     * element.
+     * class.
      * 
      * @param annotated the annotated elements
      * @return a {@code DaemonCompiler}
      */
-    public static DaemonCompiler of(AnnotatedElement annotated) {
+    public static DaemonCompiler of(Class<?> annotated) {
         var files = scan(annotated);
         files.add(DUMMY);
         

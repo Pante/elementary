@@ -23,21 +23,59 @@
  */
 package com.karuslabs.satisfactory;
 
-import java.util.stream.Stream;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.Classpath;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.List;
 
-import org.junit.jupiter.api.*;
+import javax.lang.model.element.Element;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
-
-import org.mockito.Spy;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
+//@ExtendWith(ToolsExtension.class)
+//@Classpath("com.karuslabs.satisfactory.AnnotationsCase")
 class AnnotationsTest {
     
+//    TypeMirrors types = Tools.typeMirrors();
+//    Assertion<Element> assertion = Assertions.contains(Nullable.class);
+//    
+//    @Test
+//    void contains_true(Cases cases) {
+//        assertTrue(assertion.test(types, cases.get(0)));
+//    }
+//    
+//    @Test
+//    void contains_false(Cases cases) {
+//        assertFalse(assertion.test(types, cases.get(1)));
+//    }
     
+    @Test
+    void help() {
+        System.out.println(List.of(A.class.getNestMembers()));
+        System.out.println(A.B.class.getNestHost());
+        System.out.println(C.class.getNestHost());
+        System.out.println(C.D.class.getNestHost());
+    }
 
 } 
+
+class A {
+    
+    static class B {
+    
+    }
+    
+}
+
+class C {
+    
+    static class D {
+        
+    }
+    
+}

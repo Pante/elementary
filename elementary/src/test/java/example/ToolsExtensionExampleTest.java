@@ -47,7 +47,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * 
  * Alternatively, we can also use the @Classpath annotation to include the class
  * which contains test cases for compilation if it is available on the current
- * classpath, i.e. "@Classpath("Samples.java")".
+ * classpath, i.e. "@Classpath("Samples")".
  * 
  * Other annotations can also be used to mark test cases, but we provide specialized
  * utilities to simplify retrieval of elements annotated with @Case.

@@ -64,16 +64,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(JavacExtension.class)
 @Options("-Werror")
 @Processors({StringFieldProcessor.class})
-@Classpath("ValidCase.java")
+@Classpath("com.karuslabs.elementary.junit.ValidCase")
 class JavacExtensionExampleTest {
-
+    
     @Test
     void process_string_field(Results results) {
         assertEquals(0, results.find().errors().count());
     }
     
     @Test
-    @Classpath("InvalidCase.java")
+    @Classpath("com.karuslabs.elementary.junit.InvalidCase")
     void process_int_field(Results results) {
         assertEquals(1, results.find().errors().contains("Element is not a string").count());
     }

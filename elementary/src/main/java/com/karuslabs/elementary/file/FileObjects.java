@@ -45,16 +45,40 @@ public @Static class FileObjects {
     public static final JavaFileObject DUMMY = ofLines("Dummy", "class Dummy {}");
     
     /**
-     * Creates {@code JavaFileObject}s using the {@code @Classpath} and {@code @Inline} 
-     * annotations on the given element.
+     * Creates {@code JavaFileObject}s using the {@code Classpath}, {@code @Inline},
+     * {@code Quine} and {@code @Inline} annotations on the given element.
+     * 
+     * @param annotated the annotated class
+     * @return the {@code JavaFileObject}s
+     */
+    public static List<JavaFileObject> scan(Class<?> annotated) {
+        var files = scan((AnnotatedElement) annotated);
+        var quine = annotated.getAnnotation(Quine.class);
+        
+        if (quine != null) {
+            var host = annotated.getNestHost();
+            files.add(ofClass(quine.value().equals(Quine.DEFAULT) ? host.getName() : host.getPackageName() + "." + quine.value()));
+        }
+        
+        return files;
+    }
+    
+    /**
+     * Creates {@code JavaFileObject}s using the {@code Classpath}, {@code @Inline} 
+     * and {@code @Resource} annotations on the given element.
      * 
      * @param annotated the annotated element
      * @return the {@code JavaFileObject}s
      */
     public static List<JavaFileObject> scan(AnnotatedElement annotated) {
         var files = new ArrayList<JavaFileObject>();
-        for (var classpath : annotated.getAnnotationsByType(Classpath.class)) {
-            files.add(ofResource(classpath.value()));
+        
+        for (var name : annotated.getAnnotationsByType(Classpath.class)) {
+            files.add(ofClass(name.value()));
+        }
+        
+        for (var resource : annotated.getAnnotationsByType(Resource.class)) {
+            files.add(ofResource(resource.value()));
         }
         
         for (var inline : annotated.getAnnotationsByType(Inline.class)) {
@@ -100,8 +124,25 @@ public @Static class FileObjects {
         return new StringFileObject(URI.create(fullyQualifiedName.replace('.', '/') + SOURCE.extension), SOURCE, source);
     }
     
+    
     /**
-     * Creates a {@code JavaFileObject} from the given resource.
+     * Creates a {@code JavaFileObject} from the given fully qualified class name. 
+     * Packages are separated via {@code .}. Classes should <b>not</b> contain a file 
+     * extension.
+     * 
+     * @param name the fully qualified class name
+     * @return a {@code JavaFileObject}
+     * @throws IllegalArgumentException if the given resource does not exist on the
+     *         current clssspath
+     * @throws UncheckedIOException if the resource could not be opened
+     */
+    public static JavaFileObject ofClass(String name) {
+        return ofResource(name.replace('.', '/') + ".java");
+    }
+    
+    /**
+     * Creates a {@code JavaFileObject} from the given resource. Directory names
+     * are separated via {@code /}. Resources must contain a valid file extension.
      * 
      * @param resource the path to a resource, relative to the current ClassLoader
      * @return a {@code JavaFileObject}

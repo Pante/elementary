@@ -79,6 +79,12 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      */
     abstract Object create(Constructor constructor, Environment environment) throws TestInstantiationException;
     
+    /**
+     * Initializes the environment for a given test class.
+     * 
+     * @param context the extension context
+     * @return a compiler's environment
+     */
     Environment initialize(ExtensionContext context) {
         var compiler = compiler(context);
         
@@ -110,19 +116,19 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
     
     /**
      * Intercepts a test method invocation to determine if it is annotated with 
-     * {@code @Classpath} or {@code @Inline}. 
+     * {@code Classpath}, {@code @Resource} or {@code @Inline}. 
      * 
      * @param invocation the invocation
      * @param method the method
      * @param context the context
-     * @throws IllegalArgumentException if the test method is annotated with {@code @Classpath} or {@code @Inline}
+     * @throws IllegalArgumentException if the test method is annotated with {@code @Resource} or {@code @Inline}
      * @throws Throwable if the invocation throws an exception
      */
     @Override
     public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> method, @Ignored ExtensionContext context) throws Throwable {
         var executable = method.getExecutable();
-        if (executable.getAnnotationsByType(Classpath.class).length > 0 || executable.getAnnotationsByType(Inline.class).length > 0) {
-            throw new IllegalArgumentException("Method cannot be annotated with @Classpath or @Inline when using ToolsExtension");
+        if (executable.getAnnotationsByType(Resource.class).length > 0 || executable.getAnnotationsByType(Inline.class).length > 0) {
+            throw new IllegalArgumentException("Method cannot be annotated with @Classpath, @Inline or @Resource when using ToolsExtension");
         }
         
         invocation.proceed();

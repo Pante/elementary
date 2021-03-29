@@ -85,7 +85,7 @@ class DaemonTest {
         ReflectiveInvocationContext<Method> context = when(mock(ReflectiveInvocationContext.class).getExecutable()).thenReturn(method).getMock();
         
         assertEquals(
-            "Method cannot be annotated with @Classpath or @Inline when using ToolsExtension",
+            "Method cannot be annotated with @Classpath, @Inline or @Resource when using ToolsExtension",
             assertThrows(IllegalArgumentException.class, () -> daemon.interceptTestMethod(invocation, context, null)).getMessage()
         );
     }
@@ -100,7 +100,7 @@ class DaemonTest {
 }
 
 class Normal {
-    @Classpath("a")
+    @Resource("a")
     void a() {}   
     
     @Inline(name = "a", source = "")

@@ -21,57 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
+package com.karuslabs.elementary.junit.annotations;
 
-import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.elementary.junit.*;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+import java.lang.annotation.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static java.lang.annotation.ElementType.*;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
-@ExtendWith(ToolsExtension.class)
-@Classpath("com.karuslabs.elementary.junit.CasesCases")
-class CasesTest {
+/**
+ * Denotes that the containing file of the annotated element is to be included
+ * for compilation.
+ * <br>
+ * <b>Note: </b>
+ * If no value is specified for this annotation, the top level enclosing class of
+ * the annotated element is used to resolve the file name. The file may not be named 
+ * after the top level class of an annotated element if it contains multiple top level
+ * classes.
+ */
+@Usage({JavacExtension.class, ToolsExtension.class})
+@Documented
+@Retention(RUNTIME)
+@Target({TYPE, METHOD})
+public @interface Quine {
 
-    Cases cases = Tools.cases();
+    public static final String DEFAULT = "${TRACE_ENCLOSING_CLASS}";
     
-    @Test
-    void one() {
-        assertNull(cases.one());
-    }
-    
-    
-    @Test
-    void one_label() {
-        assertNotNull(cases.one("a"));
-    }
-    
-    @Test
-    void one_label_not_found() {
-        assertNull(cases.one("invalid"));
-    }
-    
-    
-    @Test
-    void get_index() {
-        assertEquals("a", cases.get(1).getAnnotation(Case.class).value());
-    }
-    
-    @Test
-    void get_label() {
-        assertEquals(1, cases.get("a").size());
-    }
-    
-    
-    @Test
-    void list() {
-        assertEquals(2, cases.list().size());
-    }
-    
-    @Test
-    void count() {
-        assertEquals(2, cases.count());
-    }
+    /**
+     * The name of the top level class which the enclosing file is named after.
+     * 
+     * @return 
+     */
+    String value() default DEFAULT;
     
 }

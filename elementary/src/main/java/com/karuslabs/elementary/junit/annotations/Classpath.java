@@ -31,7 +31,7 @@ import static java.lang.annotation.ElementType.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Denotes a resource on the current classpath to be included for compilation.
+ * Denotes a class on the current classpath to be included for compilation.
  */
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
