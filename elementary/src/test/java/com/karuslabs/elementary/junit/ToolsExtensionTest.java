@@ -23,6 +23,7 @@ package com.karuslabs.elementary.junit;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -37,6 +38,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(ToolsExtension.class)
+@Introspect
 class ToolsExtensionTest {
 
     ToolsExtension extension = spy(new ToolsExtension());
@@ -62,6 +64,18 @@ class ToolsExtensionTest {
             "Unable to resolve parameter of type: " + String.class.getName(),
             assertThrows(ParameterResolutionException.class, () -> extension.create(InvalidConstructor.class.getDeclaredConstructors()[0], null)).getMessage()
         );
+    }
+    
+    @Test
+    void introspect_class(Cases cases) {
+        assertEquals(1, cases.count());
+    }
+    
+    static class IntrospectMethod {
+        
+        @Case
+        void test() {}
+        
     }
     
     

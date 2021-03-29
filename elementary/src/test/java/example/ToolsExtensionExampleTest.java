@@ -26,7 +26,7 @@ package example;
 import com.karuslabs.elementary.junit.Cases;
 import com.karuslabs.elementary.junit.Tools;
 import com.karuslabs.elementary.junit.ToolsExtension;
-import com.karuslabs.elementary.junit.annotations.Inline;
+import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
@@ -37,13 +37,15 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
+import com.karuslabs.elementary.junit.annotations.Introspect;
 
 /**
  * This example demonstrates how to use ToolsExtension to test a lint, described below,
  * which checks if an element is a string variable. 
  * 
- * We use the @Inline annotation to define test cases for the lint to check. 
- * Each test case is annotated with @Case to simplify retrieval.
+ * We use the @Quine annotation to include this file which contain test cases for 
+ * compilation, for the lint to check. Each test case is annotated with @Case to 
+ * simplify retrieval.
  * 
  * Alternatively, we can also use the @Classpath annotation to include the class
  * which contains test cases for compilation if it is available on the current
@@ -56,13 +58,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * variety of other checks.
  */
 @ExtendWith(ToolsExtension.class)
-@Inline(name = "Samples", source = {
-"import com.karuslabs.elementary.junit.annotations.Case;",
-"",
-"class Samples {",
-"  @Case(\"first\") String first;",
-"  @Case String second() { return \"\";}",
-"}"})
+@Introspect
 class ToolsExtensionExampleTest {
     
     // We can also obtain an instance of TypeMirrors via dependency injection in
@@ -79,6 +75,11 @@ class ToolsExtensionExampleTest {
     void lint_method_that_returns_string(Cases cases) {
         var second = cases.get(1);
         assertFalse(lint.lint(second));
+    }
+    
+    static class Sample {
+        @Case("first") String first;
+        @Case String second() { return ""; }
     }
     
 }

@@ -24,9 +24,8 @@
 package com.karuslabs.satisfactory;
 
 import com.karuslabs.elementary.junit.*;
-import com.karuslabs.elementary.junit.annotations.Classpath;
+import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
-import java.util.List;
 
 import javax.lang.model.element.Element;
 
@@ -37,45 +36,29 @@ import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-//@ExtendWith(ToolsExtension.class)
-//@Classpath("com.karuslabs.satisfactory.AnnotationsCase")
+@ExtendWith(ToolsExtension.class)
+@Introspect
 class AnnotationsTest {
     
-//    TypeMirrors types = Tools.typeMirrors();
-//    Assertion<Element> assertion = Assertions.contains(Nullable.class);
-//    
-//    @Test
-//    void contains_true(Cases cases) {
-//        assertTrue(assertion.test(types, cases.get(0)));
-//    }
-//    
-//    @Test
-//    void contains_false(Cases cases) {
-//        assertFalse(assertion.test(types, cases.get(1)));
-//    }
+    TypeMirrors types = Tools.typeMirrors();
+    Assertion<Element> assertion = Assertions.contains(Nullable.class);
     
     @Test
-    void help() {
-        System.out.println(List.of(A.class.getNestMembers()));
-        System.out.println(A.B.class.getNestHost());
-        System.out.println(C.class.getNestHost());
-        System.out.println(C.D.class.getNestHost());
+    void contains_true(Cases cases) {
+        assertTrue(assertion.test(types, cases.get(0)));
+    }
+    
+    @Test
+    void contains_false(Cases cases) {
+        assertFalse(assertion.test(types, cases.get(1)));
+    }
+    
+    static class TestCases {
+        @Case
+        public String one() { return ""; }
+    
+        @Case
+        public String two() { return null; }
     }
 
 } 
-
-class A {
-    
-    static class B {
-    
-    }
-    
-}
-
-class C {
-    
-    static class D {
-        
-    }
-    
-}

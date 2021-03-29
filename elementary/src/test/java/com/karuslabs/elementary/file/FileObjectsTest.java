@@ -40,11 +40,21 @@ import static org.mockito.Mockito.*;
 @Classpath("com.karuslabs.elementary.junit.CasesCases")
 @Resource("com/karuslabs/elementary/junit/A.java")
 @Inline(name = "Dummy", source = "class Dummy {}")
-@Quine
 class FileObjectsTest {
 
     @Test
-    void scan() {
+    void scan_nested_class() {
+        assertTrue(javac().compile(FileObjects.scan(Nested.class)).success);
+    }
+    
+    @Introspect
+    static class Nested {
+        
+    }
+    
+    
+    @Test
+    void scan_element() {
         assertTrue(javac().compile(FileObjects.scan(FileObjectsTest.class)).success);
     }
     
@@ -89,6 +99,16 @@ class FileObjectsTest {
         var url = new URL("jar:file:/C:/Program%20Files/test.jar!/foo/bar");
         
         assertEquals("/foo/bar", uri(url).getPath());
+    }
+    
+}
+
+@Introspect("FileObjectsTest")
+class FileObjectsIntrospectTest {
+    
+    @Test
+    void scan_other_top_level_class() {
+        assertTrue(javac().compile(FileObjects.scan(FileObjectsIntrospectTest.class)).success);
     }
     
 }

@@ -39,19 +39,24 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * the annotated element is used to resolve the file name. The file may not be named 
  * after the top level class of an annotated element if it contains multiple top level
  * classes.
+ * 
+ * In addition, this annotation requires a build tool to copy source files from the
+ * source directory to the output directory.
+ * 
+ * @see <a href = "https://github.com/Pante/elementary/wiki/@Introspect-Configuration">@Introspect configuration</a>
  */
 @Usage({JavacExtension.class, ToolsExtension.class})
 @Documented
 @Retention(RUNTIME)
-@Target({TYPE, METHOD})
-public @interface Quine {
+@Target(TYPE)
+public @interface Introspect {
 
     public static final String DEFAULT = "${TRACE_ENCLOSING_CLASS}";
     
     /**
-     * The name of the top level class which the enclosing file is named after.
+     * The name of the top level class after which the file is named.
      * 
-     * @return 
+     * @return the top level class name
      */
     String value() default DEFAULT;
     

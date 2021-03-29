@@ -56,3 +56,5 @@ Temporary Items
 /elementary/target/
 /elementary-core/target/
 /utilitary/target/
+/sample/.gradle/
+/sample/build/
