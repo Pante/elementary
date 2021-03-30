@@ -31,7 +31,7 @@ public abstract class Times<T> implements Part {
 
     private final Assertion<T> assertion;
     private final String condition;
-    private int current = 0;
+    private int current;
     
     public Times(Assertion<T> assertion, String condition) {
         this.assertion = assertion;

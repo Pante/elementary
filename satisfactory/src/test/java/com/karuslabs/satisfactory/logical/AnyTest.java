@@ -21,46 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.logical.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import org.junit.jupiter.api.*;
 
-import java.util.function.Supplier;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+class AnyTest {
 
-/**
- * Represents an assertion for a syntactical construct in an annotation processing
- * environment.
- * 
- * @param <T> a type which this {@code Assertion} tests
- */
-public interface Assertion<T> extends Part {
-
-    boolean test(TypeMirrors types, @Nullable T value);
+    Any<String> any = new Any<>(String.class);
     
-    String condition();
-    
-    default String conditions() {
-        return condition();
+    @Test
+    void test() {
+        assertTrue(any.test(null, "anything"));
     }
     
-    
-    default Assertion<T> and(Assertion<T> other) {
-        return new And<>(this, other);
+    @Test
+    void condition() {
+        assertEquals("", any.condition());
     }
     
-    default Assertion<T> and(Supplier<Assertion<T>> other) {
-        return new And<>(this, other.get());
-    }
-    
-    default Assertion<T> or(Assertion<T> other) {
-        return new Or<>(this, other);
-    }
-    
-    default Assertion<T> or(Supplier<Assertion<T>> other) {
-        return new Or<>(this, other.get());
+    @Test
+    void type() {
+        assertEquals(String.class, any.type());
     }
     
 }

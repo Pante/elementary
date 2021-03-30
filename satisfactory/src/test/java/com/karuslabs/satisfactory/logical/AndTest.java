@@ -21,46 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.logical.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.Assertion;
 
-import java.util.function.Supplier;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import org.junit.jupiter.api.*;
 
-/**
- * Represents an assertion for a syntactical construct in an annotation processing
- * environment.
- * 
- * @param <T> a type which this {@code Assertion} tests
- */
-public interface Assertion<T> extends Part {
+import static com.karuslabs.satisfactory.Assertions.*;
+import static javax.lang.model.element.Modifier.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-    boolean test(TypeMirrors types, @Nullable T value);
+class AndTest {
+
+    Assertion<Set<Modifier>> modifiers = contains(PUBLIC, FINAL).and(contains(ABSTRACT));
     
-    String condition();
-    
-    default String conditions() {
-        return condition();
+    @Test
+    void type() {
+        assertEquals(Modifier.class, modifiers.type());
     }
     
-    
-    default Assertion<T> and(Assertion<T> other) {
-        return new And<>(this, other);
-    }
-    
-    default Assertion<T> and(Supplier<Assertion<T>> other) {
-        return new And<>(this, other.get());
-    }
-    
-    default Assertion<T> or(Assertion<T> other) {
-        return new Or<>(this, other);
-    }
-    
-    default Assertion<T> or(Supplier<Assertion<T>> other) {
-        return new Or<>(this, other.get());
+    @Test
+    void condition() {
+        assertEquals("contains [public final] & contains [abstract]", modifiers.condition());
     }
     
 }

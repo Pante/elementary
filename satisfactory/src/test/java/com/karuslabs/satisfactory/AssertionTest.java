@@ -23,44 +23,37 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.logical.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
-import java.util.function.Supplier;
+import org.junit.jupiter.api.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import static org.junit.jupiter.api.Assertions.*;
+import static javax.lang.model.element.Modifier.*;
 
-/**
- * Represents an assertion for a syntactical construct in an annotation processing
- * environment.
- * 
- * @param <T> a type which this {@code Assertion} tests
- */
-public interface Assertion<T> extends Part {
+class AssertionTest {
 
-    boolean test(TypeMirrors types, @Nullable T value);
+    Assertion<Set<Modifier>> first = Assertions.contains(PUBLIC);
+    Assertion<Set<Modifier>> second = Assertions.contains(FINAL);
     
-    String condition();
-    
-    default String conditions() {
-        return condition();
+    @Test
+    void and_assertion() {
+        assertTrue(first.and(second).test(null, Set.of(PUBLIC, FINAL)));
     }
     
-    
-    default Assertion<T> and(Assertion<T> other) {
-        return new And<>(this, other);
+    @Test
+    void and_supplier() {
+        assertTrue(first.and(() -> second).test(null, Set.of(PUBLIC, FINAL)));
     }
     
-    default Assertion<T> and(Supplier<Assertion<T>> other) {
-        return new And<>(this, other.get());
+    @Test
+    void or_assertion() {
+        assertTrue(first.or(second).test(null, Set.of(PUBLIC, PRIVATE)));
     }
     
-    default Assertion<T> or(Assertion<T> other) {
-        return new Or<>(this, other);
-    }
-    
-    default Assertion<T> or(Supplier<Assertion<T>> other) {
-        return new Or<>(this, other.get());
+    @Test
+    void or_supplier() {
+        assertTrue(first.or(() -> second).test(null, Set.of(PUBLIC, PRIVATE)));
     }
     
 }

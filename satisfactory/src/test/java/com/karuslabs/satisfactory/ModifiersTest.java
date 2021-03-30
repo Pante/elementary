@@ -23,59 +23,61 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.elementary.junit.*;
-import com.karuslabs.elementary.junit.annotations.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
-import java.lang.annotation.Annotation;
-import javax.lang.model.element.Element;
+import org.junit.jupiter.api.*;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-
+import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(ToolsExtension.class)
-@Introspect
-class AnnotationsTest {
-    
-    TypeMirrors types = Tools.typeMirrors();
-    Assertion<Element> assertion = Assertions.contains(A.class, B.class);
-    
-    @Test
-    void contains_true(Cases cases) {
-        assertTrue(assertion.test(types, cases.get(0)));
-    }
-    
-    @Case
-    public @A @B @C String one() { return ""; }
-    
-    
-    @Test
-    void contains_false(Cases cases) {
-        assertFalse(assertion.test(types, cases.get(1)));
-    }
-    
-    @Case
-    public @A String two() { return null; }
+class ModifiersTest {
 
-    
-    @interface A {}
-    
-    @interface B {}
-    
-    @interface C {}
-    
+    Assertion<Set<Modifier>> contains = Assertions.contains(PUBLIC, FINAL);
+    Assertion<Set<Modifier>> equal = Assertions.equal(PUBLIC, FINAL);
     
     @Test
-    void condition() {
-        assertEquals("contains [@A, @B]", assertion.condition());
-        assertEquals("contains [@A, @B]", assertion.conditions());
+    void sort() {
+        assertArrayEquals(new Modifier[] {PUBLIC, STATIC, ABSTRACT, FINAL}, Modifiers.sort(STATIC, FINAL, PUBLIC, ABSTRACT));
     }
     
     @Test
     void type() {
-        assertEquals(Annotation.class, assertion.type());
+        assertEquals(Modifier.class, contains.type());
+    }
+    
+    
+    @Test
+    void contains_true() {
+        assertTrue(contains.test(null, Set.of(FINAL, NATIVE, PUBLIC)));
+    }
+    
+    @Test
+    void contains_false() {
+        assertFalse(contains.test(null, Set.of(PUBLIC)));
+    }
+    
+    @Test
+    void contains_condition() {
+        assertEquals("contains [public final]", contains.condition());
+        assertEquals("contains [public final]", contains.conditions());
+    }
+    
+    
+    @Test
+    void equal_true() {
+        assertTrue(equal.test(null, Set.of(PUBLIC, FINAL)));
+    }
+    
+    @Test
+    void equal_false() {
+        assertFalse(equal.test(null, Set.of(PUBLIC, STATIC, FINAL)));
+    }
+    
+    @Test
+    void equal_condition() {
+        assertEquals("equal [public final]", equal.condition());
+        assertEquals("equal [public final]", equal.conditions());
     }
     
 }

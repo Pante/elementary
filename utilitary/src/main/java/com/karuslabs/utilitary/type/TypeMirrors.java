@@ -102,7 +102,7 @@ public class TypeMirrors implements Types {
     
     public TypeMirror type(Class<?> type) {
         // TODO: check if type is primitives
-        return elements.getTypeElement(type.getName()).asType();
+        return elements.getTypeElement(type.getCanonicalName()).asType();
     }
     
     public TypeMirror erasure(Class<?> type) {

@@ -76,7 +76,7 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
 class ContainsModifiers extends Modifiers {
     
     ContainsModifiers(Modifier... modifiers) {
-        super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
+        super(Set.of(modifiers), "contains [" + Texts.join(sort(modifiers), SCREAMING_CASE, " ") + "]");
     }
 
     @Override
@@ -89,7 +89,7 @@ class ContainsModifiers extends Modifiers {
 class EqualModifiers extends Modifiers {
 
     EqualModifiers(Modifier... modifiers) {
-        super(Set.of(modifiers), Texts.join(sort(modifiers), SCREAMING_CASE, " "));
+        super(Set.of(modifiers), "equal [" + Texts.join(sort(modifiers), SCREAMING_CASE, " ") + "]");
     }
     
     @Override
