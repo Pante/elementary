@@ -8,10 +8,6 @@
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-> _"If I have seen further that others, it is by standing on the shoulder of giants"_
-
-This project is heavily inspired by Google's [compile-testing](https://github.com/google/compile-testing) project.
-
 #### Maven Repository
 ```XML
 <repository>
@@ -25,6 +21,10 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/elementary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html)
+
+> _"If I have seen further that others, it is by standing on the shoulder of giants"_
+
+This project is heavily inspired by Google's [compile-testing](https://github.com/google/compile-testing) project.
 
 ```XML
 <!-- Requires JUnit 5.7.1 & above -->
