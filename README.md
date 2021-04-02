@@ -4,9 +4,7 @@
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
-
-**Read the [wiki](https://github.com/Pante/elementary/wiki) to get started.**
+**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+. Read the [wiki](https://github.com/Pante/elementary/wiki) to get started.**
 
 #### Maven Repository
 ```XML
