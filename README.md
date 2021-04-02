@@ -1,4 +1,4 @@
-## Elementary is suite of libraries that simplify creating and unit testing annotation processors.
+## Elementary is a suite of libraries that simplify creating and unit testing annotation processors.
 
 [![CI/CD](https://github.com/Pante/elementary/workflows/Elementary%20CI/CD/badge.svg)](https://github.com/Pante/elementary/actions?query=workflow%3ACI%2FCD)
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
