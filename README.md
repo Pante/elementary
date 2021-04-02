@@ -1,12 +1,12 @@
 ## Elementary is suite of libraries that simplify creating and unit testing annotation processors.
 
-**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
-
-**Read the [wiki](https://github.com/Pante/elementary/wiki) to get started.**
-
 [![CI/CD](https://github.com/Pante/elementary/workflows/Elementary%20CI/CD/badge.svg)](https://github.com/Pante/elementary/actions?query=workflow%3ACI%2FCD)
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
+
+**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+.**
+
+**Read the [wiki](https://github.com/Pante/elementary/wiki) to get started.**
 
 #### Maven Repository
 ```XML
