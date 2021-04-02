@@ -131,13 +131,13 @@ class Max<T> extends Times<T> {
     private final int max;
     
     Max(int max, Assertion<T> assertion) {
-        super(assertion, "less than " + max + " " + assertion.conditions());
+        super(assertion, max + " or less " + assertion.conditions());
         this.max = max;
     }
 
     @Override
     protected boolean test(int current) {
-        return current < max;
+        return current <= max;
     }
     
 }

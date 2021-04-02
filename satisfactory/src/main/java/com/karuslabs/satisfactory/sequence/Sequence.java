@@ -29,11 +29,8 @@ import com.karuslabs.utilitary.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
-import java.util.function.BiConsumer;
 
 public abstract class Sequence<T> implements Part {
-    
-    static final BiConsumer<Assertion<?>, StringBuilder> FORMAT = (assertion, builder) -> builder.append(assertion.condition());
     
     private final String condition;
     
@@ -53,7 +50,7 @@ public abstract class Sequence<T> implements Part {
 class EqualSequence<T> extends Sequence<T> {
     
     static String format(Assertion<?>... assertions) {
-        return Texts.join(assertions, (assertion, builder) -> builder.append('[').append(assertion.condition()).append(']'), ", ");
+        return "[" + Texts.join(assertions, (assertion, builder) -> builder.append(assertion.condition()), ", ") + "]";
     }
     
     private final Assertion<T>[] assertions;
@@ -91,7 +88,7 @@ class EachSequence<T> extends Sequence<T> {
     private final Assertion<T> assertion;
     
     EachSequence(Assertion<T> assertion) {
-        super("each [" + assertion.condition() + "]");
+        super("each " + assertion.condition());
         this.assertion = assertion;
     }
 

@@ -72,18 +72,18 @@ public class Variable implements Assertion<VariableElement> {
     
     public static class Builder implements Supplier<Variable> {
         
-        static final Set<Class<?>> SUPPORTED = Set.of(Element.class, Set.class, TypeMirror.class);
+        static final Set<Class<?>> SUPPORTED = Set.of(Annotation.class, Modifier.class, TypeMirror.class);
         
         private final Map<Class<?>, Assertion<?>> assertions = new HashMap<>();
         
         Builder(Assertion<?>... parameters) {
             for (var parameter : parameters) {
                 if (!SUPPORTED.contains(parameter.type())) {
-                    throw new IllegalArgumentException("Assertion for " + parameter.type() + " is not supported");
+                    throw new IllegalArgumentException("Assertion for " + parameter.type().getName() + " is not supported");
                 }
                 
                 if (assertions.put(parameter.type(), parameter) != null) {
-                    throw new IllegalStateException("Already declared an assertion for " + parameter.type());
+                    throw new IllegalStateException("Already declared an assertion for " + parameter.type().getName());
                 }
             }
         }
@@ -94,10 +94,7 @@ public class Variable implements Assertion<VariableElement> {
             var modifiers = assertions.getOrDefault(Modifier.class, ANY_MODIFIERS);
             var type = assertions.getOrDefault(TypeMirror.class, ANY_TYPE);
             
-            return or(
-                join(join(modifiers.condition(), " ", type.condition()), " annotated with ", annotations.condition()),
-                join(join(modifiers.conditions(), " ", type.conditions()), " annotated with ", annotations.conditions())
-            );
+            return or("{" + join(annotations.condition(), ", ", join(modifiers.condition(), ", ", type.condition())) + "}");
         }
         
         public Variable or(String condition) {

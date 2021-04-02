@@ -45,12 +45,12 @@ public abstract class Type implements Assertion<TypeMirror> {
     
     @Override
     public String condition() {
-        return relation.clause() + types;
+        return relation.clause(types);
     }
     
     @Override
     public String conditions() {
-        return relation.clauses() + types;
+        return relation.clauses(types);
     }
     
     @Override
@@ -76,9 +76,9 @@ public abstract class Type implements Assertion<TypeMirror> {
 
         protected abstract boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual);
 
-        public abstract String clause();
+        public abstract String clause(String type);
         
-        public abstract String clauses();
+        public abstract String clauses(String type);
         
     }
     
@@ -89,13 +89,13 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String clause() {
-            return "";
+        public String clause(String type) {
+            return type;
         }
         
         @Override
-        public String clauses() {
-            return "";
+        public String clauses(String type) {
+            return type + "s";
         }
     }
 
@@ -106,13 +106,13 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String clause() {
-            return "subtype of ";
+        public String clause(String type) {
+            return "subtype of " + type;
         }
         
         @Override
-        public String clauses() {
-            return "subtypes of ";
+        public String clauses(String type) {
+            return "subtypes of " + type;
         }
     }
 
@@ -123,13 +123,13 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
 
         @Override
-        public String clause() {
-            return "supertype of ";
+        public String clause(String type) {
+            return "supertype of " + type;
         }
         
         @Override
-        public String clauses() {
-            return "supertypes of ";
+        public String clauses(String type) {
+            return "supertypes of " + type;
         }
     }
     

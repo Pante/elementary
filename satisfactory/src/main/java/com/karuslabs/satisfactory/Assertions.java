@@ -112,7 +112,7 @@ public class Assertions {
         return new Not<>(assertion);
     }
     
-    public static <T> Assertion<T> not(Supplier<Assertion<T>> assertion) {
+    public static <T> Assertion<T> not(Supplier<? extends Assertion<T>> assertion) {
         return new Not<>(assertion.get());
     }
     

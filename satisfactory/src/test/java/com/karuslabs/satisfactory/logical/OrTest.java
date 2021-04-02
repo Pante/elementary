@@ -34,28 +34,18 @@ import static com.karuslabs.satisfactory.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-class NotTest {
-
-    Assertion<Set<Modifier>> assertion = not(contains(PUBLIC));
+class OrTest {
     
-    @Test
-    void test() {
-        assertTrue(assertion.test(null, Set.of(FINAL)));
-    }
-    
-    @Test
-    void supplier_test() {
-        assertTrue(not(() -> contains(PUBLIC)).test(null, Set.of(FINAL)));
-    }
+    Assertion<Set<Modifier>> assertion = contains(PUBLIC).or(contains(STATIC));
     
     @Test
     void condition() {
-        assertEquals("!(contains [public])", assertion.condition());
+        assertEquals("contains [public] | contains [static]", assertion.condition());
     }
     
     @Test
     void type() {
         assertEquals(Modifier.class, assertion.type());
     }
-    
+
 }

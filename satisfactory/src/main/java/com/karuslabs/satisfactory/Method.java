@@ -99,28 +99,28 @@ public class Method implements Assertion<ExecutableElement> {
                     sequence((Sequence<?>) part);
                     
                 } else {
-                    throw new IllegalArgumentException("Part: \"" + part.getClass() + "\" is not supported");
+                    throw new IllegalArgumentException("Part for " + part.type().getName() + " is not supported");
                 }
             }
         }
         
         void assertion(Assertion<?> assertion) {
             if (!SUPPORTED_ASSERTIONS.contains(assertion.type())) {
-                throw new IllegalArgumentException("Assertion for " + assertion.type() + " is not supported");
+                throw new IllegalArgumentException("Assertion for " + assertion.type().getName() + " is not supported");
             }
                 
             if (assertions.put(assertion.type(), assertion) != null) {
-                throw new IllegalStateException("Already declared an assertion for " + assertion.type());
+                throw new IllegalStateException("Already declared an assertion for " + assertion.type().getName());
             }
         }
         
         void sequence(Sequence<?> sequence) {
             if (!SUPPORTED_SEQUENCES.contains(sequence.type())) {
-                throw new IllegalArgumentException("Sequence for " + sequence.type() + " is not supported");
+                throw new IllegalArgumentException("Sequence for " + sequence.type().getName() + " is not supported");
             }
                 
             if (sequences.put(sequence.type(), sequence) != null) {
-                throw new IllegalStateException("Already declared a sequence for " + sequence.type());
+                throw new IllegalStateException("Already declared a sequence for " + sequence.type().getName());
             }
         }
 
@@ -134,12 +134,12 @@ public class Method implements Assertion<ExecutableElement> {
             var exceptions = sequences.getOrDefault(TypeMirror.class, ANY_EXCEPTIONS);
             
             return or(
-                "Method {"
-              + "\n  annotations: " + annotations.condition()
-              + "\n  modifiers: " + modifiers.condition()
-              + "\n  type: " + type.condition()
-              + "\n  parameters: " + parameters.condition()
-              + "\n  throws: " + exceptions.condition()
+                "{"
+              + "\n  annotations " + annotations.condition()
+              + "\n  modifiers " + modifiers.condition()
+              + "\n  returns " + type.condition()
+              + "\n  parameters " + parameters.condition()
+              + "\n  throws " + exceptions.condition()
               + "\n}"
             );
         }

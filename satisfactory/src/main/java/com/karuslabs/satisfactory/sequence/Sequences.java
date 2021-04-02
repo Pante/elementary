@@ -47,7 +47,7 @@ public class Sequences {
     }
     
     
-    public static <T> Sequence<T> equal(Supplier<Assertion<T>>... assertions) {
+    public static <T> Sequence<T> equal(Supplier<? extends Assertion<T>>... assertions) {
         var supplied = new Assertion[assertions.length];
         for (int i = 0; i < assertions.length; i++) {
             supplied[i] = assertions[i].get();
@@ -60,7 +60,7 @@ public class Sequences {
         return new EqualSequence<>(assertions);
     }
     
-    public static <T> Sequence<T> each(Supplier<Assertion<T>> assertion) {
+    public static <T> Sequence<T> each(Supplier<? extends Assertion<T>> assertion) {
         return each(assertion.get());
     }
     
@@ -78,7 +78,7 @@ public class Sequences {
     }
     
     
-    public static <T> Times<T> zero(Supplier<Assertion<T>> assertion) {
+    public static <T> Times<T> zero(Supplier<? extends Assertion<T>> assertion) {
         return zero(assertion.get());
     }
     
@@ -86,7 +86,7 @@ public class Sequences {
         return new Exact(0, assertion);
     }
     
-    public static <T> Times<T> times(int times, Supplier<Assertion<T>> assertion) {
+    public static <T> Times<T> times(int times, Supplier<? extends Assertion<T>> assertion) {
         return times(times, assertion.get());
     }
     
@@ -94,7 +94,7 @@ public class Sequences {
         return new Exact(times, assertion);
     }
     
-    public static <T> Times<T> range(int min, int max, Supplier<Assertion<T>> assertion) {
+    public static <T> Times<T> range(int min, int max, Supplier<? extends Assertion<T>> assertion) {
         return new Range<>(min, max, assertion.get());
     }
     
@@ -102,7 +102,7 @@ public class Sequences {
         return new Range<>(min, max, assertion);
     }
     
-    public static <T> Times<T> min(int min, Supplier<Assertion<T>> assertion) {
+    public static <T> Times<T> min(int min, Supplier<? extends Assertion<T>> assertion) {
         return new Min<>(min, assertion.get());
     }
     
@@ -110,7 +110,7 @@ public class Sequences {
         return new Min<>(min, assertion);
     }
     
-    public static <T> Times<T> max(int max, Supplier<Assertion<T>> assertion) {
+    public static <T> Times<T> max(int max, Supplier<? extends Assertion<T>> assertion) {
         return new Max<>(max, assertion.get());
     }
     

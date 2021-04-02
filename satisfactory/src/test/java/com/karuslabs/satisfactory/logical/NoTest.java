@@ -23,39 +23,39 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.Set;
-import javax.lang.model.element.Modifier;
+import java.lang.annotation.Documented;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static com.karuslabs.satisfactory.Assertions.*;
-import static javax.lang.model.element.Modifier.*;
+import static javax.lang.model.element.Modifier.STATIC;
 import static org.junit.jupiter.api.Assertions.*;
 
-class NotTest {
-
-    Assertion<Set<Modifier>> assertion = not(contains(PUBLIC));
+@ExtendWith(ToolsExtension.class)
+@Introspect
+class NoTest {
+    
+    TypeMirrors types = Tools.typeMirrors();
+    Cases cases = Tools.cases();
     
     @Test
-    void test() {
-        assertTrue(assertion.test(null, Set.of(FINAL)));
+    void annotations() {
+        assertFalse(contains(no(Documented.class)).test(types, cases.get(0)));
     }
     
-    @Test
-    void supplier_test() {
-        assertTrue(not(() -> contains(PUBLIC)).test(null, Set.of(FINAL)));
-    }
+    @Case
+    @Documented
+    static @interface A {}
     
     @Test
-    void condition() {
-        assertEquals("!(contains [public])", assertion.condition());
+    void modifiers() {
+        assertFalse(contains(no(STATIC)).test(types, cases.get(0).getModifiers()));
     }
     
-    @Test
-    void type() {
-        assertEquals(Modifier.class, assertion.type());
-    }
     
 }

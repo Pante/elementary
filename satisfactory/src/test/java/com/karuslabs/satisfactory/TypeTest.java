@@ -84,7 +84,7 @@ class TypeTest {
     @Test
     void is_class_condition() {
         assertEquals("A", isClass.condition());
-        assertEquals("A", isClass.conditions());
+        assertEquals("As", isClass.conditions());
     }
     
     
@@ -101,7 +101,7 @@ class TypeTest {
     @Test
     void is_mirror_condition() {
         assertEquals("TypeTest.A", isMirror.condition());
-        assertEquals("TypeTest.A", isMirror.conditions());
+        assertEquals("TypeTest.As", isMirror.conditions());
     }
     
     

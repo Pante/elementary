@@ -21,41 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Assertion;
-
-import java.util.Set;
-import javax.lang.model.element.Modifier;
+import java.util.List;
+import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
-import static javax.lang.model.element.Modifier.*;
+import static com.karuslabs.satisfactory.sequence.Sequences.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
-class NotTest {
+class AnySequenceTest {
 
-    Assertion<Set<Modifier>> assertion = not(contains(PUBLIC));
-    
     @Test
     void test() {
-        assertTrue(assertion.test(null, Set.of(FINAL)));
-    }
-    
-    @Test
-    void supplier_test() {
-        assertTrue(not(() -> contains(PUBLIC)).test(null, Set.of(FINAL)));
+        ANY_EXCEPTIONS.test(null, List.of(mock(TypeMirror.class)));
     }
     
     @Test
     void condition() {
-        assertEquals("!(contains [public])", assertion.condition());
+        assertEquals("", ANY_EXCEPTIONS.condition());
     }
     
     @Test
     void type() {
-        assertEquals(Modifier.class, assertion.type());
+        assertEquals(TypeMirror.class, ANY_EXCEPTIONS.type());
     }
     
 }

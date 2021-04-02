@@ -31,7 +31,7 @@ import java.util.Collection;
 public abstract class TimeSequence<T> extends Sequence<T> {
     
     static String format(Times<?>... times) {
-        return Texts.join(times, (time, builder) -> builder.append('[').append(time.condition()).append(']'), ", ");
+        return "[" + Texts.join(times, (time, builder) -> builder.append(time.condition()), ", ") + "]";
     }
     
     protected final Times<T>[] times;
