@@ -12,6 +12,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release>11</release>
+        <repository-head>nightly</repository-head>
     </properties>
     
     <distributionManagement>
@@ -203,7 +204,7 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>
                 <configuration>
-                    <url>dav:https://repo.karuslabs.com/repository/elementary/latest/</url>
+                    <url>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</url>
                 </configuration>
                 <dependencies>
                     <dependency>

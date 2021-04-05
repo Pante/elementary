@@ -27,6 +27,7 @@ import com.karuslabs.elementary.junit.Cases;
 import com.karuslabs.elementary.junit.Tools;
 import com.karuslabs.elementary.junit.ToolsExtension;
 import com.karuslabs.elementary.junit.annotations.Case;
+import com.karuslabs.elementary.junit.annotations.Introspect;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.lang.model.element.Element;
@@ -37,7 +38,6 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
-import com.karuslabs.elementary.junit.annotations.Introspect;
 
 /**
  * This example demonstrates how to use ToolsExtension to test a lint, described below,
