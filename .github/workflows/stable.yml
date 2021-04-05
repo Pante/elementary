@@ -20,5 +20,5 @@ jobs:
       - uses: actions/setup-java@v1
         with:
           java-version: 11
-      - run: mvn deploy site site:stage-deloy site-deploy -Drepository-head=latest -Dhttps.protocols=TLSv1.2 --settings ci-settings.xml --no-transfer-progress
+      - run: mvn deploy site site:stage-deloy site-deploy -Drepository-head=latest --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
