@@ -19,6 +19,7 @@
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/elementary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-nightly-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/nightly/elementary/apidocs/index.html)
 
 > _"If I have seen further that others, it is by standing on the shoulder of giants"_
 
@@ -45,6 +46,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/satisfactory/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/satisfactory/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/satisfactory/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/satisfactory/)
 [![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/satisfactory/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-nightly-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/nightly/satisfactory/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
@@ -58,6 +60,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/utilitary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/utilitary/)
 [![javadoc](https://img.shields.io/badge/javadoc-latest-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/utilitary/apidocs/index.html)
+[![javadoc](https://img.shields.io/badge/javadoc-nightly-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/nightly/utilitary/apidocs/index.html)
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
