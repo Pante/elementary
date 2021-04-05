@@ -33,53 +33,143 @@ import javax.lang.model.type.*;
 
 import static com.karuslabs.satisfactory.Type.Relation.*;
 
+/**
+ * A utility class that contains methods to create assertions.
+ */
 public class Assertions {
-
+    
+    /**
+     * An assertion which matches any given {@code VariableElement}.
+     */
     public static final Assertion<VariableElement> ANY_VARIABLE = new Any<>(VariableElement.class);
+    /**
+     * An assertion which matches any given annotations.
+     */
     public static final Assertion<Element> ANY_ANNOTATIONS = new Any<>(Annotation.class);
+    /**
+     * An assertion which matches any given modifiers.
+     */
     public static final Assertion<Set<Modifier>> ANY_MODIFIERS = new Any<>(Modifier.class);
+    /**
+     * An assertion which matches any given {@code TypeMirror}.
+     */
     public static final Assertion<TypeMirror> ANY_TYPE = new Any<>(TypeMirror.class);
     
     
+    /**
+     * Creates a {@code Method.Builder} with the given assertions and sequences.
+     * 
+     * @param parts the unique parts
+     * @return a {@code Method.Builder}
+     * @throws IllegalArgumentException if a given assertion or sequence is unsupported
+     * @throws IllegalStateException if the given assertions and sequences contain
+     *                               assertions or sequences of the same type
+     */
     public static Method.Builder method(Part... parts) {
         return new Method.Builder(parts);
     }
     
+    /**
+     * Creates a {@code Variable.Builder} with the given assertions.
+     * 
+     * @param assertions the unique assertions
+     * @return a {@code Variable.Builder}
+     * @throws IllegalArgumentException if a given assertion is unsupported
+     * @throws IllegalStateException if the given assertions contain assertions
+     *                               of the same type
+     */
     public static Variable.Builder variable(Assertion<?>... assertions) {
         return new Variable.Builder(assertions);
     }
     
-    
+    /**
+     * Emulates a named parameter for an assertion for annotations.
+     * 
+     * @param assertion an assertion for annotations
+     * @return the given assertion
+     */
     public static Assertion<Element> annotations(Assertion<Element> assertion) {
         return assertion;
     }
     
+    /**
+     * Returns an assertion that is satisfied if an {@code Element} contains the
+     * given annotations.
+     * 
+     * @param annotations the annotations that an {@code Element} should contain
+     * @return an assertion that is satisfied if an element contains the given annotations
+     */
     public static Assertion<Element> contains(Class<? extends Annotation>... annotations) {
         return new ContainsAnnotations(annotations);
     }
     
+    /**
+     * Returns an assertion that is satisfied if an {@code Element} does not contain
+     * the given annotations
+     * 
+     * @param annotations the annotations that an {@code Element} should not contain
+     * @return an assertion that is satisfied if an element does not contain the
+     *         given annotations
+     */
     public static Assertion<Element> contains(No.Annotations annotations) {
         return not(contains(annotations.values));
     }
     
     
+    /**
+     * Emulates a named parameter for an assertion for modifiers.
+     * 
+     * @param assertion the assertion for modifiers
+     * @return the given assertion
+     */
     public static Assertion<Set<Modifier>> modifiers(Assertion<Set<Modifier>> assertion) {
         return assertion;
     }
     
+    /**
+     * Returns an assertion that is satisfied if a set of modifiers contains
+     * the given modifiers.
+     * 
+     * @param modifiers the modifiers that a set of modifiers should contain
+     * @return an assertion that is satisfied if a set of modifiers contains the
+     *         given modifiers
+     */
     public static Assertion<Set<Modifier>> contains(Modifier... modifiers) {
         return new ContainsModifiers(modifiers);
     }
     
+    /**
+     * Returns an assertion that is satisfied if a set of modifiers does not contain
+     * the given modifiers.
+     * 
+     * @param modifiers the modifiers that a set of modifiers should not contain
+     * @return an assertion that is satisfied if a set of modifiers does not contain 
+     *         the given modifiers
+     */
     public static Assertion<Set<Modifier>> contains(No.Modifiers modifiers) {
         return not(new ContainsModifiers(modifiers.values));
     }
     
+    /**
+     * Returns an assertion that is satisfied if a set of modifiers is equal to
+     * the given modifiers.
+     * 
+     * @param modifiers the modifiers to which a set of modifiers should equal
+     * @return an assertion that is satisfied if a set of modifiers is equal to
+     *         the given modifiers
+     */
     public static Assertion<Set<Modifier>> equal(Modifier... modifiers) {
         return new EqualModifiers(modifiers);
     }
     
-    
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is a primitive
+     * that is equal to the given {@code TypeKind}.
+     * 
+     * @param primitive the {@code TypeKind}
+     * @return an assertion that is satisfied if a {@code TypeMirror}'s kind is
+     *         equal to the given kind
+     */
     public static Assertion<TypeMirror> type(TypeKind primitive) {
         return new Primitive(primitive);
     }

@@ -11,7 +11,7 @@
     <packaging>jar</packaging>
     
     <name>Elementary</name>
-    <description>Elementary is a suite of JUnit 5 extensions for testing Java compilation and annotation processors</description>
+    <description>A suite of JUnit 5 extensions for testing Java compilation and annotation processors</description>
     
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
