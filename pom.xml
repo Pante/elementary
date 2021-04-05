@@ -204,7 +204,7 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>
                 <configuration>
-                    <url>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</url>
+                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</stagingSiteURL>
                 </configuration>
                 <dependencies>
                     <dependency>
