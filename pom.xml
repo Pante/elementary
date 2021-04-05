@@ -28,7 +28,7 @@
         
         <site>
             <id>karus</id>
-            <url>dav:https://repo.karuslabs.com/repository/elementary/${project.version}/</url>
+            <url>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</url>
         </site>
     </distributionManagement>
     
@@ -204,7 +204,8 @@
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>
                 <configuration>
-                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</stagingSiteURL>
+                    <stagingSiteURL>dav:https://repo.karuslabs.com/repository/elementary/${project.version}/</stagingSiteURL>
+                    <generateReports>false</generateReports>
                 </configuration>
                 <dependencies>
                     <dependency>
