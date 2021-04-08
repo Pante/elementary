@@ -26,21 +26,50 @@ package com.karuslabs.satisfactory.logical;
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.Modifier;
 
+/**
+ * Represents the negation of the arguments for an assertion.
+ * 
+ * @param <T> the type of this negation
+ */
 public class No<T> {
     
+    /**
+     * The values of this negation.
+     */
     public final T[] values;
     
+    /**
+     * Creates a {@code No} with the given elements
+     * 
+     * @param elements the elements to be negated
+     */
     public No(T... elements) {
         this.values = elements;
     }
     
+    /**
+     * Emulates a named parameter for the negation of annotations for an assertion.
+     */
     public static class Annotations extends No<Class<? extends Annotation>> {
+        /**
+         * Creates an {@code Annotations} with the given annotations.
+         * 
+         * @param annotations the annotations to be negated
+         */
         public Annotations(Class<? extends Annotation>... annotations) {
             super(annotations);
         }
     }
     
+    /**
+     * Emulates a named parameter for the negation of annotations for an assertion.
+     */
     public static class Modifiers extends No<Modifier> {
+        /**
+         * Creates an {@code Modifiers} with the given modifiers.
+         * 
+         * @param modifiers the modifiers to be negated
+         */
         public Modifiers(Modifier... modifiers) {
             super(modifiers);
         }

@@ -21,20 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
 
 /**
- * Represents a part of a Java language construct, i.e. a variable, from which
- * more complex language constructs is composed.
+ * Contains assertions for several different Java language constructs in an
+ * annotation processing environment.
  */
-@FunctionalInterface
-public interface Part {
-    
-    /**
-     * Returns a type which represents this {@code Part}.
-     * 
-     * @return a type which represents the supported part
-     */
-    public Class<?> type();
-
-}
+package com.karuslabs.satisfactory;

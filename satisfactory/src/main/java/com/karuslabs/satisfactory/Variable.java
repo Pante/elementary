@@ -34,6 +34,10 @@ import javax.lang.model.type.TypeMirror;
 import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.utilitary.Texts.join;
 
+/**
+ * An assertion for variables which delegates testing to {@code Assertion}s for 
+ * individual parts of a variable.
+ */
 public class Variable implements Assertion<VariableElement> {
 
     private final Assertion<Element> annotations;
@@ -42,6 +46,15 @@ public class Variable implements Assertion<VariableElement> {
     private final String condition;
     private final String conditions;
     
+    /**
+     * Creates a {@code Variable} with the given arguments.
+     * 
+     * @param annotations the assertion for annotations
+     * @param modifiers the assertion for modifiers
+     * @param type the type assertion
+     * @param condition the condition for satisfying this assertion
+     * @param conditions the conditions for satisfying this assertion
+     */
     Variable(Assertion<Element> annotations, Assertion<Set<Modifier>> modifiers, Assertion<TypeMirror> type, String condition, String conditions) {
         this.annotations = annotations;
         this.modifiers = modifiers;
@@ -70,24 +83,36 @@ public class Variable implements Assertion<VariableElement> {
         return VariableElement.class;
     }
     
+    /**
+     * A builder for {@code Variable}s.
+     */
     public static class Builder implements Supplier<Variable> {
         
-        static final Set<Class<?>> SUPPORTED = Set.of(Annotation.class, Modifier.class, TypeMirror.class);
-        
+        private static final Set<Class<?>> SUPPORTED = Set.of(Annotation.class, Modifier.class, TypeMirror.class);
         private final Map<Class<?>, Assertion<?>> assertions = new HashMap<>();
         
-        Builder(Assertion<?>... parameters) {
-            for (var parameter : parameters) {
-                if (!SUPPORTED.contains(parameter.type())) {
-                    throw new IllegalArgumentException("Assertion for " + parameter.type().getName() + " is not supported");
+        /**
+         * Creates a {@code Builder} with the given assertions.
+         * 
+         * @param parts the assertions
+         */
+        Builder(Assertion<?>... parts) {
+            for (var part : parts) {
+                if (!SUPPORTED.contains(part.type())) {
+                    throw new IllegalArgumentException("Assertion for " + part.type().getName() + " is not supported");
                 }
                 
-                if (assertions.put(parameter.type(), parameter) != null) {
-                    throw new IllegalStateException("Already declared an assertion for " + parameter.type().getName());
+                if (assertions.put(part.type(), part) != null) {
+                    throw new IllegalStateException("Already declared an assertion for " + part.type().getName());
                 }
             }
         }
         
+        /**
+         * Returns a {@code Variable} with the default condition message.
+         * 
+         * @return a {@code Variable} with the default condition message
+         */
         @Override
         public Variable get() {
             var annotations = assertions.getOrDefault(Annotation.class, ANY_ANNOTATIONS);
@@ -97,10 +122,23 @@ public class Variable implements Assertion<VariableElement> {
             return or("{" + join(annotations.condition(), ", ", join(modifiers.condition(), ", ", type.condition())) + "}");
         }
         
+        /**
+         * Returns a {@code Variable} with the given condition.
+         * 
+         * @param condition the condition for satisfying this assertion
+         * @return a {@code Variable}
+         */
         public Variable or(String condition) {
             return or(condition, condition);
         }
         
+        /**
+         * Returns a {@code Variable} with the given condition messages.
+         * 
+         * @param condition the condition for satisfying this assertion
+         * @param conditions the conditions for satisfying this assertion
+         * @return a {@code Variable}
+         */
         public Variable or(String condition, String conditions) {
             return new Variable(
                 (Assertion<Element>) assertions.getOrDefault(Annotation.class, ANY_ANNOTATIONS),

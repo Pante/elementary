@@ -30,23 +30,52 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 
+/**
+ * Represents a sequence of {@code Assertion}s for testing collections of elements.
+ * 
+ * @param <T> the type of the assertions
+ */
 public abstract class Sequence<T> implements Part {
     
     private final String condition;
     
+    /**
+     * Creates a {@code Sequence} with the given condition.
+     * 
+     * @param condition the condition for satisfying this {@code Sequence}
+     */
     public Sequence(String condition) {
         this.condition = condition;
     }
     
 
+    /**
+     * Tests the given values using the given types. 
+     * 
+     * @param types the types
+     * @param values the values
+     * @return {@code true} if the given values satisfies this sequence of assertions
+     */
     public abstract boolean test(TypeMirrors types, Collection<? extends T> values);
     
+    /**
+     * Returns the condition for satisfying this sequence.
+     * 
+     * @return the condition for satisfying this sequence
+     */
     public String condition() {
         return condition;
     }
     
 }
 
+/**
+ * A sequence of {@code Assertions} that is satisfied if it is equal to a collection 
+ * of elements. The assertions should share the same order as the elements.
+ * 
+ * 
+ * @param <T> the type of the assertions
+ */
 class EqualSequence<T> extends Sequence<T> {
     
     static String format(Assertion<?>... assertions) {
@@ -83,6 +112,12 @@ class EqualSequence<T> extends Sequence<T> {
     
 }
 
+/**
+ * A sequence of {@code Assertions} that is satisfied if it contains elements in
+ * a collection of elements.
+ * 
+ * @param <T> the type of the assertions
+ */
 class EachSequence<T> extends Sequence<T> {
     
     private final Assertion<T> assertion;

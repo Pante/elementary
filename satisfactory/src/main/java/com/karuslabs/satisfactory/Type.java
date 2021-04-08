@@ -31,12 +31,23 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A skeleton implementation of a type assertion.
+ */
 public abstract class Type implements Assertion<TypeMirror> {
     
     protected final Relation relation;
     protected final TypeMirror[] expectations;
     private final String types;
     
+    /**
+     * Creates a {@code Type} with the given relation, expectations and types.
+     * 
+     * @param relation the expected relation between the types
+     * @param expectations the expected types
+     * @param types a string representation of the expected types used for describing
+     *              this {@code Type}
+     */
     public Type(Relation relation, TypeMirror[] expectations, String types) {
         this.relation = relation;
         this.expectations = expectations;
@@ -58,10 +69,25 @@ public abstract class Type implements Assertion<TypeMirror> {
         return TypeMirror.class;
     }
     
+    /**
+     * Represents the expected relationship between types.
+     */
     public static abstract class Relation {
         
+        /**
+         * A {@code Relation} which expects the actual type to be exactly equal 
+         * to the expected types.
+         */
         public static final Relation IS = new Is();
+        /**
+         * A {@code Relation} which expects the actual type to be a subtype of
+         * the expected types.
+         */
         public static final Relation SUBTYPE = new Subtype();
+        /**
+         * A {@code Relation} which expects the actual type to be a supertype of
+         * the expected types.
+         */
         public static final Relation SUPERTYPE = new Supertype();
         
         public boolean test(TypeMirrors types, TypeMirror[] expectations, TypeMirror actual) {
@@ -73,7 +99,16 @@ public abstract class Type implements Assertion<TypeMirror> {
 
             return true;
         }
-
+        
+        /**
+         * Tests whether the relation between the actual and expected types using
+         * the given {@code TypeMirrors} is expected.
+         * 
+         * @param types the types
+         * @param expected the expected type
+         * @param actual the actual type
+         * @return {@code true} if relation the actual and expected types is expected
+         */
         protected abstract boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual);
 
         public abstract String clause(String type);
@@ -82,6 +117,10 @@ public abstract class Type implements Assertion<TypeMirror> {
         
     }
     
+    /**
+     * A {@code Relation} that expects the actual type to be exactly equal to the
+     * expected type.
+     */
     public static class Is extends Relation {
         @Override
         public boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual) {
@@ -99,6 +138,10 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
     }
 
+    /**
+     * A {@code Relation} that expects the actual type to be a subtype of the expected
+     * type.
+     */
     public static class Subtype extends Relation {
         @Override
         public boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual) {
@@ -116,6 +159,10 @@ public abstract class Type implements Assertion<TypeMirror> {
         }
     }
 
+    /**
+     * A {@code Relation} that expects the actual type to be a supertype of the
+     * expected type.
+     */
     public static class Supertype extends Relation {
         @Override
         public boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual) {
@@ -135,10 +182,18 @@ public abstract class Type implements Assertion<TypeMirror> {
     
 }
 
+/**
+ * An assertion for primitive types.
+ */
 class Primitive implements Assertion<TypeMirror> {
     
     private final TypeKind kind;
     
+    /**
+     * Creates a {@code Primitive} with the given primitive kind.
+     * 
+     * @param kind the kind
+     */
     Primitive(TypeKind kind) {
         this.kind = kind;
     }
@@ -165,12 +220,24 @@ class Primitive implements Assertion<TypeMirror> {
     
 }
 
+/**
+ * A type assertion that tests an actual type against classes.
+ */
 class ClassType extends Type {
 
+    /**
+     * The format for describing classes.
+     */
     static final BiConsumer<Class<?>, StringBuilder> FORMAT = (type, builder) -> builder.append(type.getSimpleName());
     
     @Nullable Class<?>[] classes;
     
+    /**
+     * Creates a {@code ClassType} with the given relation and classes.
+     * 
+     * @param relation the expected relation between types
+     * @param classes the expected types
+     */
     ClassType(Relation relation, Class<?>... classes) {
         super(relation, new TypeMirror[classes.length], Texts.and(classes, FORMAT));
         this.classes = classes;
@@ -190,10 +257,22 @@ class ClassType extends Type {
     
 }
 
+/**
+ * A type assertion that tests an actual type against {@code TypeMirror}s.
+ */
 class MirrorType extends Type {
     
+    /**
+     * The format for describing {@code TypeMirror}s.
+     */
     static final BiConsumer<TypeMirror, StringBuilder> FORMAT = (type, builder) -> type.accept(TypePrinter.SIMPLE, builder);
     
+    /**
+     * Creates a {@code MirrorTyoe} with the given relation and expected types.
+     * 
+     * @param relation the expected relation between types
+     * @param mirrors the expected types
+     */
     MirrorType(Relation relation, TypeMirror... mirrors) {
         super(relation, mirrors, Texts.and(mirrors, FORMAT));
     }

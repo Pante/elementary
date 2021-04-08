@@ -30,13 +30,25 @@ import java.lang.annotation.Annotation;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.Element;
 
+/**
+ * A skeletal implementation of an assertion for annotations.
+ */
 public abstract class Annotations implements Assertion<Element> {
     
+    /**
+     * The format used for describing annotations.
+     */
     public static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     
     protected final Class<? extends Annotation>[] annotations;
     private final String condition;
     
+    /**
+     * Creates an {@code Annotations} with the given annotations and condition.
+     * 
+     * @param annotations the annotations
+     * @param condition the condition for satisfying this assertion
+     */
     public Annotations(Class<? extends Annotation>[] annotations, String condition) {
         this.annotations = annotations;
         this.condition = condition;
@@ -54,8 +66,16 @@ public abstract class Annotations implements Assertion<Element> {
 
 }
 
+/**
+ * An assertion that is satisfied if an element contains the specified annotations.
+ */
 class ContainsAnnotations extends Annotations {
     
+    /**
+     * Creates a {@code ContainsAnnotations} with the given annotations.
+     * 
+     * @param annotations the annotations that an element should contain
+     */
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
         super(annotations, "contains [" + Texts.join(annotations, FORMAT, ", ") + "]");
     }

@@ -26,11 +26,28 @@ package com.karuslabs.satisfactory.logical;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+/**
+ * An assertion that represents a short-circuiting logical AND.
+ * 
+ * @param <T> the type of this assertion
+ */
 public final class And<T> implements Assertion<T> {
 
+    /**
+     * The assertion on the left side of this logical AND.
+     */
     public final Assertion<T> left;
+    /**
+     * The assertion on the left side of this logical AND.
+     */
     public final Assertion<T> right;
     
+    /**
+     * Creates an {@code And} with the given assertion for the left and right sides.
+     * 
+     * @param left the assertion on the left side
+     * @param right the assertion on the right side
+     */
     public And(Assertion<T> left, Assertion<T> right) {
         this.left = left;
         this.right = right;

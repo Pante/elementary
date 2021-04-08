@@ -174,42 +174,118 @@ public class Assertions {
         return new Primitive(primitive);
     }
     
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is exactly
+     * the same as the given type.
+     * 
+     * @param type the type
+     * @return an assertion that is satisfied if a {@code TypeMirror} is exactly
+     *         the same as the given type
+     */
     public static Assertion<TypeMirror> type(Class<?> type) {
         return new ClassType(IS, type);
     }
     
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is exactly
+     * the same as the given type.
+     * 
+     * @param type the type
+     * @return an assertion that is satisfied if a {@code TypeMirror} is exactly
+     *         the same as the given type
+     */
     public static Assertion<TypeMirror> type(TypeMirror type) {
         return new MirrorType(IS, type);
     }
     
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is a subtype
+     * of the given types.
+     * 
+     * @param types the types
+     * @return an assertion that is satisfied if a {@code TypeMirror} is a subtype
+     *         of the given types
+     */
     public static Assertion<TypeMirror> subtype(Class<?>... types) {
         return new ClassType(SUBTYPE, types);
     }
+    
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is a subtype
+     * of the given types.
+     * 
+     * @param types the types
+     * @return an assertion that is satisfied if a {@code TypeMirror} is a subtype
+     *         of the given types
+     */
     public static Assertion<TypeMirror> subtype(TypeMirror... types) {
         return new MirrorType(SUBTYPE, types);
     }
     
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is a supertype
+     * of the given types.
+     * 
+     * @param types the types
+     * @return an assertion that is satisfied if a {@code TypeMirror} is a supertype
+     *         of the given types
+     */
     public static Assertion<TypeMirror> supertype(Class<?>... types) {
         return new ClassType(SUPERTYPE, types);
     }
+    
+    /**
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is a supertype
+     * of the given types.
+     * 
+     * @param types the types
+     * @return an assertion that is satisfied if a {@code TypeMirror} is a supertype
+     *         of the given types
+     */
     public static Assertion<TypeMirror> supertype(TypeMirror... types) {
         return new MirrorType(SUPERTYPE, types);
     }
     
     
-    
+    /**
+     * Returns an assertion that is the negation of the given assertion.
+     * 
+     * @param <T> a type which the given assertion tests
+     * @param assertion the assertion to negate
+     * @return an assertion
+     */
     public static <T> Assertion<T> not(Assertion<T> assertion) {
         return new Not<>(assertion);
     }
     
+    /**
+     * Returns an assertion that is the negation of the assertion supplied by the
+     * given supplier.
+     * 
+     * @param <T> a type which the given assertion tests
+     * @param assertion the assertion to negate
+     * @return an assertion
+     */
     public static <T> Assertion<T> not(Supplier<? extends Assertion<T>> assertion) {
         return new Not<>(assertion.get());
     }
     
+    /**
+     * Emulates a named parameter for the negation of the given annotations.
+     * 
+     * @param annotations the annotations to be negated
+     * @return the annotations
+     */
     public static No.Annotations no(Class<? extends Annotation>... annotations) {
         return new No.Annotations(annotations);
     }
     
+    /**
+     * Emulates a named parameter for the negation of the given modifiers.
+     * 
+     * @param modifiers the modifiers to be negated
+     * @return the modifiers
+     */
     public static No.Modifiers no(Modifier... modifiers) {
         return new No.Modifiers(modifiers);
     }

@@ -31,8 +31,17 @@ import javax.lang.model.element.Modifier;
 
 import static com.karuslabs.utilitary.Texts.SCREAMING_CASE;
 
+/**
+ * A skeletal implementation of an assertion for modifiers.
+ */
 public abstract class Modifiers implements Assertion<Set<Modifier>> {
     
+    /**
+     * Sorts the given modifiers according to normal Java conventions.
+     * 
+     * @param modifiers the modifiers to be sorted
+     * @return the sorted modifiers
+     */
     public static Modifier[] sort(Modifier... modifiers) {
         Arrays.sort(modifiers, (a, b) -> Integer.compare(order(a), order(b)));
         return modifiers;
@@ -56,6 +65,12 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
     protected final Set<Modifier> modifiers;
     protected final String condition;
     
+    /**
+     * Creates a {@code Modifiers} with the given modifiers and condition.
+     * 
+     * @param modifiers the modifiers
+     * @param condition the condition
+     */
     public Modifiers(Set<Modifier> modifiers, String condition) {
         this.modifiers = modifiers;
         this.condition = condition;
@@ -73,8 +88,16 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
 
 }
 
+/**
+ * An assertion that is satisfied if a set of modifiers contains the specified modifiers.
+ */
 class ContainsModifiers extends Modifiers {
     
+    /**
+     * Creates a {@code ContainsModifiers} with the given modifiers.
+     * 
+     * @param modifiers the modifiers
+     */
     ContainsModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), "contains [" + Texts.join(sort(modifiers), SCREAMING_CASE, " ") + "]");
     }
@@ -86,8 +109,17 @@ class ContainsModifiers extends Modifiers {
     
 }
 
+/**
+ * An assertion that is satisfied if a set of modifiers is exactly equal to the 
+ * specified modifiers.
+ */
 class EqualModifiers extends Modifiers {
 
+    /**
+     * Creates a {@code EqualModifiers} with the given modifiers.
+     * 
+     * @param modifiers the modifiers
+     */
     EqualModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), "equal [" + Texts.join(sort(modifiers), SCREAMING_CASE, " ") + "]");
     }

@@ -26,10 +26,20 @@ package com.karuslabs.satisfactory.logical;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+/**
+ * An assertion that always returns {@code true}.
+ * 
+ * @param <T> the type of this assertion 
+ */
 public class Any<T> implements Assertion<T> {
     
     private final Class<?> type;
     
+    /**
+     * Creates an {@code Any} of the given type.
+     * 
+     * @param type the type
+     */
     public Any(Class<?> type) {
         this.type = type;
     }

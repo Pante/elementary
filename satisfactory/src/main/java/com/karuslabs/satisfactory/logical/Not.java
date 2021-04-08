@@ -26,10 +26,23 @@ package com.karuslabs.satisfactory.logical;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+/**
+ * An assertion that represents the negation of another assertion.
+ * 
+ * @param <T> the type of this assertion
+ */
 public final class Not<T> implements Assertion<T> {
     
+    /**
+     * The assertion to be negated.
+     */
     public final Assertion<T> assertion;
     
+    /**
+     * Creates a {@code Not} with the given assertion.
+     * 
+     * @param assertion the assertion to be negated
+     */
     public Not(Assertion<T> assertion) {
         this.assertion = assertion;
     }

@@ -35,6 +35,10 @@ import javax.lang.model.type.TypeMirror;
 import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 
+/**
+ * An assertion for methods which delegates testing to {@code Assertion}s and {@code Sequence}s 
+ * for individual parts of a method.
+ */
 public class Method implements Assertion<ExecutableElement> {
 
     private final Assertion<Element> annotations;
@@ -45,6 +49,17 @@ public class Method implements Assertion<ExecutableElement> {
     private final String condition;
     private final String conditions;
     
+    /**
+     * Creates a {@code Method} with the given arguments.
+     * 
+     * @param annotations the assertion for annotations
+     * @param modifiers the assertion for modifiers
+     * @param type the assertion for the return type
+     * @param parameters a sequence for the parameters
+     * @param exceptions a sequence for thrown exceptions
+     * @param condition the condition for satisfying this assertion
+     * @param conditions the conditions for satisfying this assertion
+     */
     Method(
         Assertion<Element> annotations, Assertion<Set<Modifier>> modifiers, 
         Assertion<TypeMirror> type, Sequence<VariableElement> parameters,
@@ -78,18 +93,28 @@ public class Method implements Assertion<ExecutableElement> {
     }
 
     @Override
-    public Class<?> type() {
+    public Class<ExecutableElement> type() {
         return ExecutableElement.class;
     }
     
+    /**
+     * A builder for {@code Method}s.
+     */
     public static class Builder implements Supplier<Method> {
         
-        static final Set<Class<?>> SUPPORTED_ASSERTIONS = Set.of(Annotation.class, Modifier.class, TypeMirror.class);
-        static final Set<Class<?>> SUPPORTED_SEQUENCES = Set.of(VariableElement.class, TypeMirror.class);
-        
+        private static final Set<Class<?>> SUPPORTED_ASSERTIONS = Set.of(Annotation.class, Modifier.class, TypeMirror.class);
+        private static final Set<Class<?>> SUPPORTED_SEQUENCES = Set.of(VariableElement.class, TypeMirror.class);
         private final Map<Class<?>, Assertion<?>> assertions = new HashMap<>();
         private final Map<Class<?>, Sequence<?>> sequences = new HashMap<>();
         
+        /**
+         * Creates a {@code Builder} with the given assertions and sequences.
+         * 
+         * @param parts the assertions and sequences
+         * @throws IllegalArgumentException if a given assertion or sequence is not supported
+         * @throws IllegalStateException if the given assertions and sequences contains
+         *                               assertions and sequences of the same type
+         */
         Builder(Part... parts) {
             for (var part : parts) {
                 if (part instanceof Assertion<?>) {
@@ -104,7 +129,14 @@ public class Method implements Assertion<ExecutableElement> {
             }
         }
         
-        void assertion(Assertion<?> assertion) {
+        /**
+         * Determines whether the given assertion's type is supported.
+         * 
+         * @param assertion the assertion
+         * @throws IllegalArgumentException if a given assertion is not supported
+         * @throws IllegalStateException if a given assertion has already been declared
+         */
+        final void assertion(Assertion<?> assertion) {
             if (!SUPPORTED_ASSERTIONS.contains(assertion.type())) {
                 throw new IllegalArgumentException("Assertion for " + assertion.type().getName() + " is not supported");
             }
@@ -114,7 +146,14 @@ public class Method implements Assertion<ExecutableElement> {
             }
         }
         
-        void sequence(Sequence<?> sequence) {
+        /**
+         * Determines whether the given sequences 's type is supported.
+         * 
+         * @param sequence the sequence
+         * @throws IllegalArgumentException if a given sequence is not supported
+         * @throws IllegalStateException if a given sequence has already been declared
+         */
+        final void sequence(Sequence<?> sequence) {
             if (!SUPPORTED_SEQUENCES.contains(sequence.type())) {
                 throw new IllegalArgumentException("Sequence for " + sequence.type().getName() + " is not supported");
             }
@@ -124,6 +163,11 @@ public class Method implements Assertion<ExecutableElement> {
             }
         }
 
+        /**
+         * Returns a {@code Method} with the default condition message.
+         * 
+         * @return a {@code Method} with the default condition message
+         */
         @Override
         public Method get() {
             var annotations = assertions.getOrDefault(Annotation.class, ANY_ANNOTATIONS);
@@ -144,10 +188,23 @@ public class Method implements Assertion<ExecutableElement> {
             );
         }
         
+        /**
+         * Returns a {@code Method} with the given condition.
+         * 
+         * @param condition the condition for satisfying this assertion
+         * @return a {@code Method}
+         */
         public Method or(String condition) {
             return or(condition, condition);
         }
         
+        /**
+         * Returns a {@code Method} with the given condition messages.
+         * 
+         * @param condition the condition for satisfying this assertion
+         * @param conditions the conditions for satisfying this assertion
+         * @return a {@code Method}
+         */
         public Method or(String condition, String conditions) {
             return new Method(
                 (Assertion<Element>) assertions.getOrDefault(Annotation.class, ANY_ANNOTATIONS),

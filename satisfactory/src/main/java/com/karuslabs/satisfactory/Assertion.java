@@ -48,11 +48,15 @@ public interface Assertion<T> extends Part {
     boolean test(TypeMirrors types, @Nullable T value);
     
     /**
+     * Returns the condition for satisfying this assertion.
+     * 
      * @return the condition for satisfying this assertion
      */
     String condition();
     
     /**
+     * Returns the conditions for satisfying this assertion.
+     * 
      * <b>Default implementation:</b>
      * Delegates execution to {@link #condition()}.
      * 
