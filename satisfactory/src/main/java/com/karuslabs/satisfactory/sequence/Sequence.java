@@ -31,9 +31,9 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * Represents a sequence of {@code Assertion}s for testing collections of elements.
+ * Represents the criteria for a sequences of elements.
  * 
- * @param <T> the type of the assertions
+ * @param <T> the type of the elements
  */
 public abstract class Sequence<T> implements Part {
     
@@ -70,20 +70,31 @@ public abstract class Sequence<T> implements Part {
 }
 
 /**
- * A sequence of {@code Assertions} that is satisfied if it is equal to a collection 
- * of elements. The assertions should share the same order as the elements.
+ * A {@code Sequence} that is satisfied if a sequence of elements is equal to and ordered
+ * according to this sequence of {@code Assertion}s. Results may be inconsistent between
+ * runs if the collection is unordered.
  * 
- * 
- * @param <T> the type of the assertions
+ * @param <T> the type of the elements
  */
 class EqualSequence<T> extends Sequence<T> {
     
+    /**
+     * Formats the given assertions.
+     * 
+     * @param assertions the assertions
+     * @return a formatted string representation of the given assertions
+     */
     static String format(Assertion<?>... assertions) {
         return "[" + Texts.join(assertions, (assertion, builder) -> builder.append(assertion.condition()), ", ") + "]";
     }
     
     private final Assertion<T>[] assertions;
     
+    /**
+     * Creates a {@code EqualSequence} with the given assertions.
+     * 
+     * @param assertions the assertions
+     */
     EqualSequence(Assertion<T>... assertions) {
         super("equal " + format(assertions));
         this.assertions = assertions;
@@ -113,15 +124,20 @@ class EqualSequence<T> extends Sequence<T> {
 }
 
 /**
- * A sequence of {@code Assertions} that is satisfied if it contains elements in
- * a collection of elements.
+ * A {@code Sequence} that is satisfied if a sequence of elements each satisfies an
+ * {@code Assertion}.
  * 
- * @param <T> the type of the assertions
+ * @param <T> the type of the elements
  */
 class EachSequence<T> extends Sequence<T> {
     
     private final Assertion<T> assertion;
     
+    /**
+     * Creates a {@code EachSequence} with the given assertion.
+     * 
+     * @param assertion the assertion
+     */
     EachSequence(Assertion<T> assertion) {
         super("each " + assertion.condition());
         this.assertion = assertion;
@@ -145,10 +161,20 @@ class EachSequence<T> extends Sequence<T> {
     
 }
 
+/**
+ * A {@code Sequence} that is satisfied if a sequence of elements is empty.
+ * 
+ * @param <T> the type of the elements
+ */
 class NoSequence<T> extends Sequence<T> {
     
     private final Class<?> type;
     
+    /**
+     * Creates a {@code NoSequence} of the given type.
+     * 
+     * @param type the type
+     */
     NoSequence(Class<?> type) {
         super("empty");
         this.type = type;

@@ -29,7 +29,7 @@ import javax.lang.model.element.Modifier;
 /**
  * Represents the negation of the arguments for an assertion.
  * 
- * @param <T> the type of this negation
+ * @param <T> the type of the negated elements
  */
 public class No<T> {
     

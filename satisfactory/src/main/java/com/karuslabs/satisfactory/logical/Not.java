@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 /**
  * An assertion that represents the negation of another assertion.
  * 
- * @param <T> the type of this assertion
+ * @param <T> the type of the tested element
  */
 public final class Not<T> implements Assertion<T> {
     

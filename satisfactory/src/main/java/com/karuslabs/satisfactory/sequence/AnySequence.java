@@ -27,10 +27,20 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.Collection;
 
+/**
+ * A {@code Sequence} that always returns {@code true}.
+ * 
+ * @param <T> the type of the assertion
+ */
 public class AnySequence<T> extends Sequence<T> {
 
     private final Class<?> type;
     
+    /**
+     * Creates a {@code AnySequence} of the given type.
+     * 
+     * @param type the type
+     */
     public AnySequence(Class<?> type) {
         super("");
         this.type = type;

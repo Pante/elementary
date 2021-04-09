@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 /**
  * An assertion that represents a short-circuiting logical AND.
  * 
- * @param <T> the type of this assertion
+ * @param <T> the type of the tested value
  */
 public final class And<T> implements Assertion<T> {
 

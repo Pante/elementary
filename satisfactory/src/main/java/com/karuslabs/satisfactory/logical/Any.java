@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 /**
  * An assertion that always returns {@code true}.
  * 
- * @param <T> the type of this assertion 
+ * @param <T> the type of the tested value 
  */
 public class Any<T> implements Assertion<T> {
     
