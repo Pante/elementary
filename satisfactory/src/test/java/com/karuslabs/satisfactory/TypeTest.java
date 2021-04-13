@@ -63,8 +63,8 @@ class TypeTest {
     
     
     @Test
-    void type() {
-        assertEquals(TypeMirror.class, isClass.type());
+    void part() {
+        assertEquals(TypeMirror.class, isClass.part());
     }
     
     
@@ -190,8 +190,8 @@ class TypeTest {
     }
     
     @Test
-    void primitive_type() {
-        assertEquals(TypeMirror.class, primitive.type());
+    void primitive_part() {
+        assertEquals(TypeMirror.class, primitive.part());
     }
     
 }

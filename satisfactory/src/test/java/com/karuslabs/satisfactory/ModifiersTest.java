@@ -42,8 +42,8 @@ class ModifiersTest {
     }
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, contains.type());
+    void part() {
+        assertEquals(Modifier.class, contains.part());
     }
     
     

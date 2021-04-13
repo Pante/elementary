@@ -63,8 +63,8 @@ class EqualSequenceTest {
     }
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, sequence.type());
+    void part() {
+        assertEquals(Modifier.class, sequence.part());
     }
     
 }
@@ -89,8 +89,8 @@ class EachSequenceTest {
     }
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, sequence.type());
+    void part() {
+        assertEquals(Modifier.class, sequence.part());
     }
     
 }
@@ -113,8 +113,8 @@ class NoSequenceTest {
     }
     
     @Test
-    void type() {
-        assertEquals(VariableElement.class, NO_PARAMETERS.type());
+    void part() {
+        assertEquals(VariableElement.class, NO_PARAMETERS.part());
     }
     
 }

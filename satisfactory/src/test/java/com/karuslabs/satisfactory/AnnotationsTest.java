@@ -74,8 +74,8 @@ class AnnotationsTest {
     }
     
     @Test
-    void type() {
-        assertEquals(Annotation.class, assertion.type());
+    void part() {
+        assertEquals(Annotation.class, assertion.part());
     }
     
 }

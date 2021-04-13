@@ -23,6 +23,7 @@
  */
 package com.karuslabs.utilitary.type;
 
+import java.util.UUID;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -41,7 +42,7 @@ class TypeMirrorsTest {
     TypeMirror mirror = mock(TypeMirror.class);
     TypeMirror type = mock(TypeMirror.class);
     TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(type).getMock();
-    Elements elements = when(mock(Elements.class).getTypeElement(int.class.getName())).thenReturn(element).getMock();
+    Elements elements = when(mock(Elements.class).getTypeElement(String.class.getName())).thenReturn(element).getMock();
     Types delegate = mock(Types.class);
     TypeMirrors types = new TypeMirrors(elements, delegate);
     
@@ -49,14 +50,14 @@ class TypeMirrorsTest {
     @Test
     void is_primitive() {
         var type = mock(PrimitiveType.class);
-        assertFalse(TypeMirrors.is(type, int.class));
+        assertFalse(TypeMirrors.is(type, String.class));
     }
     
     @Test
     void is_variable() {
         var variable = mock(VariableElement.class);
         TypeMirror type = when(mock(DeclaredType.class).asElement()).thenReturn(variable).getMock();
-        assertFalse(TypeMirrors.is(type, int.class));
+        assertFalse(TypeMirrors.is(type, String.class));
     }
     
     @Test
@@ -121,15 +122,21 @@ class TypeMirrorsTest {
     
     @Test
     void type() {
-        assertEquals(type, types.type(int.class));
+        assertEquals(type, types.type(String.class));
         verifyNoInteractions(delegate);
+    }
+    
+    @Test
+    void type_primitive() {
+        types.type(int.class);
+        verify(delegate).getPrimitiveType(TypeKind.INT);
     }
     
     @Test
     void erasure_class() {
         when(delegate.erasure(any(TypeMirror.class))).thenReturn(mirror);
         
-        assertEquals(mirror, types.erasure(int.class));
+        assertEquals(mirror, types.erasure(String.class));
         verify(delegate).erasure(type);
     }
     
@@ -139,9 +146,9 @@ class TypeMirrorsTest {
         when(delegate.getDeclaredType(element, mirror)).thenReturn(declared);
         
         TypeElement string = when(mock(TypeElement.class).asType()).thenReturn(mirror).getMock();
-        when(elements.getTypeElement(String.class.getName())).thenReturn(string);
+        when(elements.getTypeElement(UUID.class.getName())).thenReturn(string);
         
-        assertEquals(declared, types.specialize(int.class, String.class));
+        assertEquals(declared, types.specialize(String.class, UUID.class));
     }
     
     

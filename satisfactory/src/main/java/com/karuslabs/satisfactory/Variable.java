@@ -35,8 +35,8 @@ import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.utilitary.Texts.join;
 
 /**
- * An assertion for variables which delegates testing to {@code Assertion}s for 
- * individual parts of a variable.
+ * An assertion for variables which delegates testing of individual parts of a 
+ * variable to {@code Assertion}s.
  */
 public class Variable implements Assertion<VariableElement> {
 
@@ -47,7 +47,7 @@ public class Variable implements Assertion<VariableElement> {
     private final String conditions;
     
     /**
-     * Creates a {@code Variable} with the given arguments.
+     * Creates a {@code Variable} with the given assertions and conditions.
      * 
      * @param annotations the assertion for annotations
      * @param modifiers the assertion for modifiers
@@ -79,7 +79,7 @@ public class Variable implements Assertion<VariableElement> {
     }
     
     @Override
-    public Class<VariableElement> type() {
+    public Class<VariableElement> part() {
         return VariableElement.class;
     }
     
@@ -98,12 +98,12 @@ public class Variable implements Assertion<VariableElement> {
          */
         Builder(Assertion<?>... parts) {
             for (var part : parts) {
-                if (!SUPPORTED.contains(part.type())) {
-                    throw new IllegalArgumentException("Assertion for " + part.type().getName() + " is not supported");
+                if (!SUPPORTED.contains(part.part())) {
+                    throw new IllegalArgumentException("Assertion for " + part.part().getName() + " is not supported");
                 }
                 
-                if (assertions.put(part.type(), part) != null) {
-                    throw new IllegalStateException("Already declared an assertion for " + part.type().getName());
+                if (assertions.put(part.part(), part) != null) {
+                    throw new IllegalStateException("Already declared an assertion for " + part.part().getName());
                 }
             }
         }

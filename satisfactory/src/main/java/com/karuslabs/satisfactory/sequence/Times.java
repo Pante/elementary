@@ -28,7 +28,7 @@ import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * Represents the expected number of times an assertion needs to be satisfied.
+ * Represents the expected number of times an assertion should be satisfied.
  * 
  * @param <T> the type of the tested value
  */
@@ -41,45 +41,22 @@ public abstract class Times<T> implements Part {
     /**
      * Creates a {@code Times} with the given assertion and condition.
      * 
-     * @param assertion the assertion
+     * @param assertion the assertion to satisfy
      * @param condition the condition for satisfying this {@code Times}
      */
     public Times(Assertion<T> assertion, String condition) {
         this.assertion = assertion;
         this.condition = condition;
     }
-    
+
     /**
-     * Tests whether the current number of times is the expected number of times
-     * an assertion needs to be satisfied.
+     * Tests if the given value satisfies this {@code Times} using the given {@code TypeMirror}s.
      * 
-     * @return {@code true} if the given current number of times is the expected
-     *         number of times
-     */
-    public boolean test() {
-        var valid = test(current);
-        current = 0;
-        return valid;
-    }
-    
-    /**
-     * Tests whether the given number is the expected number of times an assertion
-     * needs to be satisfied.
-     * 
-     * @param current the current number of times the assertion is satisfied 
-     * @return {@code true} if the given count is the expected number of times
-     */
-    protected abstract boolean test(int current);
-    
-    /**
-     * Tests whether the given value satisfies the assertion using the given types 
-     * and increases an internal counter if so.
-     * 
-     * @param types the types
+     * @param types the {@code TypeMirrors}
      * @param value the value to be tested
-     * @return {@code true} if the given value satisfies the assertion
+     * @return {@code true} if the given value satisfies this {@code Times}
      */
-    public boolean add(TypeMirrors types, T value) {
+    public boolean test(TypeMirrors types, T value) {
         if (assertion.test(types, value)) {
             current++;
             return true;
@@ -88,6 +65,28 @@ public abstract class Times<T> implements Part {
             return false;
         }
     }
+    
+    /**
+     * Tests if the current number of times the assertion is satisfied is expected
+     * before resetting the current number of times.
+     * 
+     * @return {@code true} if the given current number of times is the expected
+     *         number of times
+     */
+    public boolean times() {
+        var valid = times(current);
+        current = 0;
+        return valid;
+    }
+    
+    /**
+     * Tests if the given times is the expected number of times an assertion needs
+     * to be satisfied.
+     * 
+     * @param current the current number of times the assertion is satisfied 
+     * @return {@code true} if the given times is the expected number of times
+     */
+    protected abstract boolean times(int current);
     
     /**
      * Returns the condition for satisfying this {@code Times}.
@@ -99,16 +98,16 @@ public abstract class Times<T> implements Part {
     }
     
     @Override
-    public Class<?> type() {
-        return assertion.type();
+    public Class<?> part() {
+        return assertion.part();
     }
     
 }
 
 /**
- * Represents an exact number of times that an assertion needs to be satisfied.
+ * An exact number of times that an assertion should be satisfied.
  * 
- * @param <T> the type of the assertion
+ * @param <T> the type of the tested value
  */
 class Exact<T> extends Times<T> {
 
@@ -117,7 +116,7 @@ class Exact<T> extends Times<T> {
      * 
      * @param times the times
      * @param assertion the assertion
-     * @return a formatted string representation of the given assertion
+     * @return a formatted description of the given assertion
      */
     static String format(int times, Assertion<?> assertion) {
         if (times == 1) {
@@ -142,14 +141,14 @@ class Exact<T> extends Times<T> {
     }
 
     @Override
-    protected boolean test(int current) {
+    protected boolean times(int current) {
         return times == current;
     }
     
 }
 
 /**
- * A range of times that an assertion needs to be satisfied.
+ * A range of times that an assertion needs should be satisfied.
  * 
  * @param <T> the type of the tested value
  */
@@ -172,14 +171,14 @@ class Range<T> extends Times<T> {
     }
 
     @Override
-    protected boolean test(int current) {
+    protected boolean times(int current) {
         return current >= min && current < max;
     }
     
 }
 
 /**
- * A minimum number of times that an assertion needs to be satisfied.
+ * A minimum number of times that an assertion should be satisfied.
  * 
  * @param <T> the type of the tested value
  */
@@ -199,14 +198,14 @@ class Min<T> extends Times<T> {
     }
 
     @Override
-    protected boolean test(int current) {
+    protected boolean times(int current) {
         return current >= min;
     }
     
 }
 
 /**
- * A maximum number of times that an assertion need to be satisfied.
+ * A maximum number of times that an assertion should be satisfied.
  * 
  * @param <T> the type of the tested value
  */
@@ -226,7 +225,7 @@ class Max<T> extends Times<T> {
     }
 
     @Override
-    protected boolean test(int current) {
+    protected boolean times(int current) {
         return current <= max;
     }
     

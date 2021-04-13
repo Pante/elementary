@@ -24,17 +24,17 @@
 package com.karuslabs.satisfactory;
 
 /**
- * Represents a part of a Java language construct, i.e. a variable, from which
- * more complex language constructs is composed.
+ * Represents a part of a Java language construct from which more complex language 
+ * constructs is composed. 
  */
 @FunctionalInterface
 public interface Part {
     
     /**
-     * Returns a type which represents this {@code Part}.
+     * Returns a part which represents this {@code Part}.
      * 
-     * @return a type which represents the supported part
+     * @return a part which represents the supported part
      */
-    public Class<?> type();
+    public Class<?> part();
 
 }

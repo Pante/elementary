@@ -37,9 +37,9 @@ import static com.karuslabs.utilitary.Texts.SCREAMING_CASE;
 public abstract class Modifiers implements Assertion<Set<Modifier>> {
     
     /**
-     * Sorts the given modifiers according to normal Java conventions.
+     * Sorts the given modifiers according to common Java conventions.
      * 
-     * @param modifiers the modifiers to be sorted
+     * @param modifiers the unsorted modifiers
      * @return the sorted modifiers
      */
     public static Modifier[] sort(Modifier... modifiers) {
@@ -82,7 +82,7 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
     }
     
     @Override
-    public Class<Modifier> type() {
+    public Class<Modifier> part() {
         return Modifier.class;
     }
 
@@ -110,15 +110,14 @@ class ContainsModifiers extends Modifiers {
 }
 
 /**
- * An assertion that is satisfied if a set of modifiers is exactly equal to the 
- * specified modifiers.
+ * An assertion that is satisfied if a set of modifiers is equal to the specified modifiers.
  */
 class EqualModifiers extends Modifiers {
 
     /**
      * Creates a {@code EqualModifiers} with the given modifiers.
      * 
-     * @param modifiers the modifiers
+     * @param modifiers the expected modifiers
      */
     EqualModifiers(Modifier... modifiers) {
         super(Set.of(modifiers), "equal [" + Texts.join(sort(modifiers), SCREAMING_CASE, " ") + "]");

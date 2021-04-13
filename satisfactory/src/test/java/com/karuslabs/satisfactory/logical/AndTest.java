@@ -39,8 +39,8 @@ class AndTest {
     Assertion<Set<Modifier>> modifiers = contains(PUBLIC, FINAL).and(contains(ABSTRACT));
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, modifiers.type());
+    void part() {
+        assertEquals(Modifier.class, modifiers.part());
     }
     
     @Test

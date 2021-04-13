@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
-public abstract class AnnotationProcessor extends AbstractProcessor { 
+public abstract class AnnotationProcessor extends AbstractProcessor {
     
     protected @Lazy Elements elements;
     protected @Lazy TypeMirrors types;

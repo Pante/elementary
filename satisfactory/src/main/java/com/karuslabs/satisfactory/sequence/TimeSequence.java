@@ -29,10 +29,10 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * A {@code Sequence} that counts the number of times each assertion is satisfied
- * while testing a sequence of elements.
+ * A {@code Sequence} that expects each value in a sequence of values to be called 
+ * a certain number of times.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the tested values
  */
 public abstract class TimeSequence<T> extends Sequence<T> {
     
@@ -40,7 +40,7 @@ public abstract class TimeSequence<T> extends Sequence<T> {
      * Formats the given {@code Times}.
      * 
      * @param times the times
-     * @return a formatted string representation of the given {@code Times}
+     * @return a formatted description of the given {@code Times}
      */
     static String format(Times<?>... times) {
         return "[" + Texts.join(times, (time, builder) -> builder.append(time.condition()), ", ") + "]";
@@ -68,7 +68,7 @@ public abstract class TimeSequence<T> extends Sequence<T> {
  * A {@code Sequence} that is satisfied if a sequence of elements contains all
  * {@code Times}. The order of the sequence of elements is ignored.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the tested values
  */
 class ContainsSequence<T> extends TimeSequence<T> {
     
@@ -85,12 +85,12 @@ class ContainsSequence<T> extends TimeSequence<T> {
     public boolean test(TypeMirrors types, Collection<? extends T> values) {
         for (var value : values) {
             for (var time : times) {
-                time.add(types, value);
+                time.test(types, value);
             }
         }
         
         for (var time : times) {
-            if (!time.test()) {
+            if (!time.times()) {
                 return false;
             }
         }
@@ -99,8 +99,8 @@ class ContainsSequence<T> extends TimeSequence<T> {
     }
 
     @Override
-    public Class<?> type() {
-        return times[0].type();
+    public Class<?> part() {
+        return times[0].part();
     }
     
 }
@@ -109,7 +109,7 @@ class ContainsSequence<T> extends TimeSequence<T> {
  * A {@code Sequence} that is satisfied if a sequence of elements is equal to this
  * sequence of {@code Times}. The order of the sequence of elements is ignored.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the tested values
  */
 class EqualTimeSequence<T> extends TimeSequence<T> {
 
@@ -127,7 +127,7 @@ class EqualTimeSequence<T> extends TimeSequence<T> {
         for (var value : values) {
             var equal = false;
             for (var time : times) {
-                equal |= time.add(types, value);
+                equal |= time.test(types, value);
             }
             
             if (!equal) {
@@ -139,8 +139,8 @@ class EqualTimeSequence<T> extends TimeSequence<T> {
     }
 
     @Override
-    public Class<?> type() {
-        return times[0].type();
+    public Class<?> part() {
+        return times[0].part();
     }
     
 }

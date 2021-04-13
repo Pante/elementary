@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.annotations.Static;
 import com.karuslabs.satisfactory.logical.*;
 
 import java.util.Set;
@@ -34,24 +35,25 @@ import javax.lang.model.type.*;
 import static com.karuslabs.satisfactory.Type.Relation.*;
 
 /**
- * A utility class that contains methods to create assertions.
+ * This class provides constants for frequently used assertion and utility methods 
+ * for creating {@code Assertion}s.
  */
-public class Assertions {
+public @Static class Assertions {
     
     /**
-     * An assertion which matches any given {@code VariableElement}.
+     * An assertion that is satisfied by any {@code VariableElement}.
      */
     public static final Assertion<VariableElement> ANY_VARIABLE = new Any<>(VariableElement.class);
     /**
-     * An assertion which matches any given annotations.
+     * An assertion that is satisfied by any annotation.
      */
     public static final Assertion<Element> ANY_ANNOTATIONS = new Any<>(Annotation.class);
     /**
-     * An assertion which matches any given modifiers.
+     * An assertion that is satisfied by any modifier.
      */
     public static final Assertion<Set<Modifier>> ANY_MODIFIERS = new Any<>(Modifier.class);
     /**
-     * An assertion which matches any given {@code TypeMirror}.
+     * An assertion that is satisfied by any {@code TypeMirror}.
      */
     public static final Assertion<TypeMirror> ANY_TYPE = new Any<>(TypeMirror.class);
     
@@ -59,11 +61,11 @@ public class Assertions {
     /**
      * Creates a {@code Method.Builder} with the given assertions and sequences.
      * 
-     * @param parts the unique parts
-     * @return a {@code Method.Builder}
+     * @param parts the assertions and sequences
+     * @return a {@code Method.Builder} with the given assertions and sequences
      * @throws IllegalArgumentException if a given assertion or sequence is unsupported
-     * @throws IllegalStateException if the given assertions and sequences contain
-     *                               assertions or sequences of the same type
+     * @throws IllegalStateException if the given parts contain assertions or sequences 
+                                     for the same part
      */
     public static Method.Builder method(Part... parts) {
         return new Method.Builder(parts);
@@ -72,18 +74,18 @@ public class Assertions {
     /**
      * Creates a {@code Variable.Builder} with the given assertions.
      * 
-     * @param assertions the unique assertions
+     * @param assertions the assertions
      * @return a {@code Variable.Builder}
      * @throws IllegalArgumentException if a given assertion is unsupported
      * @throws IllegalStateException if the given assertions contain assertions
-     *                               of the same type
+                                     for the same part
      */
     public static Variable.Builder variable(Assertion<?>... assertions) {
         return new Variable.Builder(assertions);
     }
     
     /**
-     * Emulates a named parameter for an assertion for annotations.
+     * Functions as a named parameter for an assertion for annotations.
      * 
      * @param assertion an assertion for annotations
      * @return the given assertion
@@ -97,7 +99,8 @@ public class Assertions {
      * given annotations.
      * 
      * @param annotations the annotations that an {@code Element} should contain
-     * @return an assertion that is satisfied if an element contains the given annotations
+     * @return an assertion that is satisfied if an {@code Element} contains the 
+     *         given annotations
      */
     public static Assertion<Element> contains(Class<? extends Annotation>... annotations) {
         return new ContainsAnnotations(annotations);
@@ -105,19 +108,19 @@ public class Assertions {
     
     /**
      * Returns an assertion that is satisfied if an {@code Element} does not contain
-     * the given annotations
+     * the given annotations.
      * 
      * @param annotations the annotations that an {@code Element} should not contain
-     * @return an assertion that is satisfied if an element does not contain the
-     *         given annotations
+     * @return an assertion that is satisfied if an {@code Element} does not contain 
+     *         the given annotations
      */
     public static Assertion<Element> contains(No.Annotations annotations) {
-        return not(contains(annotations.values));
+        return not(contains(annotations.elements));
     }
     
     
     /**
-     * Emulates a named parameter for an assertion for modifiers.
+     * Functions as a named parameter for an assertion for modifiers.
      * 
      * @param assertion the assertion for modifiers
      * @return the given assertion
@@ -147,14 +150,14 @@ public class Assertions {
      *         the given modifiers
      */
     public static Assertion<Set<Modifier>> contains(No.Modifiers modifiers) {
-        return not(new ContainsModifiers(modifiers.values));
+        return not(new ContainsModifiers(modifiers.elements));
     }
     
     /**
      * Returns an assertion that is satisfied if a set of modifiers is equal to
      * the given modifiers.
      * 
-     * @param modifiers the modifiers to which a set of modifiers should equal
+     * @param modifiers the modifiers to which a set of modifiers should be equal
      * @return an assertion that is satisfied if a set of modifiers is equal to
      *         the given modifiers
      */
@@ -248,11 +251,11 @@ public class Assertions {
     
     
     /**
-     * Returns an assertion that is the negation of the given assertion.
+     * Returns a negation of the given assertion.
      * 
      * @param <T> a type which the given assertion tests
      * @param assertion the assertion to negate
-     * @return an assertion
+     * @return an assertion that negates the given assertion
      */
     public static <T> Assertion<T> not(Assertion<T> assertion) {
         return new Not<>(assertion);
@@ -262,16 +265,16 @@ public class Assertions {
      * Returns an assertion that is the negation of the assertion supplied by the
      * given supplier.
      * 
-     * @param <T> a type which the given assertion tests
+     * @param <T> the type of the tested value
      * @param assertion the assertion to negate
-     * @return an assertion
+     * @return an assertion that negates the supplied assertion
      */
     public static <T> Assertion<T> not(Supplier<? extends Assertion<T>> assertion) {
         return new Not<>(assertion.get());
     }
     
     /**
-     * Emulates a named parameter for the negation of the given annotations.
+     * Functions as a named parameter for the negation of the given annotations.
      * 
      * @param annotations the annotations to be negated
      * @return the annotations
@@ -281,7 +284,7 @@ public class Assertions {
     }
     
     /**
-     * Emulates a named parameter for the negation of the given modifiers.
+     * Functions as a named parameter for the negation of the given modifiers.
      * 
      * @param modifiers the modifiers to be negated
      * @return the modifiers

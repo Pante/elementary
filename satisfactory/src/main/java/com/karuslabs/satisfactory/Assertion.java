@@ -31,19 +31,18 @@ import java.util.function.Supplier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Represents an assertion for a language construct in an annotation processing
- * environment.
+ * An assertion for a language construct in an annotation processing environment.
  * 
- * @param <T> a type which this {@code Assertion} tests
+ * @param <T> the type of the value which this {@code Assertion} tests
  */
 public interface Assertion<T> extends Part {
     
     /**
-     * Tests the given value using the given types.
+     * Tests the given value using the given {@code TypeMirrors}.
      * 
-     * @param types the types
-     * @param value the value
-     * @return {@code true} if the given value satisfies this assertion
+     * @param types the TypeMirrors
+     * @param value the value to be tested
+     * @return {@code true} if the given value satisfies this assertion, otherwise {@code false}
      */
     boolean test(TypeMirrors types, @Nullable T value);
     
@@ -56,7 +55,7 @@ public interface Assertion<T> extends Part {
     
     /**
      * Returns the conditions for satisfying this assertion.
-     * 
+     * <br>
      * <b>Default implementation:</b>
      * Delegates execution to {@link #condition()}.
      * 

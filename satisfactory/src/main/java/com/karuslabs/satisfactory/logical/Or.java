@@ -34,11 +34,11 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 public final class Or<T> implements Assertion<T> {
 
     /**
-     * The assertion on the left side of the logical OR.
+     * The assertion on the left side of this logical OR.
      */
     public final Assertion<T> left;
     /**
-     * The assertion on the right side of the logical OR.
+     * The assertion on the right side of this logical OR.
      */
     public final Assertion<T> right;
     
@@ -64,8 +64,8 @@ public final class Or<T> implements Assertion<T> {
     }
     
     @Override
-    public Class<?> type() {
-        return left.type();
+    public Class<?> part() {
+        return left.part();
     }
     
 }

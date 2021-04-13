@@ -27,16 +27,16 @@ import java.lang.annotation.Annotation;
 import javax.lang.model.element.Modifier;
 
 /**
- * Represents the negation of the arguments for an assertion.
+ * Represents the negation of an assertion's arguments.
  * 
- * @param <T> the type of the negated elements
+ * @param <T> the type of the negated arguments
  */
 public class No<T> {
     
     /**
-     * The values of this negation.
+     * The elements of this negation.
      */
-    public final T[] values;
+    public final T[] elements;
     
     /**
      * Creates a {@code No} with the given elements
@@ -44,11 +44,11 @@ public class No<T> {
      * @param elements the elements to be negated
      */
     public No(T... elements) {
-        this.values = elements;
+        this.elements = elements;
     }
     
     /**
-     * Emulates a named parameter for the negation of annotations for an assertion.
+     * Functions as a named parameter for the negation of annotations for an assertion.
      */
     public static class Annotations extends No<Class<? extends Annotation>> {
         /**
@@ -62,7 +62,7 @@ public class No<T> {
     }
     
     /**
-     * Emulates a named parameter for the negation of annotations for an assertion.
+     * Functions as a named parameter for the negation of modifiers for an assertion.
      */
     public static class Modifiers extends No<Modifier> {
         /**

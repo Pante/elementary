@@ -30,30 +30,31 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 /**
- * A utility class that contains methods to create {@code Sequence}s.
+ * This class provides constants for frequently used assertion and utility methods 
+ * for creating {@code Assertion}s.
  */
 public class Sequences {
     
     /**
-     * A {@code Sequence} which matches any given sequence of {@code VariableElement}s.
+     * A {@code Sequence} that is satisfied by any sequence of {@code VariableElement}s.
      */
     public static final Sequence<VariableElement> ANY_PARAMETERS = new AnySequence<>(VariableElement.class);
     /**
-     * A {@code Sequence} which matches any given sequence of {@code TypeMirror}s.
+     * A {@code Sequence} that is satisfied any sequence of {@code TypeMirror}s.
      */
     public static final Sequence<TypeMirror> ANY_EXCEPTIONS = new AnySequence<>(TypeMirror.class);
     /**
-     * A {@code Sequence} which matches an empty sequence of {@code VariableElement}s.
+     * A {@code Sequence} that is satisfied by an empty sequence of {@code VariableElement}s.
      */
     public static final Sequence<VariableElement> NO_PARAMETERS = new NoSequence<>(VariableElement.class);
     /**
-     * A {@code Sequence} which matches an empty sequence of {@code TypeMirror}s.
+     * A {@code Sequence} that is satisfied by an empty sequence of {@code TypeMirror}s.
      */
     public static final Sequence<TypeMirror> NO_EXCEPTIONS = new NoSequence<>(TypeMirror.class);
     
     
     /**
-     * Emulates a named parameter for a sequence of {@code VariableElement}s.
+     * Functions as a named parameter for a sequence of {@code VariableElement}s.
      * 
      * @param sequence a sequence of {@code VariableElement}s
      * @return the given sequence
@@ -63,7 +64,7 @@ public class Sequences {
     }
     
     /**
-     * Emulates a named parameter for a sequence of {@code TypeMirror}s.
+     * Functions as a named parameter for a sequence of {@code TypeMirror}s.
      * 
      * @param sequence a sequence of {@code TypeMirror}s
      * @return the given sequence
@@ -74,9 +75,9 @@ public class Sequences {
     
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements is
-     * equal to and ordered according to the supplied assertions. Results may be 
-     * inconsistent between runs if the collection is unordered.
+     * Returns a {@code Sequence} that is satisfied if a sequence of elements and
+     * the supplied assertions are equal and ordered. <b>Results may be inconsistent
+     * between invocations if the collection is unordered.</b>
      * 
      * @param <T> the type of the tested values
      * @param assertions the supplier of assertions to satisfy
@@ -93,9 +94,9 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements is
-     * equal to and ordered according to the given assertions. Results may be
-     * inconsistent between runs if the collection is unordered.
+     * Returns a {@code Sequence} that is satisfied if a sequence of elements and
+     * given assertions are equal and ordered. <b>Results may be inconsistent between
+     * invocations if the collection is unordered.</b>
      * 
      * @param <T> the type of the tested values
      * @param assertions the assertions to satisfy
@@ -231,8 +232,8 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Times} that represents a range of times the given assertion
-     * is expected to be satisfied.
+     * Returns a {@code Times} that represents the given range of times the given 
+     * assertion is expected to be satisfied.
      * 
      * @param <T> the type of the tested value
      * @param min the minimum, inclusive
@@ -247,7 +248,7 @@ public class Sequences {
     
     /**
      * Returns a {@code Times} that expects the supplied assertion to be satisfied
-     * a minimum number of times.
+     * the given minimum number of times.
      * 
      * @param <T> the type of the test value
      * @param min the minimum, inclusive
@@ -261,7 +262,7 @@ public class Sequences {
     
     /**
      * Returns a {@code Times} that expects the given assertion to be satisfied
-     * a minimum number of times.
+     * the given minimum number of times.
      * 
      * @param <T> the type of the test value
      * @param min the minimum, inclusive
@@ -275,7 +276,7 @@ public class Sequences {
     
     /**
      * Returns a {@code Times} that expects the supplied assertion to be satisfied
-     * a maximum number of times.
+     * the given maximum number of times.
      * 
      * @param <T> the type of the test value
      * @param max the maximum, inclusive
@@ -289,7 +290,7 @@ public class Sequences {
     
     /**
      * Returns a {@code Times} that expects the given assertion to be satisfied
-     * a maximum number of times.
+     * the given maximum number of times.
      * 
      * @param <T> the type of the test value
      * @param max the maximum, inclusive

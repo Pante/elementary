@@ -45,8 +45,8 @@ class AnySequenceTest {
     }
     
     @Test
-    void type() {
-        assertEquals(TypeMirror.class, ANY_EXCEPTIONS.type());
+    void part() {
+        assertEquals(TypeMirror.class, ANY_EXCEPTIONS.part());
     }
     
 }

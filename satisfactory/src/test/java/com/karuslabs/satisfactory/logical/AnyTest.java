@@ -42,8 +42,8 @@ class AnyTest {
     }
     
     @Test
-    void type() {
-        assertEquals(String.class, any.type());
+    void part() {
+        assertEquals(String.class, any.part());
     }
     
 }

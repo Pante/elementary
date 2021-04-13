@@ -54,8 +54,8 @@ class NotTest {
     }
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, assertion.type());
+    void part() {
+        assertEquals(Modifier.class, assertion.part());
     }
     
 }

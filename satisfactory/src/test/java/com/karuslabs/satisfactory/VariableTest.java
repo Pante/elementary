@@ -72,15 +72,15 @@ class VariableTest {
     }
     
     @Test
-    void variable_type() {
-        assertEquals(VariableElement.class, variable.type());
+    void variable_part() {
+        assertEquals(VariableElement.class, variable.part());
     }
     
     
     @Test
     void builder_unsupported_assertion() {
         assertEquals(
-            "Assertion for " + variable.type().getName() + " is not supported", 
+            "Assertion for " + variable.part().getName() + " is not supported", 
             assertThrows(IllegalArgumentException.class, () -> variable(variable).get()).getMessage()
         );
     }

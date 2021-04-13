@@ -66,8 +66,8 @@ class TimesSequenceTest {
     }
     
     @Test
-    void contains_type() {
-        assertEquals(TypeMirror.class, contains.type());
+    void contains_part() {
+        assertEquals(TypeMirror.class, contains.part());
     }
     
     @Test
@@ -86,8 +86,8 @@ class TimesSequenceTest {
     }
     
     @Test
-    void equal_type() {
-        assertEquals(TypeMirror.class, equal.type());
+    void equal_part() {
+        assertEquals(TypeMirror.class, equal.part());
     }
     
     

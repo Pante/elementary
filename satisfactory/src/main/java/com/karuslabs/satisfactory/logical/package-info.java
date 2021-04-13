@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains assertions that represent composable logical operations.
+ * Contains assertions that represent logical operations.
  */
 package com.karuslabs.satisfactory.logical;

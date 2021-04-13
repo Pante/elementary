@@ -38,7 +38,7 @@ public final class And<T> implements Assertion<T> {
      */
     public final Assertion<T> left;
     /**
-     * The assertion on the left side of this logical AND.
+     * The assertion on the right side of this logical AND.
      */
     public final Assertion<T> right;
     
@@ -59,8 +59,8 @@ public final class And<T> implements Assertion<T> {
     }
     
     @Override
-    public Class<?> type() {
-        return left.type();
+    public Class<?> part() {
+        return left.part();
     }
 
     @Override

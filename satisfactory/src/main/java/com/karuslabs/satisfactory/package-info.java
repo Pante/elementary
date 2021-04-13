@@ -23,7 +23,6 @@
  */
 
 /**
- * Contains assertions for several different Java language constructs in an
- * annotation processing environment.
+ * Contains assertions for Java language constructs in an annotation processing environment.
  */
 package com.karuslabs.satisfactory;

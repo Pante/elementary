@@ -91,8 +91,8 @@ class MethodTest {
     }
     
     @Test
-    void method_type() {
-        assertEquals(ExecutableElement.class, method.type());
+    void method_part() {
+        assertEquals(ExecutableElement.class, method.part());
     }
     
     

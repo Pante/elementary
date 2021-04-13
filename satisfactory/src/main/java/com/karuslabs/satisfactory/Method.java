@@ -36,8 +36,8 @@ import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 
 /**
- * An assertion for methods which delegates testing to {@code Assertion}s and {@code Sequence}s 
- * for individual parts of a method.
+ * An assertion for methods which delegates testing of individual parts of a method
+ * to {@code Assertion}s and {@code Sequence}s.
  */
 public class Method implements Assertion<ExecutableElement> {
 
@@ -50,7 +50,7 @@ public class Method implements Assertion<ExecutableElement> {
     private final String conditions;
     
     /**
-     * Creates a {@code Method} with the given arguments.
+     * Creates a {@code Method} with the given assertions, sequences and conditions.
      * 
      * @param annotations the assertion for annotations
      * @param modifiers the assertion for modifiers
@@ -61,9 +61,12 @@ public class Method implements Assertion<ExecutableElement> {
      * @param conditions the conditions for satisfying this assertion
      */
     Method(
-        Assertion<Element> annotations, Assertion<Set<Modifier>> modifiers, 
-        Assertion<TypeMirror> type, Sequence<VariableElement> parameters,
-        Sequence<TypeMirror> exceptions, String condition,
+        Assertion<Element> annotations, 
+        Assertion<Set<Modifier>> modifiers, 
+        Assertion<TypeMirror> type, 
+        Sequence<VariableElement> parameters,
+        Sequence<TypeMirror> exceptions, 
+        String condition,
         String conditions
     ) {
         this.annotations = annotations;
@@ -93,7 +96,7 @@ public class Method implements Assertion<ExecutableElement> {
     }
 
     @Override
-    public Class<ExecutableElement> type() {
+    public Class<ExecutableElement> part() {
         return ExecutableElement.class;
     }
     
@@ -113,7 +116,7 @@ public class Method implements Assertion<ExecutableElement> {
          * @param parts the assertions and sequences
          * @throws IllegalArgumentException if a given assertion or sequence is not supported
          * @throws IllegalStateException if the given assertions and sequences contains
-         *                               assertions and sequences of the same type
+                                         assertions and sequences for the same part
          */
         Builder(Part... parts) {
             for (var part : parts) {
@@ -124,42 +127,42 @@ public class Method implements Assertion<ExecutableElement> {
                     sequence((Sequence<?>) part);
                     
                 } else {
-                    throw new IllegalArgumentException("Part for " + part.type().getName() + " is not supported");
+                    throw new IllegalArgumentException("Part for " + part.part().getName() + " is not supported");
                 }
             }
         }
         
         /**
-         * Determines whether the given assertion's type is supported.
+         * Determines whether the given assertion's part is supported.
          * 
          * @param assertion the assertion
-         * @throws IllegalArgumentException if a given assertion is not supported
+         * @throws IllegalArgumentException if a given assertion's part is not supported
          * @throws IllegalStateException if a given assertion has already been declared
          */
         final void assertion(Assertion<?> assertion) {
-            if (!SUPPORTED_ASSERTIONS.contains(assertion.type())) {
-                throw new IllegalArgumentException("Assertion for " + assertion.type().getName() + " is not supported");
+            if (!SUPPORTED_ASSERTIONS.contains(assertion.part())) {
+                throw new IllegalArgumentException("Assertion for " + assertion.part().getName() + " is not supported");
             }
                 
-            if (assertions.put(assertion.type(), assertion) != null) {
-                throw new IllegalStateException("Already declared an assertion for " + assertion.type().getName());
+            if (assertions.put(assertion.part(), assertion) != null) {
+                throw new IllegalStateException("Already declared an assertion for " + assertion.part().getName());
             }
         }
         
         /**
-         * Determines whether the given sequences 's type is supported.
+         * Determines whether the given sequence's part is supported.
          * 
          * @param sequence the sequence
-         * @throws IllegalArgumentException if a given sequence is not supported
+         * @throws IllegalArgumentException if a given sequence's part is not supported
          * @throws IllegalStateException if a given sequence has already been declared
          */
         final void sequence(Sequence<?> sequence) {
-            if (!SUPPORTED_SEQUENCES.contains(sequence.type())) {
-                throw new IllegalArgumentException("Sequence for " + sequence.type().getName() + " is not supported");
+            if (!SUPPORTED_SEQUENCES.contains(sequence.part())) {
+                throw new IllegalArgumentException("Sequence for " + sequence.part().getName() + " is not supported");
             }
                 
-            if (sequences.put(sequence.type(), sequence) != null) {
-                throw new IllegalStateException("Already declared a sequence for " + sequence.type().getName());
+            if (sequences.put(sequence.part(), sequence) != null) {
+                throw new IllegalStateException("Already declared a sequence for " + sequence.part().getName());
             }
         }
 

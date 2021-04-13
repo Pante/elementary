@@ -30,20 +30,20 @@ import java.util.Collection;
 /**
  * A {@code Sequence} that always returns {@code true}.
  * 
- * @param <T> the type of the assertion
+ * @param <T> the type of the tested values
  */
 public class AnySequence<T> extends Sequence<T> {
 
-    private final Class<?> type;
+    private final Class<?> part;
     
     /**
-     * Creates a {@code AnySequence} of the given type.
+     * Creates a {@code AnySequence} for the given part.
      * 
-     * @param type the type
+     * @param part the supported part
      */
-    public AnySequence(Class<?> type) {
+    public AnySequence(Class<?> part) {
         super("");
-        this.type = type;
+        this.part = part;
     }
 
     @Override
@@ -52,8 +52,8 @@ public class AnySequence<T> extends Sequence<T> {
     }
 
     @Override
-    public Class<?> type() {
-        return type;
+    public Class<?> part() {
+        return part;
     }
 
 }

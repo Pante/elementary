@@ -39,18 +39,18 @@ class TimesTest {
     Times<Set<Modifier>> times = zero(() -> contains(PUBLIC));
     
     @Test
-    void add_true() {
-        assertTrue(times.add(null, Set.of(PUBLIC)));
+    void test_true() {
+        assertTrue(times.test(null, Set.of(PUBLIC)));
     }
     
     @Test
-    void add_false() {
-        assertFalse(times.add(null, Set.of(STATIC)));
+    void test_false() {
+        assertFalse(times.test(null, Set.of(STATIC)));
     }
     
     @Test
-    void type() {
-        assertEquals(Modifier.class, times.type());
+    void part() {
+        assertEquals(Modifier.class, times.part());
     }
     
 }
@@ -60,18 +60,18 @@ class ExactTest {
     Times<TypeMirror> times = times(1, () -> ANY_TYPE);
     
     @Test
-    void test() {
-        times.add(null, null);
+    void times_true() {
+        times.test(null, null);
         
-        assertTrue(times.test());
+        assertTrue(times.times());
     }
     
     @Test
-    void test_false() {
-        times.add(null, null);
-        times.add(null, null);
+    void times_false() {
+        times.test(null, null);
+        times.test(null, null);
         
-        assertFalse(times.test());
+        assertFalse(times.times());
     }
     
     @Test
@@ -87,32 +87,32 @@ class RangeTest {
     Times<TypeMirror> range = range(1, 3, () -> ANY_TYPE);
     
     @Test
-    void test_min() {
-        range.add(null, null);
+    void times_min() {
+        range.test(null, null);
         
-        assertTrue(range.test());
+        assertTrue(range.times());
     }
     
     @Test
-    void test_max() {
-        range.add(null, null);
-        range.add(null, null);
+    void times_max() {
+        range.test(null, null);
+        range.test(null, null);
         
-        assertTrue(range.test());
+        assertTrue(range.times());
     }
     
     @Test
-    void test_min_false() {
-        assertFalse(range.test());
+    void times_min_false() {
+        assertFalse(range.times());
     }
     
     @Test
-    void test_max_false() {
-        range.add(null, null);
-        range.add(null, null);
-        range.add(null, null);
+    void times_max_false() {
+        range.test(null, null);
+        range.test(null, null);
+        range.test(null, null);
         
-        assertFalse(range.test());
+        assertFalse(range.times());
     }
     
     @Test
@@ -127,14 +127,14 @@ class MinTest {
     Times<TypeMirror> min = min(1, () -> ANY_TYPE);
     
     @Test
-    void test() {
-        min.add(null, null);
-        assertTrue(min.test());
+    void times() {
+        min.test(null, null);
+        assertTrue(min.times());
     }
     
     @Test
-    void test_false() {
-        assertFalse(min.test());
+    void times_false() {
+        assertFalse(min.times());
     }
     
     @Test
@@ -149,18 +149,18 @@ class MaxTest {
     Times<TypeMirror> max = max(2, () -> ANY_TYPE);
     
     @Test
-    void test() {
-        max.add(null, null);
-        max.add(null, null);
-        assertTrue(max.test());
+    void times() {
+        max.test(null, null);
+        max.test(null, null);
+        assertTrue(max.times());
     }
     
     @Test
-    void test_false() {
-        max.add(null, null);
-        max.add(null, null);
-        max.add(null, null);
-        assertFalse(max.test());
+    void times_false() {
+        max.test(null, null);
+        max.test(null, null);
+        max.test(null, null);
+        assertFalse(max.times());
     }
     
 }

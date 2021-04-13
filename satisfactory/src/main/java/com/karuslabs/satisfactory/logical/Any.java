@@ -33,15 +33,15 @@ import com.karuslabs.utilitary.type.TypeMirrors;
  */
 public class Any<T> implements Assertion<T> {
     
-    private final Class<?> type;
+    private final Class<?> part;
     
     /**
-     * Creates an {@code Any} of the given type.
+     * Creates an {@code Any} for the given part.
      * 
-     * @param type the type
+     * @param part the part
      */
-    public Any(Class<?> type) {
-        this.type = type;
+    public Any(Class<?> part) {
+        this.part = part;
     }
     
     @Override
@@ -55,8 +55,8 @@ public class Any<T> implements Assertion<T> {
     }
     
     @Override
-    public Class<?> type() {
-        return type;
+    public Class<?> part() {
+        return part;
     }
     
 }

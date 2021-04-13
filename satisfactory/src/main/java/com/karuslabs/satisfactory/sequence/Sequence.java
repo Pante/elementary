@@ -31,9 +31,9 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * Represents the criteria for a sequences of elements.
+ * Represents a criteria that a sequences of values should satisfy.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the tested values
  */
 public abstract class Sequence<T> implements Part {
     
@@ -50,9 +50,9 @@ public abstract class Sequence<T> implements Part {
     
 
     /**
-     * Tests the given values using the given types. 
+     * Tests the given values using the given {@code TypeMirrors}. 
      * 
-     * @param types the types
+     * @param types the {@code TypeMirror}s.
      * @param values the values
      * @return {@code true} if the given values satisfies this sequence of assertions
      */
@@ -70,11 +70,11 @@ public abstract class Sequence<T> implements Part {
 }
 
 /**
- * A {@code Sequence} that is satisfied if a sequence of elements is equal to and ordered
- * according to this sequence of {@code Assertion}s. Results may be inconsistent between
- * runs if the collection is unordered.
+ * A {@code Sequence} that expects a sequence of elements and {@code Assertion}s
+ * to be equal and ordered. <b>Results may be inconsistent between invocations if the 
+ * the sequence of elements is unordered.</b>
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the tested values
  */
 class EqualSequence<T> extends Sequence<T> {
     
@@ -82,7 +82,7 @@ class EqualSequence<T> extends Sequence<T> {
      * Formats the given assertions.
      * 
      * @param assertions the assertions
-     * @return a formatted string representation of the given assertions
+     * @return a formatted description of the given assertions
      */
     static String format(Assertion<?>... assertions) {
         return "[" + Texts.join(assertions, (assertion, builder) -> builder.append(assertion.condition()), ", ") + "]";
@@ -93,7 +93,7 @@ class EqualSequence<T> extends Sequence<T> {
     /**
      * Creates a {@code EqualSequence} with the given assertions.
      * 
-     * @param assertions the assertions
+     * @param assertions the assertions to which a collection of values should be equal
      */
     EqualSequence(Assertion<T>... assertions) {
         super("equal " + format(assertions));
@@ -117,17 +117,17 @@ class EqualSequence<T> extends Sequence<T> {
     }
     
     @Override
-    public Class<?> type() {
-        return assertions[0].type();
+    public Class<?> part() {
+        return assertions[0].part();
     }
     
 }
 
 /**
- * A {@code Sequence} that is satisfied if a sequence of elements each satisfies an
+ * A {@code Sequence} that expects a sequence of elements to each satisfy an
  * {@code Assertion}.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the values
  */
 class EachSequence<T> extends Sequence<T> {
     
@@ -136,7 +136,7 @@ class EachSequence<T> extends Sequence<T> {
     /**
      * Creates a {@code EachSequence} with the given assertion.
      * 
-     * @param assertion the assertion
+     * @param assertion the assertion that a collection of values should all satisfy
      */
     EachSequence(Assertion<T> assertion) {
         super("each " + assertion.condition());
@@ -155,29 +155,29 @@ class EachSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public Class<?> type() {
-        return assertion.type();
+    public Class<?> part() {
+        return assertion.part();
     }
     
 }
 
 /**
- * A {@code Sequence} that is satisfied if a sequence of elements is empty.
+ * A {@code Sequence} that expects an empty sequence of values.
  * 
- * @param <T> the type of the elements
+ * @param <T> the type of the values
  */
 class NoSequence<T> extends Sequence<T> {
     
-    private final Class<?> type;
+    private final Class<?> part;
     
     /**
-     * Creates a {@code NoSequence} of the given type.
+     * Creates a {@code NoSequence} for the given part.
      * 
-     * @param type the type
+     * @param part the part
      */
-    NoSequence(Class<?> type) {
+    NoSequence(Class<?> part) {
         super("empty");
-        this.type = type;
+        this.part = part;
     }
 
     @Override
@@ -186,8 +186,8 @@ class NoSequence<T> extends Sequence<T> {
     }
 
     @Override
-    public Class<?> type() {
-        return type;
+    public Class<?> part() {
+        return part;
     }
     
 }
