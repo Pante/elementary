@@ -105,29 +105,6 @@ class TextsTest {
         assertEquals("\"something\" why, how", Texts.format("something", "why", "how"));
     }
     
-    
-    @Test
-    void method() {
-        var actual = Texts.method("actual method", "expected method");
-        var expected = "Method is: " + System.lineSeparator()
-                     + "    actual method" + System.lineSeparator()
-                     + System.lineSeparator()
-                     + "should be: " + System.lineSeparator()
-                     + "    expected method";
-        
-        assertEquals(expected, actual);
-    }
-    
-    
-    @Test
-    void indent() {
-        var actual = Texts.indent("First line" + System.lineSeparator() + "Second line");
-        var expected = "    First line" + System.lineSeparator()
-                     + "    Second line";
-        assertEquals(expected, actual);
-    }
-    
-    
     @Test
     void quote() {
         assertEquals("\"something\"", Texts.quote("something"));

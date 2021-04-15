@@ -30,8 +30,20 @@ import javax.lang.model.util.SimpleTypeVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code TypeVisistor} that traverses {@code TypeMirror}s.
+ * 
+ * @param <T> the parameter type
+ */
 public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
 
+    /**
+     * Returns a {@code Walker} that determines if a given {@code TypeMirror} is 
+     * the ancestor of the visited {@code TypeMirror}.
+     * 
+     * @param types the {@code TypeMirrors}.
+     * @return a {@code Walker}.
+     */
     public static Walker<TypeMirror> ancestor(TypeMirrors types) {
         return new AncestorWalker(types);
     }
@@ -49,6 +61,9 @@ public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
     
 }
 
+/**
+ * A {@code Walker} that 
+ */
 class AncestorWalker extends Walker<TypeMirror> {
     
     private final TypeMirror object;

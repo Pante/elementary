@@ -30,11 +30,30 @@ import javax.lang.model.util.SimpleElementVisitor9;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * An {@code ElementVisitor} that recursively traverses enclosing elements until
+ * it finds the target element. If found, the target element is returned, otherwise
+ * {@code null}.
+ * 
+ * @param <T> the type of the {@code Element} to find
+ */
 public abstract class Find<T extends Element> extends SimpleElementVisitor9<T, Void> {
     
+    /**
+     * A {@code Find} that finds the enclosing {@code ExecutableElement} of an element.
+     */
     public static final Find<ExecutableElement> EXECUTABLE = new FindExecutable();
+    /**
+     * A {@code Find} that finds the enclosing {@code TypeElement} of an element.
+     */
     public static final Find<TypeElement> TYPE = new FindType();
+    /**
+     * A {@code Find} that finds the enclosing {@code PackageElement} of an element.
+     */
     public static final Find<PackageElement> PACKAGE = new FindPackage();
+    /**
+     * A {@code Find} that finds the enclosing {@code ModuleElement} of an element.
+     */
     public static final Find<ModuleElement> MODULE = new FindModule();
     
     @Override
@@ -45,6 +64,9 @@ public abstract class Find<T extends Element> extends SimpleElementVisitor9<T, V
     
 }
 
+/**
+ * A {@code Find} that finds the enclosing {@code ExecutableElement} of an element.
+ */
 class FindExecutable extends Find<ExecutableElement> {
     
     @Override
@@ -69,6 +91,9 @@ class FindExecutable extends Find<ExecutableElement> {
     
 }
 
+/**
+ * A {@code Find} that finds the enclosing {@code TypeElement} of an element.
+ */
 class FindType extends Find<TypeElement> {
     
     @Override
@@ -88,6 +113,9 @@ class FindType extends Find<TypeElement> {
     
 }
 
+/**
+ * A {@code Find} that finds the enclosing {@code PackageElement} of an element.
+ */
 class FindPackage extends Find<PackageElement> {
     
     @Override
@@ -103,6 +131,9 @@ class FindPackage extends Find<PackageElement> {
     
 }
 
+/**
+ * A {@code Find} that finds the enclosing {@code ModuleElement} of an element.
+ */
 class FindModule extends Find<ModuleElement> {
     
     @Override

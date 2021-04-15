@@ -25,8 +25,18 @@ package com.karuslabs.utilitary;
 
 import java.util.Collection;
 
+/**
+ * Represents Java source code and contains methods for writing Java source code 
+ * programmatically.
+ */
 public class Source implements CharSequence {
     
+    /**
+     * Returns a string representation of the given parameters enclosed in parentheses.
+     * 
+     * @param parameters the parameters
+     * @return the formatted parameters
+     */
     public static String arguments(Object... parameters) {
         var builder = new StringBuilder().append('(');
         for (int i = 0; i < parameters.length; i++) {
@@ -38,6 +48,12 @@ public class Source implements CharSequence {
         return builder.append(')').toString();
     }
     
+    /**
+     * Returns a string representation of the given parameters enclosed in parentheses.
+     * 
+     * @param parameters the parameters
+     * @return the formatted parameters
+     */
     public static String arguments(Collection<?> parameters) {
         var builder = new StringBuilder().append('(');
         int i = 0;
@@ -57,67 +73,152 @@ public class Source implements CharSequence {
     private final StringBuilder builder = new StringBuilder();
     private String indentation = "";
     
+    /**
+     * Assigns the given value to the variable name of locally inferred type ({@code var}).
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param name the variable name
+     * @param value the value to be assignment
+     * @return {@code this}
+     */
     public Source assign(String name, String value) {
         return assign("var", name, value);
     }
     
+    /**
+     * Assigns the value to the variable name of the given type.
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param type the type of the variable
+     * @param name the variable name
+     * @param value the value to be assigned
+     * @return {@code this}
+     */
     public Source assign(String type, String name, String value) {
         builder.append(indentation).append(type).append(" ").append(name).append(" = ").append(value).append(";").append(System.lineSeparator());
         return this;
     }
     
+    /**
+     * Casts and assigns a value to a variable.
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param name the variable name
+     * @param type the cast type of the value
+     * @param value the value to be assigned
+     * @return {@code this}
+     */
     public Source cast(String name, String type, String value) {
         builder.append(indentation).append("var ").append(name).append(" = (").append(type).append(") ").append(value).append(";").append(System.lineSeparator());
         return this;
     }
     
+    /**
+     * Declares the current package name.
+     * 
+     * @param pack the package name
+     * @return {@code this}
+     */
     public Source pack(String pack) {
         builder.append("package ").append(pack).append(";").append(System.lineSeparator());
         return this;
     }
     
+    /**
+     * Imports the given class or class member or package.
+     * 
+     * @param pack the class, class member or package to be imported
+     * @return {@code this}
+     */
     public Source include(String pack) {
         builder.append("import ").append(pack).append(";").append(System.lineSeparator());
         return this;
     }
     
-    
+    /**
+     * Appends a new line.
+     * 
+     * @return {@code this}
+     */
     public Source line() {
         builder.append(System.lineSeparator());
         return this;
     }
     
-    public Source line(Object element) {
-        builder.append(indentation).append(element).append(System.lineSeparator());
+    /**
+     * Appends the given value on a new line.
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param value the value
+     * @return {@code this}
+     */
+    public Source line(Object value) {
+        builder.append(indentation).append(value).append(System.lineSeparator());
         return this;
     }
     
-    public Source line(Object... elements) {
+    /**
+     * Appends the given values on a new line.
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param values the values
+     * @return {@code this}
+     */
+    public Source line(Object... values) {
         builder.append(indentation);
-        for (var element : elements) {
-            builder.append(element);
+        for (var value : values) {
+            builder.append(value);
         }
         
         builder.append(System.lineSeparator());
         return this;
     }
     
+    /**
+     * Appends the given value.
+     * <br>
+     * <b>This method supports indention.</b>
+     * 
+     * @param value the value
+     * @return {@code this}
+     */
     public Source append(Object value) {
         builder.append(value);
         return this;
     }
     
     
+    /**
+     * Increases the current indentation by four spaces.
+     * 
+     * @return {@code this}
+     */
     public Source indent() {
-        indentation = indentation.isEmpty() ? "    " : indentation + "    ";
+        indentation = indentation + "    ";
         return this;
     }
     
+    /**
+     * Decreases the current indentation by four spaces.
+     * 
+     * @return {@code this}
+     */
     public Source unindent() {
         indentation = indentation.length() <= 4 ? "" : indentation.substring(0, indentation.length() - 4);
         return this;
     }
     
+    /**
+     * Sets the current indentation as the given value.
+     * 
+     * @param indentation the number of spaces
+     * @return {@code this}
+     */
     public Source indentation(int indentation) {
         this.indentation = " ".repeat(indentation);
         return this;

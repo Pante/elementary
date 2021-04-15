@@ -27,17 +27,41 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleTypeVisitor9;
 
+/**
+ * A {@code TypeVisitor} that creates a string representation of the visited type's
+ * name.
+ */
 public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder> {
 
+    /**
+     * A {@code TypePrinter} that creates a string representation of a visited type's
+     * fully qualified name.
+     */
     public static final TypePrinter QUALIFIED = new QualifiedTypePrinter();
+    /**
+     * A {@code TypePrinter} that creates a string representation of a visited type's
+     * simple name.
+     */
     public static final TypePrinter SIMPLE = new SimpleTypePrinter();
     
+    /**
+     * Returns the fully qualified name of the given type.
+     * 
+     * @param type the type
+     * @return the fully qualified name
+     */
     public static String qualified(TypeMirror type) {
         var builder = new StringBuilder();
         type.accept(QUALIFIED, builder);
         return builder.toString();
     }
     
+    /**
+     * Returns the simple name of the given type.
+     * 
+     * @param type the type
+     * @return the simple name
+     */
     public static String simple(TypeMirror type) {
         var builder = new StringBuilder();
         type.accept(SIMPLE, builder);
@@ -138,10 +162,20 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
         throw new UnsupportedOperationException("TypePrinter does not support " + type.getKind());
     }
     
+    /**
+     * Builds a string representation of the given raw type.
+     * 
+     * @param type the raw type
+     * @param builder the {@code StringBuildeer}
+     */
     protected abstract void rawType(DeclaredType type, StringBuilder builder);
     
 }
 
+/**
+ * A {@code TypePrinter} that creates a string representation of a visited type's
+ * fully qualified name.
+ */
 class QualifiedTypePrinter extends TypePrinter {
     @Override
     protected void rawType(DeclaredType type, StringBuilder builder) {
@@ -155,6 +189,10 @@ class QualifiedTypePrinter extends TypePrinter {
     }
 }
 
+/**
+ * A {@code TypePrinter} that creates a string representation of a visited type's
+ * simple name.
+ */
 class SimpleTypePrinter extends TypePrinter {
     @Override
     protected void rawType(DeclaredType type, StringBuilder builder) {

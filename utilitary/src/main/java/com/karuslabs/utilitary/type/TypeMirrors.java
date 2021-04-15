@@ -30,8 +30,22 @@ import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code Types} implementation that contains methods to create {@code TypeMirror}s
+ * from {@code Class}es. All overridden methods delegate execution to an underlying
+ * {@code Types}.
+ */
 public class TypeMirrors implements Types {   
     
+    /**
+     * Tests if the given {@code TypeMirror} and {@code Class} both represent
+     * the same type
+     * 
+     * @param type the {@code TypeMirror}
+     * @param expected the {@code Class}
+     * @return {@code true} if both the given {@code TypeMirror} and {@code Class}
+     *         represent the same type
+     */
     public static boolean is(TypeMirror type, Class<?> expected) {
         if (!(type instanceof DeclaredType)) {
             return false;
@@ -45,6 +59,12 @@ public class TypeMirrors implements Types {
         return ((TypeElement) element).getQualifiedName().contentEquals(expected.getName());
     }
     
+    /**
+     * Returns the {@code TypeKind} of the given type.
+     * 
+     * @param type the type
+     * @return the {@code TypeKind}
+     */
     public static TypeKind kind(Class<?> type) {
         switch (type.getName()) {
             case "boolean":
@@ -74,12 +94,25 @@ public class TypeMirrors implements Types {
     private final Elements elements;
     private final Types types;
     
+    /**
+     * Creates a {@code TypeMirrors} with the given arguments.
+     * 
+     * @param elements the {@code Elements}
+     * @param types the {@code Types}
+     */
     public TypeMirrors(Elements elements, Types types) {
         this.elements = elements;
         this.types = types;
     }
     
     
+    /**
+     * Returns a {@code TypeElement} that represents the given type.
+     * 
+     * @param type
+     * @return a {@code TypeElement} that represents the given type, or {@code null}
+     *         if the given type is not represented by a {@code TypeElement}
+     */
     public @Nullable TypeElement element(TypeMirror type) {
         var element = types.asElement(type);
         if (element instanceof TypeElement) {
@@ -90,6 +123,14 @@ public class TypeMirrors implements Types {
         }
     }
     
+    /**
+     * Returns the boxed type of a given primitive type, or the given type if it is
+     * not a primitive type.
+     * 
+     * @param type the primitive type
+     * @return the boxed type of the given primitive, or the given type if it is
+     *         not a primitive
+     */
     public TypeMirror box(TypeMirror type) {
         if (type instanceof PrimitiveType) {
             return types.boxedClass((PrimitiveType) type).asType();
@@ -100,6 +141,12 @@ public class TypeMirrors implements Types {
     }
     
     
+    /**
+     * Returns a {@code TypeMirror} that represents the given {@code Class}.
+     * 
+     * @param type the type
+     * @return a {@code TypeMirror} representation of the given type
+     */
     public TypeMirror type(Class<?> type) {
         if (type.isPrimitive()) {
             return types.getPrimitiveType(kind(type));
@@ -109,10 +156,25 @@ public class TypeMirrors implements Types {
         }
     }
     
+    /**
+     * Returns the erasure of a type.
+     *
+     * @param type  the type to be erased
+     * @return the erasure of the given type
+     * @throws IllegalArgumentException if given a type for a package or module
+     * @jls 4.6 Type Erasure
+     */
     public TypeMirror erasure(Class<?> type) {
         return types.erasure(elements.getTypeElement(type.getName()).asType());
     }
     
+    /**
+     * Creates a {@code TypeMirror} that represents the a specialized generic type.
+     * 
+     * @param type a generic type 
+     * @param parameters the type parameters
+     * @return a {@code TypeMirror} that represents a specialized generic type
+     */
     public TypeMirror specialize(Class<?> type, Class<?>... parameters) {
         var mirrors = new TypeMirror[parameters.length];
         for (int i = 0; i < parameters.length; i++) {
@@ -122,6 +184,13 @@ public class TypeMirrors implements Types {
         return specialize(type, mirrors);
     }
     
+    /**
+     * Creates a {@code TypeMirror} that represents the a specialized generic type.
+     * 
+     * @param type a generic type 
+     * @param parameters the type parameters
+     * @return a {@code TypeMirror} that represents a specialized generic type
+     */
     public TypeMirror specialize(Class<?> type, TypeMirror... parameters) {
         return types.getDeclaredType(elements.getTypeElement(type.getName()), parameters);
     }

@@ -27,12 +27,29 @@ import com.karuslabs.annotations.Static;
 
 import javax.lang.model.element.Name;
 
+/**
+ * Utilities for creating stub {@code Name}s in tests.
+ * <br>
+ * <b>This class should not be used in production.</b>
+ */
 public @Static class Names {
     
+    /**
+     * Creates a {@code Name} from the given type's simple name.
+     * 
+     * @param type the type
+     * @return a {@code Name}
+     */
     public static Name of(Class<?> type) {
         return of(type.getSimpleName());
     }
     
+    /**
+     * Creates a {@code Name} with given value.
+     * 
+     * @param name the name
+     * @return a {@code Name}
+     */
     public static Name of(String name) {
         return new MockName(name);
     }
@@ -40,10 +57,18 @@ public @Static class Names {
 
 }
 
+/**
+ * A mock implementation of {@code Name}.
+ */
 class MockName implements Name {
     
     private final String name;
     
+    /**
+     * Creates a {@code MockName} with the given value.
+     * 
+     * @param name the name
+     */
     MockName(String name) {
         this.name = name;
     }

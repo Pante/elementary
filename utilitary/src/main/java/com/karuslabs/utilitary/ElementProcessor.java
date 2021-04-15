@@ -27,8 +27,20 @@ import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 
+/**
+ * A skeletal implementation of an annotation processor that  
+ */
 public abstract class ElementProcessor extends AnnotationProcessor {
 
+    /**
+     * Finds and processes all elements in the current round that is annotated with
+     * any of the given annotations. Processing of each element is delegated to
+     * {@link #process{Element}}. Tearing down is subsequently delegated to {@link #clear}.
+     * 
+     * @param annotations the annotations
+     * @param round the current round
+     * @return {@code false}
+     */
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment round) {
         for (var element : round.getElementsAnnotatedWithAny(annotations.toArray(TypeElement[]::new))) {
@@ -39,8 +51,16 @@ public abstract class ElementProcessor extends AnnotationProcessor {
         return false;
     }
     
+    /**
+     * Processes the given annotated element.
+     * 
+     * @param element the element
+     */
     protected abstract void process(Element element);
     
+    /**
+     * Tears down the this annotation processor after each round of processing.
+     */
     protected void clear() {}
     
 }
