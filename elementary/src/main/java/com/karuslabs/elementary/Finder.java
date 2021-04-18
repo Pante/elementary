@@ -34,7 +34,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Contains methods to filter and map the results of a compilation.
+ * Filter and maps the results of a compilation.
  */
 public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
 
@@ -172,6 +172,17 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     }
     
     /**
+     * Retain only diagnostic messages that match the given pattern.
+     * 
+     * @param pattern the pattern
+     * @return {@code this}
+     */
+    public Finder matches(Pattern pattern) {
+        diagnostics.removeIf(diagnostic -> !pattern.matcher(diagnostic.getMessage(Locale.getDefault())).matches());
+        return this;
+    }
+    
+    /**
      * Retain only diagnostic messages that contain the given substring.
      * 
      * @param substring the substring
@@ -181,23 +192,11 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
         diagnostics.removeIf(diagnostic -> !diagnostic.getMessage(Locale.getDefault()).contains(substring));
         return this;
     }
-    
+
     /**
-     * Retain only diagnostic messages that match the given pattern.
+     * Returns the full descriptions of the diagnostic messages.
      * 
-     * @param pattern the pattern
-     * @return {@code this}
-     */
-    public Finder contains(Pattern pattern) {
-        diagnostics.removeIf(diagnostic -> !pattern.matcher(diagnostic.getMessage(Locale.getDefault())).matches());
-        return this;
-    }
-    
-    
-    /**
-     * Returns the full string representations of the diagnostic messages.
-     * 
-     * @return the full diagnostic messages
+     * @return the full descriptions
      */
     public List<String> diagnostics() {
         return diagnostics.stream().map(Diagnostic::toString).collect(toList());
@@ -253,7 +252,7 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
      * Returns the diagnostic message if this {@code Finder} contains exactly one
      * diagnostic message. Otherwise returns {@code null}.
      * 
-     * @return the diagnostic message if this {@code Finder} contains exactly one diagnostic message
+     * @return the diagnostic message if this {@code Finder} matches exactly one diagnostic message
      */
     public @Nullable Diagnostic<? extends JavaFileObject> one() {
         return diagnostics.size() == 1 ? diagnostics.get(0) : null;
@@ -289,9 +288,9 @@ public class Finder implements Iterable<Diagnostic<? extends JavaFileObject>> {
     
     
     /**
-     * Returns the current number of diagnostic messages.
+     * Returns the current count of diagnostic messages.
      * 
-     * @return the current number of diagnostic messages
+     * @return the current count of diagnostic messages
      */
     public int count() {
         return diagnostics.size();

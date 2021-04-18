@@ -70,9 +70,9 @@ public class Compiler {
     
     
     /**
-     * Compiles the given files.
+     * Compiles the given Java source files.
      * 
-     * @param files the Java source files
+     * @param files the Java source files to be compiled
      * @return the results of this compilation
      */
     public Results compile(JavaFileObject... files) {
@@ -80,9 +80,9 @@ public class Compiler {
     }
     
     /**
-     * Compiles the given files.
+     * Compiles the given Java source files.
      * 
-     * @param files the Java source files
+     * @param files the Java source files to be compiled
      * @return the results of this compilation
      */
     public Results compile(Iterable<? extends JavaFileObject> files) {
@@ -186,8 +186,8 @@ public class Compiler {
      * @return {@code this}
      * 
      * @throws IllegalArgumentException if the given {@code ClassLoader} or its parents are neither
-     *         {@code URLClassLoader}s nor the system/platform, or if they contain a classpath with 
-     *         folders
+     *         {@code URLClassLoader}s nor the system/platform classloader, or if they contain a 
+     *         classpath with folders
      */
     public Compiler classpath(ClassLoader loader) {
         var paths = new HashSet<String>();

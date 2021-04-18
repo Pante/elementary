@@ -29,12 +29,12 @@ import java.util.*;
 import javax.tools.*;
 
 /**
- * Represent the results of a compilation.
+ * The results of a compilation.
  */
 public @ValueType final class Results {
     
     /**
-     * The source files.
+     * The source files which were compiled.
      */
     public final List<JavaFileObject> sources;
     /**
@@ -63,9 +63,9 @@ public @ValueType final class Results {
     public final boolean success;
     
     /**
-     * Creates a {@code Results} with the given parameters.
+     * Creates a {@code Results} with the given arguments.
      * 
-     * @param sources the sources
+     * @param sources the sources which were compiled
      * @param generated the generated sources
      * @param diagnostics the diagnostic messages
      * @param success whether compilation was successful

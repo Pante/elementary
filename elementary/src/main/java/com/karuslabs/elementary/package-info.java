@@ -23,7 +23,7 @@
  */
 
 /**
- * Contains classes that facilitate compilation of Java source files and the subsequent
- * mapping of results.
+ * Contains classes that facilitate compilation of Java source files and subsequent
+ * mapping of the results.
  */
 package com.karuslabs.elementary;

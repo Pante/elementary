@@ -103,19 +103,19 @@ class FinderTest {
     
     
     @Test
-    void matches(Results results) {
+    void matches_string(Results results) {
         assertEquals(1, results.find().matches("warning").count());
     }
     
     @Test
-    void contains_string(Results results) {
+    void matches_pattern(Results results) {
+        assertEquals(1, results.find().matches(Pattern.compile("(.*rning)")).count());
+    }
+       
+    @Test
+    void contains(Results results) {
         assertEquals(1, results.find().contains("rnin").count());
     }   
-    
-    @Test
-    void contains_pattern(Results results) {
-        assertEquals(1, results.find().contains(Pattern.compile("(.*rning)")).count());
-    }
     
     
     @Test

@@ -29,12 +29,12 @@ import java.util.*;
 import javax.tools.*;
 
 /**
- * The diagnostic messages for the result of a compilation.
+ * The diagnostic messages of a compilation's results.
  */
 public @ValueType final class Diagnostics implements DiagnosticListener<JavaFileObject> {
     
     /**
-     * All diagnostics messages.
+     * All diagnostic messages.
      */
     public final List<Diagnostic<? extends JavaFileObject>> all = new ArrayList<>();
     /**
@@ -50,6 +50,11 @@ public @ValueType final class Diagnostics implements DiagnosticListener<JavaFile
      */
     public final List<Diagnostic<? extends JavaFileObject>> notes = new ArrayList<>();
     
+    /**
+     * Adds the given diagnostic to this {@code Diagnostics}.
+     * 
+     * @param diagnostic the diagnostic
+     */
     @Override
     public void report(Diagnostic<? extends JavaFileObject> diagnostic) {
         all.add(diagnostic);
