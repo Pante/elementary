@@ -109,7 +109,7 @@ public class TypeMirrors implements Types {
     /**
      * Returns a {@code TypeElement} that represents the given type.
      * 
-     * @param type
+     * @param type the type
      * @return a {@code TypeElement} that represents the given type, or {@code null}
      *         if the given type is not represented by a {@code TypeElement}
      */
@@ -162,7 +162,6 @@ public class TypeMirrors implements Types {
      * @param type  the type to be erased
      * @return the erasure of the given type
      * @throws IllegalArgumentException if given a type for a package or module
-     * @jls 4.6 Type Erasure
      */
     public TypeMirror erasure(Class<?> type) {
         return types.erasure(elements.getTypeElement(type.getName()).asType());

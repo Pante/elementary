@@ -48,8 +48,16 @@ public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
         return new AncestorWalker(types);
     }
     
+    /**
+     * The {@code TypeMirrors}.
+     */
     protected final TypeMirrors types;
     
+    /**
+     * Creates a {@code Walker} with the given {@code TypeMirrors}.
+     * 
+     * @param types the {@code TypeMirrors}
+     */
     public Walker(TypeMirrors types) {
         this.types = types;
     }

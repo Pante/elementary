@@ -28,14 +28,15 @@ import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
 
 /**
- * A skeletal implementation of an annotation processor that  
+ * A skeletal implementation of an annotation processor that finds and processes
+ * all elements annotated with the supported annotations.
  */
 public abstract class ElementProcessor extends AnnotationProcessor {
 
     /**
      * Finds and processes all elements in the current round that is annotated with
      * any of the given annotations. Processing of each element is delegated to
-     * {@link #process{Element}}. Tearing down is subsequently delegated to {@link #clear}.
+     * {@link #process(Element)}. Tearing down is subsequently delegated to {@link #clear}.
      * 
      * @param annotations the annotations
      * @param round the current round
