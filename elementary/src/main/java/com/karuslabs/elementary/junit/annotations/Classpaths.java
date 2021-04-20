@@ -40,6 +40,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 public @interface Classpaths {
 
+    /**
+     * The contained {@code @Classpath} annotations.
+     * 
+     * @return the {@code @Classpath} annotations
+     */
     Classpath[] value();
     
 }

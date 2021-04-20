@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 @Target({ANNOTATION_TYPE})
 public @interface Usage {
 
+    /**
+     * The JUnit extensions that uses the annotated target.
+     * 
+     * @return the JUnit extensions
+     */
     Class<? extends Extension>[] value();
     
 }

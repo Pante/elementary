@@ -40,6 +40,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 public @interface Inlines {
     
+    /**
+     * The contained {@code @Inline} annotations.
+     * 
+     * @return the {@code @Inline} annotations
+     */
     Inline[] value();
 
 }

@@ -41,7 +41,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Classpath {
 
     /**
-     * The fully qualified class name, i.e. {@cpde my.package.MyClass}.
+     * The fully qualified class name, i.e. {@code my.package.MyClass}.
      * 
      * @return the fully qualified class name
      */

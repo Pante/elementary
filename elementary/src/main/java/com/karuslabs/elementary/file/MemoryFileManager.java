@@ -80,7 +80,7 @@ public class MemoryFileManager extends ForwardingFileManager {
      * 
      * @param a the first {@code FileObject}
      * @param b the second {@code FileObject}
-     * @return {@code true} if the URIs of the two {@code FileObjects] are equal
+     * @return {@code true} if the URIs of the two {@code FileObject}s are equal
      */
     @Override
     public boolean isSameFile(FileObject a, FileObject b) {

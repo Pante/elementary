@@ -40,6 +40,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 public @interface Resources {
 
+    /**
+     * The contained {@code @Resource} annotations.
+     * 
+     * @return the {@code @Resource} annotations
+     */
     Resource[] value();
     
 }
