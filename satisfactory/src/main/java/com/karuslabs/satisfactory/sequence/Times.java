@@ -67,8 +67,8 @@ public abstract class Times<T> implements Part {
     }
     
     /**
-     * Tests if the current number of times the assertion is satisfied is expected
-     * before resetting the current number of times.
+     * Tests if the number of times this {@code Times} was satisfied is expected,
+     * before resetting this {@code Times}.
      * 
      * @return {@code true} if the given current number of times is the expected
      *         number of times
@@ -80,11 +80,10 @@ public abstract class Times<T> implements Part {
     }
     
     /**
-     * Tests if the given times is the expected number of times an assertion needs
-     * to be satisfied.
+     * Tests if the given number of times this {@code Tims} was satisfied is expected.
      * 
-     * @param current the current number of times the assertion is satisfied 
-     * @return {@code true} if the given times is the expected number of times
+     * @param current the current number of times this {@code Times} was satisfied 
+     * @return {@code true} if the given number of times is the expected number of times
      */
     protected abstract boolean times(int current);
     

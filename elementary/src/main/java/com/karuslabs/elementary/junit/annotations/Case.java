@@ -30,13 +30,21 @@ import java.lang.annotation.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * An annotation to mark and simplify retrieval of elements in tests extended  with {@code ToolsExtension}.
+ * An annotation to mark and simplify retrieval of test cases in tests extended 
+ * with {@code ToolsExtension}.
+ * 
+ * @see com.karuslabs.elementary.junit.Cases
  */
 @Usage(ToolsExtension.class)
 @Documented
 @Retention(RUNTIME)
 public @interface Case {
     
+    /**
+     * An optional label for this case.
+     * 
+     * @return a label
+     */
     String value() default "";
     
 }

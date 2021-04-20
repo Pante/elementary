@@ -36,8 +36,8 @@ import static com.karuslabs.satisfactory.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 
 /**
- * An assertion for methods which delegates testing of individual parts of a method
- * to {@code Assertion}s and {@code Sequence}s.
+ * An assertion for methods which delegates testing of the individual parts of a 
+ * method to {@code Assertion}s and {@code Sequence}s.
  */
 public class Method implements Assertion<ExecutableElement> {
 
@@ -101,7 +101,7 @@ public class Method implements Assertion<ExecutableElement> {
     }
     
     /**
-     * A builder for {@code Method}s.
+     * A builder of {@code Method}s.
      */
     public static class Builder implements Supplier<Method> {
         
@@ -192,7 +192,7 @@ public class Method implements Assertion<ExecutableElement> {
         }
         
         /**
-         * Returns a {@code Method} with the given condition.
+         * Returns a {@code Method} with the given condition message.
          * 
          * @param condition the condition for satisfying this assertion
          * @return a {@code Method}

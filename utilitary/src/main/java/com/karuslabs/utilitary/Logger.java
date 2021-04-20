@@ -34,7 +34,8 @@ import static javax.tools.Diagnostic.Kind.*;
 
 /**
  * A logger in an annotation processing environment that forwards all logged messages 
- * to an underlying {@code Messager} and tracks whether an error has been logged. 
+ * to an underlying {@code Messager}. In addition, this logger tracks whether an
+ * error has been logged. 
  */
 public class Logger {
 
@@ -61,7 +62,7 @@ public class Logger {
      * @param location the location of the error, {@code null} if none
      * @param value the error's value
      * @param reason the reason that the error occurred
-     * @param resolution a solution to fix the error
+     * @param resolution a resolution to fix the error
      */
     public void error(@Nullable Element location, Object value, String reason, String resolution) {
         error(location, format(value, reason, resolution));
@@ -96,14 +97,14 @@ public class Logger {
      * @param location the location of the warning, {@code null} if none
      * @param value the warning's value
      * @param reason the reason that the warning occurred
-     * @param resolution a solution to fix the warning
+     * @param resolution a resolution to fix the warning
      */
     public void warn(@Nullable Element location, Object value, String reason, String resolution) {
         warn(location, format(value, reason, resolution));
     }
     
     /**
-     * Emits an warning at the given location with the given value, reason and resolution.
+     * Emits an warning at the given location with the given value and reason.
      * 
      * @param location the location of the warning, {@code null} if none
      * @param value the warning's value
@@ -137,7 +138,7 @@ public class Logger {
     }
     
     /**
-     * Emits a note at the given location with the given value, reason and resolution.
+     * Emits a note at the given location with the given value and reason.
      * 
      * @param location the location of the note, {@code null} if none
      * @param value the note's value
@@ -148,7 +149,7 @@ public class Logger {
     }
     
     /**
-     * Emits a note at the given location with the given value, reason and resolution.
+     * Emits a note at the given location with the given note.
      * 
      * @param location the location of the note, {@code null} if none
      * @param message the note

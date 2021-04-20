@@ -37,9 +37,11 @@ import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.scan;
 
 /**
- * A JUnit extension that compiles Java source files specified by {@code @Classpath}
- * and {@code @Inline} annotations on the test class and method. Results of the
- * compilation may be obtained by specifying {@link Results} as a test method parameter.
+ * A JUnit extension that compiles Java source files specified by {@code @Classpath},
+ * {@code @Inline}, {@code @Introspect} and {@code @Resource} annotations on the 
+ * test class and method. Results of the compilation may be obtained by specifying 
+ * {@link Results} as a test method parameter. The only constructor and method parameter
+ * that this extension supports is {@code Results}.
  * 
  * @see com.karuslabs.elementary.junit.annotations
  */
@@ -91,6 +93,13 @@ public class JavacExtension implements ParameterResolver {
     }
     
     
+    /**
+     * Tests if a parameter is a {@code Results}.
+     * 
+     * @param parameter the parameter's context
+     * @param context this extension's context
+     * @return {@code true} if the parameter is a {@code Results}; otherwise {@code false}
+     */
     @Override
     public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
         return parameter.getParameter().getType() == Results.class;

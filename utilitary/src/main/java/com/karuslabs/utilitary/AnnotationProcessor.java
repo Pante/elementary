@@ -30,30 +30,30 @@ import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
 /**
- * A skeletal implementation of an annotation processor that contains fields 
- * for accessing the annotation processing environment.
+ * A skeletal implementation of an annotation processor that provides facilities 
+ * to access the annotation processing environment.
  */
 public abstract class AnnotationProcessor extends AbstractProcessor {
     
     /**
      * The {@code Elements} in the current annotation processing environment.
-     * Not available until {@link #init(ProcessingEnvironment)} has been called.
+     * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
     protected @Lazy Elements elements;
     /**
      * The {@code TypeMirrors} in the current annotation processing environment.
-     * Not available until {@link #init(ProcessingEnvironment)} has been called.
+     * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
     protected @Lazy TypeMirrors types;
     /**
      * The {@code Logger} in the current annotation processing environment.
-     * Not available until {@link #init(ProcessingEnvironment)} has been called.
+     * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
     protected @Lazy Logger logger;
     
     /**
      * Initializes this annotation processor and its fields.
-     * <br>
+     * <br><br>
      * <b>Subclasses that override this method must call it's superclass's method.</b>
      * 
      * @param environment the processing environment

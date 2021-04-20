@@ -29,8 +29,8 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * A {@code Sequence} that expects each value in a sequence of values to be called 
- * a certain number of times.
+ * A {@code Sequence} that expects each value in a collection to be called a certain 
+ * number of times.
  * 
  * @param <T> the type of the tested values
  */

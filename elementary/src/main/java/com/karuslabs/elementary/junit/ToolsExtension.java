@@ -38,11 +38,11 @@ import org.junit.jupiter.api.extension.*;
 /**
  * A JUnit extension that provides an annotation processing environment in which
  * to execute tests. The annotation processing utilities can be accessed either
- * via {@link Tools} or dependency injection in the test class's constructor
- * or test method's parameters.
- * 
+ * via {@link Tools} or injected through the test class's constructor or test method's 
+ * parameters.
+ * <br><br>
  * Java source files may be included for compilation by annotating the test class
- * with {@code @Classpath} and/or {@code @Inline}.
+ * with {@code @Classpath}, {@code @Inline}, {@code @Introspect} or {@code @Resource}.
  */
 public class ToolsExtension extends Daemon implements ParameterResolver {
     
@@ -57,6 +57,14 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
         return resolved;
     }
     
+    /**
+     * Tests if a parameter is supported. All types returned by the methods in
+     * {@code Tools} are supported.
+     * 
+     * @param parameter the parmaeter's context
+     * @param context this extension's context
+     * @return {@code true} if the parameter is supported; otherwise {@code false}
+     */
     @Override
     public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
         return resolve(compiler(context).environment(), parameter.getParameter().getType()) != null;

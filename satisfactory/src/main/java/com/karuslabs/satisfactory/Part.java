@@ -24,8 +24,8 @@
 package com.karuslabs.satisfactory;
 
 /**
- * Represents a part of a Java language construct from which more complex language 
- * constructs is composed. 
+ * Represents an assertion for a part of a Java language construct from which 
+ * assertions for more complex language constructs are composed. 
  */
 @FunctionalInterface
 public interface Part {

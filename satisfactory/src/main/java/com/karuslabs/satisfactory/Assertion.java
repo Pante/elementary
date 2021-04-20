@@ -31,7 +31,7 @@ import java.util.function.Supplier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * An assertion for a language construct in an annotation processing environment.
+ * An assertion for testing an {@code Element} in an annotation processing environment.
  * 
  * @param <T> the type of the value which this {@code Assertion} tests
  */
@@ -40,7 +40,7 @@ public interface Assertion<T> extends Part {
     /**
      * Tests the given value using the given {@code TypeMirrors}.
      * 
-     * @param types the TypeMirrors
+     * @param types the {@code TypeMirrors}
      * @param value the value to be tested
      * @return {@code true} if the given value satisfies this assertion, otherwise {@code false}
      */
@@ -55,8 +55,8 @@ public interface Assertion<T> extends Part {
     
     /**
      * Returns the conditions for satisfying this assertion.
-     * <br>
-     * <b>Default implementation:</b>
+     * <br><br>
+     * <b>Default implementation:</b><br>
      * Delegates execution to {@link #condition()}.
      * 
      * @return the conditions for satisfying this assertion
@@ -70,8 +70,8 @@ public interface Assertion<T> extends Part {
      * AND of this assertion and {@code other}.
      * 
      * @param other the other assertion
-     * @return a composed assertion that represents the short-circuiting logical 
-     *         AND of this assertion and the other assertion
+     * @return a composed assertion that represents a short-circuiting logical AND 
+     *         of this assertion and the other assertion
      */
     default Assertion<T> and(Assertion<T> other) {
         return new And<>(this, other);
@@ -82,7 +82,7 @@ public interface Assertion<T> extends Part {
      * AND of this assertion and the assertion supplied by {@code other}.
      * 
      * @param other the supplier of the other assertion
-     * @return a composed assertion that represents the short-circuiting logical 
+     * @return a composed assertion that represents a short-circuiting logical 
      *         AND of this assertion and the supplied assertion
      */
     default Assertion<T> and(Supplier<Assertion<T>> other) {
@@ -94,7 +94,7 @@ public interface Assertion<T> extends Part {
      * of this assertion and {@code other}.
      * 
      * @param other the other assertion
-     * @return a composed assertion that represents the short-circuiting logical 
+     * @return a composed assertion that represents a short-circuiting logical 
      *         OR of this assertion and the other assertion
      */
     default Assertion<T> or(Assertion<T> other) {
@@ -106,7 +106,7 @@ public interface Assertion<T> extends Part {
      * OR of this assertion and the assertion supplied by {@code other}.
      * 
      * @param other the supplier of the other assertion
-     * @return a composed assertion that represents the short-circuiting logical 
+     * @return a composed assertion that represents a short-circuiting logical 
      *         OR of this assertion and the supplied assertion
      */
     default Assertion<T> or(Supplier<Assertion<T>> other) {

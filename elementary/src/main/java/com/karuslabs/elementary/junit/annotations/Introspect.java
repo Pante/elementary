@@ -34,10 +34,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Denotes that the containing file of the annotated element is to be included
  * for compilation.
  * <br>
- * <b>Note: </b>
+ * <br>
+ * <b>Note: </b><br>
  * If no value is specified for this annotation, the top level enclosing class of
- * the annotated element is used to resolve the file name. The file may not be named 
- * after the top level class of an annotated element if it contains multiple top level
+ * the annotated element is used to resolve the file name. The file may not always
+ * be named after the top level class of an annotated element if it contains multiple top level
  * classes.
  * 
  * In addition, this annotation requires a build tool to copy source files from the
@@ -51,6 +52,9 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target(TYPE)
 public @interface Introspect {
 
+    /**
+     * A value to signify that the name of the enclosing top level class is to be used.
+     */
     public static final String DEFAULT = "${TRACE_ENCLOSING_CLASS}";
     
     /**

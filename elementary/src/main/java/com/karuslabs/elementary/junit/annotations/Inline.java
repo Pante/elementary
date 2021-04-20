@@ -42,11 +42,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Inline {
     
     /**
+     * The fully qualified class name, i.e. {@code my.package.MyClass}.
+     * 
      * @return the fully qualified class name
      */
     String name();
     
     /**
+     * The Java source code.
+     * 
      * @return the lines of the Java source file.
      */
     String[] source();

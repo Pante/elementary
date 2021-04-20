@@ -23,6 +23,6 @@
  */
 
 /**
- * Contains annotations used by JUnit extensions in {@link com.karuslabs.elementary.junit}.
+ * Contains annotations used in {@link com.karuslabs.elementary.junit}.
  */
 package com.karuslabs.elementary.junit.annotations;

@@ -29,7 +29,7 @@ import javax.lang.model.element.Name;
 
 /**
  * Utilities for creating stub {@code Name}s in tests.
- * <br>
+ * <br><br>
  * <b>This class should not be used in production.</b>
  */
 public @Static class Names {

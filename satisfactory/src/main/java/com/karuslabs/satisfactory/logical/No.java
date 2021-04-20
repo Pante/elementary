@@ -39,7 +39,7 @@ public class No<T> {
     public final T[] elements;
     
     /**
-     * Creates a {@code No} with the given elements
+     * Creates a {@code No} with the given elements.
      * 
      * @param elements the elements to be negated
      */

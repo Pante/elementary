@@ -27,7 +27,7 @@ import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * An assertion that always returns {@code true}.
+ * An assertion is always {@code true}.
  * 
  * @param <T> the type of the tested value 
  */

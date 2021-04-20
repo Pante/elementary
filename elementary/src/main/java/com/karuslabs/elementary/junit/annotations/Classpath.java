@@ -40,6 +40,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Classpaths.class)
 public @interface Classpath {
 
+    /**
+     * The fully qualified class name, i.e. {@cpde my.package.MyClass}.
+     * 
+     * @return the fully qualified class name
+     */
     String value();
     
 }

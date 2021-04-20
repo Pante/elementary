@@ -27,7 +27,7 @@ import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * An assertion that represents the negation of another assertion.
+ * An assertion that negates another assertion.
  * 
  * @param <T> the type of the tested value
  */

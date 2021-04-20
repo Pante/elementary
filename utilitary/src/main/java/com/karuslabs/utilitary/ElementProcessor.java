@@ -61,6 +61,9 @@ public abstract class ElementProcessor extends AnnotationProcessor {
     
     /**
      * Tears down the this annotation processor after each round of processing.
+     * <br><br>
+     * <b>Default implementation:</b><br>
+     * Does nothing.
      */
     protected void clear() {}
     

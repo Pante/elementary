@@ -39,6 +39,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 public @interface Processors {
 
+    /**
+     * The types of the annotation processors to be applied.
+     * 
+     * @return the type of the annotation processors
+     */
     Class<? extends javax.annotation.processing.Processor>[] value();
     
 }

@@ -60,12 +60,20 @@ public @Static class Assertions {
     
     /**
      * Creates a {@code Method.Builder} with the given assertions and sequences.
+     * <br><br>
+     * The supported assertions and sequences are as folllows:<br>
+     * <ul>
+     * <li>Annotation assertions<li>
+     * <li>Modifier assertions<li>
+     * <li>Type assertions</li>
+     * <li>{@code VariableElement} sequences<li>
+     * </ul>
      * 
      * @param parts the assertions and sequences
      * @return a {@code Method.Builder} with the given assertions and sequences
      * @throws IllegalArgumentException if a given assertion or sequence is unsupported
-     * @throws IllegalStateException if the given parts contain assertions or sequences 
-                                     for the same part
+     * @throws IllegalStateException if the given parts contain multiple assertions 
+     *                               or sequences for the same part
      */
     public static Method.Builder method(Part... parts) {
         return new Method.Builder(parts);
@@ -73,11 +81,18 @@ public @Static class Assertions {
     
     /**
      * Creates a {@code Variable.Builder} with the given assertions.
+     * <br><br>
+     * The supported assertions are as follows:<br>
+     * <ul>
+     * <li>Annotation assertions<li>
+     * <li>Modifier assertions<li>
+     * <li>Type assertions</li>
+     * </ul>
      * 
      * @param assertions the assertions
      * @return a {@code Variable.Builder}
      * @throws IllegalArgumentException if a given assertion is unsupported
-     * @throws IllegalStateException if the given assertions contain assertions
+     * @throws IllegalStateException if the given assertions contain multiple assertions
                                      for the same part
      */
     public static Variable.Builder variable(Assertion<?>... assertions) {
@@ -166,10 +181,10 @@ public @Static class Assertions {
     }
     
     /**
-     * Returns an assertion that is satisfied if a {@code TypeMirror} is a primitive
-     * that is equal to the given {@code TypeKind}.
+     * Returns an assertion that is satisfied if a {@code TypeMirror} is equal to 
+     * the given primitive {@code TypeKind}.
      * 
-     * @param primitive the {@code TypeKind}
+     * @param primitive the primitive {@code TypeKind}
      * @return an assertion that is satisfied if a {@code TypeMirror}'s kind is
      *         equal to the given kind
      */
@@ -262,11 +277,10 @@ public @Static class Assertions {
     }
     
     /**
-     * Returns an assertion that is the negation of the assertion supplied by the
-     * given supplier.
+     * Returns an assertion that is the negation of the supplied assertion.
      * 
      * @param <T> the type of the tested value
-     * @param assertion the assertion to negate
+     * @param assertion the supplier which provides the assertion to be negated
      * @return an assertion that negates the supplied assertion
      */
     public static <T> Assertion<T> not(Supplier<? extends Assertion<T>> assertion) {

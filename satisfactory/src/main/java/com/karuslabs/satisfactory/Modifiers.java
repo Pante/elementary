@@ -62,7 +62,13 @@ public abstract class Modifiers implements Assertion<Set<Modifier>> {
         }
     }
 
+    /**
+     * The modifiers.
+     */
     protected final Set<Modifier> modifiers;
+    /**
+     * The condition.
+     */
     protected final String condition;
     
     /**

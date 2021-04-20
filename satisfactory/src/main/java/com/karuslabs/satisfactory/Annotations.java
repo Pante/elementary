@@ -36,7 +36,7 @@ import javax.lang.model.element.Element;
 public abstract class Annotations implements Assertion<Element> {
     
     /**
-     * The format used to describe annotations.
+     * A format used to describe annotations.
      */
     public static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
     /**

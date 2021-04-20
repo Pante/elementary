@@ -33,8 +33,8 @@ import javax.lang.model.element.Element;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * Represents the elements annotated with {@link Case} in an annotation processing
- * round when used in conjunction with {@code ToolsExtension}.
+ * Utilities to find and manipulate elements annotated with {@code @Case} in an 
+ * annotation processing round when used in conjunction with {@code ToolsExtension}.
  */
 public class Cases implements Iterable<Element> {
     
@@ -42,7 +42,7 @@ public class Cases implements Iterable<Element> {
     private @Lazy List<Element> elements;
     
     /**
-     * Creates a {@code Cases} for the given round.
+     * Creates a {@code Cases} for the given annotation processing round.
      * 
      * @param environment the round's environment
      */
@@ -51,7 +51,7 @@ public class Cases implements Iterable<Element> {
     }
     
     /**
-     * Returns an iterator over {@code Element}s.
+     * Returns an iterator over the {@code Element}s annotated with {@code @Case}.
      * 
      * @return an iterator
      */
@@ -62,8 +62,8 @@ public class Cases implements Iterable<Element> {
     
     
     /**
-     * Returns an element annotated with {@code @Case} if the annotation processing
-     * round contains exactly one such element.
+     * Returns an element if this annotation processing round contains exactly one
+     * element annotated with {@code @Case}.
      * 
      * @return the only element annotated with {@code @Case}; otherwise {@code null}
      */
@@ -72,12 +72,11 @@ public class Cases implements Iterable<Element> {
     }
     
     /**
-     * Returns an element annotated with {@code @Case} if the annotation processing
-     * round contains exactly one such element which label exactly matches the given
-     * label.
+     * Returns an elementif the annotation processing round contains exactly one 
+     * element annotated with {@code @Case} and the given label.
      * 
      * @param label the label
-     * @return the only annotated element which label exactly matches the given label; else {@code null} 
+     * @return the only annotated element with the given label; else {@code null} 
      */
     public @Nullable Element one(String label) {
        var elements = get(label);
@@ -88,7 +87,7 @@ public class Cases implements Iterable<Element> {
      * Returns an element annotated with {@code @Case} at the given index in the
      * annotation processing round.
      * 
-     * @param index the index
+     * @param index the index of the element
      * @return the element at the given index
      */
     public Element get(int index) {
@@ -96,8 +95,7 @@ public class Cases implements Iterable<Element> {
     }
     
     /**
-     * Returns elements annotated with {@code @Case} which label exactly matches
-     * the given label.
+     * Returns elements annotated with {@code @Case} and the given label.
      * 
      * @param label the label
      * @return the annotated elements
@@ -115,7 +113,7 @@ public class Cases implements Iterable<Element> {
     
     
     /**
-     * Returns elements annotated with {@code @Case} in the annotation processing
+     * Returns elements annotated with {@code @Case} in this annotation processing
      * round.
      * 
      * @return the annotated elements
@@ -129,7 +127,7 @@ public class Cases implements Iterable<Element> {
     }
     
     /**
-     * Returns the number of elements annotated with {@code @Case} in the annotation
+     * Returns the number of elements annotated with {@code @Case} in this annotation
      * processing round.
      * 
      * @return the number of elements

@@ -23,7 +23,7 @@
  */
 
 /**
- * Contains classes for verifying the number of times an assertion is invoked and 
- * testing sequences of elements.
+ * Contains classes for verifying the number of times an assertion is satisfied 
+ * and testing collections of values.
  */
 package com.karuslabs.satisfactory.sequence;

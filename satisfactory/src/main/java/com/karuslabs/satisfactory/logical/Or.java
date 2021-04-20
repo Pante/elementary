@@ -43,7 +43,7 @@ public final class Or<T> implements Assertion<T> {
     public final Assertion<T> right;
     
     /**
-     * Creates a {@code OR} with the given assertions for the left and right sides.
+     * Creates an {@code Or} with the given assertions for the left and right sides.
      * 
      * @param left the assertion on the left side
      * @param right the assertion on the right side

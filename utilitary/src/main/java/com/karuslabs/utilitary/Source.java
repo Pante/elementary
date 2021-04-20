@@ -32,16 +32,16 @@ import java.util.Collection;
 public class Source implements CharSequence {
     
     /**
-     * Returns a string representation of the given parameters enclosed in parentheses.
+     * Returns a string representation of the given arguments enclosed in parentheses.
      * 
-     * @param parameters the parameters
-     * @return the formatted parameters
+     * @param arguments the arguments
+     * @return the formatted arguments
      */
-    public static String arguments(Object... parameters) {
+    public static String arguments(Object... arguments) {
         var builder = new StringBuilder().append('(');
-        for (int i = 0; i < parameters.length; i++) {
-            builder.append(parameters[i]);
-            if (i < parameters.length - 1) {
+        for (int i = 0; i < arguments.length; i++) {
+            builder.append(arguments[i]);
+            if (i < arguments.length - 1) {
                 builder.append(", ");
             }
         }
@@ -49,17 +49,17 @@ public class Source implements CharSequence {
     }
     
     /**
-     * Returns a string representation of the given parameters enclosed in parentheses.
+     * Returns a string representation of the given arguments enclosed in parentheses.
      * 
-     * @param parameters the parameters
-     * @return the formatted parameters
+     * @param arguments the arguments
+     * @return the formatted arguments
      */
-    public static String arguments(Collection<?> parameters) {
+    public static String arguments(Collection<?> arguments) {
         var builder = new StringBuilder().append('(');
         int i = 0;
-        for (var parameter : parameters) {
+        for (var parameter : arguments) {
             builder.append(parameter);
-            if (i < parameters.size() - 1) {
+            if (i < arguments.size() - 1) {
                 builder.append(", ");
             }
             
@@ -75,7 +75,7 @@ public class Source implements CharSequence {
     
     /**
      * Assigns the given value to the variable name of locally inferred type ({@code var}).
-     * <br>
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param name the variable name
@@ -88,7 +88,7 @@ public class Source implements CharSequence {
     
     /**
      * Assigns the value to the variable name of the given type.
-     * <br>
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param type the type of the variable
@@ -102,8 +102,8 @@ public class Source implements CharSequence {
     }
     
     /**
-     * Casts and assigns a value to a variable.
-     * <br>
+     * Casts and assigns a value to a variable of locally inferred type ({@code var}).
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param name the variable name
@@ -128,7 +128,7 @@ public class Source implements CharSequence {
     }
     
     /**
-     * Imports the given class or class member or package.
+     * Imports the given class, nested class member or package.
      * 
      * @param pack the class, class member or package to be imported
      * @return {@code this}
@@ -139,7 +139,7 @@ public class Source implements CharSequence {
     }
     
     /**
-     * Appends a new line.
+     * Appends a new line using the system's line separator.
      * 
      * @return {@code this}
      */
@@ -150,7 +150,7 @@ public class Source implements CharSequence {
     
     /**
      * Appends the given value on a new line.
-     * <br>
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param value the value
@@ -163,7 +163,7 @@ public class Source implements CharSequence {
     
     /**
      * Appends the given values on a new line.
-     * <br>
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param values the values
@@ -181,7 +181,7 @@ public class Source implements CharSequence {
     
     /**
      * Appends the given value.
-     * <br>
+     * <br><br>
      * <b>This method supports indention.</b>
      * 
      * @param value the value
@@ -214,7 +214,7 @@ public class Source implements CharSequence {
     }
     
     /**
-     * Sets the current indentation as the given value.
+     * Sets the current indentation.
      * 
      * @param indentation the number of spaces
      * @return {@code this}

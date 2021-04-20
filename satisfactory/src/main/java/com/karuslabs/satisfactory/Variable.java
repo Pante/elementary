@@ -84,7 +84,7 @@ public class Variable implements Assertion<VariableElement> {
     }
     
     /**
-     * A builder for {@code Variable}s.
+     * A builder of {@code Variable}s.
      */
     public static class Builder implements Supplier<Variable> {
         

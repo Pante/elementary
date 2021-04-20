@@ -75,6 +75,13 @@ public class MemoryFileManager extends ForwardingFileManager {
     }
     
     
+    /**
+     * Determines if the two {@code FileObject}s are equal by comparing their URIs.
+     * 
+     * @param a the first {@code FileObject}
+     * @param b the second {@code FileObject}
+     * @return {@code true} if the URIs of the two {@code FileObjects] are equal
+     */
     @Override
     public boolean isSameFile(FileObject a, FileObject b) {
         return a.toUri().equals(b.toUri());

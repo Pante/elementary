@@ -31,7 +31,8 @@ import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 /**
- * A meta-annotation that documents usage of the other annotations by JUnit extensions.
+ * A meta-annotation that documents usage of the other annotations by JUnit extensions
+ * in {@link com.karuslabs.elementary.junit}.
  */
 @Documented
 @Retention(SOURCE)

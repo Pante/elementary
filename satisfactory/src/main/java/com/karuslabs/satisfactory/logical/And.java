@@ -43,7 +43,7 @@ public final class And<T> implements Assertion<T> {
     public final Assertion<T> right;
     
     /**
-     * Creates an {@code And} with the given assertion for the left and right sides.
+     * Creates an {@code And} with the given assertions for the left and right sides.
      * 
      * @param left the assertion on the left side
      * @param right the assertion on the right side

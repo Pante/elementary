@@ -35,7 +35,7 @@ import javax.tools.*;
 import static javax.tools.JavaFileObject.Kind.SOURCE;
 
 /**
- * A utility class for creating {@code JavaFileObject}s.
+ * Utilities for creating {@code JavaFileObject}s.
  */
 public @Static class FileObjects {
     
@@ -45,8 +45,8 @@ public @Static class FileObjects {
     public static final JavaFileObject DUMMY = ofLines("Dummy", "class Dummy {}");
     
     /**
-     * Creates {@code JavaFileObject}s using the {@code Classpath}, {@code @Introspect},
-     * {@code @Resource} and {@code @Inline} annotations on the given class.
+     * Creates {@code JavaFileObject}s using the {@code @Classpath}, {@code @Inline},
+     * {@code @Introspect} and {@code @Resource} annotations on the given class.
      * 
      * @param annotated the annotated class
      * @return the {@code JavaFileObject}s
@@ -58,14 +58,14 @@ public @Static class FileObjects {
         if (introspect != null) {
             var host = annotated.getNestHost();
             var file = introspect.value().equals(Introspect.DEFAULT) ? host.getName() : host.getPackageName() + "." + introspect.value();
-            files.add(ofSource(file));
+            files.add(ofClass(file));
         }
         
         return files;
     }
     
     /**
-     * Creates {@code JavaFileObject}s using the {@code Classpath}, {@code @Inline} 
+     * Creates {@code JavaFileObject}s using the {@code @Classpath}, {@code @Inline} 
      * and {@code @Resource} annotations on the given element.
      * 
      * @param annotated the annotated element
@@ -75,7 +75,7 @@ public @Static class FileObjects {
         var files = new ArrayList<JavaFileObject>();
         
         for (var name : annotated.getAnnotationsByType(Classpath.class)) {
-            files.add(ofSource(name.value()));
+            files.add(ofClass(name.value()));
         }
         
         for (var resource : annotated.getAnnotationsByType(Resource.class)) {
@@ -92,7 +92,7 @@ public @Static class FileObjects {
     
     /**
      * Creates a {@code JavaFileObject} using the given fully qualified class name
-     * and source code.
+     * and source code. Each line is delimited by the system's line separator.
      * 
      * @param fullyQualifiedName the fully qualified class name
      * @param lines the source code
@@ -104,7 +104,7 @@ public @Static class FileObjects {
     
     /**
      * Creates a {@code JavaFileObject} using the given fully qualified class name
-     * and source code.
+     * and source code. Each line is delimited by the system's line separator.
      * 
      * @param fullyQualifiedName the fully qualified class name
      * @param lines the source code
@@ -131,14 +131,14 @@ public @Static class FileObjects {
      * Creates a {@code JavaFileObject} from a source file that the given fully qualified
      * name represents, i.e. {@code my.package.MyClass}.
      * 
-     * @param source the fully qualified name of a source file
+     * @param fullyQualifiedName the fully qualified name of a source file
      * @return a {@code JavaFileObject}
-     * @throws IllegalArgumentException if the given resource does not exist on the
+     * @throws IllegalArgumentException if the given class does not exist on the
      *         current clssspath
-     * @throws UncheckedIOException if the resource could not be opened
+     * @throws UncheckedIOException if the file could not be opened
      */
-    public static JavaFileObject ofSource(String source) {
-        return ofResource(source.replace('.', '/') + ".java");
+    public static JavaFileObject ofClass(String fullyQualifiedName) {
+        return ofResource(fullyQualifiedName.replace('.', '/') + ".java");
     }
     
     
@@ -203,7 +203,7 @@ public @Static class FileObjects {
     
     
     /**
-     * Deduces the file kind of the given URI.
+     * Deduces the file extension of the given URI.
      * 
      * @param uri the URI
      * @return the file kind that the given URI represents

@@ -28,7 +28,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * A {@code Sequence} that always returns {@code true}.
+ * A {@code Sequence} that is always {@code true}.
  * 
  * @param <T> the type of the tested values
  */
@@ -37,7 +37,7 @@ public class AnySequence<T> extends Sequence<T> {
     private final Class<?> part;
     
     /**
-     * Creates a {@code AnySequence} for the given part.
+     * Creates an {@code AnySequence} for the given part.
      * 
      * @param part the supported part
      */

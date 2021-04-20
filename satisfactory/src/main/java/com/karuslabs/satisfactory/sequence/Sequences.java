@@ -30,25 +30,25 @@ import javax.lang.model.element.VariableElement;
 import javax.lang.model.type.TypeMirror;
 
 /**
- * This class provides constants for frequently used assertion and utility methods 
+ * Provides constants for frequently used assertion and utility methods 
  * for creating {@code Assertion}s.
  */
 public class Sequences {
     
     /**
-     * A {@code Sequence} that is satisfied by any sequence of {@code VariableElement}s.
+     * A {@code Sequence} that is satisfied by any collection of {@code VariableElement}s.
      */
     public static final Sequence<VariableElement> ANY_PARAMETERS = new AnySequence<>(VariableElement.class);
     /**
-     * A {@code Sequence} that is satisfied any sequence of {@code TypeMirror}s.
+     * A {@code Sequence} that is satisfied by any collection of {@code TypeMirror}s.
      */
     public static final Sequence<TypeMirror> ANY_EXCEPTIONS = new AnySequence<>(TypeMirror.class);
     /**
-     * A {@code Sequence} that is satisfied by an empty sequence of {@code VariableElement}s.
+     * A {@code Sequence} that is satisfied by an empty collection of {@code VariableElement}s.
      */
     public static final Sequence<VariableElement> NO_PARAMETERS = new NoSequence<>(VariableElement.class);
     /**
-     * A {@code Sequence} that is satisfied by an empty sequence of {@code TypeMirror}s.
+     * A {@code Sequence} that is satisfied by an empty collection of {@code TypeMirror}s.
      */
     public static final Sequence<TypeMirror> NO_EXCEPTIONS = new NoSequence<>(TypeMirror.class);
     
@@ -75,13 +75,14 @@ public class Sequences {
     
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements and
-     * the supplied assertions are equal and ordered. <b>Results may be inconsistent
-     * between invocations if the collection is unordered.</b>
+     * Returns a {@code Sequence} that is satisfied if a collection of elements and
+     * the supplied assertions are equal and similarly ordered. 
+     * <br><br>
+     * <b>Results may be inconsistent between invocations if the collection is unordered.</b>
      * 
      * @param <T> the type of the tested values
      * @param assertions the supplier of assertions to satisfy
-     * @return a sequence that is satisfied if a sequence of elements is equal to
+     * @return a sequence that is satisfied if a collection of elements is equal to
      *         the supplied assertions
      */
     public static <T> Sequence<T> equal(Supplier<? extends Assertion<T>>... assertions) {
@@ -94,13 +95,14 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements and
-     * given assertions are equal and ordered. <b>Results may be inconsistent between
-     * invocations if the collection is unordered.</b>
+     * Returns a {@code Sequence} that is satisfied if a collection of elements and
+     * given assertions are equal and similarly ordered.
+     * <br><br>
+     * <b>Results may be inconsistent between invocations if the collection is unordered.</b>
      * 
      * @param <T> the type of the tested values
      * @param assertions the assertions to satisfy
-     * @return a sequence that is satisfied if a sequence of elements is equal to
+     * @return a sequence that is satisfied if a collection of elements is equal to
      *         the given assertions
      */
     public static <T> Sequence<T> equal(Assertion<T>... assertions) {
@@ -108,12 +110,12 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements each
+     * Returns a {@code Sequence} that is satisfied if a collection of elements each
      * satisfies the supplied assertion.
      * 
      * @param <T> the type of the tested values
      * @param assertion the supplier of the assertion to satisfy
-     * @return a sequence that is satisfied if a sequence of elements each satisfies
+     * @return a sequence that is satisfied if each element in a collection satisfies
      *         the supplied assertion
      */
     public static <T> Sequence<T> each(Supplier<? extends Assertion<T>> assertion) {
@@ -121,12 +123,12 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements each
+     * Returns a {@code Sequence} that is satisfied if each value in a collection
      * satisfies the given assertion.
      * 
      * @param <T> the type of the tested values
      * @param assertion the assertion to satisfy
-     * @return a sequence that is satisfied if a sequence of elements each satisfies
+     * @return a sequence that is satisfied if a collection of elements each satisfies
      *         the given assertion
      */
     public static <T> Sequence<T> each(Assertion<T> assertion) {
@@ -135,12 +137,12 @@ public class Sequences {
     
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements
-     * contains all the given {@code Times}.
+     * Returns a {@code Sequence} that is satisfied if a collection of values contains 
+     * all the given {@code Times}.
      * 
      * @param <T> the type of the tested values
      * @param times the times to satisfy
-     * @return a sequence that is satisfied if a sequence of elements contains all
+     * @return a sequence that is satisfied if a collection of values contains all
      *         the given {@code Times}
      */
     public static <T> Sequence<T> contains(Times<T>... times) {
@@ -148,13 +150,12 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Sequence} that is satisfied if a sequence of elements is
-     * equal to the given {@code Times}. The order of the sequence of elements is
-     * ignored.
+     * Returns a {@code Sequence} that is satisfied if a collection of values is
+     * equal to the given {@code Times}. The collection of values's order is ignored.
      * 
      * @param <T> the type of the tested values
      * @param times the times to satisfy
-     * @return a sequence that is satisfied if a sequence of elements is equal to
+     * @return a sequence that is satisfied if a collection of values is equal to
      *         the given {@code Times}
      */
     public static <T> Sequence<T> equal(Times<T>... times) {
@@ -217,8 +218,8 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Times} that represents a range of times the supplied assertion
-     * is to be satisfied.
+     * Returns a {@code Times} that represents the expected range of times the supplied 
+     * assertion is to be satisfied.
      * 
      * @param <T> the type of the tested value
      * @param min the minimum, inclusive
@@ -232,7 +233,7 @@ public class Sequences {
     }
     
     /**
-     * Returns a {@code Times} that represents the given range of times the given 
+     * Returns a {@code Times} that represents the expected range of times the given 
      * assertion is expected to be satisfied.
      * 
      * @param <T> the type of the tested value

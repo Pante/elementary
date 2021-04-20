@@ -41,6 +41,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({TYPE, METHOD})
 public @interface Options {
 
+    /**
+     * The options.
+     * 
+     * @return the options
+     */
     String value();
     
 }

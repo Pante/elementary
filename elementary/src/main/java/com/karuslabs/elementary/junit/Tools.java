@@ -34,9 +34,10 @@ import javax.lang.model.util.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
- * A utility class from which an annotation processing environment can be accessed
- * when used in conjunction with {@link ToolsExtension}. All methods throw an exception
- * when called outside a test class extended with {@code ToolsExtension}.
+ * Utilities from which an annotation processing environment can be accessed
+ * when used in conjunction with {@link ToolsExtension}. All methods throw an
+ * {@code IllegalStateException} when called outside a test class extended with 
+ * {@code ToolsExtension}.
  * 
  * @see ToolsExtension
  */
@@ -107,6 +108,8 @@ public @Static class Tools {
     }
     
     /**
+     * Returns a {@code TypeMirrors}.
+     * 
      * @return a {@code TypeMirrors}
      */
     public static TypeMirrors typeMirrors() {

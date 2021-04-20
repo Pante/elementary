@@ -36,7 +36,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  */
 public abstract class Type implements Assertion<TypeMirror> {
     
+    /**
+     * The expected relationship.
+     */
     protected final Relation relation;
+    /**
+     * The expected types.
+     */
     protected final TypeMirror[] expectations;
     private final String types;
     
@@ -119,8 +125,22 @@ public abstract class Type implements Assertion<TypeMirror> {
          */
         protected abstract boolean test(TypeMirrors types, TypeMirror expected, TypeMirror actual);
 
+        /**
+         * Returns the expected clause for the given type.
+         * 
+         * @param type the type
+         * @return a clause that describes the the expected relationship between
+         *         the actual and given types
+         */
         public abstract String clause(String type);
         
+        /**
+         * Returns the expected clauses for the given type.
+         * 
+         * @param type the type
+         * @return the clauses that describe the expected relationship between the
+         *         actual and given types
+         */
         public abstract String clauses(String type);
         
     }

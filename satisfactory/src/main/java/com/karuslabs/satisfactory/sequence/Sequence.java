@@ -31,7 +31,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Collection;
 
 /**
- * Represents a criteria that a sequences of values should satisfy.
+ * Represents a criteria that a collection of values should satisfy.
  * 
  * @param <T> the type of the tested values
  */
@@ -70,8 +70,10 @@ public abstract class Sequence<T> implements Part {
 }
 
 /**
- * A {@code Sequence} that expects a sequence of elements and {@code Assertion}s
- * to be equal and ordered. <b>Results may be inconsistent between invocations if the 
+ * A {@code Sequence} that expects a collection of values and {@code Assertion}s
+ * to be equal and ordered. 
+ * <br><br>
+ * <b>Results may be inconsistent between invocations if the 
  * the sequence of elements is unordered.</b>
  * 
  * @param <T> the type of the tested values
@@ -124,7 +126,7 @@ class EqualSequence<T> extends Sequence<T> {
 }
 
 /**
- * A {@code Sequence} that expects a sequence of elements to each satisfy an
+ * A {@code Sequence} that expects a collection of values to each satisfy an
  * {@code Assertion}.
  * 
  * @param <T> the type of the values
@@ -162,7 +164,7 @@ class EachSequence<T> extends Sequence<T> {
 }
 
 /**
- * A {@code Sequence} that expects an empty sequence of values.
+ * A {@code Sequence} that expects an empty collection of values.
  * 
  * @param <T> the type of the values
  */

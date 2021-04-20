@@ -40,6 +40,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Repeatable(Resources.class)
 public @interface Resource {
 
+    /**
+     * The path to the resource. Directories should be separated by {@code /}.
+     * 
+     * @return the path to the resource
+     */
     String value();
     
 }
