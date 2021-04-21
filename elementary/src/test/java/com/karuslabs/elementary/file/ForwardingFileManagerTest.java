@@ -167,11 +167,11 @@ class ForwardingFileManagerTest {
         verify(internal).asPath(a);
     }
 
-    @Test
-    void close() throws IOException {
-        manager.close();
-        verify(internal).close();
-    }
+//    @Test
+//    void close() throws IOException {
+//        manager.close();
+//        verify(internal).close();
+//    }
     
 }
 
