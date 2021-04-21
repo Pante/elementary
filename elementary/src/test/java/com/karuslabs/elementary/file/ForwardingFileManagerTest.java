@@ -28,7 +28,7 @@ import java.util.List;
 import javax.tools.*;
 import javax.tools.JavaFileManager.Location;
 import javax.tools.StandardJavaFileManager;
-//import javax.tools.StandardJavaFileManager.PathFactory;
+import javax.tools.StandardJavaFileManager.PathFactory;
 
 import org.junit.jupiter.api.*;
 
@@ -144,13 +144,13 @@ class ForwardingFileManagerTest {
 //    }
 //
 //
-//    @Test
-//    void setPathFactory() {
-//        var factory = mock(PathFactory.class);
-//        manager.setPathFactory(factory);
-//
-//        verify(internal).setPathFactory(factory);
-//    }
+    @Test
+    void setPathFactory() {
+        var factory = mock(PathFactory.class);
+        manager.setPathFactory(factory);
+
+        verify(internal).setPathFactory(factory);
+    }
 //
 //
 //    @Test
