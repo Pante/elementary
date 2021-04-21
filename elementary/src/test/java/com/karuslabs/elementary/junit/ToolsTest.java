@@ -31,6 +31,8 @@ class ToolsTest {
 
     @Test
     void method_unitialized() {
+        Tools.environment = null;
+        
         assertEquals(
             "Test class should be annotated with \"@ExtendWith(ToolsExtension.class)\"",
             assertThrows(IllegalStateException.class, () -> Tools.filer()).getMessage()
