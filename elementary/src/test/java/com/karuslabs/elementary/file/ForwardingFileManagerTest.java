@@ -90,11 +90,11 @@ class ForwardingFileManagerTest {
     }
     
     
-//    @Test
-//    void getLocation() {
-//        manager.getLocation(location);
-//        verify(internal).getLocation(location);
-//    }
+    @Test
+    void getLocation() {
+        manager.getLocation(location);
+        verify(internal).getLocation(location);
+    }
 //    
 //    
 //    @Test
@@ -144,13 +144,13 @@ class ForwardingFileManagerTest {
 //    }
 //
 //
-//    @Test
-//    void setPathFactory() {
-//        var factory = mock(PathFactory.class);
-//        manager.setPathFactory(factory);
-//
-//        verify(internal).setPathFactory(factory);
-//    }
+    @Test
+    void setPathFactory() {
+        var factory = mock(PathFactory.class);
+        manager.setPathFactory(factory);
+
+        verify(internal).setPathFactory(factory);
+    }
 //
 //
 //    @Test
@@ -166,11 +166,11 @@ class ForwardingFileManagerTest {
 //        verify(internal).asPath(a);
 //    }
 //
-//    @Test
-//    void close() throws IOException {
-//        manager.close();
-//        verify(internal).close();
-//    }
+    @Test
+    void close() throws IOException {
+        manager.close();
+        verify(internal).close();
+    }
     
 }
 
