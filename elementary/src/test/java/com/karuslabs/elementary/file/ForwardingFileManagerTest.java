@@ -35,9 +35,15 @@ import org.junit.jupiter.api.*;
 import static org.mockito.Mockito.*;
 
 class ForwardingFileManagerTest {
+    
+    static class Manager extends ForwardingFileManager {
+        Manager(StandardJavaFileManager manager) {
+            super(manager);
+        }
+    }
 
     StandardJavaFileManager internal = mock(StandardJavaFileManager.class);
-    ForwardingFileManager manager = new ForwardingFileManager(internal) {};
+    ForwardingFileManager manager = new Manager(internal);
     Location location = mock(Location.class);
     JavaFileObject a = mock(JavaFileObject.class);
     JavaFileObject b = mock(JavaFileObject.class);
