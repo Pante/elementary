@@ -90,11 +90,11 @@ class ForwardingFileManagerTest {
     }
     
     
-    @Test
-    void getLocation() {
-        manager.getLocation(location);
-        verify(internal).getLocation(location);
-    }
+//    @Test
+//    void getLocation() {
+//        manager.getLocation(location);
+//        verify(internal).getLocation(location);
+//    }
 //    
 //    
 //    @Test
