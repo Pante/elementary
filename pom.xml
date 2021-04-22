@@ -172,10 +172,10 @@
                     <additionalOptions>-html5</additionalOptions>
                     <links>
                         <link>https://checkerframework.org/api/</link>
-<!--                        <link>https://junit.org/junit5/docs/current/api/</link>
+                        <link>https://junit.org/junit5/docs/current/api/</link>
                         <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/elementary/apidocs</link>
                         <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/satisfactory/apidocs</link>
-                        <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/utilitary/apidocs</link>-->
+                        <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/utilitary/apidocs</link>
                     </links>
                 </configuration>
                 <executions> 
