@@ -6,6 +6,8 @@
 
 **Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Requires Java 11+. Read the [wiki](https://github.com/Pante/elementary/wiki) to get started.**
 
+**Please read [The Problem With Annotation Processors](https://dzone.com/articles/the-problem-with-annotation-processors]) if you're interested in what problem Elementary solves.**
+
 #### Maven Repository
 ```XML
 <repository>
