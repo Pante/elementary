@@ -23,15 +23,13 @@
  */
 package com.karuslabs.elementary;
 
-import com.karuslabs.annotations.ValueType;
-
 import java.util.*;
 import javax.tools.*;
 
 /**
  * The diagnostic messages of a compilation's results.
  */
-public @ValueType final class Diagnostics implements DiagnosticListener<JavaFileObject> {
+public final class Diagnostics implements DiagnosticListener<JavaFileObject> {
     
     /**
      * All diagnostic messages.
