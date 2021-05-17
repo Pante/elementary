@@ -39,7 +39,8 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>elementary</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
+  <scope>test</scope>
 </dependency>
 ```
 
@@ -53,7 +54,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>satisfactory</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
 
@@ -67,6 +68,6 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>satisfactory</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
 </dependency>
 ```
