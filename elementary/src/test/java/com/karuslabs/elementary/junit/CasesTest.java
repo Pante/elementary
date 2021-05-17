@@ -45,6 +45,7 @@ class CasesTest {
     @Test
     void one_label() {
         assertNotNull(cases.one("a"));
+        assertNotNull(cases.one("A"));
     }
     
     @Test
@@ -59,14 +60,19 @@ class CasesTest {
     }
     
     @Test
-    void get_label() {
-        assertEquals(1, cases.get("a").size());
+    void label() {
+        assertEquals(1, cases.label("a").size());
     }
     
     
     @Test
-    void list() {
-        assertEquals(2, cases.list().size());
+    void all() {
+        assertEquals(2, cases.all().size());
+    }
+    
+    @Test
+    void labels() {
+        assertEquals(2, cases.labels().size());
     }
     
     @Test
