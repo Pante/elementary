@@ -41,10 +41,16 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 public @interface Case {
     
     /**
+     * A default value for {@code @Case} used to denote that the annotated target's
+     * name should be used as its label.
+     */
+    static final String DEFAULT_LABEL = "${DEFAULT_LABEL}";
+    
+    /**
      * An optional label for this case.
      * 
      * @return a label
      */
-    String value() default "";
+    String value() default DEFAULT_LABEL;
     
 }

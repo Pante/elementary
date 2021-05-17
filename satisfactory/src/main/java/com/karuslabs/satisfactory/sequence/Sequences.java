@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
+import com.karuslabs.annotations.Static;
 import com.karuslabs.satisfactory.Assertion;
 
 import java.util.function.Supplier;
@@ -33,7 +34,7 @@ import javax.lang.model.type.TypeMirror;
  * Provides constants for frequently used assertion and utility methods 
  * for creating {@code Assertion}s.
  */
-public class Sequences {
+public @Static class Sequences {
     
     /**
      * A {@code Sequence} that is satisfied by any collection of {@code VariableElement}s.

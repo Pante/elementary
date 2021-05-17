@@ -177,7 +177,7 @@ class DaemonCompiler extends Thread {
     /**
      * An annotation processing environment.
      */
-    static @ValueType final class Environment {
+    static final class Environment {
         public final RoundEnvironment round;
         public final Elements elements;
         public final Types types;

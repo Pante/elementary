@@ -132,12 +132,12 @@ class StringFileObject extends ImmutableFileObject {
     }
 
     @Override
-    public Reader openReader(boolean ignoreEncodingErrors) {
+    public Reader openReader(@Ignored boolean ignoreEncodingErrors) {
         return new StringReader(string);
     }
 
     @Override
-    public CharSequence getCharContent(boolean ignoreEncodingErrors) {
+    public CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors) {
         return string;
     }
     

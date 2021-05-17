@@ -23,15 +23,13 @@
  */
 package com.karuslabs.elementary;
 
-import com.karuslabs.annotations.ValueType;
-
 import java.util.*;
 import javax.tools.*;
 
 /**
  * The results of a compilation.
  */
-public @ValueType final class Results {
+public final class Results {
     
     /**
      * The source files which were compiled.

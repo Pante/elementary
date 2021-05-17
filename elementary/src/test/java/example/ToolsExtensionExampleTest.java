@@ -73,13 +73,13 @@ class ToolsExtensionExampleTest {
     
     @Test
     void lint_method_that_returns_string(Cases cases) {
-        var second = cases.get(1);
+        var second = cases.get(1); // Alternatively, we can use cases.one("second")
         assertFalse(lint.lint(second));
     }
     
     static class Sample {
-        @Case("first") String first;
-        @Case String second() { return ""; }
+        @Case("first") String something;
+        @Case String second() { return ""; } // The method/variable name is used as the label if none is specified
     }
     
 }

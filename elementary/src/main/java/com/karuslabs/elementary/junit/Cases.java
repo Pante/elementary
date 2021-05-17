@@ -28,7 +28,7 @@ import com.karuslabs.elementary.junit.annotations.Case;
 
 import java.util.*;
 import javax.annotation.processing.RoundEnvironment;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -40,6 +40,8 @@ public class Cases implements Iterable<Element> {
     
     private final RoundEnvironment environment;
     private @Lazy List<Element> elements;
+    private @Lazy Map<String, List<Element>> labels;
+    
     
     /**
      * Creates a {@code Cases} for the given annotation processing round.
@@ -57,7 +59,7 @@ public class Cases implements Iterable<Element> {
      */
     @Override
     public Iterator<Element> iterator() {
-        return list().iterator();
+        return all().iterator();
     }
     
     
@@ -68,18 +70,18 @@ public class Cases implements Iterable<Element> {
      * @return the only element annotated with {@code @Case}; otherwise {@code null}
      */
     public @Nullable Element one() {
-        return list().size() == 1 ? list().get(0) : null;
+        return all().size() == 1 ? all().get(0) : null;
     }
     
     /**
-     * Returns an elementif the annotation processing round contains exactly one 
+     * Returns an element if the annotation processing round contains exactly one 
      * element annotated with {@code @Case} and the given label.
      * 
      * @param label the label
      * @return the only annotated element with the given label; else {@code null} 
      */
     public @Nullable Element one(String label) {
-       var elements = get(label);
+       var elements = label(label);
        return elements.size() == 1 ? elements.get(0) : null;
     }
     
@@ -91,7 +93,7 @@ public class Cases implements Iterable<Element> {
      * @return the element at the given index
      */
     public Element get(int index) {
-        return list().get(index);
+        return all().get(index);
     }
     
     /**
@@ -100,17 +102,9 @@ public class Cases implements Iterable<Element> {
      * @param label the label
      * @return the annotated elements
      */
-    public List<Element> get(String label) {
-        var matches = new ArrayList<Element>();
-        for (var element : list()) {
-            if (element.getAnnotation(Case.class).value().equals(label)) {
-                matches.add(element);
-            }
-        }
-        
-        return matches;
+    public List<Element> label(String label) {
+        return labels().getOrDefault(label, List.of());
     }
-    
     
     /**
      * Returns elements annotated with {@code @Case} in this annotation processing
@@ -118,13 +112,41 @@ public class Cases implements Iterable<Element> {
      * 
      * @return the annotated elements
      */
-    public List<Element> list() {
-        if (elements == null) {
-            elements = new ArrayList<>(environment.getElementsAnnotatedWith(Case.class));
-        }
-        
+    public List<Element> all() {
+        initialize();
         return elements;
     }
+    
+    /**
+     * Returns the labels of {@code @Case}s and the associated elements in this 
+     * annotation processing round.
+     * 
+     * @return the {@code @Case} labels and the associated elements
+     */
+    public Map<String, List<Element>> labels() {
+        initialize();
+        return labels;
+    }
+    
+    
+    void initialize() {
+        if (elements == null || labels == null) {
+            elements = new ArrayList<>(environment.getElementsAnnotatedWith(Case.class));
+            labels = new HashMap<>();
+            
+            for (var element : elements) {
+                var annotation = element.getAnnotation(Case.class);
+                var label = annotation.value().equals(Case.DEFAULT_LABEL) ? element.getSimpleName().toString() : annotation.value();
+                
+                var elements = labels.get(label);
+                if (elements == null) {
+                    labels.put(label, elements = new ArrayList<>());
+                }
+                elements.add(element);
+            }
+        }
+    }
+    
     
     /**
      * Returns the number of elements annotated with {@code @Case} in this annotation
@@ -133,7 +155,7 @@ public class Cases implements Iterable<Element> {
      * @return the number of elements
      */
     public int count() {
-        return list().size();
+        return all().size();
     }
-
+    
 }
