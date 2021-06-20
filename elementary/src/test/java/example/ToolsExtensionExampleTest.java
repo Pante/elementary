@@ -79,7 +79,7 @@ class ToolsExtensionExampleTest {
     
     static class Sample {
         @Case("first") String something;
-        @Case String second() { return ""; } // The method/variable name is used as the label if none is specified
+        @Case String second() { return ""; } // The method/variable name is used as the get if none is specified
     }
     
 }

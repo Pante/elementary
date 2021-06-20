@@ -135,6 +135,12 @@ class EqualTimeSequence<T> extends TimeSequence<T> {
             }
         }
         
+        for (var time : times) {
+            if (!time.times()) {
+                return false;
+            }
+        }
+        
         return true;
     }
 
