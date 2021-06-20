@@ -42,7 +42,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TimesSequenceTest {
     
     Sequence<TypeMirror> contains = contains(times(1, subtype(String.class)), max(3, type(Integer.class)));
-    Sequence<TypeMirror> equal = equal(times(1, subtype(String.class)), max(3, type(Integer.class)));
+    Sequence<TypeMirror> equal = equal(times(2, subtype(String.class)), max(3, type(Integer.class)));
     TypeMirrors types = Tools.typeMirrors();
     Cases cases = Tools.cases();
     TypeMirror string = cases.get(0).asType();
@@ -72,17 +72,22 @@ class TimesSequenceTest {
     
     @Test
     void equal_test() {
-        assertTrue(equal.test(types, List.of(integer, string, integer)));
+        assertTrue(equal.test(types, List.of(string, integer, string, integer)));
     }
     
     @Test
     void equal_test_false() {
-        assertFalse(equal.test(types, List.of(string, integer, integer, uuid)));
+        assertFalse(equal.test(types, List.of(string, string, integer, integer, uuid)));
+    }
+    
+    @Test
+    void equal_test_less_false() {
+        assertFalse(equal.test(types, List.of(string, integer)));
     }
     
     @Test
     void equal_condition() {
-        assertEquals("equal [1 subtype of String, 3 or less Integers]", equal.condition());
+        assertEquals("equal [2 subtypes of String, 3 or less Integers]", equal.condition());
     }
     
     @Test

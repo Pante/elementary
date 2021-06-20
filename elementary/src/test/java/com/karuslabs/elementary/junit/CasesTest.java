@@ -60,8 +60,8 @@ class CasesTest {
     }
     
     @Test
-    void label() {
-        assertEquals(1, cases.label("a").size());
+    void get_string() {
+        assertEquals(1, cases.get("a").size());
     }
     
     

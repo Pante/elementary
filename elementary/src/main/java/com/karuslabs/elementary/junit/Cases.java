@@ -75,13 +75,13 @@ public class Cases implements Iterable<Element> {
     
     /**
      * Returns an element if the annotation processing round contains exactly one 
-     * element annotated with {@code @Case} and the given label.
+     * element annotated with {@code @Case} and the given get.
      * 
-     * @param label the label
-     * @return the only annotated element with the given label; else {@code null} 
+     * @param label the get
+     * @return the only annotated element with the given get; else {@code null} 
      */
     public @Nullable Element one(String label) {
-       var elements = label(label);
+       var elements = get(label);
        return elements.size() == 1 ? elements.get(0) : null;
     }
     
@@ -97,12 +97,12 @@ public class Cases implements Iterable<Element> {
     }
     
     /**
-     * Returns elements annotated with {@code @Case} and the given label.
+     * Returns elements annotated with {@code @Case} and the given get.
      * 
-     * @param label the label
+     * @param label the get
      * @return the annotated elements
      */
-    public List<Element> label(String label) {
+    public List<Element> get(String label) {
         return labels().getOrDefault(label, List.of());
     }
     
