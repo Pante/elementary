@@ -11,6 +11,10 @@ This release focuses on fixing a few pesky issues.
 ## Satisfactory
 - Fix `EqualTimeSequence` not comparing sequences properly
 
+## Utilitary
+- Add `Walker.erasuredAncestor(TypeMirrors)`
+- Change `Walker.ancestor(TypeMirrors)` to `Walker.specializedAncestor(TypeMirrors)`
+
 ## 1.1.0 - The Case for Cases (17/05/2021)
 
 This release focuses on improving the quality of life for cases.
