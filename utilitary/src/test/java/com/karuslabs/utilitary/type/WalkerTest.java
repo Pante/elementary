@@ -33,7 +33,7 @@ import static org.mockito.Mockito.*;
 
 class WalkerTest {
     
-    Walker<?> walker = Walker.ancestor(mock(TypeMirrors.class));
+    Walker<?> walker = Walker.erasuredAncestor(mock(TypeMirrors.class));
     
     @Test
     void defaultAction() {
@@ -42,14 +42,67 @@ class WalkerTest {
 
 }
 
-class AncestorWalkerTest {
+class ErasuredAncestorWalkerTest {
     
     TypeMirror object = mock(TypeMirror.class);
     TypeMirror ancestor = mock(TypeMirror.class);
     DeclaredType type = mock(DeclaredType.class);
     DeclaredType parent = mock(DeclaredType.class);
     TypeMirrors types = when(mock(TypeMirrors.class).type(Object.class)).thenReturn(object).getMock();
-    Walker<TypeMirror> walker = Walker.ancestor(types);
+    Walker<TypeMirror> walker = Walker.erasuredAncestor(types);
+    
+    @BeforeEach
+    void before() {
+        when(types.erasure(ancestor)).thenReturn(ancestor);
+        when(types.erasure(type)).thenReturn(type);
+    }
+    
+    @Test
+    void visitDeclared_same() {
+        when(types.isSameType(type, ancestor)).thenReturn(true);
+        assertEquals(type, walker.visitDeclared(type, ancestor));
+    }
+    
+    @Test
+    void visitDeclared_object() {
+        when(types.isSameType(type, ancestor)).thenReturn(false);
+        when(types.isSameType(type, object)).thenReturn(true);
+        
+        assertNull(walker.visitDeclared(type, ancestor));
+    }
+    
+    @Test
+    void visitDeclared_found_ancestor() {
+        doReturn(List.of(parent)).when(types).directSupertypes(type);
+        when(parent.accept(walker, ancestor)).thenReturn(parent);
+        
+        when(types.isSameType(type, ancestor)).thenReturn(false);
+        when(types.isSameType(type, object)).thenReturn(false);
+        
+        assertEquals(parent, walker.visitDeclared(type, ancestor));
+    }
+    
+    @Test
+    void visitDeclared_no_ancestor() {
+        doReturn(List.of(parent)).when(types).directSupertypes(type);
+        when(parent.accept(walker, ancestor)).thenReturn(null);
+        
+        when(types.isSameType(type, ancestor)).thenReturn(false);
+        when(types.isSameType(type, object)).thenReturn(false);
+        
+        assertNull(walker.visitDeclared(type, ancestor));
+    }
+    
+}
+
+class SpecializedAncestorWalkerTest {
+    
+    TypeMirror object = mock(TypeMirror.class);
+    TypeMirror ancestor = mock(TypeMirror.class);
+    DeclaredType type = mock(DeclaredType.class);
+    DeclaredType parent = mock(DeclaredType.class);
+    TypeMirrors types = when(mock(TypeMirrors.class).type(Object.class)).thenReturn(object).getMock();
+    Walker<TypeMirror> walker = Walker.specializedAncestor(types);
     
     @Test
     void visitDeclared_same() {

@@ -39,13 +39,26 @@ public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
 
     /**
      * Returns a {@code Walker} that determines if a given {@code TypeMirror} is 
-     * the ancestor of the visited {@code TypeMirror}.
+     * the ancestor of the visited {@code TypeMirror}. All types are erasured when
+     * finding the ancestor.
      * 
      * @param types the {@code TypeMirrors}.
      * @return a {@code Walker}.
      */
-    public static Walker<TypeMirror> ancestor(TypeMirrors types) {
-        return new AncestorWalker(types);
+    public static Walker<TypeMirror> erasuredAncestor(TypeMirrors types) {
+        return new ErasuredAncestorWalker(types);
+    }
+    
+    /**
+     * Returns a {@code Walker} that determines if a given {@code TypeMirror} is 
+     * the ancestor of the visited {@code TypeMirror}. All type parameters are
+     * retained when finding the ancestor.
+     * 
+     * @param types the {@code TypeMirrors}.
+     * @return a {@code Walker}.
+     */
+    public static Walker<TypeMirror> specializedAncestor(TypeMirrors types) {
+        return new SpecializedAncestorWalker(types);
     }
     
     /**
@@ -70,13 +83,49 @@ public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
 }
 
 /**
- * A {@code Walker} that 
+ * A {@code Walker} that erasures all types when finding the ancestor of the visited
+ * type.
  */
-class AncestorWalker extends Walker<TypeMirror> {
+class ErasuredAncestorWalker extends Walker<TypeMirror> {
     
     private final TypeMirror object;
     
-    AncestorWalker(TypeMirrors types) {
+    ErasuredAncestorWalker(TypeMirrors types) {
+        super(types);
+        object = types.type(Object.class);
+    }
+    
+    @Override
+    public @Nullable TypeMirror visitDeclared(DeclaredType type, TypeMirror ancestor) {
+        if (types.isSameType(types.erasure(type), types.erasure(ancestor))) {
+            return type;
+        }
+        
+        if (types.isSameType(type, object)) {
+            return null;
+        }
+        
+        for (var parent : types.directSupertypes(type)) {
+            var match = parent.accept(this, ancestor);
+            if (match != null) {
+                return match;
+            }
+        }
+        
+        return null;
+    }
+    
+}
+
+/**
+ * A {@code Walker} that retains all type parameters when finding the ancestor of 
+ * the visited type.
+ */
+class SpecializedAncestorWalker extends Walker<TypeMirror> {
+    
+    private final TypeMirror object;
+    
+    SpecializedAncestorWalker(TypeMirrors types) {
         super(types);
         object = types.type(Object.class);
     }
