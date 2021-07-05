@@ -23,7 +23,7 @@
  */
 package com.karuslabs.utilitary.type;
 
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
@@ -39,10 +39,12 @@ import static org.mockito.Mockito.*;
 
 class TypeMirrorsTest {
  
-    TypeMirror mirror = mock(TypeMirror.class);
+    DeclaredType mirror = mock(DeclaredType.class);
+    DeclaredType other = mock(DeclaredType.class);
     TypeMirror type = mock(TypeMirror.class);
     TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(type).getMock();
     Elements elements = when(mock(Elements.class).getTypeElement(String.class.getName())).thenReturn(element).getMock();
+    AnnotationMirror annotation = when(mock(AnnotationMirror.class).getAnnotationType()).thenReturn(mirror).getMock();
     Types delegate = mock(Types.class);
     TypeMirrors types = new TypeMirrors(elements, delegate);
     
@@ -88,6 +90,39 @@ class TypeMirrorsTest {
             of(TypeKind.VOID, void.class),
             of(TypeKind.DECLARED, Object.class)
         );
+    }
+    
+    
+    @Test
+    void annotation() {
+        when(delegate.isSameType(mirror, other)).thenReturn(true);
+        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
+        
+        assertEquals(annotation, types.annotation(element, other));
+    }
+    
+    @Test
+    void annotation_null() {
+        when(delegate.isSameType(mirror, other)).thenReturn(false);
+        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
+        
+        assertNull(types.annotation(element, other));
+    }
+    
+    @Test
+    void annotations() {
+        when(delegate.isSameType(mirror, other)).thenReturn(true);
+        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
+        
+        assertEquals(List.of(annotation), types.annotations(element, other));
+    }
+    
+    @Test
+    void annotations_empty() {
+        when(delegate.isSameType(mirror, other)).thenReturn(false);
+        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
+        
+        assertTrue(types.annotations(element, other).isEmpty());
     }
     
     

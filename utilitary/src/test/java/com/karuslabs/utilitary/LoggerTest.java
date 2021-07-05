@@ -28,6 +28,7 @@ import javax.lang.model.element.Element;
 import javax.tools.Diagnostic.Kind;
 import java.util.function.*;
 import java.util.stream.Stream;
+import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -35,7 +36,6 @@ import org.junit.jupiter.params.provider.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.utilitary.Texts.format;
 import static javax.tools.Diagnostic.Kind.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
@@ -47,44 +47,13 @@ class LoggerTest {
     static final Logger LOGGER = new Logger(MESSAGER);
     
     Element element = mock(Element.class);
+    AnnotationMirror annotation = mock(AnnotationMirror.class);
     Messager messager = mock(Messager.class);
     Logger logger = new Logger(messager);
     
     @ParameterizedTest
-    @MethodSource("log_value_reason_resolution_parameters")
-    void log_value_reason_resolution(Printer consumer, Kind kind) {
-        consumer.accept(element, 1, "reason", "resolution");
-        
-        verify(MESSAGER).printMessage(kind, format(1, "reason", "resolution"), element);
-        reset(MESSAGER);
-    }
-    
-    static Stream<Arguments> log_value_reason_resolution_parameters() {
-        return Stream.of(of((Printer) LOGGER::error, ERROR),
-            of((Printer) LOGGER::warn, WARNING),
-            of((Printer) LOGGER::note, NOTE)
-        );
-    }
-    
-    @ParameterizedTest
-    @MethodSource("log_value_reason_parameters")
-    void log_value_reason(PartialPrinter printer, Kind kind) {
-        printer.accept(element, 1, "reason");
-        
-        verify(MESSAGER).printMessage(kind, format(1, "reason"), element);
-        reset(MESSAGER);
-    }
-    
-    static Stream<Arguments> log_value_reason_parameters() {
-        return Stream.of(of((PartialPrinter) LOGGER::error, ERROR),
-            of((PartialPrinter) LOGGER::warn, WARNING),
-            of((PartialPrinter) LOGGER::note, NOTE)
-        );
-    }
-    
-    @ParameterizedTest
     @MethodSource("log_message_parameters")
-    void log_value(BiConsumer<Element, String> consumer, Kind kind) {
+    void log_message(BiConsumer<Element, String> consumer, Kind kind) {
         consumer.accept(element, "message");
         
         verify(MESSAGER).printMessage(kind, "message", element);
@@ -98,13 +67,24 @@ class LoggerTest {
         );
     }
     
+    @ParameterizedTest
+    @MethodSource("log_annotation_message_parameters")
+    void log_annotation_message(Printer printer, Kind kind) {
+        printer.accept(element, annotation, "message");
+    }
+    
+    static Stream<Arguments> log_annotation_message_parameters() {
+        return Stream.of(of((Printer) LOGGER::error, ERROR),
+            of((Printer) LOGGER::warn, WARNING),
+            of((Printer) LOGGER::note, NOTE)
+        );
+    }
     
     @Test
     void log_no_element() {
         logger.error(null, "message");
         verify(messager).printMessage(ERROR, "message");
     }
-    
     
     @Test
     void clear() {
@@ -122,12 +102,5 @@ class LoggerTest {
 
 @FunctionalInterface
 interface Printer {
-    void accept(@Nullable Element location, Object value, String reason, String resolution);
-}
-
-@FunctionalInterface
-interface PartialPrinter {
-    
-    void accept(@Nullable Element location, Object value, String reason);
-    
+    void accept(@Nullable Element location, AnnotationMirror annotation, Object message);
 }

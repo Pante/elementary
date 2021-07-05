@@ -30,6 +30,8 @@ import javax.lang.model.util.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import static java.util.stream.Collectors.toList;
+
 /**
  * A {@code Types} implementation that contains methods to create {@code TypeMirror}s
  * from {@code Class}es. All overridden methods delegate execution to an underlying
@@ -105,6 +107,35 @@ public class TypeMirrors implements Types {
         this.types = types;
     }
     
+    /**
+     * Returns the first annotation on the given element which matches the given type.
+     * 
+     * @param element the element
+     * @param type the annotation type
+     * @return the annotation, or {@code null} if no annotation matches the given type
+     */
+    public @Nullable AnnotationMirror annotation(Element element, DeclaredType type) {
+        for (var annotation : element.getAnnotationMirrors()) {
+            if (isSameType(annotation.getAnnotationType(), type)) {
+                return annotation;
+            }
+        }
+        
+        return null;
+    }
+    
+    /**
+     * Returns all annotations on the given element that match the given type.
+     * 
+     * @param element the element
+     * @param type the annotation type
+     * @return the annotations that match the given type
+     */
+    public List<AnnotationMirror> annotations(Element element, DeclaredType type) {
+        return element.getAnnotationMirrors().stream()
+                      .filter(annotation -> isSameType(annotation.getAnnotationType(), type))
+                      .collect(toList());
+    }
     
     /**
      * Returns a {@code TypeElement} that represents the given type.

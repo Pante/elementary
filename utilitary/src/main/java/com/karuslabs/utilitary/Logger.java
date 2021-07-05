@@ -24,12 +24,11 @@
 package com.karuslabs.utilitary;
 
 import javax.annotation.processing.Messager;
-import javax.lang.model.element.Element;
+import javax.lang.model.element.*;
 import javax.tools.Diagnostic.Kind;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.utilitary.Texts.format;
 import static javax.tools.Diagnostic.Kind.*;
 
 /**
@@ -42,7 +41,7 @@ public class Logger {
     /**
      * The underlying {@code Messager}.
      */
-    public final Messager messager;
+    private final Messager messager;
     private boolean error;
     
     /**
@@ -57,26 +56,15 @@ public class Logger {
     
     
     /**
-     * Emits an error at the given location with the given value, reason and resolution.
+     * Emits an error at the given annotation with the given error message.
      * 
-     * @param location the location of the error, {@code null} if none
-     * @param value the error's value
-     * @param reason the reason that the error occurred
-     * @param resolution a resolution to fix the error
+     * @param element the annotated element
+     * @param annotation the annotation
+     * @param message the error message
      */
-    public void error(@Nullable Element location, Object value, String reason, String resolution) {
-        error(location, format(value, reason, resolution));
-    }
-    
-    /**
-     * Emits an error at the given location with the given value and reason.
-     * 
-     * @param location the location of the error, {@code null} if none
-     * @param value the error's value
-     * @param reason the reason that the error occurred
-     */
-    public void error(@Nullable Element location, Object value, String reason) {
-        error(location, format(value, reason));
+    public void error(Element element, AnnotationMirror annotation, Object message) {
+        messager.printMessage(ERROR, message.toString(), element, annotation);
+        error = true;
     }
     
     /**
@@ -85,33 +73,20 @@ public class Logger {
      * @param location the location of the error, {@code null} if none
      * @param message the error message
      */
-    public void error(@Nullable Element location, String message) {
-        print(location, ERROR, message);
+    public void error(@Nullable Element location, Object message) {
+        print(location, ERROR, message.toString());
         error = true;
     }
     
-    
     /**
-     * Emits an warning at the given location with the given value, reason and resolution.
+     * Emits a warning at the given annotation with the given warning message.
      * 
-     * @param location the location of the warning, {@code null} if none
-     * @param value the warning's value
-     * @param reason the reason that the warning occurred
-     * @param resolution a resolution to fix the warning
+     * @param element the annotated element
+     * @param annotation the annotation
+     * @param message the warning message
      */
-    public void warn(@Nullable Element location, Object value, String reason, String resolution) {
-        warn(location, format(value, reason, resolution));
-    }
-    
-    /**
-     * Emits an warning at the given location with the given value and reason.
-     * 
-     * @param location the location of the warning, {@code null} if none
-     * @param value the warning's value
-     * @param reason the reason that the warning occurred
-     */
-    public void warn(@Nullable Element location, Object value, String reason) {
-        warn(location, format(value, reason));
+    public void warn(Element element, AnnotationMirror annotation, Object message) {
+        messager.printMessage(WARNING, message.toString(), element, annotation);
     }
     
     /**
@@ -123,29 +98,16 @@ public class Logger {
     public void warn(@Nullable Element location, String message) {
         print(location, WARNING, message);
     }
-    
-    
+
     /**
-     * Emits a note at the given location with the given value, reason and resolution.
+     * Emits a note at the given annotation with the given note.
      * 
-     * @param location the location of the note, {@code null} if none
-     * @param value the note's value
-     * @param reason the reason that the note occurred
-     * @param resolution a solution to resolve the note
+     * @param element the annotated element
+     * @param annotation the annotation
+     * @param message the note
      */
-    public void note(@Nullable Element location, Object value, String reason, String resolution) {
-        note(location, format(value, reason, resolution));
-    }
-    
-    /**
-     * Emits a note at the given location with the given value and reason.
-     * 
-     * @param location the location of the note, {@code null} if none
-     * @param value the note's value
-     * @param reason the reason that the note occurred
-     */
-    public void note(@Nullable Element location, Object value, String reason) {
-        note(location, format(value, reason));
+    public void note(Element element, AnnotationMirror annotation, Object message) {
+        messager.printMessage(NOTE, message.toString(), element, annotation);
     }
     
     /**
