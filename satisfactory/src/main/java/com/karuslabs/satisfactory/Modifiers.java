@@ -35,32 +35,6 @@ import static com.karuslabs.utilitary.Texts.SCREAMING_CASE;
  * A skeletal implementation of an assertion for modifiers.
  */
 public abstract class Modifiers implements Assertion<Set<Modifier>> {
-    
-    /**
-     * Sorts the given modifiers according to common Java conventions.
-     * 
-     * @param modifiers the unsorted modifiers
-     * @return the sorted modifiers
-     */
-    public static Modifier[] sort(Modifier... modifiers) {
-        Arrays.sort(modifiers, (a, b) -> Integer.compare(order(a), order(b)));
-        return modifiers;
-    }
-    
-    static int order(Modifier modifier) {
-        switch (modifier) {
-            case PUBLIC:
-            case PROTECTED:
-            case PRIVATE:
-                return 0;
-            case STATIC:
-                return 1;
-            case ABSTRACT:
-                return 2;
-            default:
-                return 3;
-        }
-    }
 
     /**
      * The modifiers.

@@ -23,8 +23,6 @@
  */
 package com.karuslabs.utilitary.type;
 
-import com.karuslabs.annotations.*;
-
 import javax.lang.model.element.*;
 import javax.lang.model.util.SimpleElementVisitor9;
 
@@ -57,7 +55,7 @@ public abstract class Find<T extends Element> extends SimpleElementVisitor9<T, V
     public static final Find<ModuleElement> MODULE = new FindModule();
     
     @Override
-    protected @Nullable T defaultAction(Element element, @Ignored Void parameter) {
+    protected @Nullable T defaultAction(Element element, Void parameter) {
         var enclosing = element.getEnclosingElement();
         return enclosing == null ? DEFAULT_VALUE : enclosing.accept(this, null);
     }
@@ -70,22 +68,22 @@ public abstract class Find<T extends Element> extends SimpleElementVisitor9<T, V
 class FindExecutable extends Find<ExecutableElement> {
     
     @Override
-    public @Nullable ExecutableElement visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable ExecutableElement visitModule(ModuleElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public @Nullable ExecutableElement visitPackage(PackageElement element, @Ignored Void parameter) {
+    public @Nullable ExecutableElement visitPackage(PackageElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public @Nullable ExecutableElement visitType(TypeElement element, @Ignored Void parameter) {
+    public @Nullable ExecutableElement visitType(TypeElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public ExecutableElement visitExecutable(ExecutableElement element, @Ignored Void parameter) {
+    public ExecutableElement visitExecutable(ExecutableElement element, Void parameter) {
         return element;
     }
     
@@ -97,17 +95,17 @@ class FindExecutable extends Find<ExecutableElement> {
 class FindType extends Find<TypeElement> {
     
     @Override
-    public @Nullable TypeElement visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable TypeElement visitModule(ModuleElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public @Nullable TypeElement visitPackage(PackageElement element, @Ignored Void parameter) {
+    public @Nullable TypeElement visitPackage(PackageElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     @Override
-    public TypeElement visitType(TypeElement element, @Ignored Void parameter) {
+    public TypeElement visitType(TypeElement element, Void parameter) {
         return element;
     }
     
@@ -119,13 +117,13 @@ class FindType extends Find<TypeElement> {
 class FindPackage extends Find<PackageElement> {
     
     @Override
-    public @Nullable PackageElement visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable PackageElement visitModule(ModuleElement element, Void parameter) {
         return DEFAULT_VALUE;
     }
     
     
     @Override
-    public @Nullable PackageElement visitPackage(PackageElement element, @Ignored Void parameter) {
+    public @Nullable PackageElement visitPackage(PackageElement element, Void parameter) {
         return element;
     }
     
@@ -137,7 +135,7 @@ class FindPackage extends Find<PackageElement> {
 class FindModule extends Find<ModuleElement> {
     
     @Override
-    public @Nullable ModuleElement visitModule(ModuleElement element, @Ignored Void parameter) {
+    public @Nullable ModuleElement visitModule(ModuleElement element, Void parameter) {
         return element;
     }
     

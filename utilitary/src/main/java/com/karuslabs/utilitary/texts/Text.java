@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,79 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary;
+package com.karuslabs.utilitary.texts;
 
-import javax.lang.model.element.Name;
-
-/**
- * Utilities for creating stub {@code Name}s in tests.
- * <br><br>
- * <b>This class should not be used in production.</b>
- */
-public class Names {
+public class Text implements CharSequence {
     
-    /**
-     * Creates a {@code Name} from the given type's simple name.
-     * 
-     * @param type the type
-     * @return a {@code Name}
-     */
-    public static Name of(Class<?> type) {
-        return of(type.getSimpleName());
+    public final String value;
+    public final int column;
+    public final int position;
+    
+    public Text(String value, int column, int position) {
+        this.value = value;
+        this.column = column;
+        this.position = position;
     }
     
-    /**
-     * Creates a {@code Name} with given value.
-     * 
-     * @param name the name
-     * @return a {@code Name}
-     */
-    public static Name of(String name) {
-        return new MockName(name);
-    }
-    
-
-}
-
-/**
- * A mock implementation of {@code Name}.
- */
-class MockName implements Name {
-    
-    private final String name;
-    
-    /**
-     * Creates a {@code MockName} with the given value.
-     * 
-     * @param name the name
-     */
-    MockName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public boolean contentEquals(CharSequence sequence) {
-        return name.contentEquals(sequence);
-    }
-
-    @Override
-    public int length() {
-        return name.length();
+    public String line(int index) {
+        return value.split("\n")[index];
     }
 
     @Override
     public char charAt(int index) {
-        return name.charAt(index);
+        return value.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return name.subSequence(start, end);
+        return value.subSequence(start, end);
+    }
+    
+    @Override
+    public int length() {
+        return value.length();
     }
     
     @Override
     public String toString() {
-        return name;
+        return value;
     }
     
 }

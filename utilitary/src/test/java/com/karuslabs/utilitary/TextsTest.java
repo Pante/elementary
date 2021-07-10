@@ -23,6 +23,7 @@
  */
 package com.karuslabs.utilitary;
 
+import com.karuslabs.utilitary.texts.Texts;
 import java.util.List;
 import java.util.stream.Stream;
 

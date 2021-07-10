@@ -23,8 +23,6 @@
  */
 package com.karuslabs.utilitary;
 
-import com.karuslabs.annotations.VisibleForOverride;
-
 import java.util.Set;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.*;
@@ -67,7 +65,6 @@ public abstract class ElementProcessor extends AnnotationProcessor {
      * <b>Default implementation:</b><br>
      * Does nothing.
      */
-    @VisibleForOverride
     protected void clear() {}
     
 }

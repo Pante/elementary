@@ -43,7 +43,7 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
      * simple name.
      */
     public static final TypePrinter SIMPLE = new SimpleTypePrinter();
-    
+
     /**
      * Returns the fully qualified name of the given type.
      * 

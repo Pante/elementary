@@ -97,7 +97,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source assign(String type, String name, String value) {
-        builder.append(indentation).append(type).append(" ").append(name).append(" = ").append(value).append(";").append(System.lineSeparator());
+        builder.append(indentation).append(type).append(" ").append(name).append(" = ").append(value).append(";").append('\n');
         return this;
     }
     
@@ -112,7 +112,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source cast(String name, String type, String value) {
-        builder.append(indentation).append("var ").append(name).append(" = (").append(type).append(") ").append(value).append(";").append(System.lineSeparator());
+        builder.append(indentation).append("var ").append(name).append(" = (").append(type).append(") ").append(value).append(";").append('\n');
         return this;
     }
     
@@ -123,7 +123,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source pack(String pack) {
-        builder.append("package ").append(pack).append(";").append(System.lineSeparator());
+        builder.append("package ").append(pack).append(";").append('\n');
         return this;
     }
     
@@ -134,7 +134,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source include(String pack) {
-        builder.append("import ").append(pack).append(";").append(System.lineSeparator());
+        builder.append("import ").append(pack).append(";").append('\n');
         return this;
     }
     
@@ -144,7 +144,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source line() {
-        builder.append(System.lineSeparator());
+        builder.append('\n');
         return this;
     }
     
@@ -157,7 +157,7 @@ public class Source implements CharSequence {
      * @return {@code this}
      */
     public Source line(Object value) {
-        builder.append(indentation).append(value).append(System.lineSeparator());
+        builder.append(indentation).append(value).append('\n');
         return this;
     }
     
@@ -175,7 +175,7 @@ public class Source implements CharSequence {
             builder.append(value);
         }
         
-        builder.append(System.lineSeparator());
+        builder.append('\n');
         return this;
     }
     

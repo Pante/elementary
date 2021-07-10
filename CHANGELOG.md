@@ -1,5 +1,7 @@
 ## 1.2.0 - Spit Shine
 
+- Add `com.karuslabs.utilitary.texts`
+- Add `AnnotationValuePrinter`
 - Add `Logger.error(Element, AnnotationMirror, Object)`
 - Add `Logger.warn(Element, AnnotationMirror, Object)`
 - Add `Logger.note(Element, AnnotationMirror, Object)`
@@ -8,6 +10,9 @@
 - Change `Logger.error(Element, String)` to `Logger.error(Element, Object)`
 - Change `Logger.warn(Element, String)` to `Logger.warn(Element, Object)`
 - Change `Logger.note(Element, String)` to `Logger.note(Element, Object)`
+- Change `Source` to always append a newline using `\n` instead of the system's line separator - using the system's line separator was a terrible mistake
+- Remove `com.karuslabs.annotations` dependency - annnotation is now compiled agaisnt JDK 16
+- Remove `com.karuslabs.utilitary.Texts`
 - Remove `Logger.error(Element, Object, String, String)`
 - Remove `Logger.error(Element, Object, String)`
 - Remove `Logger.warn(Element, Object, String, String)`
