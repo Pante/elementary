@@ -23,8 +23,6 @@
  */
 package com.karuslabs.elementary.file;
 
-import com.karuslabs.annotations.*;
-
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.Charset;
@@ -54,10 +52,10 @@ abstract class ImmutableFileObject extends SimpleJavaFileObject {
     public abstract InputStream openInputStream();
 
     @Override
-    public abstract Reader openReader(@Ignored boolean ignoreEncodingErrors);
+    public abstract Reader openReader(boolean ignoreEncodingErrors);
     
     @Override
-    public abstract CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors);
+    public abstract CharSequence getCharContent(boolean ignoreEncodingErrors);
     
 }
 
@@ -67,7 +65,7 @@ abstract class ImmutableFileObject extends SimpleJavaFileObject {
 class ByteFileObject extends ImmutableFileObject {
 
     private final byte[] bytes;
-    private @Lazy String string;
+    private String string;
     
     /**
      * Creates a {@code ByteFileObject} with the given parameters.
@@ -87,12 +85,12 @@ class ByteFileObject extends ImmutableFileObject {
     }
 
     @Override
-    public Reader openReader(@Ignored boolean ignoreEncodingErrors) {
+    public Reader openReader(boolean ignoreEncodingErrors) {
         return new StringReader(toString());
     }
     
     @Override
-    public CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors) {
+    public CharSequence getCharContent(boolean ignoreEncodingErrors) {
         if (string == null) {
             string =  new String(bytes, Charset.defaultCharset());
         }
@@ -108,7 +106,7 @@ class ByteFileObject extends ImmutableFileObject {
 class StringFileObject extends ImmutableFileObject {
     
     private final String string;
-    private @Lazy byte[] bytes;
+    private byte[] bytes;
     
     /**
      * Creates a {@code StringFileObject} with the given parameters,
@@ -132,12 +130,12 @@ class StringFileObject extends ImmutableFileObject {
     }
 
     @Override
-    public Reader openReader(@Ignored boolean ignoreEncodingErrors) {
+    public Reader openReader(boolean ignoreEncodingErrors) {
         return new StringReader(string);
     }
 
     @Override
-    public CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors) {
+    public CharSequence getCharContent(boolean ignoreEncodingErrors) {
         return string;
     }
     

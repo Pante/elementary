@@ -47,38 +47,38 @@ class SourceTest {
     
     @Test
     void assign() {
-        assertEquals("var a = b;" + System.lineSeparator(), source.assign("a", "b").toString());
+        assertEquals("var a = b;\n", source.assign("a", "b").toString());
     }
     
     @Test
     void cast() {
-        assertEquals("var a = (B) c;" + System.lineSeparator(), source.cast("a", "B", "c").toString());
+        assertEquals("var a = (B) c;\n", source.cast("a", "B", "c").toString());
     }
     
     @Test
     void pack() {
-        assertEquals("package a.b.c;" + System.lineSeparator(), source.pack("a.b.c").toString());
+        assertEquals("package a.b.c;\n", source.pack("a.b.c").toString());
     }
     
     @Test
     void include() {
-        assertEquals("import a.b.c;" + System.lineSeparator(), source.include("a.b.c").toString());
+        assertEquals("import a.b.c;\n", source.include("a.b.c").toString());
     }
     
     
     @Test
     void line_newline() {
-        assertEquals(System.lineSeparator(), source.line().toString());
+        assertEquals("\n", source.line().toString());
     }
     
     @Test
     void line_element() {
-        assertEquals("    test" + System.lineSeparator(), source.indentation(4).line("test").toString());
+        assertEquals("    test\n", source.indentation(4).line("test").toString());
     }
     
     @Test
     void line_elements() {
-        assertEquals("    abc" + System.lineSeparator(), source.indentation(4).line("a", "b", "c").toString());
+        assertEquals("    abc\n", source.indentation(4).line("a", "b", "c").toString());
     }
     
     
@@ -90,17 +90,17 @@ class SourceTest {
     
     @Test
     void indent() {
-        assertEquals(" ".repeat(8) + System.lineSeparator(), source.indent().indent().line("").toString());
+        assertEquals(" ".repeat(8) + "\n", source.indent().indent().line("").toString());
     }
     
     @Test
     void unindent() {
-        assertEquals(" ".repeat(4) + System.lineSeparator(), source.indent().indent().unindent().line("").toString());
+        assertEquals(" ".repeat(4) + "\n", source.indent().indent().unindent().line("").toString());
     }
     
     @Test
     void indentation() {
-        assertEquals(" ".repeat(5) + System.lineSeparator(), source.indentation(5).line("").toString());
+        assertEquals(" ".repeat(5) + "\n", source.indentation(5).line("").toString());
     }
     
     

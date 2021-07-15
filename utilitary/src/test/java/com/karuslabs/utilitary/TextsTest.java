@@ -23,14 +23,15 @@
  */
 package com.karuslabs.utilitary;
 
-import com.karuslabs.utilitary.texts.Texts;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Stream;
-
+import javax.lang.model.element.Modifier;
 import org.junit.jupiter.api.Test;
+
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
+import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
@@ -95,20 +96,9 @@ class TextsTest {
         assertEquals(expected, Texts.join(first, "b", second));
     }
     
-    
     @Test
-    void format_reason() {
-        assertEquals("\"something\" why", Texts.format("something", "why"));
-    }
-    
-    @Test
-    void format_reason_resolution() {
-        assertEquals("\"something\" why, how", Texts.format("something", "why", "how"));
-    }
-    
-    @Test
-    void quote() {
-        assertEquals("\"something\"", Texts.quote("something"));
+    void sort() {
+        assertArrayEquals(new Modifier[] {PUBLIC, STATIC, ABSTRACT, FINAL}, Texts.sort(STATIC, FINAL, PUBLIC, ABSTRACT));
     }
 
 } 

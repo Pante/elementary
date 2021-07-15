@@ -36,12 +36,12 @@
     <repositories>
         <repository>
             <id>chimera-releases</id>
-            <url>https://repo.karuslabs.com/repository/chimera-releases/</url>
+            <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
         </repository>
         
         <repository>
             <id>chimera-snapshots</id>
-            <url>https://repo.karuslabs.com/repository/chimera-snapshots/</url>
+            <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
         </repository>
     </repositories>
     

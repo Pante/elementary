@@ -23,7 +23,6 @@
  */
 package com.karuslabs.elementary.file;
 
-import com.karuslabs.annotations.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.io.*;
@@ -37,7 +36,7 @@ import static javax.tools.JavaFileObject.Kind.SOURCE;
 /**
  * Utilities for creating {@code JavaFileObject}s.
  */
-public @Static class FileObjects {
+public class FileObjects {
     
     /**
      * A dummy Java source file.

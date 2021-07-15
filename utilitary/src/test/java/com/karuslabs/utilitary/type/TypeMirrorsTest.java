@@ -23,6 +23,9 @@
  */
 package com.karuslabs.utilitary.type;
 
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+
 import java.util.*;
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
@@ -30,6 +33,7 @@ import javax.lang.model.type.*;
 import javax.lang.model.util.*;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -37,37 +41,38 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(ToolsExtension.class)
+@Introspect
 class TypeMirrorsTest {
- 
-    DeclaredType mirror = mock(DeclaredType.class);
-    DeclaredType other = mock(DeclaredType.class);
-    TypeMirror type = mock(TypeMirror.class);
-    TypeElement element = when(mock(TypeElement.class).asType()).thenReturn(type).getMock();
-    Elements elements = when(mock(Elements.class).getTypeElement(String.class.getName())).thenReturn(element).getMock();
-    AnnotationMirror annotation = when(mock(AnnotationMirror.class).getAnnotationType()).thenReturn(mirror).getMock();
-    Types delegate = mock(Types.class);
-    TypeMirrors types = new TypeMirrors(elements, delegate);
+    
+    TypeMirrors types = new TypeMirrors(Tools.elements(), Tools.types());
+    Cases cases = Tools.cases();
+    
+    @Case("primitive") int primitive;
+    @Case("string_variable") String string_variable;
+    @Case("generic_executable") <T extends String> T generic_executable() { return null; }
     
     
     @Test
     void is_primitive() {
         var type = mock(PrimitiveType.class);
-        assertFalse(TypeMirrors.is(type, String.class));
+        assertTrue(TypeMirrors.is(cases.one("primitive").asType(), int.class));
     }
     
     @Test
-    void is_variable() {
-        var variable = mock(VariableElement.class);
-        TypeMirror type = when(mock(DeclaredType.class).asElement()).thenReturn(variable).getMock();
-        assertFalse(TypeMirrors.is(type, String.class));
+    void is_not_primitive() {
+        var type = mock(PrimitiveType.class);
+        assertFalse(TypeMirrors.is(cases.one("primitive").asType(), String.class));
     }
     
     @Test
     void is_declared_type() {
-        Name name = when(mock(Name.class).contentEquals(String.class.getName())).thenReturn(true).getMock();
-        TypeElement element = when(mock(TypeElement.class).getQualifiedName()).thenReturn(name).getMock();
-        TypeMirror type = when(mock(DeclaredType.class).asElement()).thenReturn(element).getMock();
-        assertTrue(TypeMirrors.is(type, String.class));
+        assertTrue(TypeMirrors.is(cases.one("string_variable").asType(), String.class));
+    }
+    
+    @Test
+    void is_not_declared_type() {
+        assertFalse(TypeMirrors.is(((ExecutableElement) cases.one("generic_executable")).getReturnType(), String.class));
     }
     
     
@@ -95,97 +100,88 @@ class TypeMirrorsTest {
     
     @Test
     void annotation() {
-        when(delegate.isSameType(mirror, other)).thenReturn(true);
-        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
-        
-        assertEquals(annotation, types.annotation(element, other));
+        var element = cases.one("string_variable");
+        var annotation = element.getAnnotationMirrors().get(0);
+        assertEquals(annotation, types.annotation(element, annotation.getAnnotationType()));
     }
     
     @Test
     void annotation_null() {
-        when(delegate.isSameType(mirror, other)).thenReturn(false);
-        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
-        
-        assertNull(types.annotation(element, other));
+        var element = cases.one("string_variable");
+        assertNull(types.annotation(element, (DeclaredType) element.asType()));
     }
     
     @Test
     void annotations() {
-        when(delegate.isSameType(mirror, other)).thenReturn(true);
-        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
-        
-        assertEquals(List.of(annotation), types.annotations(element, other));
+        var element = cases.one("string_variable");
+        var annotation = element.getAnnotationMirrors().get(0);
+        assertEquals(List.of(annotation), types.annotations(element, annotation.getAnnotationType()));
     }
     
     @Test
     void annotations_empty() {
-        when(delegate.isSameType(mirror, other)).thenReturn(false);
-        doReturn(List.of(annotation)).when(element).getAnnotationMirrors();
-        
-        assertTrue(types.annotations(element, other).isEmpty());
+        var element = cases.one("string_variable");
+        assertEquals(List.of(), types.annotations(element, (DeclaredType) element.asType()));
     }
     
     
     @Test
     void element_type() {
-        when(delegate.asElement(type)).thenReturn(element);
-        
-        assertEquals(element, types.element(type));
+        var element = Tools.typeMirrors().asElement(types.type(String.class));
+        assertEquals(element, types.asTypeElement(cases.one("string_variable").asType()));
     }
     
     @Test
     void element_primitive() {
-        when(delegate.asElement(type)).thenReturn(mock(Element.class));
-        
-        assertNull(types.element(type));
+        assertNull(types.asTypeElement(cases.one("primitive").asType()));
     }
     
     @Test
     void box_primitive() {
-        var primitive = mock(PrimitiveType.class);
-        when(delegate.boxedClass(primitive)).thenReturn(element);
-        
-        assertEquals(type, types.box(primitive));
-        verify(delegate, times(1)).boxedClass(primitive);
+        assertEquals(types.type(Integer.class), types.box(types.type(int.class)));
     }
     
     @Test
     void box_non_primitive() {
+        var type = types.type(String.class);
         assertSame(type, types.box(type));
-        verify(delegate, never()).boxedClass(any());
     }
     
     @Test
     void type() {
-        assertEquals(type, types.type(String.class));
-        verifyNoInteractions(delegate);
+        assertNotNull(types.type(String.class));
     }
     
     @Test
     void type_primitive() {
-        types.type(int.class);
-        verify(delegate).getPrimitiveType(TypeKind.INT);
+        assertEquals(TypeKind.INT, types.type(int.class).getKind());
     }
     
     @Test
     void erasure_class() {
-        when(delegate.erasure(any(TypeMirror.class))).thenReturn(mirror);
-        
-        assertEquals(mirror, types.erasure(String.class));
-        verify(delegate).erasure(type);
+        var list = types.erasure(List.class);
+        assertNotEquals(types.type(List.class), list);
+        assertEquals("java.util.List", list.toString());
     }
     
     @Test
     void specialize_classes() {
-        var declared = mock(DeclaredType.class);
-        when(delegate.getDeclaredType(element, mirror)).thenReturn(declared);
-        
-        TypeElement string = when(mock(TypeElement.class).asType()).thenReturn(mirror).getMock();
-        when(elements.getTypeElement(UUID.class.getName())).thenReturn(string);
-        
-        assertEquals(declared, types.specialize(String.class, UUID.class));
+        var list = types.specialize(List.class, UUID.class);
+        assertNotEquals(types.type(List.class), list);
+        assertEquals("java.util.List<java.util.UUID>", list.toString());
     }
     
+}
+
+class DelegateTypeMirrorsTest {
+
+    Elements elements = mock(Elements.class);
+    Types delegate = mock(Types.class);
+    TypeMirrors types = new TypeMirrors(elements, delegate);
+    
+    TypeElement element = mock(TypeElement.class);
+    DeclaredType type = mock(DeclaredType.class);
+    DeclaredType other = mock(DeclaredType.class);
     
     @Test
     void asElement() {
@@ -195,26 +191,26 @@ class TypeMirrorsTest {
     
     @Test
     void isSameType() {
-        types.isSameType(type, mirror);
-        verify(delegate).isSameType(type, mirror);
+        types.isSameType(type, other);
+        verify(delegate).isSameType(type, other);
     }
     
     @Test
     void isSubtype() {
-        types.isSubtype(type, mirror);
-        verify(delegate).isSubtype(type, mirror);
+        types.isSubtype(type, other);
+        verify(delegate).isSubtype(type, other);
     }
     
     @Test
     void isAssignable() {
-        types.isAssignable(type, mirror);
-        verify(delegate).isAssignable(type, mirror);
+        types.isAssignable(type, other);
+        verify(delegate).isAssignable(type, other);
     }
     
     @Test
     void contains() {
-        types.contains(type, mirror);
-        verify(delegate).contains(type, mirror);
+        types.contains(type, other);
+        verify(delegate).contains(type, other);
     }
     
     @Test
@@ -282,21 +278,21 @@ class TypeMirrorsTest {
     
     @Test
     void getWildcardType() {
-        types.getWildcardType(type, mirror);
-        verify(delegate).getWildcardType(type, mirror);
+        types.getWildcardType(type, other);
+        verify(delegate).getWildcardType(type, other);
     }
     
     @Test
     void getDeclaredType() {
-        types.getDeclaredType(element, type, mirror);
-        verify(delegate).getDeclaredType(element, type, mirror);
+        types.getDeclaredType(element, type, other);
+        verify(delegate).getDeclaredType(element, type, other);
     }
     
     @Test
     void getDeclaredType_nested() {
         var declared = mock(DeclaredType.class);
-        types.getDeclaredType(declared, element, type, mirror);
-        verify(delegate).getDeclaredType(declared, element, type, mirror);
+        types.getDeclaredType(declared, element, type, other);
+        verify(delegate).getDeclaredType(declared, element, type, other);
     }
     
     @Test
@@ -305,5 +301,5 @@ class TypeMirrorsTest {
         types.asMemberOf(declared, element);
         verify(delegate).asMemberOf(declared, element);
     }
-    
+
 }

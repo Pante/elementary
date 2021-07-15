@@ -49,15 +49,15 @@ public class TypeMirrors implements Types {
      *         represent the same type
      */
     public static boolean is(TypeMirror type, Class<?> expected) {
+        if (type instanceof PrimitiveType) {
+            return type.getKind() == kind(expected);
+        }
+        
         if (!(type instanceof DeclaredType)) {
             return false;
         }
         
         var element = ((DeclaredType) type).asElement();
-        if (!(element instanceof TypeElement)) {
-            return false;
-        }
-        
         return ((TypeElement) element).getQualifiedName().contentEquals(expected.getName());
     }
     
@@ -108,9 +108,9 @@ public class TypeMirrors implements Types {
     }
     
     /**
-     * Returns the first annotation on the given element which matches the given type.
+     * Returns the first annotation on the given asTypeElement which matches the given type.
      * 
-     * @param element the element
+     * @param element the asTypeElement
      * @param type the annotation type
      * @return the annotation, or {@code null} if no annotation matches the given type
      */
@@ -125,9 +125,9 @@ public class TypeMirrors implements Types {
     }
     
     /**
-     * Returns all annotations on the given element that match the given type.
+     * Returns all annotations on the given asTypeElement that match the given type.
      * 
-     * @param element the element
+     * @param element the asTypeElement
      * @param type the annotation type
      * @return the annotations that match the given type
      */
@@ -144,14 +144,9 @@ public class TypeMirrors implements Types {
      * @return a {@code TypeElement} that represents the given type, or {@code null}
      *         if the given type is not represented by a {@code TypeElement}
      */
-    public @Nullable TypeElement element(TypeMirror type) {
+    public @Nullable TypeElement asTypeElement(TypeMirror type) {
         var element = types.asElement(type);
-        if (element instanceof TypeElement) {
-            return (TypeElement) element;
-            
-        } else {
-            return null;
-        }
+        return element instanceof TypeElement ? (TypeElement) element : null;
     }
     
     /**
@@ -190,7 +185,7 @@ public class TypeMirrors implements Types {
     /**
      * Returns the erasure of a type.
      *
-     * @param type  the type to be erased
+     * @param type  the type to be erasured
      * @return the erasure of the given type
      * @throws IllegalArgumentException if given a type for a package or module
      */

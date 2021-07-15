@@ -23,14 +23,14 @@
  */
 package com.karuslabs.utilitary.type;
 
-import com.karuslabs.utilitary.texts.Texts;
+import com.karuslabs.utilitary.Texts;
 
 import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 import javax.lang.model.util.*;
 
-import static com.karuslabs.utilitary.type.TypePrinter.SIMPLE;
+import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
 public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, StringBuilder> {
     
@@ -43,7 +43,9 @@ public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, 
     }
     
     static void annotation(AnnotationMirror annotation, AnnotationValuePrinter printer, StringBuilder builder) {
-        builder.append('@').append(annotation.getAnnotationType().accept(SIMPLE, builder));
+        builder.append('@');
+        annotation.getAnnotationType().accept(simple(), builder);
+        
         var values = annotation.getElementValues();
         if (values.isEmpty()) {
             return;
@@ -89,7 +91,7 @@ public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, 
     
     @Override
     public Void visitType(TypeMirror type, StringBuilder builder) {
-        type.accept(SIMPLE, builder);
+        type.accept(simple(), builder);
         builder.append(".class");
         return null;
     }

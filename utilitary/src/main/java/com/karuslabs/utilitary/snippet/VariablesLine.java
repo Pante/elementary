@@ -21,33 +21,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary.texts;
+package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.element.VariableElement;
 
-import static com.karuslabs.utilitary.texts.Texts.join;
-import static com.karuslabs.utilitary.type.TypePrinter.SIMPLE;
+import static com.karuslabs.utilitary.Texts.join;
 
-public class TypesText extends Text {
-    
-    public static TypesText of(List<? extends TypeMirror> types, int column, int position) {
+public class VariablesLine extends Line {
+
+    public static VariablesLine of(List<? extends VariableElement> variables, int column, int position) {
         var builder = new StringBuilder();
-        var positions = new LinkedHashMap<TypeMirror, Integer>();
+        var values = new LinkedHashMap<VariableElement, VariableLine>();
         
-        join(builder, types, (type, sb) -> {
-            type.accept(SIMPLE, sb);
-            positions.put(type, position + sb.length());
+        builder.append('(');
+        join(builder, variables, (variable, sb) -> {
+            var value = VariableLine.of(variable, column, position + sb.length());
+            values.put(variable, value);
+            sb.append(value);
         }, ", ");
+        builder.append(')');
         
-        return new TypesText(positions, builder.toString(), column, position);
+        return new VariablesLine(values, builder.toString(), column, position);
     }
     
-    public final Map<TypeMirror, Integer> positions;
-    
-    TypesText(Map<TypeMirror, Integer> positions, String value, int column, int position) {
+    public final Map<VariableElement, VariableLine> values;
+   
+    VariablesLine(Map<VariableElement, VariableLine> values, String value, int column, int position) {
         super(value, column, position);
-        this.positions = positions;
+        this.values = values;
     }
     
 }

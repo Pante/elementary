@@ -23,7 +23,6 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.annotations.*;
 import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.CompilationException;
 import com.karuslabs.utilitary.Logger;
@@ -143,7 +142,7 @@ class DaemonCompiler extends Thread {
         
         final CompletableFuture<Environment> environment = new CompletableFuture<>();
         final CountDownLatch completion = new CountDownLatch(1);
-        @Lazy ProcessingEnvironment env;
+        ProcessingEnvironment env;
 
         @Override
         public void init(ProcessingEnvironment env) {

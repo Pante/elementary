@@ -23,8 +23,6 @@
  */
 package com.karuslabs.elementary.file;
 
-import com.karuslabs.annotations.Ignored;
-
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
@@ -110,12 +108,12 @@ public class MemoryFileManager extends ForwardingFileManager {
     
     
     @Override
-    public FileObject getFileForOutput(Location location, String pack, String relative, @Ignored FileObject sibling) {
+    public FileObject getFileForOutput(Location location, String pack, String relative, FileObject sibling) {
         return files.computeIfAbsent(of(location, pack, relative), MemoryFileObject::new);
     }
     
     @Override
-    public JavaFileObject getJavaFileForOutput(Location location, String type, Kind kind, @Ignored FileObject sibling) {
+    public JavaFileObject getJavaFileForOutput(Location location, String type, Kind kind, FileObject sibling) {
         return files.computeIfAbsent(of(location, type, kind), MemoryFileObject::new);
     }
     

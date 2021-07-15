@@ -21,32 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary.texts;
+package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
-import static com.karuslabs.utilitary.texts.Texts.sort;
+import static com.karuslabs.utilitary.Texts.sort;
 
-public class ModifiersText extends Text {
+public class ModifiersLine extends Line {
 
-    public static ModifiersText of(Set<Modifier> modifiers, int column, int position) {
+    public static ModifiersLine of(Set<Modifier> modifiers, int column, int position) {
+        var values = new LinkedHashMap<Modifier, Line>();
         var builder = new StringBuilder();
-        var positions = new LinkedHashMap<Modifier, Integer>();
         
         for (var modifier : sort(modifiers)) {
-            positions.put(modifier, position + builder.length());
-            builder.append(modifier.toString()).append(' ');
+            var line = new Line(modifier.toString(), column, position + builder.length());
+            values.put(modifier, line);
+            builder.append(line).append(' ');
         }
         
-        return new ModifiersText(positions, builder.toString(), column, position);
+        return new ModifiersLine(values, builder.toString(), column, position);
     }
     
-    public final Map<Modifier, Integer> positions;
+    public final Map<Modifier, Line> values;
     
-    ModifiersText(Map<Modifier, Integer> positions, String value, int column, int position) {
-        super(value, column, position);
-        this.positions = positions;
+    ModifiersLine(Map<Modifier, Line> values, String line, int column, int position) {
+        super(line, column, position);
+        this.values = values;
     }
     
 }

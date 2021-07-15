@@ -1,24 +1,32 @@
-## 1.2.0 - Spit Shine
+## 1.2.0 - Snippety Snip
 
-- Add `com.karuslabs.utilitary.texts`
+## Utilitary
+
+- Add `com.karuslabs.utilitary.snippet`
 - Add `AnnotationValuePrinter`
 - Add `Logger.error(Element, AnnotationMirror, Object)`
 - Add `Logger.warn(Element, AnnotationMirror, Object)`
 - Add `Logger.note(Element, AnnotationMirror, Object)`
-- Add `TypeMirrors.annotation(Element, DeclaredType)`
-- Add `TypeMirrors.annotations(Element, DeclaredType)`
 - Change `Logger.error(Element, String)` to `Logger.error(Element, Object)`
 - Change `Logger.warn(Element, String)` to `Logger.warn(Element, Object)`
 - Change `Logger.note(Element, String)` to `Logger.note(Element, Object)`
 - Change `Source` to always append a newline using `\n` instead of the system's line separator - using the system's line separator was a terrible mistake
+- Change `TypeMirrors.element(TypeMirror)` to `TypeMirrors.asTypeElement(TypeMirror)`
+- Change `TypePrinter.SIMPLE` to `TypePrinter.simple()`
+- Change `TypePrinter.QUALIFIED` to `TypePrinter.qualified()`
+- Change `Walker.specializedAncestor(TypeMirrors)` to `Walker.ancestor(TypeMirrors)`
+- Fix `TypeMirrors.is(TypeMirror, Class)` always returning false on primitive types
+- Fix `TypePrinter` throwing a StackOverflowError on circular type parameters
 - Remove `com.karuslabs.annotations` dependency - annnotation is now compiled agaisnt JDK 16
-- Remove `com.karuslabs.utilitary.Texts`
+- Remove `Names`
 - Remove `Logger.error(Element, Object, String, String)`
 - Remove `Logger.error(Element, Object, String)`
 - Remove `Logger.warn(Element, Object, String, String)`
 - Remove `Logger.warn(Element, Object, String)`
 - Remove `Logger.note(Element, Object, String, String)`
 - Remove `Logger.note(Element, Object, String)`
+- Remove `Texts.quote(String)`
+- Remove `Walker.erasuredAncestor(TypeMirrors)` - Erasured ancestors is subtlely flawed since a Collection<String> will be an ancestor of a List<Integer>
 
 ## 1.1.1 - Polish & Shine (20/06/2021)
 

@@ -21,34 +21,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary.texts;
+package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.AnnotationMirror;
 
-import static com.karuslabs.utilitary.texts.Texts.join;
-
-public class VariablesText extends Text {
+public class AnnotationsLine extends Line {
     
-    public static VariablesText of(List<? extends VariableElement> variables, int column, int position) {
+    public static AnnotationsLine of(List<? extends AnnotationMirror> annotations, int column, int position) {
+        var values = new LinkedHashMap<AnnotationMirror, Line>();
         var builder = new StringBuilder();
-        var values = new LinkedHashMap<VariableElement, VariableText>();
         
-        builder.append('(');
-        join(builder, variables, (variable, sb) -> {
-            var value = VariableText.inline(variable, column, position + sb.length());
-            sb.append(value);
-            values.put(variable, value);
-        }, ", ");
-        builder.append(')');
+        for (var annotation : annotations) {
+            var line = of(annotation, column, position + builder.length());
+            values.put(annotation, line);
+            builder.append(line).append(" ");
+        }
         
-        return new VariablesText(values, builder.toString(), column, position);
+        return new AnnotationsLine(values, builder.toString(), column, position);
     }
+
+    public final Map<AnnotationMirror, Line> values;
     
-    public final Map<VariableElement, VariableText> values;
-   
-    VariablesText(Map<VariableElement, VariableText> values, String value, int column, int position) {
-        super(value, column, position);
+    AnnotationsLine(Map<AnnotationMirror, Line> values, String line, int column, int position) {
+        super(line, column, position);
         this.values = values;
     }
     

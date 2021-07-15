@@ -32,7 +32,7 @@ import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
 import static com.karuslabs.satisfactory.Assertions.*;
-import static com.karuslabs.utilitary.Texts.join;
+import static com.karuslabs.utilitary.text.Texts.join;
 
 /**
  * An assertion for variables which delegates testing of individual parts of a 

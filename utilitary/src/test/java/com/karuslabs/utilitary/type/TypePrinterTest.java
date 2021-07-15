@@ -23,156 +23,89 @@
  */
 package com.karuslabs.utilitary.type;
 
-import com.karuslabs.utilitary.Names;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Consumer;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
+import static com.karuslabs.utilitary.type.TypePrinter.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+@ExtendWith(ToolsExtension.class)
+@Introspect
 class TypePrinterTest {
-
-    TypePrinter printer = spy(new StubTypePrinter());
-    StringBuilder builder = new StringBuilder();
     
-    DeclaredType declared = mock(DeclaredType.class);
-    
-    TypeVariable variable = type(TypeVariable.class, "variable");
-    TypeMirror upper = type("upper");
-    TypeMirror lower = type("lower");
-    
-    
-    TypeMirror type(String message) {
-        return type(TypeMirror.class, message);
-    }
-    
-    <T extends TypeMirror> T type(Class<T> type, String message) {
-        return when(mock(type).accept(printer, builder)).then(invocation -> 
-            invocation.getArgument(1, StringBuilder.class).append(message)
-        ).getMock();
-    }
+    Cases cases = Tools.cases();
+    @Case("declared") String declared;
+    @Case("type_variables") Map<String, Integer> type_variables;
+    @Case("upper_bound") class upper_bound<T extends String> {}
+    @Case("wildcard_extends") List<? extends String> wildcard_extends;
+    @Case("wildcard_super") List<? super String> wildcard_super;
+    @Case("intersection") class Intersection<T extends Runnable & Iterable<T> & Consumer<T>> {}
+    @Case("array") String[] array;
+    @Case("primitive") int primitive;
+    @Case("no") void no() {}
+    @Case("circular") class Circular<T extends Circular<T, C>, C extends Consumer<T>> {}
     
     
     @Test
     void visitDeclared() {
-        when(declared.getTypeArguments()).thenReturn(List.of());
-        
-        printer.visitDeclared(declared, builder);
-        assertEquals("declared", builder.toString());
+        assertEquals("String", simple(cases.one("declared").asType()));
     }
     
     @Test
     void visitDeclared_type_variables() {
-        doReturn(List.of(variable, variable)).when(declared).getTypeArguments();
-        
-        printer.visitDeclared(declared, builder);
-        
-        assertEquals("declared<variable, variable>", builder.toString());
+        assertEquals("Map<String, Integer>", simple(cases.one("type_variables").asType()));
     }
-    
     
     @Test
     void visitTypeVariable_upper() {
-        Element element = when(mock(Element.class).getSimpleName()).thenReturn(Names.of("a")).getMock();
-        when(variable.asElement()).thenReturn(element);
-        
-        when(lower.getKind()).thenReturn(TypeKind.NULL);
-        
-        when(variable.getUpperBound()).thenReturn(upper);
-        when(variable.getLowerBound()).thenReturn(lower);
-        
-        
-        try (var scope = mockStatic(TypeMirrors.class)) {
-            scope.when(() -> TypeMirrors.is(upper, Object.class)).thenReturn(false);
-            
-            printer.visitTypeVariable(variable, builder);
-            assertEquals("a extends upper", builder.toString());
-        }
+        assertEquals("TypePrinterTest.upper_bound<T extends String>", simple(cases.one("upper_bound").asType()));
     }
-    
-    @Test
-    void visitTypeVariable_lower() {
-        Element element = when(mock(Element.class).getSimpleName()).thenReturn(Names.of("a")).getMock();
-        when(variable.asElement()).thenReturn(element);
-        
-        when(lower.getKind()).thenReturn(TypeKind.DECLARED);
-        
-        when(variable.getUpperBound()).thenReturn(upper);
-        when(variable.getLowerBound()).thenReturn(lower);
-        
-        
-        try (var scope = mockStatic(TypeMirrors.class)) {
-            scope.when(() -> TypeMirrors.is(upper, Object.class)).thenReturn(true);
-            
-            printer.visitTypeVariable(variable, builder);
-            assertEquals("a super lower", builder.toString());
-        }
-    }
-    
     
     @Test
     void visitWildcard_extends() {
-        var extension = type("other");
-        WildcardType wildcard = when(mock(WildcardType.class).getExtendsBound()).thenReturn(extension).getMock();
-        printer.visitWildcard(wildcard, builder);
-        assertEquals("? extends other", builder.toString());
+        assertEquals("List<? extends String>", simple(cases.one("wildcard_extends").asType()));
     }
     
     @Test
     void visitWildcard_super() {
-        var superBound = type("other");
-        WildcardType wildcard = when(mock(WildcardType.class).getSuperBound()).thenReturn(superBound).getMock();
-        printer.visitWildcard(wildcard, builder);
-        assertEquals("? super other", builder.toString());
+        assertEquals("List<? super String>", simple(cases.one("wildcard_super").asType()));
     }
-    
     
     @Test
     void visitIntersection() {
-        IntersectionType intersection = mock(IntersectionType.class);
-        
-        var a = type("a");
-        var b = type("b");
-        doReturn(List.of(a, b)).when(intersection).getBounds();
-        
-        printer.visitIntersection(intersection, builder);
-        
-        assertEquals("a & b", builder.toString());
+        assertEquals(
+            "TypePrinterTest.Intersection<T extends Runnable & Iterable<T> & Consumer<T>>", 
+            simple(cases.one("intersection").asType())
+        );
     }
-    
-    @Test
-    void visitIntersection_null() {
-        IntersectionType intersection = when(mock(IntersectionType.class).getBounds()).thenReturn(List.of()).getMock();
-        printer.visitIntersection(intersection, builder);
-        assertEquals("", builder.toString());      
-    }
-    
     
     @Test
     void visitArray() {
-        var type = type("type");
-        ArrayType array = when(mock(ArrayType.class).getComponentType()).thenReturn(type).getMock();
-        
-        printer.visitArray(array, builder);
-        
-        assertEquals("type[]",builder.toString());
+        assertEquals("String[]", simple(cases.one("array").asType()));
     }
     
     @Test
     void visitPrimitive() {
-        PrimitiveType primitive = when(mock(PrimitiveType.class).getKind()).thenReturn(TypeKind.BOOLEAN).getMock();
-        printer.visitPrimitive(primitive, builder);
-        assertEquals("boolean", builder.toString());
+        assertEquals("int", simple(cases.one("primitive").asType()));
     }
     
     @Test
     void visitNoType() {
-        printer.visitNoType(mock(NoType.class), builder);
-        assertEquals("void", builder.toString());
+        assertEquals("void", simple(((ExecutableElement) cases.one("no")).getReturnType()));
+    }
+    
+    @Test
+    void visit_circular() {
+        assertEquals("TypePrinterTest.Circular<T extends TypePrinterTest.Circular<T, C extends Consumer<T>>, C>", simple(cases.one("circular").asType()));
     }
     
     @Test
@@ -181,30 +114,22 @@ class TypePrinterTest {
         
         assertEquals(
             "TypePrinter does not support EXECUTABLE",
-            assertThrows(UnsupportedOperationException.class, () -> printer.defaultAction(type, builder)).getMessage()
+            assertThrows(UnsupportedOperationException.class, () -> new SimpleTypePrinter().defaultAction(type, new StringBuilder())).getMessage()
         );
     }
 
 }
 
-class StubTypePrinter extends TypePrinter {
-    @Override
-    protected void rawType(DeclaredType type, StringBuilder builder) {
-
-        builder.append("declared");
-    }
-}
-
+@ExtendWith(ToolsExtension.class)
+@Introspect("TypePrinterTest")
 class QualifiedTypePrinterTest {
+    
+    Cases cases = Tools.cases();
+    @Case("qualified") List<String> qualified;
     
     @Test
     void rawType() {        
-        TypeElement element = when(mock(TypeElement.class).getQualifiedName()).thenReturn(Names.of("a.b.c.type")).getMock();
-        DeclaredType type = when(mock(DeclaredType.class).asElement()).thenReturn(element).getMock();
-        when(type.getTypeArguments()).thenReturn(List.of());
-        when(type.accept(any(), any())).then((invocation) -> TypePrinter.QUALIFIED.visitDeclared(type, invocation.getArgument(1, StringBuilder.class)));
-  
-        assertEquals("a.b.c.type", TypePrinter.qualified(type));
+        assertEquals("java.util.List<java.lang.String>", qualified(cases.one("qualified").asType()));
     }
     
     @Test
@@ -214,36 +139,22 @@ class QualifiedTypePrinterTest {
         
         assertEquals(
             "DeclaredType should be a TypeElement",
-            assertThrows(IllegalStateException.class, () -> TypePrinter.QUALIFIED.rawType(type, new StringBuilder())).getMessage()
+            assertThrows(IllegalStateException.class, () -> qualified().rawType(type, new StringBuilder())).getMessage()
         );
     }
     
 }
 
+@ExtendWith(ToolsExtension.class)
+@Introspect("TypePrinterTest")
 class SimpleTypePrinterTest {
-    
-    PackageElement pack = mock(PackageElement.class);
-    TypeElement element = when(mock(TypeElement.class).getQualifiedName()).thenReturn(Names.of("a.b.c.type")).getMock();
-    DeclaredType type = when(mock(DeclaredType.class).asElement()).thenReturn(element).getMock();
-    
-    @BeforeEach
-    void before() {
-        when(element.accept(any(), any())).thenReturn(pack);
-        when(type.accept(any(), any())).then((invocation) -> TypePrinter.SIMPLE.visitDeclared(type, invocation.getArgument(1, StringBuilder.class)));
-    }
+
+    Cases cases = Tools.cases();
+    @Case("simple") List<String> simple;
     
     @Test
-    void rawType_default_package() {
-        when(pack.getQualifiedName()).thenReturn(Names.of(""));
-        
-        assertEquals("a.b.c.type", TypePrinter.simple(type));
-    }
-    
-    @Test
-    void rawType_package() {
-        when(pack.getQualifiedName()).thenReturn(Names.of("a.b.c"));
-        
-        assertEquals("type", TypePrinter.simple(type));
+    void rawType() {
+        assertEquals("List<String>", TypePrinter.simple(cases.one("simple").asType()));
     }
     
     @Test
@@ -253,7 +164,7 @@ class SimpleTypePrinterTest {
         
         assertEquals(
             "DeclaredType should be a TypeElement",
-            assertThrows(IllegalStateException.class, () -> TypePrinter.SIMPLE.rawType(type, new StringBuilder())).getMessage()
+            assertThrows(IllegalStateException.class, () -> simple().rawType(type, new StringBuilder())).getMessage()
         );
     }
     

@@ -23,82 +23,110 @@
  */
 package com.karuslabs.utilitary.type;
 
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+
 import java.util.stream.Stream;
 import javax.lang.model.element.*;
 
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.params.provider.Arguments.of;
-import static org.mockito.Mockito.*;
 
+@ExtendWith(ToolsExtension.class)
+@Introspect
 class FindTest {
+      
+    Cases cases = Tools.cases();
+    Element module = Tools.elements().getModuleOf(cases.one("type"));
+    Element pack = Tools.elements().getPackageOf(cases.one("type"));
     
-    static final Element MODULE;
-    static final Element PACKAGE;
-    static final Element TYPE;
-    static final Element EXECUTABLE;
-    static final Element DEFAULT;
-    static final Element ENCLOSED;
-    
-    static {
-        MODULE = when(mock(ModuleElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitModule((ModuleElement) invocation.getMock(), null)
-        ).getMock();
-        PACKAGE = when(mock(PackageElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitPackage((PackageElement) invocation.getMock(), null)
-        ).getMock();
-        TYPE = when(mock(TypeElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitType((TypeElement) invocation.getMock(), null)
-        ).getMock();
+    @Case("type")
+    static class Type {
         
-        EXECUTABLE = when(mock(ExecutableElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitExecutable((ExecutableElement) invocation.getMock(), null)
-        ).getMock();
+        @Case("variable") String variable = "a";
         
-        DEFAULT = when(mock(VariableElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitVariable((VariableElement) invocation.getMock(), null)
-        ).getMock();
+        @Case("executable")
+        void execute() {}
         
-        ENCLOSED = when(mock(VariableElement.class).accept(any(), any())).then(
-            invocation -> invocation.getArgument(0, ElementVisitor.class).visitVariable((VariableElement) invocation.getMock(), null)
-        ).getMock();
-        
-        when(ENCLOSED.getEnclosingElement()).thenReturn(MODULE);
     }
-    
     
     @ParameterizedTest
-    @MethodSource("finders")
-    void visit(ElementVisitor<Element, Void> visitor, Element element, Element expected) {
-        assertEquals(expected, element.accept(visitor, null));
+    @MethodSource("module_parameters")
+    void module(Find finder, boolean found) {
+        assertEquals(module.accept(finder, null) != null, found);
     }
     
-    static Stream<Arguments> finders() {
+    static Stream<Arguments> module_parameters() {
         return Stream.of(
-            of(Find.EXECUTABLE, MODULE, null),
-            of(Find.EXECUTABLE, PACKAGE, null),
-            of(Find.EXECUTABLE, TYPE, null),
-            of(Find.EXECUTABLE, EXECUTABLE, EXECUTABLE),
-            of(Find.EXECUTABLE, DEFAULT, null),
-            of(Find.EXECUTABLE, ENCLOSED, null),
-            
-            of(Find.TYPE, MODULE, null),
-            of(Find.TYPE, PACKAGE, null),
-            of(Find.TYPE, TYPE, TYPE),
-            of(Find.TYPE, DEFAULT, null),
-            of(Find.TYPE, ENCLOSED, null),
-            
-            of(Find.PACKAGE, MODULE, null),
-            of(Find.PACKAGE, PACKAGE, PACKAGE),
-            of(Find.PACKAGE, TYPE, null),
-            of(Find.PACKAGE, ENCLOSED, null),
-            
-            of(Find.MODULE, MODULE, MODULE),
-            of(Find.MODULE, PACKAGE, null),
-            of(Find.MODULE, TYPE, null),
-            of(Find.MODULE, ENCLOSED, MODULE)
+            of(Find.MODULE, true),
+            of(Find.PACKAGE, false),
+            of(Find.TYPE, false),
+            of(Find.EXECUTABLE, false)
+        );
+    }
+    
+    @ParameterizedTest
+    @MethodSource("pack_parameters")
+    void pack(Find finder, boolean found) {
+        assertEquals(found, pack.accept(finder, null) != null);
+    }
+    
+    static Stream<Arguments> pack_parameters() {
+        return Stream.of(
+            of(Find.MODULE, true),
+            of(Find.PACKAGE, true),
+            of(Find.TYPE, false),
+            of(Find.EXECUTABLE, false)
+        );
+    }
+    
+    @ParameterizedTest
+    @MethodSource("type_parameters")
+    void type(Find finder, boolean found) {
+        assertEquals(found, cases.one("type").accept(finder, null) != null);
+    }
+    
+    static Stream<Arguments> type_parameters() {
+        return Stream.of(
+            of(Find.MODULE, true),
+            of(Find.PACKAGE, true),
+            of(Find.TYPE, true),
+            of(Find.EXECUTABLE, false)
+        );
+    }
+    
+    @ParameterizedTest
+    @MethodSource("executable_parameters")
+    void executable(Find finder, boolean found) {
+        assertEquals(found, cases.one("executable").accept(finder, null) != null);
+    }
+    
+    static Stream<Arguments> executable_parameters() {
+        return Stream.of(
+            of(Find.MODULE, true),
+            of(Find.PACKAGE, true),
+            of(Find.TYPE, true),
+            of(Find.EXECUTABLE, true)
+        );
+    }
+    
+    @ParameterizedTest
+    @MethodSource("variable_parameters")
+    void variable(Find finder, boolean found) {
+        assertEquals(found, cases.one("variable").accept(finder, null) != null);
+    }
+    
+    // We cannot test Find.EXECUTABLE since javac performs dead code elimation on
+    // local variables in a method.
+    static Stream<Arguments> variable_parameters() {
+        return Stream.of(
+            of(Find.MODULE, true),
+            of(Find.PACKAGE, true),
+            of(Find.TYPE, true)
         );
     }
 

@@ -23,6 +23,9 @@
  */
 package com.karuslabs.utilitary.type;
 
+import com.karuslabs.utilitary.Texts;
+
+import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleTypeVisitor9;
@@ -34,17 +37,6 @@ import javax.lang.model.util.SimpleTypeVisitor9;
 public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder> {
 
     /**
-     * A {@code TypePrinter} that creates a string representation of a visited type's
-     * fully qualified name.
-     */
-    public static final TypePrinter QUALIFIED = new QualifiedTypePrinter();
-    /**
-     * A {@code TypePrinter} that creates a string representation of a visited type's
-     * simple name.
-     */
-    public static final TypePrinter SIMPLE = new SimpleTypePrinter();
-
-    /**
      * Returns the fully qualified name of the given type.
      * 
      * @param type the type
@@ -52,8 +44,18 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
      */
     public static String qualified(TypeMirror type) {
         var builder = new StringBuilder();
-        type.accept(QUALIFIED, builder);
+        type.accept(qualified(), builder);
         return builder.toString();
+    }
+    
+    /**
+     * Creates a {@code TypePrinter} that creates a string representation of a visited type's
+     * fully qualified name.
+     * 
+     * @return a {@code TypePrinter}
+     */
+    public static final TypePrinter qualified() {
+        return new QualifiedTypePrinter();
     }
     
     /**
@@ -64,10 +66,21 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
      */
     public static String simple(TypeMirror type) {
         var builder = new StringBuilder();
-        type.accept(SIMPLE, builder);
+        type.accept(simple(), builder);
         return builder.toString();
     }
     
+    /**
+     * Creates a {@code TypePrinter} that creates a string representation of a visited 
+     * type's simple name.
+     * 
+     * @return a {@code TypePrinter}
+     */
+    public static TypePrinter simple() {
+        return new SimpleTypePrinter();
+    }
+    
+    private final Set<TypeMirror> visited = new HashSet<>();
     
     @Override
     public Void visitDeclared(DeclaredType type, StringBuilder builder) {
@@ -89,6 +102,9 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
     @Override
     public Void visitTypeVariable(TypeVariable variable, StringBuilder builder) {
         builder.append(variable.asElement().getSimpleName());
+        if (!visited.add(variable)) {
+            return null;
+        }
         
         // We do this to ignore the default <T extends Object> upper bound
         var upper = variable.getUpperBound();
@@ -96,10 +112,7 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
             upper.accept(this, builder.append(" extends "));
         }
         
-        var lower = variable.getLowerBound();
-        if (lower.getKind() != TypeKind.NULL) {
-            lower.accept(this, builder.append(" super "));
-        }
+        // Generics can never have lower bounds
         
         return null;
     }
@@ -123,17 +136,10 @@ public abstract class TypePrinter extends SimpleTypeVisitor9<Void, StringBuilder
     
     @Override
     public Void visitIntersection(IntersectionType intersection, StringBuilder builder) {
-        var bounds = intersection.getBounds();
-        if (bounds.isEmpty()) {
-            return null;
-        }
+        Texts.join(builder, intersection.getBounds(), (bound, sb) -> {
+            bound.accept(this, builder);
+        }, " & ");
         
-        for (int i = 0; i < bounds.size() - 1; i++) {
-            bounds.get(i).accept(this, builder);
-            builder.append(" & ");
-        }
-        
-        bounds.get(bounds.size() - 1).accept(this, builder);
         return null;
     }
     
@@ -185,7 +191,6 @@ class QualifiedTypePrinter extends TypePrinter {
         } else {
             throw new IllegalStateException("DeclaredType should be a TypeElement");
         }
-        
     }
 }
 

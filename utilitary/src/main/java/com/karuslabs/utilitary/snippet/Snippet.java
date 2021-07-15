@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2020 Karus Labs.
+ * Copyright 2021 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,42 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary;
+package com.karuslabs.utilitary.snippet;
 
-import javax.lang.model.element.Name;
+import java.util.*;
 
-import org.junit.jupiter.api.*;
+import static java.util.Map.Entry.comparingByKey;
+import static java.util.stream.Collectors.joining;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class NamesTest {
-
-    public static final String VALUE = Object.class.getSimpleName();
-    public static final Name NAME = Names.of(Object.class);
+public class Snippet implements CharSequence {
     
-    @Test
-    void contentEquals() {
-        assertTrue(NAME.contentEquals(VALUE));
+    public final Map<Integer, CharSequence> lines;
+    public final int first;
+    public final int last;
+    private final String value;
+    
+    public Snippet(Map<Integer, CharSequence> lines) {
+        this.lines = lines;
+        this.first = Collections.min(lines.keySet());
+        this.last = Collections.max(lines.keySet());
+        this.value = lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue()).collect(joining("\n"));
+    }
+
+    @Override
+    public int length() {
+        return value.length();
+    }
+
+    @Override
+    public char charAt(int index) {
+        return value.charAt(index);
+    }
+
+    @Override
+    public CharSequence subSequence(int start, int end) {
+        return value.subSequence(start, end);
     }
     
-    @Test
-    void length() {
-        assertEquals(VALUE.length(), NAME.length());
+    @Override
+    public String toString() {
+        return value;
     }
-    
-    @Test
-    void charAt() {
-        assertEquals(VALUE.charAt(1), NAME.charAt(1));
-    }
-    
-    @Test
-    void subSequence() {
-        assertEquals(VALUE.subSequence(0, 2), NAME.subSequence(0, 2));
-    }
-    
-    @Test
-    void toString_() {
-        assertEquals(VALUE, NAME.toString());
-    }
-    
+
 }

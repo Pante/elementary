@@ -23,7 +23,6 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.annotations.Lazy;
 import com.karuslabs.elementary.junit.annotations.Case;
 
 import java.util.*;
@@ -39,8 +38,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public class Cases implements Iterable<Element> {
     
     private final RoundEnvironment environment;
-    private @Lazy List<Element> elements;
-    private @Lazy Map<String, List<Element>> labels;
+    private List<Element> elements;
+    private Map<String, List<Element>> labels;
     
     
     /**

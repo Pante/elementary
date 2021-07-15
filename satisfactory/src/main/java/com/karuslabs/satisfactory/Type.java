@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.text.Texts;
 import com.karuslabs.utilitary.type.*;
 
 import java.util.function.BiConsumer;

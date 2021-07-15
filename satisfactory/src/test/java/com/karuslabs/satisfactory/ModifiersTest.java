@@ -37,11 +37,6 @@ class ModifiersTest {
     Assertion<Set<Modifier>> equal = Assertions.equal(PUBLIC, FINAL);
     
     @Test
-    void sort() {
-        assertArrayEquals(new Modifier[] {PUBLIC, STATIC, ABSTRACT, FINAL}, Modifiers.sort(STATIC, FINAL, PUBLIC, ABSTRACT));
-    }
-    
-    @Test
     void part() {
         assertEquals(Modifier.class, contains.part());
     }

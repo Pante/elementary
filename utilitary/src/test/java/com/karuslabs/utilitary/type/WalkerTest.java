@@ -23,121 +23,48 @@
  */
 package com.karuslabs.utilitary.type;
 
-import java.util.List;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+
+import java.util.*;
 import javax.lang.model.type.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-class WalkerTest {
+@ExtendWith(ToolsExtension.class)
+@Introspect("WalkerTest")
+class AncestorWalkerTest {
     
-    Walker<?> walker = Walker.erasuredAncestor(mock(TypeMirrors.class));
+    TypeMirrors types = Tools.typeMirrors();
+    Walker<TypeMirror> walker = Walker.ancestor(types);
+    Cases cases = Tools.cases();
+    @Case("ancestor") Collection<String> ancestor;
+    @Case("descendent") List<String> descendent;
+    @Case("other") List<Integer> other;
+    
+    @Test
+    void visitDeclared_same() {
+        var ancestor = cases.one("ancestor").asType();
+        assertTrue(types.isSameType(ancestor, ancestor.accept(walker, ancestor)));
+    }
+    
+    @Test
+    void visitDeclared_found_ancestor() {
+        var ancestor = cases.one("ancestor").asType();
+        assertTrue(types.isSameType(ancestor, cases.one("descendent").asType().accept(walker, ancestor)));
+    }
+    
+    @Test
+    void visitDeclared_no_ancestor() {
+        assertNull(cases.one("other").asType().accept(walker, cases.one("ancestor").asType()));
+    }
     
     @Test
     void defaultAction() {
         assertNull(walker.defaultAction(null, null));
     }
 
-}
-
-class ErasuredAncestorWalkerTest {
-    
-    TypeMirror object = mock(TypeMirror.class);
-    TypeMirror ancestor = mock(TypeMirror.class);
-    DeclaredType type = mock(DeclaredType.class);
-    DeclaredType parent = mock(DeclaredType.class);
-    TypeMirrors types = when(mock(TypeMirrors.class).type(Object.class)).thenReturn(object).getMock();
-    Walker<TypeMirror> walker = Walker.erasuredAncestor(types);
-    
-    @BeforeEach
-    void before() {
-        when(types.erasure(ancestor)).thenReturn(ancestor);
-        when(types.erasure(type)).thenReturn(type);
-    }
-    
-    @Test
-    void visitDeclared_same() {
-        when(types.isSameType(type, ancestor)).thenReturn(true);
-        assertEquals(type, walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_object() {
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(true);
-        
-        assertNull(walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_found_ancestor() {
-        doReturn(List.of(parent)).when(types).directSupertypes(type);
-        when(parent.accept(walker, ancestor)).thenReturn(parent);
-        
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(false);
-        
-        assertEquals(parent, walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_no_ancestor() {
-        doReturn(List.of(parent)).when(types).directSupertypes(type);
-        when(parent.accept(walker, ancestor)).thenReturn(null);
-        
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(false);
-        
-        assertNull(walker.visitDeclared(type, ancestor));
-    }
-    
-}
-
-class SpecializedAncestorWalkerTest {
-    
-    TypeMirror object = mock(TypeMirror.class);
-    TypeMirror ancestor = mock(TypeMirror.class);
-    DeclaredType type = mock(DeclaredType.class);
-    DeclaredType parent = mock(DeclaredType.class);
-    TypeMirrors types = when(mock(TypeMirrors.class).type(Object.class)).thenReturn(object).getMock();
-    Walker<TypeMirror> walker = Walker.specializedAncestor(types);
-    
-    @Test
-    void visitDeclared_same() {
-        when(types.isSameType(type, ancestor)).thenReturn(true);
-        assertEquals(type, walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_object() {
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(true);
-        
-        assertNull(walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_found_ancestor() {
-        doReturn(List.of(parent)).when(types).directSupertypes(type);
-        when(parent.accept(walker, ancestor)).thenReturn(parent);
-        
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(false);
-        
-        assertEquals(parent, walker.visitDeclared(type, ancestor));
-    }
-    
-    @Test
-    void visitDeclared_no_ancestor() {
-        doReturn(List.of(parent)).when(types).directSupertypes(type);
-        when(parent.accept(walker, ancestor)).thenReturn(null);
-        
-        when(types.isSameType(type, ancestor)).thenReturn(false);
-        when(types.isSameType(type, object)).thenReturn(false);
-        
-        assertNull(walker.visitDeclared(type, ancestor));
-    }
-    
 }

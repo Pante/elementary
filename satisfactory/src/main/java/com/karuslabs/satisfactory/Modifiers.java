@@ -23,13 +23,13 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.utilitary.Texts;
+import com.karuslabs.utilitary.text.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
-import static com.karuslabs.utilitary.Texts.SCREAMING_CASE;
+import static com.karuslabs.utilitary.text.Texts.*;
 
 /**
  * A skeletal implementation of an assertion for modifiers.
