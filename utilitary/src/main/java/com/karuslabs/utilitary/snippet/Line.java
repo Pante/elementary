@@ -21,42 +21,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.utilitary.texts;
+package com.karuslabs.utilitary.snippet;
 
-public class Text implements CharSequence {
+import javax.lang.model.element.AnnotationMirror;
+
+import static com.karuslabs.utilitary.type.AnnotationValuePrinter.annotation;
+
+public class Line implements CharSequence {
+
+    public static Line of(AnnotationMirror annotation, int column, int position) {
+        return new Line(annotation(annotation), column, position);
+    }
     
-    public final String value;
+    private final String line;
     public final int column;
     public final int position;
     
-    public Text(String value, int column, int position) {
-        this.value = value;
+    public Line(String line, int column, int position) {
+        this.line = line;
         this.column = column;
         this.position = position;
     }
-    
-    public String line(int index) {
-        return value.split("\n")[index];
+
+    @Override
+    public int length() {
+        return line.length();
     }
 
     @Override
     public char charAt(int index) {
-        return value.charAt(index);
+        return line.charAt(index);
     }
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        return value.subSequence(start, end);
-    }
-    
-    @Override
-    public int length() {
-        return value.length();
+        return line.subSequence(start, end);
     }
     
     @Override
     public String toString() {
-        return value;
+        return line;
     }
     
 }
