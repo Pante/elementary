@@ -206,12 +206,7 @@ class SimpleTypePrinter extends TypePrinter {
             var pack = element.accept(Find.PACKAGE, null).getQualifiedName().toString();
             var qualified = element.getQualifiedName().toString();
             
-            if (pack.isEmpty()) {
-                builder.append(qualified);
-                
-            } else {
-                builder.append(qualified.substring(pack.length() + 1));
-            }
+            builder.append(pack.isEmpty() ? qualified : qualified.substring(pack.length() + 1));
             
         } else {
             throw new IllegalStateException("DeclaredType should be a TypeElement");

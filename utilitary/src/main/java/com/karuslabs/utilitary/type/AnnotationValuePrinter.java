@@ -71,8 +71,13 @@ public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, 
     
     @Override
     public Void visitArray(List<? extends AnnotationValue> values, StringBuilder builder) {
+        if (values.size() == 1) {
+            values.get(0).accept(this, builder);
+            return null;
+        }
+        
         builder.append('{');
-        Texts.join(builder, values, (value, sb) -> sb.append(value.accept(this, sb)), ",");
+        Texts.join(builder, values, (value, sb) -> value.accept(this, sb), ",");
         builder.append('}');
         return null;
     }

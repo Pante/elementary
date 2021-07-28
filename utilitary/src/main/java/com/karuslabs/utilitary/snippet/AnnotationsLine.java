@@ -26,8 +26,19 @@ package com.karuslabs.utilitary.snippet;
 import java.util.*;
 import javax.lang.model.element.AnnotationMirror;
 
+/**
+ * Represents the annotations of an {@code Element} merged onto a single line.
+ */
 public class AnnotationsLine extends Line {
     
+    /**
+     * Creates an {@code AnnotationsLine} with the given annotations.
+     * 
+     * @param annotations the annotations
+     * @param column the column of the annotations
+     * @param position the position of the annotations
+     * @return 
+     */
     public static AnnotationsLine of(List<? extends AnnotationMirror> annotations, int column, int position) {
         var values = new LinkedHashMap<AnnotationMirror, Line>();
         var builder = new StringBuilder();
@@ -41,6 +52,9 @@ public class AnnotationsLine extends Line {
         return new AnnotationsLine(values, builder.toString(), column, position);
     }
 
+    /**
+     * The annotations.
+     */
     public final Map<AnnotationMirror, Line> values;
     
     AnnotationsLine(Map<AnnotationMirror, Line> values, String line, int column, int position) {

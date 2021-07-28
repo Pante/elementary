@@ -28,8 +28,19 @@ import javax.lang.model.element.Modifier;
 
 import static com.karuslabs.utilitary.Texts.sort;
 
+/**
+ * Represents the modifiers of an {@code Element} sorted according to common Java conventions.
+ */
 public class ModifiersLine extends Line {
 
+    /**
+     * Creates a {@code ModifiersLine} with the given modifiers.
+     * 
+     * @param modifiers the modifiers
+     * @param column the column of the modifiers
+     * @param position the position of the modifiers
+     * @return 
+     */
     public static ModifiersLine of(Set<Modifier> modifiers, int column, int position) {
         var values = new LinkedHashMap<Modifier, Line>();
         var builder = new StringBuilder();
@@ -43,6 +54,9 @@ public class ModifiersLine extends Line {
         return new ModifiersLine(values, builder.toString(), column, position);
     }
     
+    /**
+     * The modifiers.
+     */
     public final Map<Modifier, Line> values;
     
     ModifiersLine(Map<Modifier, Line> values, String line, int column, int position) {
