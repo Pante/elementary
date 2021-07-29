@@ -28,8 +28,19 @@ import javax.lang.model.element.VariableElement;
 
 import static com.karuslabs.utilitary.Texts.join;
 
+/**
+ * Represents the parameters of a {@code ExecutableElement}.
+ */
 public class VariablesLine extends Line {
 
+    /**
+     * Creates a {@code VariablesLine} with the given {@code ExecutableElement} parameters.
+     * 
+     * @param variables the {@code ExecutableElement} parameters
+     * @param column the column
+     * @param position the position
+     * @return a {@code VariablesLine}
+     */
     public static VariablesLine of(List<? extends VariableElement> variables, int column, int position) {
         var builder = new StringBuilder();
         var values = new LinkedHashMap<VariableElement, VariableLine>();
@@ -45,6 +56,9 @@ public class VariablesLine extends Line {
         return new VariablesLine(values, builder.toString(), column, position);
     }
     
+    /**
+     * The parameters.
+     */
     public final Map<VariableElement, VariableLine> values;
    
     VariablesLine(Map<VariableElement, VariableLine> values, String value, int column, int position) {

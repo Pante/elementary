@@ -1,3 +1,5 @@
+
+
 /*
  * The MIT License
  *
@@ -29,8 +31,19 @@ import javax.lang.model.element.TypeParameterElement;
 import static com.karuslabs.utilitary.Texts.join;
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
+/**
+ * Represents the type parameters of a {@code TypeElement}.
+ */
 public class TypeParametersLine extends Line {
 
+    /**
+     * Creates a {@code TypeParametersLine} with the given type parameters.
+     * 
+     * @param parameters the type parameters
+     * @param column the column
+     * @param position the position
+     * @return a {@code TypeParametersLine}
+     */
     public static TypeParametersLine of(List<? extends TypeParameterElement> parameters, int column, int position) {
         if (parameters.isEmpty()) {
             return new TypeParametersLine(Map.of(), "", column, position);
@@ -48,9 +61,12 @@ public class TypeParametersLine extends Line {
         return new TypeParametersLine(arguments, builder.append(">").toString(), column, position);
     }
     
+    /**
+     * The type parameters.
+     */
     public final Map<TypeParameterElement, Line> arguments;
     
-    public TypeParametersLine(Map<TypeParameterElement, Line> arguments, String value, int column, int position) {
+    TypeParametersLine(Map<TypeParameterElement, Line> arguments, String value, int column, int position) {
         super(value, column, position);
         this.arguments = arguments;
     }

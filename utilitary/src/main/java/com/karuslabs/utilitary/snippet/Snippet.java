@@ -28,13 +28,30 @@ import java.util.*;
 import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.joining;
 
+/**
+ * Represents a code snippet. A code snippet may start from any non-negative index.
+ */
 public class Snippet implements CharSequence {
     
+    /**
+     * The lines in this snippet.
+     */
     public final Map<Integer, CharSequence> lines;
+    /**
+     * The index of the first line.
+     */
     public final int first;
+    /**
+     * The index of the last line.
+     */
     public final int last;
     private final String value;
     
+    /**
+     * Creates a {@code Snippet} with the given lines.
+     * 
+     * @param lines the lines
+     */
     public Snippet(Map<Integer, CharSequence> lines) {
         this.lines = lines;
         this.first = Collections.min(lines.keySet());
@@ -55,6 +72,25 @@ public class Snippet implements CharSequence {
     @Override
     public CharSequence subSequence(int start, int end) {
         return value.subSequence(start, end);
+    }
+    
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        
+        if (!(other instanceof Snippet)) {
+            return false;
+        }
+        
+        var snippet = (Snippet) other;
+        return lines.equals(snippet.lines);
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(lines);
     }
     
     @Override

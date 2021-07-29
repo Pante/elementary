@@ -23,11 +23,10 @@
  */
 package com.karuslabs.utilitary.snippet;
 
-import com.karuslabs.elementary.junit.*;
-import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.elementary.junit.ToolsExtension;
+import com.karuslabs.elementary.junit.annotations.Introspect;
 
-import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import java.util.Map;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,23 +35,59 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("annotations")
-class AnnotationLineTest {
+class SnippetTest {
     
-    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
-    AnnotationsLine line = AnnotationsLine.of(annotations, 0, 1);
+    Snippet snippet = new Snippet(Map.of(1, "first", 2, "second", 3, "third"));
     
     @Test
-    void toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect @Case(\"annotations\") ", line.toString());
+    void snippet() {
+        assertEquals(1, snippet.first);
+        assertEquals(3, snippet.last);
     }
     
     @Test
-    void values() {
-        assertEquals(3, line.values.size());
-        assertEquals("@ExtendWith(ToolsExtension.class)", line.values.get(annotations.get(0)).toString());
-        assertEquals("@Introspect", line.values.get(annotations.get(1)).toString());
-        assertEquals("@Case(\"annotations\")", line.values.get(annotations.get(2)).toString());
+    void length() {
+        assertEquals(18, snippet.length());
+    }
+    
+    @Test
+    void charAt() {
+        assertEquals('i', snippet.charAt(1));
+    }
+    
+    @Test
+    void subSequence() {
+        assertEquals("irst", snippet.subSequence(1, 5));
+    }
+    
+    @Test
+    void equals_same() {
+        assertTrue(snippet.equals(snippet));
+    }
+    
+    @Test
+    void equals_other() {
+        assertFalse(snippet.equals(Map.of(1, "first", 2, "second", 3, "third")));
+    }
+    
+    @Test
+    void equals() {
+        assertEquals(snippet, new Snippet(Map.of(1, "first", 2, "second", 3, "third")));
+    }
+    
+    @Test
+    void hashCode_() {
+        assertEquals(snippet.hashCode(), new Snippet(Map.of(1, "first", 2, "second", 3, "third")).hashCode());
+    }
+    
+    @Test
+    void hashCode_different() {
+        assertNotEquals(snippet.hashCode(), Map.of(1, "first", 2, "second", 3, "third").hashCode());
+    }
+    
+    @Test
+    void toString_() {
+        assertEquals("first\nsecond\nthird", snippet.toString());
     }
 
 } 

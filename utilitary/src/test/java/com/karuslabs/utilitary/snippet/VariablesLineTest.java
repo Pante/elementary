@@ -25,9 +25,8 @@ package com.karuslabs.utilitary.snippet;
 
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
-
 import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,23 +35,23 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("annotations")
-class AnnotationLineTest {
+class VariablesLineTest {
     
-    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
-    AnnotationsLine line = AnnotationsLine.of(annotations, 0, 1);
+    @Case("arguments")
+    void arguments(List<String> a, int b) {}
+    
+    List<? extends VariableElement> parameters = ((ExecutableElement) Tools.cases().one("arguments")).getParameters();
+    VariablesLine line = VariablesLine.of(parameters, 0, 1);
     
     @Test
     void toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect @Case(\"annotations\") ", line.toString());
+        assertEquals("(List<String> a, int b)", line.toString());
     }
     
     @Test
     void values() {
-        assertEquals(3, line.values.size());
-        assertEquals("@ExtendWith(ToolsExtension.class)", line.values.get(annotations.get(0)).toString());
-        assertEquals("@Introspect", line.values.get(annotations.get(1)).toString());
-        assertEquals("@Case(\"annotations\")", line.values.get(annotations.get(2)).toString());
+        assertEquals("List<String> a", line.values.get(parameters.get(0)).toString());
+        assertEquals("int b", line.values.get(parameters.get(1)).toString());
     }
 
 } 

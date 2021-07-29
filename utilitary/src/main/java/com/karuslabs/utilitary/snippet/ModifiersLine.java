@@ -39,7 +39,7 @@ public class ModifiersLine extends Line {
      * @param modifiers the modifiers
      * @param column the column of the modifiers
      * @param position the position of the modifiers
-     * @return 
+     * @return a {@code ModifiersLine}
      */
     public static ModifiersLine of(Set<Modifier> modifiers, int column, int position) {
         var values = new LinkedHashMap<Modifier, Line>();

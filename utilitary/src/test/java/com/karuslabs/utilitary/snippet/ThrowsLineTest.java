@@ -27,32 +27,32 @@ import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("annotations")
-class AnnotationLineTest {
+class ThrowsLineTest {
     
-    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
-    AnnotationsLine line = AnnotationsLine.of(annotations, 0, 1);
+    List<? extends TypeMirror> thrown = ((ExecutableElement) Tools.cases().one("case")).getThrownTypes();
+    ThrowsLine line = ThrowsLine.of(thrown, 0, 0);
     
     @Test
-    void toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect @Case(\"annotations\") ", line.toString());
+    @Case("case")
+    void toString_() throws IllegalArgumentException, NullPointerException {
+        assertEquals(" throws IllegalArgumentException, NullPointerException", line.toString());
     }
     
     @Test
     void values() {
-        assertEquals(3, line.values.size());
-        assertEquals("@ExtendWith(ToolsExtension.class)", line.values.get(annotations.get(0)).toString());
-        assertEquals("@Introspect", line.values.get(annotations.get(1)).toString());
-        assertEquals("@Case(\"annotations\")", line.values.get(annotations.get(2)).toString());
+        assertEquals(2, line.values.size());
+        assertEquals("IllegalArgumentException", line.values.get(thrown.get(0)).toString());
+        assertEquals("NullPointerException", line.values.get(thrown.get(1)).toString());
     }
 
 } 

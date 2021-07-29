@@ -27,7 +27,7 @@ import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -36,23 +36,29 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("annotations")
-class AnnotationLineTest {
+@Case("empty")
+class TypeParametersLineTest {
     
-    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
-    AnnotationsLine line = AnnotationsLine.of(annotations, 0, 1);
+    @Case("generics") static class Type<T extends String, U extends Line> {}
+    
+    List<? extends TypeParameterElement> parameters = ((TypeElement) Tools.cases().one("generics")).getTypeParameters();      
+    TypeParametersLine line = TypeParametersLine.of(parameters, 0, 1);
     
     @Test
     void toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect @Case(\"annotations\") ", line.toString());
+        assertEquals("<T extends String, U extends Line>", line.toString());
+    }
+    
+    @Test
+    void toString_empty() {
+        assertEquals("", TypeParametersLine.of(List.of(), 0, 1).toString());
     }
     
     @Test
     void values() {
-        assertEquals(3, line.values.size());
-        assertEquals("@ExtendWith(ToolsExtension.class)", line.values.get(annotations.get(0)).toString());
-        assertEquals("@Introspect", line.values.get(annotations.get(1)).toString());
-        assertEquals("@Case(\"annotations\")", line.values.get(annotations.get(2)).toString());
+        assertEquals(2, line.arguments.size());
+        assertEquals("T extends String", line.arguments.get(parameters.get(0)).toString());
+        assertEquals("U extends Line", line.arguments.get(parameters.get(1)).toString());
     }
 
 } 

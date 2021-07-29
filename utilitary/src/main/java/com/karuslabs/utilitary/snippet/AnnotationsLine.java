@@ -37,7 +37,7 @@ public class AnnotationsLine extends Line {
      * @param annotations the annotations
      * @param column the column of the annotations
      * @param position the position of the annotations
-     * @return 
+     * @return a {@code AnnotationsLine}
      */
     public static AnnotationsLine of(List<? extends AnnotationMirror> annotations, int column, int position) {
         var values = new LinkedHashMap<AnnotationMirror, Line>();

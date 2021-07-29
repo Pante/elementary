@@ -27,29 +27,52 @@ import javax.lang.model.element.VariableElement;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
+/**
+ * Represents a {@code VariableElement} with all annotations inlined.
+ */
 public class VariableLine extends Line {
     
-    public static VariableLine of(VariableElement variable, int column, int indentation) {
+    /**
+     * Creates a {@code VariableLine} with the given {@code VariableElement}.
+     * 
+     * @param variable the variable
+     * @param column the column
+     * @param position the position
+     * @return a {@code VariableLine} 
+     */
+    public static VariableLine of(VariableElement variable, int column, int position) {
         var builder = new StringBuilder();
         
-        var modifiers = ModifiersLine.of(variable.getModifiers(), column, indentation);
+        var modifiers = ModifiersLine.of(variable.getModifiers(), column, position);
         builder.append(modifiers);
         
-        var annotations = AnnotationsLine.of(variable.getAnnotationMirrors(), column, indentation + builder.length());
+        var annotations = AnnotationsLine.of(variable.getAnnotationMirrors(), column, position + builder.length());
         builder.append(annotations);
         
-        var type = new Line(simple(variable.asType()), column, indentation + builder.length());
+        var type = new Line(simple(variable.asType()), column, position + builder.length());
         builder.append(type).append(" ");
         
-        var name = new Line(variable.getSimpleName().toString(), column, indentation + builder.length());
+        var name = new Line(variable.getSimpleName().toString(), column, position + builder.length());
         builder.append(name);
         
-        return new VariableLine(modifiers, annotations, type, name, builder.toString(), column, indentation);
+        return new VariableLine(modifiers, annotations, type, name, builder.toString(), column, position);
     } 
     
+    /**
+     * The modifiers.
+     */
     public final ModifiersLine modifiers;
+    /**
+     * The annotations.
+     */
     public final AnnotationsLine annotations;
+    /**
+     * The type.
+     */
     public final Line type;
+    /**
+     * The name.
+     */
     public final Line name;
     
     VariableLine(ModifiersLine modifiers, AnnotationsLine annotations, Line type, Line name, String value, int column, int position) {

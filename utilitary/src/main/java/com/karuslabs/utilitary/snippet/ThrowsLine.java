@@ -29,8 +29,19 @@ import javax.lang.model.type.TypeMirror;
 import static com.karuslabs.utilitary.Texts.join;
 import static com.karuslabs.utilitary.type.TypePrinter.*;
 
+/**
+ * Represents the thrown exceptions of an {@code ExecutableElement}.
+ */
 public class ThrowsLine extends Line {
 
+    /**
+     * Creates a {@code ThrownsLine} with the given thrown exceptions.
+     * 
+     * @param types the thrown exceptions
+     * @param column the column
+     * @param position the position
+     * @return a {@code ThrowsLine}
+     */
     public static ThrowsLine of(List<? extends TypeMirror> types, int column, int position) {
         if (types.isEmpty()) {
             return new ThrowsLine(Map.of(), "", column, position);
@@ -48,6 +59,9 @@ public class ThrowsLine extends Line {
         return new ThrowsLine(values, builder.toString(), column, position);
     }
     
+    /**
+     * The exceptions.
+     */
     public final Map<TypeMirror, Line> values;
     
     ThrowsLine(Map<TypeMirror, Line> values, String value, int column, int position) {
