@@ -26,38 +26,36 @@ package com.karuslabs.utilitary.snippet;
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
-import java.util.List;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.element.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-class ThrowsLineTest {
+class MethodSnippetTest {
     
-    List<? extends TypeMirror> thrown = ((ExecutableElement) Tools.cases().one("case")).getThrownTypes();
-    ThrowsLine line = ThrowsLine.of(thrown, 0, 0);
+    ExecutableElement method = (ExecutableElement) Tools.cases().one("test");
+    MethodSnippet snippet = MethodSnippet.of(method, 0);
     
-    @Test
-    @Case("case")
-    void toString_() throws IllegalArgumentException, NullPointerException {
-        assertEquals(" throws IllegalArgumentException, NullPointerException", line.toString());
-    }
+    @Case("test")
+    <T> void test(Line line, T a) throws NullPointerException {}
     
     @Test
-    void toString_empty() {
-        assertEquals("", ThrowsLine.of(List.of(), 0, 0).toString());
+    void toString_() {
+        assertEquals("@Case(\"test\")\n<T> void test(Line line, T a) throws NullPointerException", snippet.toString());
     }
     
     @Test
     void values() {
-        assertEquals(2, line.values.size());
-        assertEquals("IllegalArgumentException", line.values.get(thrown.get(0)).toString());
-        assertEquals("NullPointerException", line.values.get(thrown.get(1)).toString());
+        assertEquals("@Case(\"test\")", snippet.annotations.toString());
+        assertEquals("<T>", snippet.generics.toString());
+        assertEquals("void", snippet.type.toString());
+        assertEquals("test", snippet.name.toString());
+        assertEquals("(Line line, T a)", snippet.parameters.toString());
+        assertEquals(" throws NullPointerException", snippet.exceptions.toString());
     }
 
 } 

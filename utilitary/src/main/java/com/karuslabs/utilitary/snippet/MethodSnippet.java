@@ -28,8 +28,18 @@ import javax.lang.model.element.ExecutableElement;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
+/**
+ * A code snippet that represents a {@code ExecutableElement}.
+ */
 public class MethodSnippet extends Snippet {
 
+    /**
+     * Creates a {@code MethodSnippet} with the given {@code ExecutableElement}.
+     * 
+     * @param method the method
+     * @param column the column
+     * @return a {@code VariableSnippet}
+     */
     public static MethodSnippet of(ExecutableElement method, int column) {
         var lines = new LinkedHashMap<Integer, CharSequence>();
         
@@ -62,16 +72,36 @@ public class MethodSnippet extends Snippet {
         return new MethodSnippet(annotations, modifiers, generics, type, name, parameters, exceptions, lines);
     }
     
-    
+    /**
+     * The annotations.
+     */
     public final AnnotationsSnippet annotations;
+    /**
+     * The modifiers.
+     */
     public final ModifiersLine modifiers;
+    /**
+     * The type parameters.
+     */
     public final TypeParametersLine generics;
+    /**
+     * The return type.
+     */
     public final Line type;
+    /**
+     * The name.
+     */
     public final Line name;
+    /**
+     * The parameters.
+     */
     public final VariablesLine parameters;
+    /**
+     * The thrown exceptions.
+     */
     public final ThrowsLine exceptions;
     
-    public MethodSnippet(
+    MethodSnippet(
         AnnotationsSnippet annotations, 
         ModifiersLine modifiers, 
         TypeParametersLine generics,

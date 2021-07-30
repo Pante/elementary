@@ -27,37 +27,34 @@ import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
 import java.util.List;
-import javax.lang.model.element.ExecutableElement;
-import javax.lang.model.type.TypeMirror;
+import javax.lang.model.element.VariableElement;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-class ThrowsLineTest {
+class VariableSnippetTest {
     
-    List<? extends TypeMirror> thrown = ((ExecutableElement) Tools.cases().one("case")).getThrownTypes();
-    ThrowsLine line = ThrowsLine.of(thrown, 0, 0);
+    @Case("variable")
+    public final List<String> something = List.of();
+    
+    VariableElement variable = (VariableElement) Tools.cases().one("variable");
+    VariableSnippet snippet = VariableSnippet.of(variable, 0);
     
     @Test
-    @Case("case")
-    void toString_() throws IllegalArgumentException, NullPointerException {
-        assertEquals(" throws IllegalArgumentException, NullPointerException", line.toString());
+    void toString_() {
+        assertEquals("@Case(\"variable\")\npublic final List<String> something", snippet.toString());
     }
     
     @Test
-    void toString_empty() {
-        assertEquals("", ThrowsLine.of(List.of(), 0, 0).toString());
-    }
-    
-    @Test
-    void values() {
-        assertEquals(2, line.values.size());
-        assertEquals("IllegalArgumentException", line.values.get(thrown.get(0)).toString());
-        assertEquals("NullPointerException", line.values.get(thrown.get(1)).toString());
+    void fields() {
+        assertEquals("@Case(\"variable\")", snippet.annotations.toString());
+        assertEquals("public final ", snippet.modifiers.toString());
+        assertEquals("List<String>", snippet.type.toString());
+        assertEquals("something", snippet.name.toString());
     }
 
 } 

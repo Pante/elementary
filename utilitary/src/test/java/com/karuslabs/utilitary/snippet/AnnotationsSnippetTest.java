@@ -23,42 +23,34 @@
  */
 package com.karuslabs.utilitary.snippet;
 
-import java.util.*;
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+import java.util.List;
 import javax.lang.model.element.AnnotationMirror;
 
-/**
- * A code snippet that represents an {@code Element}'s annotations.
- */
-public class AnnotationsSnippet extends Snippet {
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 
-    /**
-     * Creates a {@code AnnotationsSnippet} with the given annotations.
-     * 
-     * @param annotations the annotations
-     * @param column the column on which this {@code AnnotationsSnippet} starts at
-     * @return a {@code AnnotationsSnippet}
-     */
-    public static AnnotationsSnippet of(List<? extends AnnotationMirror> annotations, int column) {
-        var values = new LinkedHashMap<AnnotationMirror, Line>();
-        var lines = new LinkedHashMap<Integer, CharSequence>();
-        
-        for (var annotation : annotations) {
-            var line = Line.of(annotation, column, 0);
-            values.put(annotation, line);
-            lines.put(column++, line);
-        }
-        
-        return new AnnotationsSnippet(values, lines);
+import static org.junit.jupiter.api.Assertions.*;
+
+@ExtendWith(ToolsExtension.class)
+@Introspect
+@Case("annotations")
+class AnnotationsSnippetTest {
+    
+    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
+    AnnotationsSnippet snippet = AnnotationsSnippet.of(annotations, 0);
+    
+    @Test
+    void toString_() {
+        assertEquals("@ExtendWith(ToolsExtension.class)\n@Introspect\n@Case(\"annotations\")", snippet.toString());
     }
     
-    /**
-     * The annotations.
-     */
-    public final Map<AnnotationMirror, Line> values;
-    
-    AnnotationsSnippet(Map<AnnotationMirror, Line> values, Map<Integer, CharSequence> lines) {
-        super(lines);
-        this.values = values;
+    @Test
+    void values() {
+        assertEquals("@ExtendWith(ToolsExtension.class)", snippet.values.get(annotations.get(0)).toString());
+        assertEquals("@Introspect", snippet.values.get(annotations.get(1)).toString());
+        assertEquals("@Case(\"annotations\")", snippet.values.get(annotations.get(2)).toString());
     }
-    
-}
+
+} 

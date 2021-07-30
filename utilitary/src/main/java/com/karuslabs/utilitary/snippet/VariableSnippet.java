@@ -28,8 +28,18 @@ import javax.lang.model.element.VariableElement;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
+/**
+ * A code snippet that represents a {@code VariableElement}.
+ */
 public class VariableSnippet extends Snippet {
 
+    /**
+     * Creates a {@code VariableSnippet} with the given {@code VariableElement}.
+     * 
+     * @param variable the variable
+     * @param column the column
+     * @return a {@code VariableSnippet}
+     */
     public static VariableSnippet of(VariableElement variable, int column) {
         var lines = new LinkedHashMap<Integer, CharSequence>();
         
@@ -53,9 +63,21 @@ public class VariableSnippet extends Snippet {
         return new VariableSnippet(annotations, modifiers, type, name, lines);
     }
     
+    /**
+     * The annotations.
+     */
     public final AnnotationsSnippet annotations;
+    /**
+     * The modifiers.
+     */
     public final ModifiersLine modifiers;
+    /**
+     * The type.
+     */
     public final Line type;
+    /**
+     * The name.
+     */
     public final Line name;
     
     VariableSnippet(AnnotationsSnippet annotations, ModifiersLine modifiers, Line type, Line name, Map<Integer, CharSequence> lines) {
