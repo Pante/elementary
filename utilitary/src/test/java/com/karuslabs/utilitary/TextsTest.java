@@ -23,11 +23,16 @@
  */
 package com.karuslabs.utilitary;
 
+import com.karuslabs.elementary.junit.*;
+import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.utilitary.snippet.*;
+
 import java.util.*;
 import java.util.stream.Stream;
-import javax.lang.model.element.Modifier;
-import org.junit.jupiter.api.Test;
+import javax.lang.model.element.*;
 
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.*;
 
@@ -35,7 +40,43 @@ import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.of;
 
+@ExtendWith(ToolsExtension.class)
+@Introspect
 class TextsTest {
+    
+    Cases cases = Tools.cases();
+    
+    @Case("line")
+    static final String LINE = "";
+    
+    @Test
+    void highlight_line() {
+        var line = VariableLine.of((VariableElement) cases.one("line"), 0, 4);
+        var message = Texts.highlight("a brief message", line, line.name, "what happened");
+        assertEquals(
+            "a brief message\n" +
+            "|    \n" +
+            "|    static final @Case(\"line\") String LINE\n" +
+            "|                                      ~~~~ what happened\n" +
+            "|    ", 
+            message
+        );
+    }
+    
+    @Test
+    void highlight_snippet() {
+        var snippet = VariableSnippet.of((VariableElement) cases.one("line"), 4);
+        var message = Texts.highlight("a brief message", snippet, snippet.name, "what happened");
+        assertEquals(
+            "a brief message\n" +
+            "|    \n" +
+            "|    @Case(\"line\")\n" +
+            "|    static final String LINE\n" +
+            "|                        ~~~~ what happened\n" +
+            "|    ",
+            message
+        );
+    }
     
     @ParameterizedTest
     @MethodSource("conjunction_parameters")

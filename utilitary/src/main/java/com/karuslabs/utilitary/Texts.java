@@ -47,13 +47,32 @@ public class Texts {
      */
     public static final BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
     
-    
+    /**
+     * Creates an diagnostic message that highlights part of the given line with 
+     * a message. The highlighted part is indicated using {@code ~}.
+     * 
+     * @param brief the brief diagnostic message
+     * @param line the line which contains an issue
+     * @param highlight the part to highlight
+     * @param message a message that describes
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Line line, Line highlight, String message) {
-        return highlight(brief, line, highlight.position, highlight.length(), "~", message);
+        return highlight(brief, line, highlight, "~", message);
     }
     
+    /**
+     * Creates an diagnostic message that highlights part of the given snippet with 
+     * a message. The highlighted part is indicated using {@code ~}.
+     * 
+     * @param brief the brief diagnostic message
+     * @param snippet the snippet which contains an issue
+     * @param highlight the part to highlight
+     * @param message a message that describes
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Snippet snippet, Line highlight, String message) {
-        return highlight(brief, snippet, highlight.column, highlight.position, highlight.length(), "~", message);
+        return highlight(brief, snippet, highlight, "~", message);
     }
     
     
@@ -67,7 +86,7 @@ public class Texts {
     
     
     public static String highlight(String brief, Line line, int position, int length, String indicator, String message) {
-        return highlight(brief, Map.of(0, line), 0, position, length, indicator, message);
+        return highlight(brief, Map.of(0, line), 0, position - line.position, length, indicator, message);
     }
     
     public static String highlight(String brief, Snippet snippet, int column, int position, int length, String indicator, String message) {

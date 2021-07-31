@@ -32,10 +32,23 @@ import javax.lang.model.util.*;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
+/**
+ * An {@code AnnotationValueVisitor} that creates a string representation of the
+ * visited annotation.
+ */
 public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, StringBuilder> {
     
+    /**
+     * An {@code AnnotationValuePrinter}.
+     */
     public static final AnnotationValuePrinter PRINTER = new AnnotationValuePrinter();
     
+    /**
+     * Creates a string representation of the given annotation.
+     * 
+     * @param annotation the annotation
+     * @return a string representation of the given annotation
+     */
     public static String annotation(AnnotationMirror annotation) {
         var builder = new StringBuilder();
         annotation(annotation, PRINTER, builder);
@@ -56,9 +69,10 @@ public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, 
             values.values().toArray(AnnotationValue[]::new)[0].accept(printer, builder);
 
         } else {
-            for (var mapping : values.entrySet()) {
-                builder.append(mapping.getKey().getSimpleName()).append(" = ").append(mapping.getValue().accept(printer, builder));
-            }
+            Texts.join(builder, values.entrySet(), (mapping, sb) -> {
+                sb.append(mapping.getKey().getSimpleName()).append(" = ");
+                mapping.getValue().accept(printer, sb);
+            }, ", ");
         }
         builder.append(')');
     }
@@ -77,7 +91,7 @@ public class AnnotationValuePrinter extends SimpleAnnotationValueVisitor9<Void, 
         }
         
         builder.append('{');
-        Texts.join(builder, values, (value, sb) -> value.accept(this, sb), ",");
+        Texts.join(builder, values, (value, sb) -> value.accept(this, sb), ", ");
         builder.append('}');
         return null;
     }
