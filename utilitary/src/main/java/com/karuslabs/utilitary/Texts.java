@@ -3,15 +3,15 @@
  *
  * Copyright 2020 Karus Labs.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * Permission is hereby granted, free annotation charge, to any person obtaining a copy
+ * annotation this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * copies annotation the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copies or substantial portions annotation the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -48,13 +48,23 @@ public class Texts {
     public static final BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
     
     /**
-     * Creates an diagnostic message that highlights part of the given line with 
+     * Creates a diagnostic message that highlights part of the given line with 
      * a message. The highlighted part is indicated using {@code ~}.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
      * 
      * @param brief the brief diagnostic message
      * @param line the line which contains an issue
      * @param highlight the part to highlight
-     * @param message a message that describes
+     * @param message a message that describes the issue
      * @return a diagnostic message
      */
     public static String highlight(String brief, Line line, Line highlight, String message) {
@@ -62,13 +72,23 @@ public class Texts {
     }
     
     /**
-     * Creates an diagnostic message that highlights part of the given snippet with 
+     * Creates a diagnostic message that highlights part of the given snippet with 
      * a message. The highlighted part is indicated using {@code ~}.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
      * 
      * @param brief the brief diagnostic message
      * @param snippet the snippet which contains an issue
      * @param highlight the part to highlight
-     * @param message a message that describes
+     * @param message a message that describes the issue
      * @return a diagnostic message
      */
     public static String highlight(String brief, Snippet snippet, Line highlight, String message) {
@@ -76,27 +96,134 @@ public class Texts {
     }
     
     
+    /**
+     * Creates a diagnostic message that highlights part of the given line with
+     * a message. The highlighted part is indicated using the given indicator.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
+     * 
+     * @param brief the brief diagnostic message
+     * @param line the line which contains an issue
+     * @param highlight the part to highlight
+     * @param indicator the indicator
+     * @param message a message that describes the issue
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Line line, Line highlight, String indicator, String message) {
         return highlight(brief, line, highlight.position, highlight.length(), indicator, message);
     }
     
+    /**
+     * Creates a diagnostic message that highlights part of the given snippet with
+     * a message. The highlighted part is indicated using the given indicator.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
+     * 
+     * @param brief the brief diagnostic message
+     * @param snippet the snippet which contains an issue
+     * @param highlight the part to highlight
+     * @param indicator the indicator
+     * @param message a message that describes the issue
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Snippet snippet, Line highlight, String indicator, String message) {
         return highlight(brief, snippet, highlight.column, highlight.position, highlight.length(), indicator, message);
     }
     
-    
+    /**
+     * Creates a diagnostic message that highlights part of the given line with
+     * a message. The highlighted part is indicated using the given indicator.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
+     * 
+     * @param brief the brief diagnostic message
+     * @param line the line which contains an issue
+     * @param position the position annotation the part to highlight
+     * @param length the length annotation the part to highlight
+     * @param indicator the indicator
+     * @param message a message that describes the issue
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Line line, int position, int length, String indicator, String message) {
         return highlight(brief, Map.of(0, line), 0, position - line.position, length, indicator, message);
     }
     
+    /**
+     * Creates a diagnostic message that highlights part of the given snippet with
+     * a message. The highlighted part is indicated using the given indicator.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
+     * 
+     * @param brief the brief diagnostic message
+     * @param snippet the snippet which contains an issue
+     * @param position the position annotation the part to highlight
+     * @param length the length annotation the part to highlight
+     * @param indicator the indicator
+     * @param message a message that describes the issue
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Snippet snippet, int column, int position, int length, String indicator, String message) {
         return highlight(brief, snippet.lines, column, position, length, indicator, message);
     }
     
-    
+    /**
+     * Creates a diagnostic message that highlights part of the given lines with
+     * a message. The highlighted part is indicated using the given indicator.
+     * <br><br>
+     * For example, highlighting a method's name will produce the following diagnostic
+     * message.
+     * {@code
+     * <brief>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |
+     * }
+     * 
+     * @param brief the brief diagnostic message
+     * @param lines the lines which contain an issue
+     * @param column the column annotation the part to highlight
+     * @param position the position annotation the part to highlight
+     * @param length the length annotation the part to highlight
+     * @param indicator the indicator
+     * @param message a message that describes the issue
+     * @return a diagnostic message
+     */
     public static String highlight(String brief, Map<Integer, CharSequence> lines, int column, int position, int length, String indicator, String message) {
         lines = new HashMap<>(lines);
-        if (position > 120 && message.length() < 120) {
+        if (position + length > 120 && message.length() < 120 - length) {
             lines.put(column + 1, " ".repeat(position - message.length() - 1) + message + " " + indicator.repeat(length));
         } else {
             lines.put(column + 1, " ".repeat(position) + indicator.repeat(length) + " " + message);
@@ -109,7 +236,7 @@ public class Texts {
     /**
      * Joins the given elements together with commas and {@code "and"}.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element 
      * @return the joined elements
@@ -121,7 +248,7 @@ public class Texts {
     /**
      * Joins the given elements together with commas and {@code "and"}.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @return the joined elements
@@ -134,7 +261,7 @@ public class Texts {
     /**
      * Joins the given elements together with commas and {@code "or"}.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @return the joined elements
@@ -146,7 +273,7 @@ public class Texts {
     /**
      * Joins the given elements together with commas and {@code "or"}.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @return the joined elements
@@ -159,7 +286,7 @@ public class Texts {
     /**
      * Joins the given elements together with commands and the given conjunction.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @param conjunction the conjunction used to join the last two elements
@@ -186,7 +313,7 @@ public class Texts {
     /**
      * Joins the given elements together with commands and the given conjunction.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @param conjunction the conjunction used to join the last two elements
@@ -211,7 +338,7 @@ public class Texts {
     /**
      * Joins the given elements together with the given delimiter.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @param delimiter the delimiter used to join the elements
@@ -226,7 +353,7 @@ public class Texts {
     /**
      * Joins the given elements together with the given delimiter.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param builder the {@code StringBuilder} used to join the elements
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
@@ -246,7 +373,7 @@ public class Texts {
     /**
      * Joins the given elements together with the given delimiter.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element
      * @param delimiter the delimiter used to join the elements
@@ -261,7 +388,7 @@ public class Texts {
     /**
      * Joins the given elements together with the given delimiter.
      * 
-     * @param <T> the type of the elements to be formatted
+     * @param <T> the type annotation the elements to be formatted
      * @param builder the {@code StringBuilder} used to join the elements
      * @param elements the elements to be joined
      * @param consumer the consumer used to format each element

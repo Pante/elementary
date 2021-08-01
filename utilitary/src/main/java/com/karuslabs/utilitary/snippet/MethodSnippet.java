@@ -3,15 +3,15 @@
  *
  * Copyright 2021 Karus Labs.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * Permission is hereby granted, free annotation charge, to any person obtaining a copy
+ * annotation this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * copies annotation the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copies or substantial portions annotation the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,7 +24,8 @@
 package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
-import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
@@ -49,11 +50,11 @@ public class MethodSnippet extends Snippet {
         var builder = new StringBuilder();
         column = annotations.last + 1;
         
-        var modifiers = ModifiersLine.of(method.getModifiers(), column, builder.length());
+        var modifiers = Part.modifiers(method.getModifiers(), column, builder.length());
         builder.append(modifiers);
         
-        var generics = TypeParametersLine.of(method.getTypeParameters(), column, builder.length());
-        builder.append(generics).append(" ");
+        var typeParameters = Part.typeParameters(method.getTypeParameters(), column, builder.length());
+        builder.append(typeParameters).append(" ");
         
         var type = new Line(simple(method.getReturnType()), column, builder.length());
         builder.append(type).append(" ");
@@ -61,15 +62,15 @@ public class MethodSnippet extends Snippet {
         var name = new Line(method.getSimpleName().toString(), column, builder.length());
         builder.append(name);
         
-        var parameters = VariablesLine.of(method.getParameters(), column, builder.length());
+        var parameters = Part.parameters(method.getParameters(), column, builder.length());
         builder.append(parameters);
         
-        var exceptions = ThrowsLine.of(method.getThrownTypes(), column, builder.length());
+        var exceptions = Part.exceptions(method.getThrownTypes(), column, builder.length());
         builder.append(exceptions);
         
         lines.put(column, builder.toString());
         
-        return new MethodSnippet(annotations, modifiers, generics, type, name, parameters, exceptions, lines);
+        return new MethodSnippet(annotations, modifiers, typeParameters, type, name, parameters, exceptions, lines);
     }
     
     /**
@@ -79,11 +80,11 @@ public class MethodSnippet extends Snippet {
     /**
      * The modifiers.
      */
-    public final ModifiersLine modifiers;
+    public final Part<Modifier, Line> modifiers;
     /**
      * The type parameters.
      */
-    public final TypeParametersLine generics;
+    public final Part<TypeParameterElement, Line> typeParameters;
     /**
      * The return type.
      */
@@ -95,26 +96,26 @@ public class MethodSnippet extends Snippet {
     /**
      * The parameters.
      */
-    public final VariablesLine parameters;
+    public final Part<VariableElement, VariableLine> parameters;
     /**
      * The thrown exceptions.
      */
-    public final ThrowsLine exceptions;
+    public final Part<TypeMirror, Line> exceptions;
     
     MethodSnippet(
         AnnotationsSnippet annotations, 
-        ModifiersLine modifiers, 
-        TypeParametersLine generics,
+        Part<Modifier, Line> modifiers, 
+        Part<TypeParameterElement, Line> typeParameters,
         Line type, 
         Line name, 
-        VariablesLine parameters, 
-        ThrowsLine exceptions,
+        Part<VariableElement, VariableLine> parameters, 
+        Part<TypeMirror, Line> exceptions,
         Map<Integer, CharSequence> lines
     ) {
         super(lines);
         this.annotations = annotations;
         this.modifiers = modifiers;
-        this.generics = generics;
+        this.typeParameters = typeParameters;
         this.type = type;
         this.name = name;
         this.parameters = parameters;

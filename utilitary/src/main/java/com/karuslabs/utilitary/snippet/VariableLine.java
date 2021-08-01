@@ -3,15 +3,15 @@
  *
  * Copyright 2021 Karus Labs.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * Permission is hereby granted, free annotation charge, to any person obtaining a copy
+ * annotation this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * copies annotation the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copies or substantial portions annotation the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -23,7 +23,7 @@
  */
 package com.karuslabs.utilitary.snippet;
 
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
@@ -43,10 +43,10 @@ public class VariableLine extends Line {
     public static VariableLine of(VariableElement variable, int column, int position) {
         var builder = new StringBuilder();
         
-        var modifiers = ModifiersLine.of(variable.getModifiers(), column, position);
+        var modifiers = Part.modifiers(variable.getModifiers(), column, position);
         builder.append(modifiers);
         
-        var annotations = AnnotationsLine.of(variable.getAnnotationMirrors(), column, position + builder.length());
+        var annotations = Part.annotations(variable.getAnnotationMirrors(), column, position + builder.length());
         builder.append(annotations);
         
         var type = new Line(simple(variable.asType()), column, position + builder.length());
@@ -61,11 +61,11 @@ public class VariableLine extends Line {
     /**
      * The modifiers.
      */
-    public final ModifiersLine modifiers;
+    public final Part<Modifier, Line> modifiers;
     /**
      * The annotations.
      */
-    public final AnnotationsLine annotations;
+    public final Part<AnnotationMirror, Line> annotations;
     /**
      * The type.
      */
@@ -75,7 +75,7 @@ public class VariableLine extends Line {
      */
     public final Line name;
     
-    VariableLine(ModifiersLine modifiers, AnnotationsLine annotations, Line type, Line name, String value, int column, int position) {
+    VariableLine(Part<Modifier, Line> modifiers, Part<AnnotationMirror, Line> annotations, Line type, Line name, String value, int column, int position) {
         super(value, column, position);
         this.modifiers = modifiers;
         this.annotations = annotations;

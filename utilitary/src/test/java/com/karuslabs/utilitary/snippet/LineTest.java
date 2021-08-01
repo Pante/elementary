@@ -3,15 +3,15 @@
  *
  * Copyright 2021 Karus Labs.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * Permission is hereby granted, free annotation charge, to any person obtaining a copy
+ * annotation this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * copies annotation the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copies or substantial portions annotation the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Case("case")
 class LineTest {
     
-    Line line = Line.of(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1);
+    Line line = Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1);
     
     @Test
     void length() {
@@ -65,12 +65,12 @@ class LineTest {
     
     @Test
     void equals() {
-        assertTrue(line.equals(Line.of(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1)));
+        assertTrue(line.equals(Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1)));
     }
     
     @Test
     void hashCode_() {
-        assertEquals(line.hashCode(), Line.of(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1).hashCode());
+        assertEquals(line.hashCode(), Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1).hashCode());
     }
     
     @Test

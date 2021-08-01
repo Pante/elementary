@@ -3,15 +3,15 @@
  *
  * Copyright 2021 Karus Labs.
  *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
+ * Permission is hereby granted, free annotation charge, to any person obtaining a copy
+ * annotation this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
+ * copies annotation the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in
- * all copies or substantial portions of the Software.
+ * all copies or substantial portions annotation the Software.
  *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -24,7 +24,7 @@
 package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
-import javax.lang.model.element.VariableElement;
+import javax.lang.model.element.*;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
 
@@ -49,7 +49,7 @@ public class VariableSnippet extends Snippet {
         var builder = new StringBuilder();
         column = annotations.last + 1;
         
-        var modifiers = ModifiersLine.of(variable.getModifiers(), column, 0);
+        var modifiers = Part.modifiers(variable.getModifiers(), column, 0);
         builder.append(modifiers);
         
         var type = new Line(simple(variable.asType()), column, builder.length());
@@ -70,7 +70,7 @@ public class VariableSnippet extends Snippet {
     /**
      * The modifiers.
      */
-    public final ModifiersLine modifiers;
+    public final Part<Modifier, Line> modifiers;
     /**
      * The type.
      */
@@ -80,7 +80,7 @@ public class VariableSnippet extends Snippet {
      */
     public final Line name;
     
-    VariableSnippet(AnnotationsSnippet annotations, ModifiersLine modifiers, Line type, Line name, Map<Integer, CharSequence> lines) {
+    VariableSnippet(AnnotationsSnippet annotations, Part<Modifier, Line> modifiers, Line type, Line name, Map<Integer, CharSequence> lines) {
         super(lines);
         this.annotations = annotations;
         this.modifiers = modifiers;

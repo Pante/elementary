@@ -49,6 +49,26 @@ class TextsTest {
     @Case("line")
     static final String LINE = "";
     
+    @Case("long")
+    static final void extremelyLongMethodThatThrowsManyExceptions(String a, String b, String c) throws IllegalArgumentException {
+        
+    }
+    
+    @Test
+    void highlight_long() {
+        var snippet = MethodSnippet.of((ExecutableElement) cases.one("long"), 0);
+        var message = Texts.highlight("a brief message", snippet, snippet.exceptions, "what happened");
+        assertEquals(
+            "a brief message\n" +
+            "|    \n" +
+            "|    @Case(\"long\")\n" +
+            "|    static final  void extremelyLongMethodThatThrowsManyExceptions(String a, String b, String c) throws IllegalArgumentException\n" +
+            "|                                                                                  what happened ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
+            "|    ", 
+            message
+        );
+    }
+    
     @Test
     void highlight_line() {
         var line = VariableLine.of((VariableElement) cases.one("line"), 0, 4);
