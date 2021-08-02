@@ -23,15 +23,16 @@
  */
 package com.karuslabs.utilitary.snippet;
 
+import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.*;
 import javax.lang.model.element.*;
-
 import javax.lang.model.type.*;
 
 import static com.karuslabs.utilitary.Texts.*;
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
-import static javax.lang.model.element.ElementKind.INTERFACE;
 import static com.karuslabs.utilitary.snippet.Line.annotation;
+import static javax.lang.model.element.ElementKind.INTERFACE;
 
 /**
  * Represents a part annotation an {@code Element}.
@@ -156,8 +157,16 @@ public class Part<T, U extends Line> extends Line {
         return new Part<>(values, builder.toString(), column, position);
     }
     
+    /**
+     * Creates a {@code Part} with the given supertype of a {@code TypeElement}.
+     * 
+     * @param supertype the supertype
+     * @param column the column
+     * @param position the position
+     * @return a {@code Part} that represents the given supertype of a {@code TypeElement}
+     */
     public static Part<TypeMirror, Line> extend(TypeMirror supertype, int column, int position) {
-        if (supertype instanceof NoType) {
+        if (supertype instanceof NoType || TypeMirrors.is(supertype, Object.class)) {
             return new Part(Map.of(), "", column, position);
         }
         
@@ -167,6 +176,15 @@ public class Part<T, U extends Line> extends Line {
         return new Part<>(Map.of(supertype, type), extend + type, column, position);
     }
     
+    /**
+     * Creates a {@code Part} with the given implemented interfaces of a {@code TypeElement}.
+     * 
+     * @param kind the {@code TypeElement}'s kind
+     * @param interfaces the implemented interfaces
+     * @param column the column
+     * @param position the position
+     * @return a {@code Part} that represents the given implemented interfaces of a {@code TypeElement}
+     */
     public static Part<TypeMirror, Line> implement(ElementKind kind, List<? extends TypeMirror> interfaces, int column, int position) {
         if (interfaces.isEmpty()) {
             return new Part<>(Map.of(), "", column, position);

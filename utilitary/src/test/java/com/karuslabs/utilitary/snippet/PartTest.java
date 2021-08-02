@@ -33,11 +33,12 @@ import javax.lang.model.type.TypeMirror;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
+import static javax.lang.model.element.ElementKind.*;
 import static javax.lang.model.element.Modifier.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
-@Introspect("IdentifiersLineTest")
+@Introspect("PartTest")
 @Case("annotations")
 class AnnotationsPartTest {
     
@@ -46,21 +47,21 @@ class AnnotationsPartTest {
     
     @Test
     void annotations_toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect(\"IdentifiersLineTest\") @Case(\"annotations\") ", line.toString());
+        assertEquals("@ExtendWith(ToolsExtension.class) @Introspect(\"PartTest\") @Case(\"annotations\") ", line.toString());
     }
     
     @Test
     void annotations_values() {
         assertEquals(3, line.values.size());
         assertEquals("@ExtendWith(ToolsExtension.class)", line.values.get(annotations.get(0)).toString());
-        assertEquals("@Introspect(\"IdentifiersLineTest\")", line.values.get(annotations.get(1)).toString());
+        assertEquals("@Introspect(\"PartTest\")", line.values.get(annotations.get(1)).toString());
         assertEquals("@Case(\"annotations\")", line.values.get(annotations.get(2)).toString());
     }
 
 }
 
 @ExtendWith(ToolsExtension.class)
-@Introspect("IdentifiersLineTest")
+@Introspect("PartTest")
 class ModifiersPartTest {
     
     Part<Modifier, Line> line = Part.modifiers(Set.of(PUBLIC, STATIC, ABSTRACT), 0, 1);
@@ -81,9 +82,9 @@ class ModifiersPartTest {
 }
 
 @ExtendWith(ToolsExtension.class)
-@Introspect("IdentifiersLineTest")
+@Introspect("PartTest")
 @Case("empty")
-class GenericsPartTest {
+class TypeParametersPartTest {
     
     @Case("generics") static class Type<T extends String, U extends Line> {}
     
@@ -110,7 +111,7 @@ class GenericsPartTest {
 }
 
 @ExtendWith(ToolsExtension.class)
-@Introspect
+@Introspect("PartTest")
 class ParametersPartTest {
     
     @Case("arguments")
@@ -132,9 +133,8 @@ class ParametersPartTest {
 
 } 
 
-
 @ExtendWith(ToolsExtension.class)
-@Introspect("IdentifiersLineTest")
+@Introspect("PartTest")
 class ExceptionsPartTest {
     
     List<? extends TypeMirror> thrown = ((ExecutableElement) Tools.cases().one("case")).getThrownTypes();
@@ -156,6 +156,98 @@ class ExceptionsPartTest {
         assertEquals(2, line.values.size());
         assertEquals("IllegalArgumentException", line.values.get(thrown.get(0)).toString());
         assertEquals("NullPointerException", line.values.get(thrown.get(1)).toString());
+    }
+
+}
+
+@ExtendWith(ToolsExtension.class)
+@Introspect("PartTest")
+class ExtendPartTest {
+    
+    Cases cases = Tools.cases();
+    
+    @Case("extends")
+    static class Subtype extends Supertype {}
+    
+    @Case("extends_empty")
+    static class Supertype {}
+    
+    @Case("interface")
+    static interface Interface {}
+    
+    @Test
+    void toString_extends() {
+        var supertype = ((TypeElement) cases.one("extends")).getSuperclass();
+        var line = Part.extend(supertype, 0, 0);
+        
+        assertEquals(" extends ExtendPartTest.Supertype", line.toString());
+        assertEquals("ExtendPartTest.Supertype", line.values.get(supertype).toString());
+    }
+    
+    @Test
+    void toString_empty() {
+        var supertype = ((TypeElement) cases.one("extends_empty")).getSuperclass();
+        var line = Part.extend(supertype, 0, 0);
+        
+        assertEquals("", line.toString());
+        assertTrue(line.values.isEmpty());
+    }
+    
+    @Test
+    void toString_interface_extends() {
+        var supertype = ((TypeElement) cases.one("interface")).getSuperclass();
+        var line = Part.extend(supertype, 0, 0);
+        
+        assertEquals("", line.toString());
+        assertTrue(line.values.isEmpty());
+    }
+
+}
+
+@ExtendWith(ToolsExtension.class)
+@Introspect("PartTest")
+class ImplementPartTest {
+    
+    Cases cases = Tools.cases();
+    
+    @Case("implements")
+    static abstract class Subtype implements Supertype, Runnable {}
+    
+    @Case("implements_empty")
+    static interface Supertype {}
+    
+    @Case("interface_extends")
+    static interface Interface extends Supertype, Runnable {}
+    
+    @Test
+    void toString_implements() {
+        var interfaces = ((TypeElement) cases.one("implements")).getInterfaces();
+        var line = Part.implement(CLASS, interfaces, 0, 0);
+        
+        assertEquals(" implements ImplementPartTest.Supertype, Runnable", line.toString());
+        assertEquals(2, line.values.size());
+        assertEquals("ImplementPartTest.Supertype", line.values.get(interfaces.get(0)).toString());
+        assertEquals("Runnable", line.values.get(interfaces.get(1)).toString());
+    }
+    
+    @Test
+    void toString_empty() {
+        var interfaces = ((TypeElement) cases.one("implements_empty")).getInterfaces();
+        var line = Part.implement(CLASS, interfaces, 0, 0);
+        
+        assertEquals("", line.toString());
+        assertTrue(line.values.isEmpty());
+    }
+    
+    @Test
+    void toString_interface_extends() {
+        var interfaces = ((TypeElement) cases.one("interface_extends")).getInterfaces();
+        var line = Part.implement(INTERFACE, interfaces, 0, 0);
+        
+        assertEquals(" extends ImplementPartTest.Supertype, Runnable", line.toString());
+        assertEquals(2, line.values.size());
+        assertEquals("ImplementPartTest.Supertype", line.values.get(interfaces.get(0)).toString());
+        assertEquals("Runnable", line.values.get(interfaces.get(1)).toString());
     }
 
 } 
