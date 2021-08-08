@@ -55,7 +55,7 @@
         <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
-            <version>3.16.0</version>
+            <version>3.17.0</version>
             <scope>compile</scope>
         </dependency>
         
@@ -126,7 +126,7 @@
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
                         <artifactId>checkstyle</artifactId>
-                        <version>8.44</version>
+                        <version>8.45</version>
                     </dependency>
                 </dependencies>
                 <configuration>
