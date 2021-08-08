@@ -27,12 +27,26 @@ import javax.lang.model.element.ElementKind;
 
 import static javax.lang.model.element.ElementKind.ANNOTATION_TYPE;
 
+/**
+ * Represents the declaration kind of an {@code TypeElement}.
+ */
 public class TypeLine extends Line {
 
+    /**
+    * Creates a {@code TypeLine} with the given {@code ElementKind}.
+    * 
+     * @param kind the {@code ElementKind}.
+     * @param column the column
+     * @param position the position
+     * @return a {@code TypeLine}
+    */
     public static TypeLine of(ElementKind kind, int column, int position) {
         return new TypeLine(kind, kind == ANNOTATION_TYPE ? "@interface" : kind.toString().toLowerCase(), column, position);
     }
-            
+    
+    /**
+     * The {@code ElementKind} of a {@code TypeElement}.
+     */
     public final ElementKind kind;
     
     TypeLine(ElementKind kind, String value, int column, int position) {

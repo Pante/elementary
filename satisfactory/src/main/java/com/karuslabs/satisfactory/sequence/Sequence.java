@@ -24,7 +24,7 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.old.Assertion;
 import com.karuslabs.utilitary.text.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;
 

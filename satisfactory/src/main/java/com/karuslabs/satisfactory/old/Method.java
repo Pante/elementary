@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.old;
 
 import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -32,7 +32,7 @@ import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.satisfactory.old.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 
 /**

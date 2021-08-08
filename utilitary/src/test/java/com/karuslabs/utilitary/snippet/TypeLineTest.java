@@ -21,41 +21,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.utilitary.snippet;
 
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
-
-import java.lang.annotation.Documented;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
-import static javax.lang.model.element.Modifier.STATIC;
+import static javax.lang.model.element.ElementKind.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-class NoTest {
+class TypeLineTest {
     
-    TypeMirrors types = Tools.typeMirrors();
-    Cases cases = Tools.cases();
+    @Case("annotation")
+    static @interface Annotation {}
+    
+    @Case("enum")
+    static enum Enum {}
+    
+    @Case("interface")
+    static interface Interface {}
+    
+    @Case("class")
+    static class Type {}
     
     @Test
-    void annotations() {
-        assertFalse(contains(no(Documented.class)).test(types, cases.get(0)));
+    void annotation() {
+        var line = TypeLine.of(Tools.cases().one("annotation").getKind(), 0, 1);
+        assertEquals("@interface", line.toString());
+        assertEquals(ANNOTATION_TYPE, line.kind);
     }
-    
-    @Case
-    @Documented
-    static @interface A {}
     
     @Test
-    void modifiers() {
-        assertFalse(contains(no(STATIC)).test(types, cases.get(0).getModifiers()));
+    void enum_() {
+        var line = TypeLine.of(Tools.cases().one("enum").getKind(), 0, 1);
+        assertEquals("enum", line.toString());
+        assertEquals(ENUM, line.kind);
     }
     
+    @Test
+    void interface_() {
+        var line = TypeLine.of(Tools.cases().one("interface").getKind(), 0, 1);
+        assertEquals("interface", line.toString());
+        assertEquals(INTERFACE, line.kind);
+    }
     
-}
+    @Test
+    void class_() {
+        var line = TypeLine.of(Tools.cases().one("class").getKind(), 0, 1);
+        assertEquals("class", line.toString());
+        assertEquals(CLASS, line.kind);
+    }
+
+} 

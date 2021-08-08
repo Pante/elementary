@@ -21,41 +21,47 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.utilitary.snippet;
 
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.lang.annotation.Documented;
+import javax.lang.model.element.TypeElement;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
-import static javax.lang.model.element.Modifier.STATIC;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-class NoTest {
+class TypeSnippetTest {
     
-    TypeMirrors types = Tools.typeMirrors();
-    Cases cases = Tools.cases();
+    @Case("type")
+    static abstract class Type<T extends String> extends Supertype implements Runnable {}
+            
+    static class Supertype {}
     
-    @Test
-    void annotations() {
-        assertFalse(contains(no(Documented.class)).test(types, cases.get(0)));
-    }
-    
-    @Case
-    @Documented
-    static @interface A {}
+    TypeElement type = (TypeElement) Tools.cases().one("type");
+    TypeSnippet snippet = TypeSnippet.of(type, 0);
     
     @Test
-    void modifiers() {
-        assertFalse(contains(no(STATIC)).test(types, cases.get(0).getModifiers()));
+    void toString_() {
+        assertEquals(
+            "@Case(\"type\")\nstatic abstract class Type<T extends String> extends TypeSnippetTest.Supertype implements Runnable {",
+            snippet.toString()
+        );
     }
     
-    
-}
+    @Test
+    void fields() {
+        assertEquals("@Case(\"type\")", snippet.annotations.toString());
+        assertEquals("static abstract ", snippet.modifiers.toString());
+        assertEquals("class", snippet.type.toString());
+        assertEquals("Type", snippet.name.toString());
+        assertEquals("<T extends String>", snippet.typeParameters.toString());
+        assertEquals(" extends TypeSnippetTest.Supertype", snippet.supertype.toString());
+        assertEquals(" implements Runnable", snippet.interfaces.toString());
+    }
+
+} 

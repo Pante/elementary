@@ -29,7 +29,7 @@ import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.satisfactory.old.Assertions.*;
 import static com.karuslabs.satisfactory.sequence.Sequences.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;

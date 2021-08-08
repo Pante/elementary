@@ -23,14 +23,14 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.old.Assertion;
 
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.Assertions.*;
+import static com.karuslabs.satisfactory.old.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 

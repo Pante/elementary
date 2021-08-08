@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.old.Assertion;
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.type.TypeMirrors;

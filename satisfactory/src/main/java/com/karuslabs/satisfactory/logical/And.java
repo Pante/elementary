@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.old.Assertion;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**

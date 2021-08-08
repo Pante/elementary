@@ -27,8 +27,18 @@ import java.util.*;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
+/**
+ * A code snippet that represents a {@code TypeElement}.
+ */
 public class TypeSnippet extends Snippet {
 
+    /**
+     * Creates a {@code TypeSnippet} for the given {@code TypeElement}.
+     * 
+     * @param element the {@code TypeElement}
+     * @param column the column
+     * @return a {@code TypeSnippet}
+     */
     public static TypeSnippet of(TypeElement element, int column) {
         var lines = new LinkedHashMap<Integer, CharSequence>();
         
@@ -48,10 +58,10 @@ public class TypeSnippet extends Snippet {
         builder.append(name);
         
         var typeParameters = Part.typeParameters(element.getTypeParameters(), column, builder.length());
-        builder.append(typeParameters).append(" ");
+        builder.append(typeParameters);
         
         var supertype = Part.extend(element.getSuperclass(), column, builder.length());
-        builder.append(supertype).append(" ");
+        builder.append(supertype);
         
         var interfaces = Part.implement(element.getKind(), element.getInterfaces(), column, builder.length());
         builder.append(interfaces).append(" {");
@@ -61,12 +71,33 @@ public class TypeSnippet extends Snippet {
         return new TypeSnippet(annotations, modifiers, type, name, typeParameters, supertype, interfaces, lines);
     }
     
+    /**
+     * The annotations.
+     */
     public final AnnotationsSnippet annotations;
+    /**
+     * The modifiers.
+     */
     public final Part<Modifier, Line> modifiers;
+    /**
+     * The type.
+     */
     public final TypeLine type;
+    /**
+     * The name.
+     */
     public final Line name;
+    /**
+     * The type parameters.
+     */
     public final Part<TypeParameterElement, Line> typeParameters;
+    /**
+     * The supertype.
+     */
     public final Part<TypeMirror, Line> supertype;
+    /**
+     * The implemented interfaces.
+     */
     public final Part<TypeMirror, Line> interfaces;
     
     TypeSnippet(

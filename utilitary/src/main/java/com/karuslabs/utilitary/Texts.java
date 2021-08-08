@@ -37,6 +37,7 @@ import static java.util.stream.Collectors.joining;
 public class Texts {
     
     private static final String DELIMITER = "\n|    ";
+    private static final String INDICATOR = "~";
     
     /**
      * The format used to describe strings.
@@ -197,39 +198,29 @@ public class Texts {
     public static String highlight(String brief, Snippet snippet, int column, int position, int length, String indicator, String message) {
         return highlight(brief, snippet.lines, column, position, length, indicator, message);
     }
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given lines with
-     * a message. The highlighted part is indicated using the given indicator.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param lines the lines which contain an issue
-     * @param column the column annotation the part to highlight
-     * @param position the position annotation the part to highlight
-     * @param length the length annotation the part to highlight
-     * @param indicator the indicator
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Map<Integer, CharSequence> lines, int column, int position, int length, String indicator, String message) {
+
+    public static String diagnostic(String brief, Map<Integer, CharSequence> lines, Map<Line, String> messages) {
         lines = new HashMap<>(lines);
-        if (position + length > 120 && message.length() < 120 - length) {
-            lines.put(column + 1, " ".repeat(position - message.length() - 1) + message + " " + indicator.repeat(length));
-        } else {
-            lines.put(column + 1, " ".repeat(position) + indicator.repeat(length) + " " + message);
+        if (messages.size() == 1) {
+            
         }
         
-        return brief + DELIMITER.repeat(2) + lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue() + DELIMITER).collect(joining(""));
+        var columns = new HashMap<Integer, TreeMap<Line, String>>();
+        for (var entry : messages.entrySet()) {
+            var column = columns.get(entry.getKey().column);
+            if (column == null) {
+                column = new TreeMap<>();
+            }
+        }
+        
+        
+//        if (position + length > 120 && message.length() < 120 - length) {
+//            lines.put(column + 1, " ".repeat(position - message.length() - 1) + message + " " + INDICATOR.repeat(length));
+//        } else {
+//            lines.put(column + 1, " ".repeat(position) + INDICATOR.repeat(length) + " " + message);
+//        }
+//        
+//        return brief + DELIMITER.repeat(2) + lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue() + DELIMITER).collect(joining(""));
     }
     
     

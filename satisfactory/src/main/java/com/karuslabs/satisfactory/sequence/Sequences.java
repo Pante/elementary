@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.old.Assertion;
 
 import java.util.function.Supplier;
 import javax.lang.model.element.VariableElement;

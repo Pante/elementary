@@ -33,7 +33,7 @@ import javax.lang.model.element.AnnotationMirror;
  * A {@code Line} reconstructs a line in the source file from an {@code Element}
  * representation and hence may not be exactly the same as the original source code. 
  */
-public class Line implements CharSequence {
+public class Line implements CharSequence, Comparable<Line> {
 
     /**
      * Creates a {@code Line} for the given annotation.
@@ -83,6 +83,11 @@ public class Line implements CharSequence {
     @Override
     public CharSequence subSequence(int start, int end) {
         return value.subSequence(start, end);
+    }
+    
+    @Override
+    public int compareTo(Line other) {
+        
     }
     
     @Override

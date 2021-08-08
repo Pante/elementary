@@ -1,6 +1,9 @@
 ## 1.2.0 - Snippety Snip
 
+This release focuses on providing facilities for creating more precise and detailed diagnostic messages.
+
 ## Utilitary
+
 
 - Add `com.karuslabs.utilitary.snippet`
 - Add `AnnotationValuePrinter`
