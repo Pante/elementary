@@ -211,6 +211,12 @@ public class Texts {
             if (column == null) {
                 column = new TreeMap<>();
             }
+            
+            column.put(entry.getKey(), entry.getValue());
+        }
+        
+        for (var column : columns.values()) {
+            render(column);
         }
         
         
@@ -221,6 +227,14 @@ public class Texts {
 //        }
 //        
 //        return brief + DELIMITER.repeat(2) + lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue() + DELIMITER).collect(joining(""));
+    }
+    
+    static String render(TreeMap<Line, String> diagnostics) {
+        var builder = new StringBuilder().append(DELIMITER);
+        for (var diagnostic : diagnostics.entrySet()) {
+            var line = diagnostic.getKey();
+            builder.append()
+        }
     }
     
     
