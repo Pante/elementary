@@ -36,7 +36,7 @@ public class Snippet implements CharSequence {
     /**
      * The lines in this snippet.
      */
-    public final Map<Integer, CharSequence> lines;
+    public final Map<Integer, Line> lines;
     /**
      * The index of the first line.
      */
@@ -52,7 +52,7 @@ public class Snippet implements CharSequence {
      * 
      * @param lines the lines
      */
-    public Snippet(Map<Integer, CharSequence> lines) {
+    public Snippet(Map<Integer, Line> lines) {
         this.lines = lines;
         this.first = Collections.min(lines.keySet());
         this.last = Collections.max(lines.keySet());

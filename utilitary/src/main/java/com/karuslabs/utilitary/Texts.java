@@ -24,20 +24,17 @@
 package com.karuslabs.utilitary;
 
 import com.karuslabs.utilitary.snippet.*;
+
 import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.*;
-
-import static java.util.Map.Entry.comparingByKey;
-import static java.util.stream.Collectors.joining;
 
 /**
  * Utilities for formatting messages.
  */
 public class Texts {
     
-    private static final String DELIMITER = "\n|    ";
-    private static final String INDICATOR = "~";
+    private static final String DELIMITER = "\n|  ";
     
     /**
      * The format used to describe strings.
@@ -47,194 +44,87 @@ public class Texts {
      * The format used to describe objects which string representation is in screaming case.
      */
     public static final BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given line with 
-     * a message. The highlighted part is indicated using {@code ~}.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param line the line which contains an issue
-     * @param highlight the part to highlight
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Line line, Line highlight, String message) {
-        return highlight(brief, line, highlight, "~", message);
-    }
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given snippet with 
-     * a message. The highlighted part is indicated using {@code ~}.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param snippet the snippet which contains an issue
-     * @param highlight the part to highlight
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Snippet snippet, Line highlight, String message) {
-        return highlight(brief, snippet, highlight, "~", message);
-    }
-    
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given line with
-     * a message. The highlighted part is indicated using the given indicator.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param line the line which contains an issue
-     * @param highlight the part to highlight
-     * @param indicator the indicator
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Line line, Line highlight, String indicator, String message) {
-        return highlight(brief, line, highlight.position, highlight.length(), indicator, message);
-    }
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given snippet with
-     * a message. The highlighted part is indicated using the given indicator.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param snippet the snippet which contains an issue
-     * @param highlight the part to highlight
-     * @param indicator the indicator
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Snippet snippet, Line highlight, String indicator, String message) {
-        return highlight(brief, snippet, highlight.column, highlight.position, highlight.length(), indicator, message);
-    }
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given line with
-     * a message. The highlighted part is indicated using the given indicator.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param line the line which contains an issue
-     * @param position the position annotation the part to highlight
-     * @param length the length annotation the part to highlight
-     * @param indicator the indicator
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Line line, int position, int length, String indicator, String message) {
-        return highlight(brief, Map.of(0, line), 0, position - line.position, length, indicator, message);
-    }
-    
-    /**
-     * Creates a diagnostic message that highlights part of the given snippet with
-     * a message. The highlighted part is indicated using the given indicator.
-     * <br><br>
-     * For example, highlighting a method's name will produce the following diagnostic
-     * message.
-     * {@code
-     * <brief>
-     * |
-     * | public static void method()
-     * |                    ~~~~~~ <message>
-     * |
-     * }
-     * 
-     * @param brief the brief diagnostic message
-     * @param snippet the snippet which contains an issue
-     * @param position the position annotation the part to highlight
-     * @param length the length annotation the part to highlight
-     * @param indicator the indicator
-     * @param message a message that describes the issue
-     * @return a diagnostic message
-     */
-    public static String highlight(String brief, Snippet snippet, int column, int position, int length, String indicator, String message) {
-        return highlight(brief, snippet.lines, column, position, length, indicator, message);
-    }
 
-    public static String diagnostic(String brief, Map<Integer, CharSequence> lines, Map<Line, String> messages) {
-        lines = new HashMap<>(lines);
-        if (messages.size() == 1) {
-            
-        }
-        
-        var columns = new HashMap<Integer, TreeMap<Line, String>>();
-        for (var entry : messages.entrySet()) {
-            var column = columns.get(entry.getKey().column);
-            if (column == null) {
-                column = new TreeMap<>();
-            }
-            
-            column.put(entry.getKey(), entry.getValue());
-        }
-        
-        for (var column : columns.values()) {
-            render(column);
-        }
-        
-        
-//        if (position + length > 120 && message.length() < 120 - length) {
-//            lines.put(column + 1, " ".repeat(position - message.length() - 1) + message + " " + INDICATOR.repeat(length));
-//        } else {
-//            lines.put(column + 1, " ".repeat(position) + INDICATOR.repeat(length) + " " + message);
-//        }
-//        
-//        return brief + DELIMITER.repeat(2) + lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue() + DELIMITER).collect(joining(""));
+    
+    public static String diagnose(String brief, Line line, Line issue, String message) {
+        return diagnose(brief, line, Map.of(issue, message));
     }
     
-    static String render(TreeMap<Line, String> diagnostics) {
-        var builder = new StringBuilder().append(DELIMITER);
-        for (var diagnostic : diagnostics.entrySet()) {
-            var line = diagnostic.getKey();
-            builder.append()
+    public static String diagnose(String brief, Line line, Map<Line, String> issues) {
+        return diagnose(brief, Map.of(0, line), issues);
+    }
+    
+    
+    public static String diagnose(String brief, Snippet snippet, Line issue, String message) {
+        return diagnose(brief, snippet, Map.of(issue, message));
+    }
+    
+    public static String diagnose(String brief, Snippet snippet, Map<Line, String> issues) {
+        return diagnose(brief, snippet.lines, issues);
+    }
+    
+    
+    public static String diagnose(String brief, Map<Integer, Line> lines, Map<Line, String> issues) {
+        lines = new TreeMap<>(lines);
+        
+        var columns = new TreeMap<Integer, TreeMap<Line, String>>();
+        for (var issue : issues.entrySet()) {
+            columns.computeIfAbsent(issue.getKey().column, k -> new TreeMap<>()).put(issue.getKey(), issue.getValue());
         }
+        
+        var builder = new StringBuilder().append(brief).append(DELIMITER);
+        for (var entry : lines.entrySet()) {
+            var line = entry.getValue();
+            builder.append(DELIMITER)
+                   .append(" ".repeat(line.position))
+                   .append(line)
+                   .append(render(columns.computeIfAbsent(entry.getKey(), k -> new TreeMap<>())));
+        }
+        
+        return builder.append(DELIMITER).toString();
+    }
+    
+    static String render(TreeMap<Line, String> issues) {
+        if (issues.isEmpty()) {
+            return "";
+        }
+        
+        var underline = new StringBuilder().append(DELIMITER);
+        var builders = new TreeMap<Integer, StringBuilder>();
+        
+        var times = issues.size() - 1;
+        for (var entry : issues.entrySet()) {
+            var line = entry.getKey();
+            underline.append(pad(underline, line)).append("~".repeat(line.length()));
+            
+            if (line.equals(issues.lastKey())) {
+                underline.append(" ").append(entry.getValue());
+                
+            } else {
+                draw(times--, builders, entry.getKey(), entry.getValue());
+            }
+        }
+        
+        for (var builder : builders.values()) {
+            underline.append(builder);
+        }
+        
+        return underline.toString();
+    }
+    
+    static void draw(int times, Map<Integer, StringBuilder> builders, Line issue, String message) {
+        for (var i = 0; i < times * 2; i++) {
+            var builder = builders.computeIfAbsent(i, k -> new StringBuilder().append(DELIMITER));
+            builder.append(pad(builder, issue)).append("|");
+        }
+        
+        var builder = builders.computeIfAbsent(times * 2, k -> new StringBuilder().append(DELIMITER));
+        builder.append(pad(builder, issue)).append(message);
+    }
+    
+    
+    static String pad(StringBuilder builder, Line issue) {
+        return " ".repeat(issue.position - builder.length() + DELIMITER.length());
     }
     
     

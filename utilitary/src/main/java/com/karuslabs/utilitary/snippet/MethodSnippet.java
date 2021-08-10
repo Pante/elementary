@@ -42,7 +42,7 @@ public class MethodSnippet extends Snippet {
      * @return a {@code VariableSnippet}
      */
     public static MethodSnippet of(ExecutableElement method, int column) {
-        var lines = new LinkedHashMap<Integer, CharSequence>();
+        var lines = new LinkedHashMap<Integer, Line>();
         
         var annotations = AnnotationsSnippet.of(method.getAnnotationMirrors(), column);
         lines.putAll(annotations.lines);
@@ -68,7 +68,7 @@ public class MethodSnippet extends Snippet {
         var exceptions = Part.exceptions(method.getThrownTypes(), column, builder.length());
         builder.append(exceptions);
         
-        lines.put(column, builder.toString());
+        lines.put(column, new Line(builder.toString(), column, 0));
         
         return new MethodSnippet(annotations, modifiers, typeParameters, type, name, parameters, exceptions, lines);
     }
@@ -110,7 +110,7 @@ public class MethodSnippet extends Snippet {
         Line name, 
         Part<VariableElement, VariableLine> parameters, 
         Part<TypeMirror, Line> exceptions,
-        Map<Integer, CharSequence> lines
+        Map<Integer, Line> lines
     ) {
         super(lines);
         this.annotations = annotations;

@@ -55,9 +55,21 @@ class TextsTest {
     }
     
     @Test
+    void example() {
+        var method = (ExecutableElement) cases.one("long");
+        var snippet = MethodSnippet.of(method, 0);
+        assertEquals("", Texts.diagnose("<summary>", snippet, Map.of(
+            snippet.modifiers, "method should not be static", 
+            snippet.type, "method should not return void", 
+            snippet.name, "method's name is too damn long",
+            snippet.parameters.values.get(method.getParameters().get(0)).type, "method should not contain a string parameter"
+        )));
+    }
+    
+    @Test
     void highlight_long() {
         var snippet = MethodSnippet.of((ExecutableElement) cases.one("long"), 0);
-        var message = Texts.highlight("a brief message", snippet, snippet.exceptions, "what happened");
+        var message = Texts.diagnose("a brief message", snippet, snippet.exceptions, "what happened");
         assertEquals(
             "a brief message\n" +
             "|    \n" +
@@ -72,7 +84,7 @@ class TextsTest {
     @Test
     void highlight_line() {
         var line = VariableLine.of((VariableElement) cases.one("line"), 0, 4);
-        var message = Texts.highlight("a brief message", line, line.name, "what happened");
+        var message = Texts.diagnose("a brief message", line, line.name, "what happened");
         assertEquals(
             "a brief message\n" +
             "|    \n" +
@@ -86,7 +98,7 @@ class TextsTest {
     @Test
     void highlight_snippet() {
         var snippet = VariableSnippet.of((VariableElement) cases.one("line"), 4);
-        var message = Texts.highlight("a brief message", snippet, snippet.name, "what happened");
+        var message = Texts.diagnose("a brief message", snippet, snippet.name, "what happened");
         assertEquals(
             "a brief message\n" +
             "|    \n" +

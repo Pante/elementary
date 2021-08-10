@@ -37,7 +37,9 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class SnippetTest {
     
-    Snippet snippet = new Snippet(Map.of(1, "first", 2, "second", 3, "third"));
+    static final Map<Integer, Line> LINES = Map.of(1, new Line("first", 0, 0), 2, new Line("second", 0, 0), 3, new Line("third", 0, 0));
+    
+    Snippet snippet = new Snippet(LINES);
     
     @Test
     void snippet() {
@@ -72,17 +74,17 @@ class SnippetTest {
     
     @Test
     void equals() {
-        assertEquals(snippet, new Snippet(Map.of(1, "first", 2, "second", 3, "third")));
+        assertEquals(snippet, new Snippet(LINES));
     }
     
     @Test
     void hashCode_() {
-        assertEquals(snippet.hashCode(), new Snippet(Map.of(1, "first", 2, "second", 3, "third")).hashCode());
+        assertEquals(snippet.hashCode(), new Snippet(LINES).hashCode());
     }
     
     @Test
     void hashCode_different() {
-        assertNotEquals(snippet.hashCode(), Map.of(1, "first", 2, "second", 3, "third").hashCode());
+        assertNotEquals(snippet.hashCode(), LINES.hashCode());
     }
     
     @Test

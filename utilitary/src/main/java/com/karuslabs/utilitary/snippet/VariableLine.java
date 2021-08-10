@@ -23,6 +23,7 @@
  */
 package com.karuslabs.utilitary.snippet;
 
+import java.util.List;
 import javax.lang.model.element.*;
 
 import static com.karuslabs.utilitary.type.TypePrinter.simple;
@@ -33,7 +34,8 @@ import static com.karuslabs.utilitary.type.TypePrinter.simple;
 public class VariableLine extends Line {
     
     /**
-     * Creates a {@code VariableLine} with the given {@code VariableElement}.
+     * Creates a {@code VariableLine} with the given {@code VariableElement} that
+     * includes the annotations on the given {@code VariableElement}.
      * 
      * @param variable the variable
      * @param column the column
@@ -41,12 +43,25 @@ public class VariableLine extends Line {
      * @return a {@code VariableLine} 
      */
     public static VariableLine of(VariableElement variable, int column, int position) {
+        return of(variable, true, column, position);
+    }
+    
+    /**
+     * Creates a {@code VariableLine} with the given {@code VariableElement}.
+     * 
+     * @param variable the variable
+     * @param annotated whether to include the annotations on the given {@code VariableElement}
+     * @param column the column
+     * @param position the position
+     * @return a {@code VariableLine} 
+     */
+    public static VariableLine of(VariableElement variable, boolean annotated, int column, int position) {
         var builder = new StringBuilder();
         
         var modifiers = Part.modifiers(variable.getModifiers(), column, position);
         builder.append(modifiers);
         
-        var annotations = Part.annotations(variable.getAnnotationMirrors(), column, position + builder.length());
+        var annotations = Part.annotations(annotated ? variable.getAnnotationMirrors() : List.of(), column, position + builder.length());
         builder.append(annotations);
         
         var type = new Line(simple(variable.asType()), column, position + builder.length());

@@ -36,31 +36,21 @@ public class VariableSnippet extends Snippet {
     /**
      * Creates a {@code VariableSnippet} with the given {@code VariableElement}.
      * 
-     * @param variable the variable
+     * @param element the variable
      * @param column the column
      * @return a {@code VariableSnippet}
      */
-    public static VariableSnippet of(VariableElement variable, int column) {
-        var lines = new LinkedHashMap<Integer, CharSequence>();
+    public static VariableSnippet of(VariableElement element, int column) {
+        var lines = new LinkedHashMap<Integer, Line>();
         
-        var annotations = AnnotationsSnippet.of(variable.getAnnotationMirrors(), column);
+        var annotations = AnnotationsSnippet.of(element.getAnnotationMirrors(), column);
         lines.putAll(annotations.lines);
         
-        var builder = new StringBuilder();
-        column = annotations.last + 1;
+        var variable = VariableLine.of(element, false, annotations.last + 1, 0);
         
-        var modifiers = Part.modifiers(variable.getModifiers(), column, 0);
-        builder.append(modifiers);
+        lines.put(variable.column, variable);
         
-        var type = new Line(simple(variable.asType()), column, builder.length());
-        builder.append(type).append(" ");
-        
-        var name = new Line(variable.getSimpleName().toString(), column, builder.length());
-        builder.append(name);
-        
-        lines.put(column, builder.toString());
-        
-        return new VariableSnippet(annotations, modifiers, type, name, lines);
+        return new VariableSnippet(annotations, variable.modifiers, variable.type, variable.name, lines);
     }
     
     /**
@@ -80,7 +70,7 @@ public class VariableSnippet extends Snippet {
      */
     public final Line name;
     
-    VariableSnippet(AnnotationsSnippet annotations, Part<Modifier, Line> modifiers, Line type, Line name, Map<Integer, CharSequence> lines) {
+    VariableSnippet(AnnotationsSnippet annotations, Part<Modifier, Line> modifiers, Line type, Line name, Map<Integer, Line> lines) {
         super(lines);
         this.annotations = annotations;
         this.modifiers = modifiers;

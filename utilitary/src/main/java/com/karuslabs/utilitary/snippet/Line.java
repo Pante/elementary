@@ -46,6 +46,17 @@ public class Line implements CharSequence, Comparable<Line> {
     public static Line annotation(AnnotationMirror annotation, int column, int position) {
         return new Line(AnnotationValuePrinter.annotation(annotation), column, position);
     }
+    
+    /**
+     * Creates an empty {@code Line}.
+     * 
+     * @param column the column
+     * @param position the position
+     * @return an empty {@code Line}
+     */
+    public static Line empty(int column, int position) {
+        return new Line("", column, position);
+    }
 
     private final String value;
     /**
@@ -87,7 +98,12 @@ public class Line implements CharSequence, Comparable<Line> {
     
     @Override
     public int compareTo(Line other) {
+        var columns = Integer.compare(column, other.column);
+        if (columns != 0) {
+            return columns;
+        }
         
+        return Integer.compare(position, other.position);
     }
     
     @Override
