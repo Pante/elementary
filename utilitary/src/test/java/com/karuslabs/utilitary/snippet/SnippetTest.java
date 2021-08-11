@@ -26,7 +26,7 @@ package com.karuslabs.utilitary.snippet;
 import com.karuslabs.elementary.junit.ToolsExtension;
 import com.karuslabs.elementary.junit.annotations.Introspect;
 
-import java.util.Map;
+import java.util.*;
 
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,7 +37,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class SnippetTest {
     
-    static final Map<Integer, Line> LINES = Map.of(1, new Line("first", 0, 0), 2, new Line("second", 0, 0), 3, new Line("third", 0, 0));
+    static final TreeMap<Integer, Line> LINES = new TreeMap<>(Map.of(1, new Line("first", 0, 0), 2, new Line("second", 0, 0), 3, new Line("third", 0, 0)));
     
     Snippet snippet = new Snippet(LINES);
     

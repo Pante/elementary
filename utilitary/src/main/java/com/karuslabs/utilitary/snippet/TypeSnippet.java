@@ -40,7 +40,7 @@ public class TypeSnippet extends Snippet {
      * @return a {@code TypeSnippet}
      */
     public static TypeSnippet of(TypeElement element, int column) {
-        var lines = new LinkedHashMap<Integer, Line>();
+        var lines = new TreeMap<Integer, Line>();
         
         var annotations = AnnotationsSnippet.of(element.getAnnotationMirrors(), column);
         lines.putAll(annotations.lines);
@@ -108,7 +108,7 @@ public class TypeSnippet extends Snippet {
         Part<TypeParameterElement, Line> typeParameters,
         Part<TypeMirror, Line> supertype,
         Part<TypeMirror, Line> interfaces,
-        Map<Integer, Line> lines
+        TreeMap<Integer, Line> lines
     ) {
         super(lines);
         this.annotations = annotations;

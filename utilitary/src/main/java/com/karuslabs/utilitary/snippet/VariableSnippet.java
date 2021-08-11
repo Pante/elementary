@@ -26,8 +26,6 @@ package com.karuslabs.utilitary.snippet;
 import java.util.*;
 import javax.lang.model.element.*;
 
-import static com.karuslabs.utilitary.type.TypePrinter.simple;
-
 /**
  * A code snippet that represents a {@code VariableElement}.
  */
@@ -41,7 +39,7 @@ public class VariableSnippet extends Snippet {
      * @return a {@code VariableSnippet}
      */
     public static VariableSnippet of(VariableElement element, int column) {
-        var lines = new LinkedHashMap<Integer, Line>();
+        var lines = new TreeMap<Integer, Line>();
         
         var annotations = AnnotationsSnippet.of(element.getAnnotationMirrors(), column);
         lines.putAll(annotations.lines);
@@ -70,7 +68,7 @@ public class VariableSnippet extends Snippet {
      */
     public final Line name;
     
-    VariableSnippet(AnnotationsSnippet annotations, Part<Modifier, Line> modifiers, Line type, Line name, Map<Integer, Line> lines) {
+    VariableSnippet(AnnotationsSnippet annotations, Part<Modifier, Line> modifiers, Line type, Line name, TreeMap<Integer, Line> lines) {
         super(lines);
         this.annotations = annotations;
         this.modifiers = modifiers;

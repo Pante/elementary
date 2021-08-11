@@ -40,7 +40,7 @@ public class AnnotationsSnippet extends Snippet {
      */
     public static AnnotationsSnippet of(List<? extends AnnotationMirror> annotations, int column) {
         var values = new LinkedHashMap<AnnotationMirror, Line>();
-        var lines = new LinkedHashMap<Integer, Line>();
+        var lines = new TreeMap<Integer, Line>();
         
         for (var annotation : annotations) {
             var line = Line.annotation(annotation, column, 0);
@@ -56,7 +56,7 @@ public class AnnotationsSnippet extends Snippet {
      */
     public final Map<AnnotationMirror, Line> values;
     
-    AnnotationsSnippet(Map<AnnotationMirror, Line> values, Map<Integer, Line> lines) {
+    AnnotationsSnippet(Map<AnnotationMirror, Line> values, TreeMap<Integer, Line> lines) {
         super(lines);
         this.values = values;
     }

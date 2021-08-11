@@ -62,7 +62,7 @@ class TextsTest {
             snippet.modifiers, "method should not be static", 
             snippet.type, "method should not return void", 
             snippet.name, "method's name is too damn long",
-            snippet.parameters.values.get(method.getParameters().get(0)).type, "method should not contain a string parameter"
+            snippet.parameters.values.get(method.getParameters().get(0)).name, "method should not contain a string parameter"
         )));
     }
     

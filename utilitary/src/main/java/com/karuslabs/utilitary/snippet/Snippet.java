@@ -25,7 +25,6 @@ package com.karuslabs.utilitary.snippet;
 
 import java.util.*;
 
-import static java.util.Map.Entry.comparingByKey;
 import static java.util.stream.Collectors.joining;
 
 /**
@@ -36,7 +35,7 @@ public class Snippet implements CharSequence {
     /**
      * The lines in this snippet.
      */
-    public final Map<Integer, Line> lines;
+    public final TreeMap<Integer, Line> lines;
     /**
      * The index of the first line.
      */
@@ -52,11 +51,11 @@ public class Snippet implements CharSequence {
      * 
      * @param lines the lines
      */
-    public Snippet(Map<Integer, Line> lines) {
+    public Snippet(TreeMap<Integer, Line> lines) {
         this.lines = lines;
-        this.first = Collections.min(lines.keySet());
-        this.last = Collections.max(lines.keySet());
-        this.value = lines.entrySet().stream().sorted(comparingByKey()).map(entry -> entry.getValue()).collect(joining("\n"));
+        this.first = lines.firstKey();
+        this.last = lines.lastKey();
+        this.value = lines.values().stream().collect(joining("\n"));
     }
 
     @Override

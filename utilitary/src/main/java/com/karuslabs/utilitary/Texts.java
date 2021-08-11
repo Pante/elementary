@@ -29,12 +29,14 @@ import java.util.*;
 import java.util.function.BiConsumer;
 import javax.lang.model.element.*;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 /**
  * Utilities for formatting messages.
  */
 public class Texts {
     
-    private static final String DELIMITER = "\n|  ";
+    private static final String DELIMITER = "\n|    ";
     
     /**
      * The format used to describe strings.
@@ -63,56 +65,49 @@ public class Texts {
         return diagnose(brief, snippet.lines, issues);
     }
     
-    
-    public static String diagnose(String brief, Map<Integer, Line> lines, Map<Line, String> issues) {
-        lines = new TreeMap<>(lines);
-        
-        var columns = new TreeMap<Integer, TreeMap<Line, String>>();
+    static String diagnose(String brief, Map<Integer, Line> lines, Map<Line, String> issues) {
+        var columns = new HashMap<Integer, TreeMap<Line, String>>();
         for (var issue : issues.entrySet()) {
             columns.computeIfAbsent(issue.getKey().column, k -> new TreeMap<>()).put(issue.getKey(), issue.getValue());
         }
         
         var builder = new StringBuilder().append(brief).append(DELIMITER);
-        for (var entry : lines.entrySet()) {
-            var line = entry.getValue();
-            builder.append(DELIMITER)
-                   .append(" ".repeat(line.position))
-                   .append(line)
-                   .append(render(columns.computeIfAbsent(entry.getKey(), k -> new TreeMap<>())));
+        for (var line : lines.values()) {
+            builder.append(DELIMITER).append(" ".repeat(line.position)).append(line).append(render(columns.get(line.column)));
         }
         
         return builder.append(DELIMITER).toString();
     }
     
-    static String render(TreeMap<Line, String> issues) {
-        if (issues.isEmpty()) {
+    static String render(@Nullable TreeMap<Line, String> issues) {
+        if (issues == null) {
             return "";
         }
         
         var underline = new StringBuilder().append(DELIMITER);
-        var builders = new TreeMap<Integer, StringBuilder>();
+        var lines = new TreeMap<Integer, StringBuilder>();
         
         var times = issues.size() - 1;
         for (var entry : issues.entrySet()) {
             var line = entry.getKey();
-            underline.append(pad(underline, line)).append("~".repeat(line.length()));
+            underline.append(pad(underline, line)).append(line.length() == 1 ? '^' : "~".repeat(line.length()));
             
             if (line.equals(issues.lastKey())) {
                 underline.append(" ").append(entry.getValue());
                 
             } else {
-                draw(times--, builders, entry.getKey(), entry.getValue());
+                render(times--, lines, entry.getKey(), entry.getValue());
             }
         }
         
-        for (var builder : builders.values()) {
-            underline.append(builder);
+        for (var line : lines.values()) {
+            underline.append(line);
         }
         
         return underline.toString();
     }
     
-    static void draw(int times, Map<Integer, StringBuilder> builders, Line issue, String message) {
+    static void render(int times, Map<Integer, StringBuilder> builders, Line issue, String message) {
         for (var i = 0; i < times * 2; i++) {
             var builder = builders.computeIfAbsent(i, k -> new StringBuilder().append(DELIMITER));
             builder.append(pad(builder, issue)).append("|");

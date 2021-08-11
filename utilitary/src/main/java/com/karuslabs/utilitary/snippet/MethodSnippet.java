@@ -42,7 +42,7 @@ public class MethodSnippet extends Snippet {
      * @return a {@code VariableSnippet}
      */
     public static MethodSnippet of(ExecutableElement method, int column) {
-        var lines = new LinkedHashMap<Integer, Line>();
+        var lines = new TreeMap<Integer, Line>();
         
         var annotations = AnnotationsSnippet.of(method.getAnnotationMirrors(), column);
         lines.putAll(annotations.lines);
@@ -110,7 +110,7 @@ public class MethodSnippet extends Snippet {
         Line name, 
         Part<VariableElement, VariableLine> parameters, 
         Part<TypeMirror, Line> exceptions,
-        Map<Integer, Line> lines
+        TreeMap<Integer, Line> lines
     ) {
         super(lines);
         this.annotations = annotations;
