@@ -26,17 +26,27 @@ package com.karuslabs.utilitary.snippet;
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 
+import java.util.stream.Stream;
+
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.params.provider.Arguments.of;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
 @Case("case")
 class LineTest {
     
-    Line line = Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1);
+    Line line = Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2);
+    
+    @Test
+    void empty() {
+        assertEquals(new Line("", 1, 2), Line.empty(1, 2));
+    }
     
     @Test
     void length() {
@@ -53,6 +63,22 @@ class LineTest {
         assertEquals("Case", line.subSequence(1, 5));
     }
     
+    @ParameterizedTest
+    @MethodSource("compareTo_parameters")
+    void compareTo(Line other, int comparison) {
+        assertEquals(comparison, line.compareTo(other));
+    }
+    
+    static Stream<Arguments> compareTo_parameters() {
+        return Stream.of(
+            of(Line.empty(0, 2), 1),
+            of(Line.empty(2, 2), -1),
+            of(Line.empty(1, 1), 1),
+            of(Line.empty(1, 2), 0),
+            of(Line.empty(1, 3), -1)
+        );
+    }
+    
     @Test
     void equals_same() {
         assertTrue(line.equals(line));
@@ -65,18 +91,17 @@ class LineTest {
     
     @Test
     void equals() {
-        assertTrue(line.equals(Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1)));
+        assertTrue(line.equals(Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2)));
     }
     
     @Test
     void hashCode_() {
-        assertEquals(line.hashCode(), Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 0, 1).hashCode());
+        assertEquals(line.hashCode(), Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2).hashCode());
     }
     
     @Test
     void toString_() {
         assertEquals("@Case(\"case\")", line.toString());
     } 
-    
 
 } 

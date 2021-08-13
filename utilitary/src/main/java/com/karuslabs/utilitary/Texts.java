@@ -47,31 +47,95 @@ public class Texts {
      */
     public static final BiConsumer<Object, StringBuilder> SCREAMING_CASE = (object, builder) -> builder.append(object.toString().toLowerCase().replace('_', ' '));
 
-    
-    public static String diagnose(String brief, Line line, Line issue, String message) {
-        return diagnose(brief, line, Map.of(issue, message));
+    /**
+     * Creates a formatted diagnostic message that underlines issues in a message.
+     * <br><br>
+     * {@code
+     * <summary>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |                    <issue>
+     * }
+     * 
+     * @param summary a summary
+     * @param line the line which contains an issue
+     * @param issue the issue
+     * @param message the message describing the issue
+     * @return a formatted diagnostic message
+     */
+    public static String diagnose(String summary, Line line, Line issue, String message) {
+        return diagnose(summary, line, Map.of(issue, message));
     }
     
-    public static String diagnose(String brief, Line line, Map<Line, String> issues) {
-        return diagnose(brief, Map.of(0, line), issues);
+    /**
+     * Creates a formatted diagnostic message that underlines issues in a message.
+     * <br><br>
+     * {@code
+     * <summary>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |                    <issue>
+     * }
+     * 
+     * @param summary a summary
+     * @param line the line which contains an issue
+     * @param issues the issues
+     * @return a formatted diagnostic message
+     */
+    public static String diagnose(String summary, Line line, Map<Line, String> issues) {
+        return diagnose(summary, Map.of(0, line), issues);
     }
     
-    
-    public static String diagnose(String brief, Snippet snippet, Line issue, String message) {
-        return diagnose(brief, snippet, Map.of(issue, message));
+    /**
+     * Creates a formatted diagnostic message that underlines issues in a message.
+     * <br><br>
+     * {@code
+     * <summary>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |                    <issue>
+     * }
+     * 
+     * @param summary a summary
+     * @param snippet the snippet which contains an issue
+     * @param issue the issue
+     * @param message the message describing the issue
+     * @return a formatted diagnostic message
+     */
+    public static String diagnose(String summary, Snippet snippet, Line issue, String message) {
+        return diagnose(summary, snippet, Map.of(issue, message));
     }
     
-    public static String diagnose(String brief, Snippet snippet, Map<Line, String> issues) {
-        return diagnose(brief, snippet.lines, issues);
+    /**
+     * Creates a formatted diagnostic message that underlines issues in a message.
+     * <br><br>
+     * {@code
+     * <summary>
+     * |
+     * | public static void method()
+     * |                    ~~~~~~ <message>
+     * |                    <issue>
+     * }
+     * 
+     * @param summary a summary
+     * @param snippet the snippet which contains an issue
+     * @param issues the issues
+     * @return a formatted diagnostic message
+     */
+    public static String diagnose(String summary, Snippet snippet, Map<Line, String> issues) {
+        return diagnose(summary, snippet.lines, issues);
     }
     
-    static String diagnose(String brief, Map<Integer, Line> lines, Map<Line, String> issues) {
+    static String diagnose(String summary, Map<Integer, Line> lines, Map<Line, String> issues) {
         var columns = new HashMap<Integer, TreeMap<Line, String>>();
         for (var issue : issues.entrySet()) {
             columns.computeIfAbsent(issue.getKey().column, k -> new TreeMap<>()).put(issue.getKey(), issue.getValue());
         }
         
-        var builder = new StringBuilder().append(brief).append(DELIMITER);
+        var builder = new StringBuilder().append(summary).append(DELIMITER);
         for (var line : lines.values()) {
             builder.append(DELIMITER).append(" ".repeat(line.position)).append(line).append(render(columns.get(line.column)));
         }

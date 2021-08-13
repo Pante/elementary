@@ -55,41 +55,42 @@ class TextsTest {
     }
     
     @Test
-    void example() {
+    void highlight_multiple() {
         var method = (ExecutableElement) cases.one("long");
         var snippet = MethodSnippet.of(method, 0);
-        assertEquals("", Texts.diagnose("<summary>", snippet, Map.of(
+        var message = Texts.diagnose("<summary>", snippet, Map.of(
             snippet.modifiers, "method should not be static", 
             snippet.type, "method should not return void", 
             snippet.name, "method's name is too damn long",
             snippet.parameters.values.get(method.getParameters().get(0)).name, "method should not contain a string parameter"
-        )));
-    }
-    
-    @Test
-    void highlight_long() {
-        var snippet = MethodSnippet.of((ExecutableElement) cases.one("long"), 0);
-        var message = Texts.diagnose("a brief message", snippet, snippet.exceptions, "what happened");
+        ));
+        
         assertEquals(
-            "a brief message\n" +
+            "<summary>\n" +
             "|    \n" +
             "|    @Case(\"long\")\n" +
             "|    static final  void extremelyLongMethodThatThrowsManyExceptions(String a, String b, String c) throws IllegalArgumentException\n" +
-            "|                                                                                  what happened ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n" +
-            "|    ", 
-            message
-        );
+            "|    ~~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        ^ method should not contain a string parameter\n" +
+            "|    |             |    |\n" +
+            "|    |             |    |\n" +
+            "|    |             |    method's name is too damn long\n" +
+            "|    |             |\n" +
+            "|    |             method should not return void\n" +
+            "|    |\n" +
+            "|    method should not be static\n" +
+            "|    ", message);
     }
     
     @Test
     void highlight_line() {
         var line = VariableLine.of((VariableElement) cases.one("line"), 0, 4);
-        var message = Texts.diagnose("a brief message", line, line.name, "what happened");
+        var message = Texts.diagnose("<summary>", line, line.name, "what happened");
+        // Message seems misaligned due to additional "\"s
         assertEquals(
-            "a brief message\n" +
+            "<summary>\n" +
             "|    \n" +
-            "|    static final @Case(\"line\") String LINE\n" +
-            "|                                      ~~~~ what happened\n" +
+            "|        static final @Case(\"line\") String LINE\n" +
+            "|                                          ~~~~ what happened\n" +
             "|    ", 
             message
         );
@@ -98,9 +99,9 @@ class TextsTest {
     @Test
     void highlight_snippet() {
         var snippet = VariableSnippet.of((VariableElement) cases.one("line"), 4);
-        var message = Texts.diagnose("a brief message", snippet, snippet.name, "what happened");
+        var message = Texts.diagnose("<summary>", snippet, snippet.name, "what happened");
         assertEquals(
-            "a brief message\n" +
+            "<summary>\n" +
             "|    \n" +
             "|    @Case(\"line\")\n" +
             "|    static final String LINE\n" +
