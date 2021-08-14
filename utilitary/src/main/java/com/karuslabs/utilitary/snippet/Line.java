@@ -41,7 +41,7 @@ public class Line implements CharSequence, Comparable<Line> {
      * @param annotation the annotation
      * @param column the column at which the annotation is declared
      * @param position the position at which the annotation starts
-     * @return 
+     * @return a {@code Line} representing an annotation
      */
     public static Line annotation(AnnotationMirror annotation, int column, int position) {
         return new Line(AnnotationValuePrinter.annotation(annotation), column, position);
