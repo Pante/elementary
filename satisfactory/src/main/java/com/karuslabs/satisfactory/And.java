@@ -26,48 +26,10 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.Assertion.Result;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+public class And<T, R extends Result> implements Assertion<T, R> {
 
-@FunctionalInterface
-public interface Assertion<T, R extends Result> {
-
-    R test(TypeMirrors types, T value);
-    
-    static abstract class Result {
-        
-        public final boolean success;
-        
-        public Result(boolean success) {
-            this.success = success;
-        }
-        
-        public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
-        
-    }
-    
-    static interface Visitor<T, R> { 
-        
-        default @Nullable R visit(Result result, T value) {
-            return null;
-        }
-        
-    }
-    
-}
-
-class And<T, R extends Result> implements Assertion<T, R> {
-
-    private final Assertion<T, R> left;
-    private final Assertion<T, R> right;
-    
-    And(Assertion<T, R> left, Assertion<T, R> right) {
-        this.left = left;
-        this.right = right;
-    }
-    
     @Override
     public R test(TypeMirrors types, T value) {
-        return left.test(types, value) && right.test(types, value);
     }
-    
+
 }
