@@ -23,51 +23,33 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.Result;
+import com.karuslabs.satisfactory.Assertion.Failure;
 import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.function.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 @FunctionalInterface
-public interface Assertion<T, R extends Result> {
+public interface Assertion<T, R extends Failure> {
 
-    R test(TypeMirrors types, T value);
+    @Nullable R test(TypeMirrors types, T value);
     
-    static abstract class Result {
+    default BiPredicate<TypeMirrors, T> predicate() {
+        return (types, value) -> test(types, value) == null;
+    }
+    
+    static interface Failure {
         
-        public final boolean success;
-        
-        public Result(boolean success) {
-            this.success = success;
-        }
-        
-        public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
+        <T, R> R accept(Visitor<T, R> visitor, T value);
         
     }
     
     static interface Visitor<T, R> { 
         
-        default @Nullable R visit(Result result, T value) {
+        default @Nullable R visit(Failure failure, T value) {
             return null;
         }
         
-    }
-    
-}
-
-class And<T, R extends Result> implements Assertion<T, R> {
-
-    private final Assertion<T, R> left;
-    private final Assertion<T, R> right;
-    
-    And(Assertion<T, R> left, Assertion<T, R> right) {
-        this.left = left;
-        this.right = right;
-    }
-    
-    @Override
-    public R test(TypeMirrors types, T value) {
-        return left.test(types, value) && right.test(types, value);
     }
     
 }

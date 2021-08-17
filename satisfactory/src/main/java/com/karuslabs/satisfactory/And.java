@@ -23,13 +23,17 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.Result;
+import com.karuslabs.satisfactory.Assertion.Failure;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-public class And<T, R extends Result> implements Assertion<T, R> {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+public class And<T, R extends Failure> implements Assertion<T, R> {
+
+    
+    
     @Override
-    public R test(TypeMirrors types, T value) {
+    public @Nullable R test(TypeMirrors types, T value) {
     }
 
 }
