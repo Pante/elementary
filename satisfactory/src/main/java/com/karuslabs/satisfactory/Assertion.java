@@ -23,8 +23,9 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.Failure;
+import com.karuslabs.satisfactory.Assertion.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.function.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -33,6 +34,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public interface Assertion<T, R extends Failure> {
 
     @Nullable R test(TypeMirrors types, T value);
+    
+    default Assertion<T, AndFailure<R>> and(Assertion<T, R> other) {
+        return new And<>(this, other);
+    }
     
     default BiPredicate<TypeMirrors, T> predicate() {
         return (types, value) -> test(types, value) == null;
@@ -44,7 +49,26 @@ public interface Assertion<T, R extends Failure> {
         
     }
     
+    static class AndFailure<T extends Failure> implements Failure {
+
+        public final T failure;
+        
+        AndFailure(T failure) {
+            this.failure = failure;
+        }
+        
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitAnd(this, value);
+        }
+        
+    }
+    
     static interface Visitor<T, R> { 
+        
+        default @Nullable R visitAnd(AndFailure failure, T value) {
+            return visit(failure, value);
+        }
         
         default @Nullable R visit(Failure failure, T value) {
             return null;
@@ -52,4 +76,31 @@ public interface Assertion<T, R extends Failure> {
         
     }
     
+}
+
+class And<T, R extends Failure> implements Assertion<T, AndFailure<R>> {
+
+    private final Assertion<T, R> left;
+    private final Assertion<T, R> right;
+    
+    And(Assertion<T, R> left, Assertion<T, R> right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public @Nullable AndFailure<R> test(TypeMirrors types, T value) {
+        var failure = left.test(types, value);
+        if (failure != null) {
+            return new AndFailure<>(failure);
+        }
+        
+        failure = right.test(types, value);
+        if (failure != null) {
+            return new AndFailure<>(failure);
+        }
+        
+        return null;
+    }
+
 }
