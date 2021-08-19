@@ -39,6 +39,10 @@ public interface Assertion<T, R extends Failure> {
         return new And<>(this, other);
     }
     
+    default Assertion<T, OrFailure<R>> or(Assertion<T, R> other) {
+        return new Or<>(this, other);
+    }
+    
     default BiPredicate<TypeMirrors, T> predicate() {
         return (types, value) -> test(types, value) == null;
     }
@@ -64,9 +68,30 @@ public interface Assertion<T, R extends Failure> {
         
     }
     
+    static class OrFailure<T extends Failure> implements Failure {
+        
+        public final T left;
+        public final T right;
+        
+        OrFailure(T left, T right) {
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitOr(this, value);
+        }
+        
+    }
+    
     static interface Visitor<T, R> { 
         
-        default @Nullable R visitAnd(AndFailure failure, T value) {
+        default @Nullable R visitAnd(AndFailure<?> failure, T value) {
+            return visit(failure, value);
+        }
+        
+        default @Nullable R visitOr(OrFailure<?> failure, T value) {
             return visit(failure, value);
         }
         
@@ -103,4 +128,31 @@ class And<T, R extends Failure> implements Assertion<T, AndFailure<R>> {
         return null;
     }
 
+}
+
+class Or<T, R extends Failure> implements Assertion<T, OrFailure<R>> {
+    
+    private final Assertion<T, R> left;
+    private final Assertion<T, R> right;
+    
+    Or(Assertion<T, R> left, Assertion<T, R> right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public @Nullable OrFailure<R> test(TypeMirrors types, T value) {
+        var first = left.test(types, value);
+        if (first == null) {
+            return null;
+        }
+        
+        var second = right.test(types, value);
+        if (second == null) {
+            return null;
+        }
+        
+        return new OrFailure<>(first, second);
+    }
+    
 }
