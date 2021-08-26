@@ -31,71 +31,62 @@ import java.util.function.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 @FunctionalInterface
-public interface Assertion<T, R extends Failure> {
+public interface Assertion<T, R extends Result<R>> {
 
-    @Nullable R test(TypeMirrors types, T value);
+    R test(TypeMirrors types, T value);
     
-    default Assertion<T, AndFailure<R>> and(Assertion<T, R> other) {
+    default Assertion<T, AndResult<R>> and(Assertion<T, R> other) {
         return new And<>(this, other);
-    }
-    
-    default Assertion<T, OrFailure<R>> or(Assertion<T, R> other) {
-        return new Or<>(this, other);
     }
     
     default BiPredicate<TypeMirrors, T> predicate() {
         return (types, value) -> test(types, value) == null;
     }
     
-    static interface Failure {
+    static abstract class Result<Self extends Result> {
         
-        <T, R> R accept(Visitor<T, R> visitor, T value);
+        public final boolean success;
+        
+        public Result(boolean success) {
+            this.success = success;
+        }
+        
+        public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
+        
+        public abstract Self empty();
         
     }
     
-    static class AndFailure<T extends Failure> implements Failure {
+    static class AndResult<R extends Result<R>> extends Result<AndResult<R>> {
 
-        public final T failure;
+        public final R left;
+        public final R right;
         
-        AndFailure(T failure) {
-            this.failure = failure;
-        }
-        
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitAnd(this, value);
-        }
-        
-    }
-    
-    static class OrFailure<T extends Failure> implements Failure {
-        
-        public final T left;
-        public final T right;
-        
-        OrFailure(T left, T right) {
+        AndResult(R left, R right) {
+            super(left.success && right.success);
             this.left = left;
             this.right = right;
         }
-
+        
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitOr(this, value);
+            return visitor.visit(this, value);
+        }
+
+        @Override
+        public AndResult<R> empty() {
+            return new AndResult<>(left.empty(), right.empty());
         }
         
     }
     
     static interface Visitor<T, R> { 
         
-        default @Nullable R visitAnd(AndFailure<?> failure, T value) {
-            return visit(failure, value);
+        default @Nullable R visit(AndResult<?> result, T value) {
+            return visit((Result) result, value);
         }
         
-        default @Nullable R visitOr(OrFailure<?> failure, T value) {
-            return visit(failure, value);
-        }
-        
-        default @Nullable R visit(Failure failure, T value) {
+        default @Nullable R visit(Result result, T value) {
             return null;
         }
         
@@ -103,56 +94,20 @@ public interface Assertion<T, R extends Failure> {
     
 }
 
-class And<T, R extends Failure> implements Assertion<T, AndFailure<R>> {
+class And<T, R extends Result<R>> implements Assertion<T, AndResult<R>> {
 
-    private final Assertion<T, R> left;
-    private final Assertion<T, R> right;
+    final Assertion<T, R> left;
+    final Assertion<T, R> right;
     
     And(Assertion<T, R> left, Assertion<T, R> right) {
         this.left = left;
         this.right = right;
     }
-
-    @Override
-    public @Nullable AndFailure<R> test(TypeMirrors types, T value) {
-        var failure = left.test(types, value);
-        if (failure != null) {
-            return new AndFailure<>(failure);
-        }
-        
-        failure = right.test(types, value);
-        if (failure != null) {
-            return new AndFailure<>(failure);
-        }
-        
-        return null;
-    }
-
-}
-
-class Or<T, R extends Failure> implements Assertion<T, OrFailure<R>> {
     
-    private final Assertion<T, R> left;
-    private final Assertion<T, R> right;
-    
-    Or(Assertion<T, R> left, Assertion<T, R> right) {
-        this.left = left;
-        this.right = right;
-    }
-
     @Override
-    public @Nullable OrFailure<R> test(TypeMirrors types, T value) {
+    public AndResult<R> test(TypeMirrors types, T value) {
         var first = left.test(types, value);
-        if (first == null) {
-            return null;
-        }
-        
-        var second = right.test(types, value);
-        if (second == null) {
-            return null;
-        }
-        
-        return new OrFailure<>(first, second);
+        return new AndResult<>(first, first.success ? right.test(types, value) : first.empty());
     }
     
 }
