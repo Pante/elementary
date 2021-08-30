@@ -80,10 +80,37 @@ public interface Assertion<T, R extends Result<R>> {
         
     }
     
+    static class OrResult<R extends Result<R>> extends Result<OrResult<R>> {
+        
+       public final R left;
+       public final R right;
+       
+        OrResult(R left, R right) {
+            super(left.success || right.success);
+            this.left = left;
+            this.right = right;
+        }
+
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitOr(this, value);
+        }
+
+        @Override
+        public OrResult<R> empty() {
+            return new OrResult<>(left.empty(), right.empty());
+        }
+       
+    }
+    
     static interface Visitor<T, R> { 
         
-        default @Nullable R visit(AndResult<?> result, T value) {
-            return visit((Result) result, value);
+        default @Nullable <U extends Result<U>> R visitAnd(AndResult<U> result, T value) {
+            return visit(result, value);
+        }
+        
+        default @Nullable <U extends Result<U>> R visitOr(OrResult<U> result, T value) {
+            return visit(result, value);
         }
         
         default @Nullable R visit(Result result, T value) {
@@ -108,6 +135,24 @@ class And<T, R extends Result<R>> implements Assertion<T, AndResult<R>> {
     public AndResult<R> test(TypeMirrors types, T value) {
         var first = left.test(types, value);
         return new AndResult<>(first, first.success ? right.test(types, value) : first.empty());
+    }
+    
+}
+
+class Or<T, R extends Result<R>> implements Assertion<T, OrResult<R>> {
+
+    final Assertion<T, R> left;
+    final Assertion<T, R> right;
+    
+    Or(Assertion<T, R> left, Assertion<T, R> right) {
+        this.left = left;
+        this.right = right;
+    }
+    
+    @Override
+    public OrResult<R> test(TypeMirrors types, T value) {
+        var first = left.test(types, value);
+        return new OrResult<>(first, first.success ? first.empty() : right.test(types, value));
     }
     
 }
