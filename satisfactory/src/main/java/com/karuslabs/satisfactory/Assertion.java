@@ -32,11 +32,19 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 @FunctionalInterface
 public interface Assertion<T, R extends Result<R>> {
+    
+    static <T, R extends Result<R>> Assertion<T, NegationResult<R>> not(Assertion<T, R> assertion) {
+        return (types, value) -> new NegationResult<>(assertion.test(types, value));
+    }
 
     R test(TypeMirrors types, T value);
     
     default Assertion<T, AndResult<R>> and(Assertion<T, R> other) {
         return new And<>(this, other);
+    }
+    
+    default Assertion<T, OrResult<R>> or(Assertion<T, R> other) {
+        return new Or<>(this, other);
     }
     
     default BiPredicate<TypeMirrors, T> predicate() {
@@ -103,6 +111,27 @@ public interface Assertion<T, R extends Result<R>> {
        
     }
     
+    static class NegationResult<R extends Result<R>> extends Result<NegationResult<R>> {
+
+        public final R negation;
+        
+        NegationResult(R negation) {
+            super(!negation.success);
+            this.negation = negation;
+        }
+        
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitNegation(this, value);
+        }
+
+        @Override
+        public NegationResult<R> empty() {
+            return new NegationResult<>(negation.empty());
+        }
+        
+    }
+    
     static interface Visitor<T, R> { 
         
         default @Nullable <U extends Result<U>> R visitAnd(AndResult<U> result, T value) {
@@ -110,6 +139,10 @@ public interface Assertion<T, R extends Result<R>> {
         }
         
         default @Nullable <U extends Result<U>> R visitOr(OrResult<U> result, T value) {
+            return visit(result, value);
+        }
+              
+        default @Nullable R visitNegation(NegationResult result, T value) {
             return visit(result, value);
         }
         
