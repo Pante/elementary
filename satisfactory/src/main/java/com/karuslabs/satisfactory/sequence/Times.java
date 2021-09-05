@@ -26,6 +26,10 @@ package com.karuslabs.satisfactory.sequence;
 import com.karuslabs.satisfactory.old.Assertion;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+public A {
+
+}
+
 /**
  * Represents the expected number of times an assertion should be satisfied.
  * 
@@ -34,6 +38,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 public abstract class Times<T> implements Part {
 
     private final Assertion<T> assertion;
+    
     private final String condition;
     private int current;
     

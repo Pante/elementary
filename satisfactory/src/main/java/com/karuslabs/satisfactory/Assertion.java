@@ -51,20 +51,6 @@ public interface Assertion<T, R extends Result<R>> {
         return (types, value) -> test(types, value) == null;
     }
     
-    static abstract class Result<Self extends Result> {
-        
-        public final boolean success;
-        
-        public Result(boolean success) {
-            this.success = success;
-        }
-        
-        public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
-        
-        public abstract Self empty();
-        
-    }
-    
     static class AndResult<R extends Result<R>> extends Result<AndResult<R>> {
 
         public final R left;
@@ -77,7 +63,7 @@ public interface Assertion<T, R extends Result<R>> {
         }
         
         @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
             return visitor.visit(this, value);
         }
 
@@ -100,7 +86,7 @@ public interface Assertion<T, R extends Result<R>> {
         }
 
         @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
             return visitor.visitOr(this, value);
         }
 
@@ -121,33 +107,13 @@ public interface Assertion<T, R extends Result<R>> {
         }
         
         @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
             return visitor.visitNegation(this, value);
         }
 
         @Override
         public NegationResult<R> empty() {
             return new NegationResult<>(negation.empty());
-        }
-        
-    }
-    
-    static interface Visitor<T, R> { 
-        
-        default @Nullable <U extends Result<U>> R visitAnd(AndResult<U> result, T value) {
-            return visit(result, value);
-        }
-        
-        default @Nullable <U extends Result<U>> R visitOr(OrResult<U> result, T value) {
-            return visit(result, value);
-        }
-              
-        default @Nullable R visitNegation(NegationResult result, T value) {
-            return visit(result, value);
-        }
-        
-        default @Nullable R visit(Result result, T value) {
-            return null;
         }
         
     }

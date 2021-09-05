@@ -21,8 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-/**
- * Contains assertions for {@code Element}s in an annotation processing environment.
- */
 package com.karuslabs.satisfactory;
+
+import com.karuslabs.satisfactory.Assertion.*;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+public abstract class Result<Self extends Result> {
+        
+    public final boolean success;
+
+    public Result(boolean success) {
+        this.success = success;
+    }
+
+    public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
+
+    public abstract Self empty();
+    
+    
+    public static interface Visitor<T, R> {
+
+        default @Nullable <U extends Result<U>> R visitAnd(AndResult<U> result, T value) {
+            return visit(result, value);
+        }
+
+        default @Nullable <U extends Result<U>> R visitOr(OrResult<U> result, T value) {
+            return visit(result, value);
+        }
+
+        default @Nullable R visitNegation(NegationResult result, T value) {
+            return visit(result, value);
+        }
+
+        default @Nullable R visit(Result result, T value) {
+            return null;
+        }
+
+    }
+
+}
