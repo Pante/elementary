@@ -23,40 +23,8 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.*;
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public abstract class Result {
-        
-    public final boolean success;
-
-    public Result(boolean success) {
-        this.success = success;
-    }
-
-    public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
-
-    public abstract Result empty();
+public class Context {
     
-    
-    public static interface Visitor<T, R> {
-
-        default @Nullable R visitAnd(AndResult result, T value) {
-            return visit(result, value);
-        }
-
-        default @Nullable R visitOr(OrResult result, T value) {
-            return visit(result, value);
-        }
-
-        default @Nullable R visitNegation(NegationResult result, T value) {
-            return visit(result, value);
-        }
-
-        default @Nullable R visit(Result result, T value) {
-            return null;
-        }
-
-    }
+    public final boolean starting;
 
 }

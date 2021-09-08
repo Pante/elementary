@@ -26,24 +26,25 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.Assertion.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+import java.util.List;
 import java.util.function.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 @FunctionalInterface
-public interface Assertion<T, R extends Result<R>> {
+public interface Assertion<T> {
     
-    static <T, R extends Result<R>> Assertion<T, NegationResult<R>> not(Assertion<T, R> assertion) {
-        return (types, value) -> new NegationResult<>(assertion.test(types, value));
+    static <T> Assertion<T> not(Assertion<T> assertion) {
+        return (types, value) -> new NegationResult(assertion.test(types, value));
     }
 
-    R test(TypeMirrors types, T value);
+    Result test(TypeMirrors types, T value);
     
-    default Assertion<T, AndResult<R>> and(Assertion<T, R> other) {
+    default Assertion<T> and(Assertion<T> other) {
         return new And<>(this, other);
     }
     
-    default Assertion<T, OrResult<R>> or(Assertion<T, R> other) {
+    default Assertion<T> or(Assertion<T> other) {
         return new Or<>(this, other);
     }
     
@@ -51,15 +52,23 @@ public interface Assertion<T, R extends Result<R>> {
         return (types, value) -> test(types, value) == null;
     }
     
-    static class AndResult<R extends Result<R>> extends Result<AndResult<R>> {
-
-        public final R left;
-        public final R right;
+    static class AndResult extends Result {
         
-        AndResult(R left, R right) {
-            super(left.success && right.success);
-            this.left = left;
-            this.right = right;
+        static boolean success(Result... clauses) {
+            for (var clause : clauses) {
+               if (!clause.success) {
+                   return false;
+               }
+            }
+            
+            return true;
+        }
+
+        public final List<Result> clauses;
+        
+        AndResult(Result... clauses) {
+            super(success(clauses));
+            this.clauses = List.of(clauses);
         }
         
         @Override
@@ -68,21 +77,29 @@ public interface Assertion<T, R extends Result<R>> {
         }
 
         @Override
-        public AndResult<R> empty() {
-            return new AndResult<>(left.empty(), right.empty());
+        public AndResult empty() {
+            return new AndResult();
         }
         
     }
     
-    static class OrResult<R extends Result<R>> extends Result<OrResult<R>> {
+    static class OrResult extends Result {
         
-       public final R left;
-       public final R right;
+        static boolean success(Result... clauses) {
+            for (var clause : clauses) {
+                if (clause.success) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        public final List<Result> clauses;
        
-        OrResult(R left, R right) {
-            super(left.success || right.success);
-            this.left = left;
-            this.right = right;
+        OrResult(Result... clauses) {
+            super(success(clauses));
+            this.clauses = List.of(clauses);
         }
 
         @Override
@@ -91,17 +108,17 @@ public interface Assertion<T, R extends Result<R>> {
         }
 
         @Override
-        public OrResult<R> empty() {
-            return new OrResult<>(left.empty(), right.empty());
+        public OrResult empty() {
+            return new OrResult();
         }
        
     }
     
-    static class NegationResult<R extends Result<R>> extends Result<NegationResult<R>> {
+    static class NegationResult extends Result {
 
-        public final R negation;
+        public final Result negation;
         
-        NegationResult(R negation) {
+        NegationResult(Result negation) {
             super(!negation.success);
             this.negation = negation;
         }
@@ -112,46 +129,46 @@ public interface Assertion<T, R extends Result<R>> {
         }
 
         @Override
-        public NegationResult<R> empty() {
-            return new NegationResult<>(negation.empty());
+        public NegationResult empty() {
+            return new NegationResult(negation.empty());
         }
         
     }
     
 }
 
-class And<T, R extends Result<R>> implements Assertion<T, AndResult<R>> {
+class And<T> implements Assertion<T> {
 
-    final Assertion<T, R> left;
-    final Assertion<T, R> right;
+    final Assertion<T> left;
+    final Assertion<T> right;
     
-    And(Assertion<T, R> left, Assertion<T, R> right) {
+    And(Assertion<T> left, Assertion<T> right) {
         this.left = left;
         this.right = right;
     }
     
     @Override
-    public AndResult<R> test(TypeMirrors types, T value) {
+    public AndResult test(TypeMirrors types, T value) {
         var first = left.test(types, value);
-        return new AndResult<>(first, first.success ? right.test(types, value) : first.empty());
+        return new AndResult(first, first.success ? right.test(types, value) : first.empty());
     }
     
 }
 
-class Or<T, R extends Result<R>> implements Assertion<T, OrResult<R>> {
+class Or<T> implements Assertion<T> {
 
-    final Assertion<T, R> left;
-    final Assertion<T, R> right;
+    final Assertion<T> left;
+    final Assertion<T> right;
     
-    Or(Assertion<T, R> left, Assertion<T, R> right) {
+    Or(Assertion<T> left, Assertion<T> right) {
         this.left = left;
         this.right = right;
     }
     
     @Override
-    public OrResult<R> test(TypeMirrors types, T value) {
+    public OrResult test(TypeMirrors types, T value) {
         var first = left.test(types, value);
-        return new OrResult<>(first, first.success ? first.empty() : right.test(types, value));
+        return new OrResult(first, first.success ? first.empty() : right.test(types, value));
     }
     
 }
