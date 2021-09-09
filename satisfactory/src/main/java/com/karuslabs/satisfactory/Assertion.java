@@ -35,7 +35,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 public interface Assertion<T> {
     
     static <T> Assertion<T> not(Assertion<T> assertion) {
-        return (types, value) -> new NegationResult(assertion.test(types, value));
+        if (assertion instanceof Not<?>) {
+            return ((Not<T>) assertion).assertion;
+            
+        } else {
+            return new Not<>(assertion);
+        }
     }
 
     Result test(TypeMirrors types, T value);
@@ -169,6 +174,21 @@ class Or<T> implements Assertion<T> {
     public OrResult test(TypeMirrors types, T value) {
         var first = left.test(types, value);
         return new OrResult(first, first.success ? first.empty() : right.test(types, value));
+    }
+    
+}
+
+class Not<T> implements Assertion<T> {
+
+    final Assertion<T> assertion;
+    
+    Not(Assertion<T> assertion) {
+        this.assertion = assertion;
+    }
+    
+    @Override
+    public Result test(TypeMirrors types, T value) {
+        return new NegationResult(assertion.test(types, value));
     }
     
 }
