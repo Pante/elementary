@@ -24,6 +24,7 @@
 package com.karuslabs.satisfactory;
 
 import com.karuslabs.satisfactory.Assertion.*;
+import java.util.Set;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Result {
@@ -34,26 +35,26 @@ public abstract class Result {
         this.success = success;
     }
 
-    public abstract <T, R> R accept(Visitor<T, R> visitor, T value);
+    public abstract <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value);
 
     public abstract Result empty();
     
     
     public static interface Visitor<T, R> {
 
-        default @Nullable R visitAnd(AndResult result, T value) {
-            return visit(result, value);
+        default @Nullable R visitAnd(AndResult result, Set<Flag> flags, T value) {
+            return visit(result, flags, value);
         }
 
-        default @Nullable R visitOr(OrResult result, T value) {
-            return visit(result, value);
+        default @Nullable R visitOr(OrResult result, Set<Flag> flags, T value) {
+            return visit(result, flags, value);
         }
 
-        default @Nullable R visitNegation(NegationResult result, T value) {
-            return visit(result, value);
+        default @Nullable R visitNegation(NegationResult result, Set<Flag> flags, T value) {
+            return visit(result, flags, value);
         }
 
-        default @Nullable R visit(Result result, T value) {
+        default @Nullable R visit(Result result, Set<Flag> flags, T value) {
             return null;
         }
 

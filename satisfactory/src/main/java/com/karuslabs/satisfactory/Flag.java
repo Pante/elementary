@@ -21,10 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+
 package com.karuslabs.satisfactory;
 
-public class Context {
-    
-    public final boolean starting;
+public enum Flag {
 
+    STARTING,
+    PLURAL,
+    NEGATION,
+    
 }

@@ -26,7 +26,7 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.Assertion.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.List;
+import java.util.*;
 import java.util.function.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -77,8 +77,8 @@ public interface Assertion<T> {
         }
         
         @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visit(this, value);
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visit(this, flags, value);
         }
 
         @Override
@@ -108,8 +108,8 @@ public interface Assertion<T> {
         }
 
         @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitOr(this, value);
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitOr(this, flags, value);
         }
 
         @Override
@@ -129,8 +129,8 @@ public interface Assertion<T> {
         }
         
         @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitNegation(this, value);
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitNegation(this, flags, value);
         }
 
         @Override
