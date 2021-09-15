@@ -78,13 +78,9 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.0</version>
       <scope>test</scope>
       <exclusions>
-        <exclusion>
-          <artifactId>apiguardian-api</artifactId>
-          <groupId>org.apiguardian</groupId>
-        </exclusion>
         <exclusion>
           <artifactId>opentest4j</artifactId>
           <groupId>org.opentest4j</groupId>
@@ -93,12 +89,16 @@
           <artifactId>junit-platform-commons</artifactId>
           <groupId>org.junit.platform</groupId>
         </exclusion>
+        <exclusion>
+          <artifactId>apiguardian-api</artifactId>
+          <groupId>org.apiguardian</groupId>
+        </exclusion>
       </exclusions>
     </dependency>
     <dependency>
       <groupId>org.junit.platform</groupId>
       <artifactId>junit-platform-launcher</artifactId>
-      <version>1.7.2</version>
+      <version>1.8.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -114,7 +114,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -130,7 +130,7 @@
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-params</artifactId>
-      <version>5.7.2</version>
+      <version>5.8.0</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -142,7 +142,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>3.11.2</version>
+      <version>3.12.4</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -162,7 +162,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>3.11.2</version>
+      <version>3.12.4</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

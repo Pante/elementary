@@ -21,30 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.satisfactory.old;
 
-import com.karuslabs.satisfactory.old.Any;
-import org.junit.jupiter.api.*;
+import com.karuslabs.satisfactory.old.Assertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class AnyTest {
-
-    Any<String> any = new Any<>(String.class);
+/**
+ * An assertion is always {@code true}.
+ * 
+ * @param <T> the type of the tested value 
+ */
+public class Any<T> implements Assertion<T> {
     
-    @Test
-    void test() {
-        assertTrue(any.test(null, "anything"));
+    private final Class<?> part;
+    
+    /**
+     * Creates an {@code Any} for the given part.
+     * 
+     * @param part the part
+     */
+    public Any(Class<?> part) {
+        this.part = part;
     }
     
-    @Test
-    void condition() {
-        assertEquals("", any.condition());
+    @Override
+    public boolean test(TypeMirrors types, T value) {
+        return true;
     }
     
-    @Test
-    void part() {
-        assertEquals(String.class, any.part());
+    @Override
+    public String condition() {
+        return "";
+    }
+    
+    @Override
+    public Class<?> part() {
+        return part;
     }
     
 }

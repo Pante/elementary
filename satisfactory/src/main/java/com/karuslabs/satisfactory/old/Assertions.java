@@ -23,7 +23,6 @@
  */
 package com.karuslabs.satisfactory.old;
 
-import com.karuslabs.satisfactory.logical.*;
 
 import java.util.Set;
 import java.util.function.Supplier;

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.satisfactory.old;
 
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.Modifier;

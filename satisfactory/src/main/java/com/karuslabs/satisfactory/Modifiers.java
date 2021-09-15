@@ -21,42 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.old.Assertion;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
 
-/**
- * An assertion is always {@code true}.
- * 
- * @param <T> the type of the tested value 
- */
-public class Any<T> implements Assertion<T> {
+public class Modifiers {
     
-    private final Class<?> part;
-    
-    /**
-     * Creates an {@code Any} for the given part.
-     * 
-     * @param part the part
-     */
-    public Any(Class<?> part) {
-        this.part = part;
+    public static Assertion<Result> contains(Modifier... modifiers) {
+        
     }
     
-    @Override
-    public boolean test(TypeMirrors types, T value) {
-        return true;
+    public static class Result extends com.karuslabs.satisfactory.Result {
+        
+        static final Result EMPTY = new Result(Set.of());
+        
+        public final Set<Modifier> modifiers;
+        
+        Result(Set<Modifier> modifiers) {
+            this.modifiers = modifiers;
+        }
+        
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+        }
+
+        @Override
+        public Result empty() {
+            return EMPTY;
+        }
+        
     }
-    
-    @Override
-    public String condition() {
-        return "";
-    }
-    
-    @Override
-    public Class<?> part() {
-        return part;
-    }
-    
+
 }
