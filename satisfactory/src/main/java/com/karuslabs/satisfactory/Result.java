@@ -23,8 +23,10 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.*;
+import com.karuslabs.satisfactory.Logical.*;
+
 import java.util.Set;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class Result {

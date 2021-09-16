@@ -24,7 +24,6 @@
 package com.karuslabs.satisfactory;
 
 import com.karuslabs.satisfactory.Assertion.*;
-import com.karuslabs.satisfactory.Logical.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
@@ -56,89 +55,6 @@ public interface Assertion<T> {
     
     default BiPredicate<TypeMirrors, T> predicate() {
         return (types, value) -> test(types, value) == null;
-    }
-    
-    static class AndResult extends Result {
-        
-        static boolean success(Result... clauses) {
-            for (var clause : clauses) {
-               if (!clause.success) {
-                   return false;
-               }
-            }
-            
-            return true;
-        }
-
-        public final List<Result> clauses;
-        
-        AndResult(Result... clauses) {
-            super(success(clauses));
-            this.clauses = List.of(clauses);
-        }
-        
-        @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
-            return visitor.visit(this, flags, value);
-        }
-
-        @Override
-        public AndResult empty() {
-            return new AndResult();
-        }
-        
-    }
-    
-    static class OrResult extends Result {
-        
-        static boolean success(Result... clauses) {
-            for (var clause : clauses) {
-                if (clause.success) {
-                    return true;
-                }
-            }
-            
-            return false;
-        }
-        
-        public final List<Result> clauses;
-       
-        OrResult(Result... clauses) {
-            super(success(clauses));
-            this.clauses = List.of(clauses);
-        }
-
-        @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
-            return visitor.visitOr(this, flags, value);
-        }
-
-        @Override
-        public OrResult empty() {
-            return new OrResult();
-        }
-       
-    }
-    
-    static class NegationResult extends Result {
-
-        public final Result negation;
-        
-        NegationResult(Result negation) {
-            super(!negation.success);
-            this.negation = negation;
-        }
-        
-        @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
-            return visitor.visitNegation(this, flags, value);
-        }
-
-        @Override
-        public NegationResult empty() {
-            return new NegationResult(negation.empty());
-        }
-        
     }
     
 }

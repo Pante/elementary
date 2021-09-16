@@ -23,59 +23,148 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.Logical.*;
+import com.karuslabs.satisfactory.Result.Visitor;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+import java.util.*;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 public class Logical {
+    
+    public static class AndResult extends Result {
+        
+        static boolean success(Result... clauses) {
+            for (var clause : clauses) {
+               if (!clause.success) {
+                   return false;
+               }
+            }
+            
+            return true;
+        }
 
-    static class And<T> implements Assertion<T> {
-
-        final Assertion<T> left;
-        final Assertion<T> right;
-
-        And(Assertion<T> left, Assertion<T> right) {
-            this.left = left;
-            this.right = right;
+        public final List<Result> clauses;
+        
+        AndResult(Result... clauses) {
+            super(success(clauses));
+            this.clauses = List.of(clauses);
+        }
+        
+        @Override
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visit(this, flags, value);
         }
 
         @Override
-        public Assertion.AndResult test(TypeMirrors types, T value) {
-            var first = left.test(types, value);
-            return new Assertion.AndResult(first, first.success ? right.test(types, value) : first.empty());
+        public AndResult empty() {
+            return new AndResult();
         }
-
-    }
-
-    static class Or<T> implements Assertion<T> {
-
-        final Assertion<T> left;
-        final Assertion<T> right;
-
-        Or(Assertion<T> left, Assertion<T> right) {
-            this.left = left;
-            this.right = right;
-        }
-
-        @Override
-        public Assertion.OrResult test(TypeMirrors types, T value) {
-            var first = left.test(types, value);
-            return new Assertion.OrResult(first, first.success ? first.empty() : right.test(types, value));
-        }
-
-    }
-
-    static class Not<T> implements Assertion<T> {
-
-        final Assertion<T> assertion;
-
-        Not(Assertion<T> assertion) {
-            this.assertion = assertion;
-        }
-
-        @Override
-        public Result test(TypeMirrors types, T value) {
-            return new Assertion.NegationResult(assertion.test(types, value));
-        }
-
+        
     }
     
+    public static class OrResult extends Result {
+        
+        static boolean success(Result... clauses) {
+            for (var clause : clauses) {
+                if (clause.success) {
+                    return true;
+                }
+            }
+            
+            return false;
+        }
+        
+        public final List<Result> clauses;
+       
+        OrResult(Result... clauses) {
+            super(success(clauses));
+            this.clauses = List.of(clauses);
+        }
+
+        @Override
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitOr(this, flags, value);
+        }
+
+        @Override
+        public OrResult empty() {
+            return new OrResult();
+        }
+       
+    }
+    
+    public static class NegationResult extends Result {
+
+        public final Result negation;
+        
+        NegationResult(Result negation) {
+            super(!negation.success);
+            this.negation = negation;
+        }
+        
+        @Override
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitNegation(this, flags, value);
+        }
+
+        @Override
+        public NegationResult empty() {
+            return new NegationResult(negation.empty());
+        }
+        
+    }
+    
+}
+
+class And<T> implements Assertion<T> {
+
+    final Assertion<T> left;
+    final Assertion<T> right;
+
+    And(Assertion<T> left, Assertion<T> right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public AndResult test(TypeMirrors types, T value) {
+        var first = left.test(types, value);
+        return new AndResult(first, first.success ? right.test(types, value) : first.empty());
+    }
+
+}
+
+class Or<T> implements Assertion<T> {
+
+    final Assertion<T> left;
+    final Assertion<T> right;
+
+    Or(Assertion<T> left, Assertion<T> right) {
+        this.left = left;
+        this.right = right;
+    }
+
+    @Override
+    public OrResult test(TypeMirrors types, T value) {
+        var first = left.test(types, value);
+        return new OrResult(first, first.success ? first.empty() : right.test(types, value));
+    }
+
+}
+
+class Not<T> implements Assertion<T> {
+
+    final Assertion<T> assertion;
+
+    Not(Assertion<T> assertion) {
+        this.assertion = assertion;
+    }
+
+    @Override
+    public NegationResult test(TypeMirrors types, T value) {
+        return new NegationResult(assertion.test(types, value));
+    }
+
 }
