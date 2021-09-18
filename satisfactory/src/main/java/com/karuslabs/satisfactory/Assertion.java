@@ -23,13 +23,9 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Assertion.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.*;
 import java.util.function.*;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 @FunctionalInterface
 public interface Assertion<T> {

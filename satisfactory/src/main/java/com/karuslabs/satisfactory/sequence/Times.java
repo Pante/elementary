@@ -26,10 +26,6 @@ package com.karuslabs.satisfactory.sequence;
 import com.karuslabs.satisfactory.old.Assertion;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-public A {
-
-}
-
 /**
  * Represents the expected number of times an assertion should be satisfied.
  * 

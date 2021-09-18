@@ -28,22 +28,35 @@ import javax.lang.model.element.Modifier;
 
 public class Modifiers {
     
-    public static Assertion<Result> contains(Modifier... modifiers) {
+    public static Assertion<Set<Modifier>> contains(Modifier... modifiers) {
+        var expected = Set.of(modifiers);
+        var result = new Result("", expected);
         
+        return (types, actual) -> actual.containsAll(expected) ? Result.EMPTY : result;
+    }
+    
+    public static Assertion<Set<Modifier>> equals(Modifier... modifiers) {
+        var expected = Set.of(modifiers);
+        var result = new Result("", expected);
+        
+        return (types, actual) -> expected.equals(types) ? Result.EMPTY : result;
     }
     
     public static class Result extends com.karuslabs.satisfactory.Result {
         
-        static final Result EMPTY = new Result(Set.of());
+        static final Result EMPTY = new Result("", Set.of());
         
+        public final String verb;
         public final Set<Modifier> modifiers;
         
-        Result(Set<Modifier> modifiers) {
+        Result(String verb, Set<Modifier> modifiers) {
+            this.verb = verb;
             this.modifiers = modifiers;
         }
         
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitModifiers(this, flags, value);
         }
 
         @Override

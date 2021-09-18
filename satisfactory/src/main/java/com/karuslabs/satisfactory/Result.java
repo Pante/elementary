@@ -43,6 +43,10 @@ public abstract class Result {
     
     
     public static interface Visitor<T, R> {
+        
+        default @Nullable R visitModifiers(Modifiers.Result result, Set<Flag> flags, T value) {
+            return visit(result, flags, value);
+        }
 
         default @Nullable R visitAnd(AndResult result, Set<Flag> flags, T value) {
             return visit(result, flags, value);
