@@ -25,6 +25,7 @@ package com.karuslabs.satisfactory;
 
 import com.karuslabs.satisfactory.syntax.Modifiers;
 import com.karuslabs.satisfactory.Logical.*;
+import com.karuslabs.satisfactory.syntax.*;
 
 import java.util.Set;
 
@@ -46,6 +47,10 @@ public abstract class Result {
     public static interface Visitor<T, R> {
         
         default @Nullable R visitModifiers(Modifiers.Result result, Set<Flag> flags, T value) {
+            return visit(result, flags, value);
+        }
+        
+        default @Nullable R visitType(Type.Result result, Set<Flag> flags, T value) {
             return visit(result, flags, value);
         }
 

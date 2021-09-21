@@ -29,6 +29,8 @@ import com.karuslabs.satisfactory.Flag;
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
+import static com.karuslabs.satisfactory.syntax.Modifiers.Result.EMPTY;
+
 public class Modifiers {
     
     public static Assertion<Set<Modifier>> ANY_MODIFIERS = (types, actual) -> Result.EMPTY;
@@ -37,19 +39,19 @@ public class Modifiers {
         var expected = Set.of(modifiers);
         var result = new Result("", expected);
         
-        return (actual, types) -> actual.containsAll(expected) ? Result.EMPTY : result;
+        return (actual, types) -> actual.containsAll(expected) ? EMPTY : result;
     }
     
     public static Assertion<Set<Modifier>> equals(Modifier... modifiers) {
         var expected = Set.of(modifiers);
         var result = new Result("", expected);
         
-        return (actual, types) -> expected.equals(types) ? Result.EMPTY : result;
+        return (actual, types) -> expected.equals(types) ? EMPTY : result;
     }
     
     public static class Result extends com.karuslabs.satisfactory.Result {
         
-        static final Result EMPTY = new Result(true, "", Set.of());
+        public static final Result EMPTY = new Result(true, "", Set.of());
         
         public final String verb;
         public final Set<Modifier> modifiers;

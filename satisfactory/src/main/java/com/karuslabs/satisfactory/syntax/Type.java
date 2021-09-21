@@ -27,13 +27,18 @@ import com.karuslabs.satisfactory.*;
 import java.util.*;
 import javax.lang.model.type.TypeMirror;
 
+import static com.karuslabs.satisfactory.syntax.Type.Result.EMPTY;
+
 public class Type {
 
     public static Assertion<TypeMirror> type(TypeMirror type) {
-        return (type, types)
+        var result = new Result("", List.of(type));
+        return (actual, types) -> types.isSameType(actual, type) ? EMPTY : result;
     }
     
     public static class Result extends com.karuslabs.satisfactory.Result {
+        
+        public static final Result EMPTY = new Result(true, "", List.of());
         
         public final String verb;
         public final List<TypeMirror> types;
@@ -50,10 +55,12 @@ public class Type {
         
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+            return visitor.visitType(this, flags, value);
         }
 
         @Override
         public Result empty() {
+            return EMPTY;
         }
         
     }
