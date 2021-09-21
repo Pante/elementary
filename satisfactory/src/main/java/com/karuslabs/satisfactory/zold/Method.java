@@ -21,9 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.old;
+package com.karuslabs.satisfactory.zold;
 
-import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
@@ -32,8 +31,8 @@ import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
-import static com.karuslabs.satisfactory.sequence.Sequences.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Sequences.*;
 
 /**
  * An assertion for methods which delegates testing of the individual parts of a 

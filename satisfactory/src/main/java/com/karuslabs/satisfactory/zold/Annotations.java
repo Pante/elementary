@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.old;
+package com.karuslabs.satisfactory.zold;
 
 import com.karuslabs.utilitary.text.Texts;
 import com.karuslabs.utilitary.type.TypeMirrors;

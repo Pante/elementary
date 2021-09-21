@@ -32,7 +32,7 @@ import java.lang.annotation.Documented;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
 import static javax.lang.model.element.Modifier.STATIC;
 import static org.junit.jupiter.api.Assertions.*;
 

@@ -23,14 +23,15 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
+import com.karuslabs.satisfactory.zold.Times;
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
-import static com.karuslabs.satisfactory.sequence.Sequences.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Sequences.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 

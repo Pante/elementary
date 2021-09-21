@@ -21,31 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logical;
+package com.karuslabs.satisfactory.zold;
 
-import com.karuslabs.satisfactory.old.Assertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.Set;
-import javax.lang.model.element.Modifier;
+import java.util.Collection;
 
-import org.junit.jupiter.api.*;
+/**
+ * A {@code Sequence} that is always {@code true}.
+ * 
+ * @param <T> the type of the tested values
+ */
+public class AnySequence<T> extends Sequence<T> {
 
-import static com.karuslabs.satisfactory.zold.Assertions.*;
-import static javax.lang.model.element.Modifier.*;
-import static org.junit.jupiter.api.Assertions.*;
-
-class AndTest {
-
-    Assertion<Set<Modifier>> modifiers = contains(PUBLIC, FINAL).and(contains(ABSTRACT));
+    private final Class<?> part;
     
-    @Test
-    void part() {
-        assertEquals(Modifier.class, modifiers.part());
+    /**
+     * Creates an {@code AnySequence} for the given part.
+     * 
+     * @param part the supported part
+     */
+    public AnySequence(Class<?> part) {
+        super("");
+        this.part = part;
     }
-    
-    @Test
-    void condition() {
-        assertEquals("contains [public final] & contains [abstract]", modifiers.condition());
+
+    @Override
+    public boolean test(TypeMirrors types, Collection<? extends T> values) {
+        return true;
     }
-    
+
+    @Override
+    public Class<?> part() {
+        return part;
+    }
+
 }

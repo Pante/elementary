@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.old.Assertions;
+import com.karuslabs.satisfactory.zold.Assertions;
 import com.karuslabs.satisfactory.old.Assertion;
 import java.util.Set;
 import javax.lang.model.element.Modifier;

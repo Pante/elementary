@@ -21,35 +21,45 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.syntax;
+
+import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.Flag;
 
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
 public class Modifiers {
     
+    public static Assertion<Set<Modifier>> ANY_MODIFIERS = (types, actual) -> Result.EMPTY;
+    
     public static Assertion<Set<Modifier>> contains(Modifier... modifiers) {
         var expected = Set.of(modifiers);
         var result = new Result("", expected);
         
-        return (types, actual) -> actual.containsAll(expected) ? Result.EMPTY : result;
+        return (actual, types) -> actual.containsAll(expected) ? Result.EMPTY : result;
     }
     
     public static Assertion<Set<Modifier>> equals(Modifier... modifiers) {
         var expected = Set.of(modifiers);
         var result = new Result("", expected);
         
-        return (types, actual) -> expected.equals(types) ? Result.EMPTY : result;
+        return (actual, types) -> expected.equals(types) ? Result.EMPTY : result;
     }
     
     public static class Result extends com.karuslabs.satisfactory.Result {
         
-        static final Result EMPTY = new Result("", Set.of());
+        static final Result EMPTY = new Result(true, "", Set.of());
         
         public final String verb;
         public final Set<Modifier> modifiers;
         
-        Result(String verb, Set<Modifier> modifiers) {
+        public Result(String verb, Set<Modifier> expected) {
+            this(false, verb, expected);
+        }
+        
+        Result(boolean success, String verb, Set<Modifier> modifiers) {
+            super(success);
             this.verb = verb;
             this.modifiers = modifiers;
         }

@@ -21,42 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.old;
+package com.karuslabs.satisfactory.syntax;
 
-import com.karuslabs.satisfactory.old.Assertion;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.*;
+import java.util.*;
+import javax.lang.model.type.TypeMirror;
 
-/**
- * An assertion is always {@code true}.
- * 
- * @param <T> the type of the tested value 
- */
-public class Any<T> implements Assertion<T> {
-    
-    private final Class<?> part;
-    
-    /**
-     * Creates an {@code Any} for the given part.
-     * 
-     * @param part the part
-     */
-    public Any(Class<?> part) {
-        this.part = part;
+public class Type {
+
+    public static Assertion<TypeMirror> type(TypeMirror type) {
+        return (type, types)
     }
     
-    @Override
-    public boolean test(TypeMirrors types, T value) {
-        return true;
-    }
-    
-    @Override
-    public String condition() {
-        return "";
-    }
-    
-    @Override
-    public Class<?> part() {
-        return part;
+    public static class Result extends com.karuslabs.satisfactory.Result {
+        
+        public final String verb;
+        public final List<TypeMirror> types;
+        
+        public Result(String verb, List<TypeMirror> types) {
+            this(false, verb, types);
+        }
+        
+        Result(boolean success, String verb, List<TypeMirror> types) {
+            super(success);
+            this.verb = verb;
+            this.types = types;
+        }
+        
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
+        }
+
+        @Override
+        public Result empty() {
+        }
+        
     }
     
 }

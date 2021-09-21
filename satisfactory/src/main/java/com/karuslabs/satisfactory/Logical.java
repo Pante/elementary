@@ -129,9 +129,9 @@ class And<T> implements Assertion<T> {
     }
 
     @Override
-    public AndResult test(TypeMirrors types, T value) {
-        var first = left.test(types, value);
-        return new AndResult(first, first.success ? right.test(types, value) : first.empty());
+    public AndResult test(T value, TypeMirrors types) {
+        var first = left.test(value, types);
+        return new AndResult(first, first.success ? right.test(value, types) : first.empty());
     }
 
 }
@@ -147,9 +147,9 @@ class Or<T> implements Assertion<T> {
     }
 
     @Override
-    public OrResult test(TypeMirrors types, T value) {
-        var first = left.test(types, value);
-        return new OrResult(first, first.success ? first.empty() : right.test(types, value));
+    public OrResult test(T value, TypeMirrors types) {
+        var first = left.test(value, types);
+        return new OrResult(first, first.success ? first.empty() : right.test(value, types));
     }
 
 }
@@ -163,8 +163,8 @@ class Not<T> implements Assertion<T> {
     }
 
     @Override
-    public NegationResult test(TypeMirrors types, T value) {
-        return new NegationResult(assertion.test(types, value));
+    public NegationResult test(T value, TypeMirrors types) {
+        return new NegationResult(assertion.test(value, types));
     }
 
 }

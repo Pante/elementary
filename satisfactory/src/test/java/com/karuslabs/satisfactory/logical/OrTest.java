@@ -30,7 +30,7 @@ import javax.lang.model.element.Modifier;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 

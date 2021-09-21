@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
+import com.karuslabs.satisfactory.zold.Sequence;
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -33,8 +34,8 @@ import javax.lang.model.type.TypeMirror;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
-import static com.karuslabs.satisfactory.sequence.Sequences.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Sequences.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)

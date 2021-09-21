@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory.logical;
 
-import com.karuslabs.satisfactory.old.Any;
+import com.karuslabs.satisfactory.zold.Any;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;

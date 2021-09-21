@@ -21,39 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.sequence;
-
-import com.karuslabs.utilitary.type.TypeMirrors;
-
-import java.util.Collection;
 
 /**
- * A {@code Sequence} that is always {@code true}.
- * 
- * @param <T> the type of the tested values
+ * Contains classes for verifying the number of times an assertion is satisfied 
+ * and testing collections of values.
  */
-public class AnySequence<T> extends Sequence<T> {
-
-    private final Class<?> part;
-    
-    /**
-     * Creates an {@code AnySequence} for the given part.
-     * 
-     * @param part the supported part
-     */
-    public AnySequence(Class<?> part) {
-        super("");
-        this.part = part;
-    }
-
-    @Override
-    public boolean test(TypeMirrors types, Collection<? extends T> values) {
-        return true;
-    }
-
-    @Override
-    public Class<?> part() {
-        return part;
-    }
-
-}
+package com.karuslabs.satisfactory.zold;

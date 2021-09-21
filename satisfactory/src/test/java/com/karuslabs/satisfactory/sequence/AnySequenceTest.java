@@ -28,7 +28,7 @@ import javax.lang.model.type.TypeMirror;
 
 import org.junit.jupiter.api.*;
 
-import static com.karuslabs.satisfactory.sequence.Sequences.*;
+import static com.karuslabs.satisfactory.zold.Sequences.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 

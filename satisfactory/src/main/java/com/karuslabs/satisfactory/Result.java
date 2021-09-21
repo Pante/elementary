@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.syntax.Modifiers;
 import com.karuslabs.satisfactory.Logical.*;
 
 import java.util.Set;

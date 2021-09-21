@@ -21,9 +21,42 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.satisfactory.zold;
+
+import com.karuslabs.satisfactory.old.Assertion;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * Contains classes for verifying the number of times an assertion is satisfied 
- * and testing collections of values.
+ * An assertion is always {@code true}.
+ * 
+ * @param <T> the type of the tested value 
  */
-package com.karuslabs.satisfactory.sequence;
+public class Any<T> implements Assertion<T> {
+    
+    private final Class<?> part;
+    
+    /**
+     * Creates an {@code Any} for the given part.
+     * 
+     * @param part the part
+     */
+    public Any(Class<?> part) {
+        this.part = part;
+    }
+    
+    @Override
+    public boolean test(TypeMirrors types, T value) {
+        return true;
+    }
+    
+    @Override
+    public String condition() {
+        return "";
+    }
+    
+    @Override
+    public Class<?> part() {
+        return part;
+    }
+    
+}

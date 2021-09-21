@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.old.Variable;
+import com.karuslabs.satisfactory.zold.Variable;
 import com.karuslabs.elementary.junit.*;
 import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -33,7 +33,7 @@ import javax.lang.model.element.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
-import static com.karuslabs.satisfactory.old.Assertions.*;
+import static com.karuslabs.satisfactory.zold.Assertions.*;
 import static javax.lang.model.element.Modifier.*;
 import static org.junit.jupiter.api.Assertions.*;
 

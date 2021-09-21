@@ -39,7 +39,7 @@ public interface Assertion<T> {
         }
     }
 
-    Result test(TypeMirrors types, T value);
+    Result test(T value, TypeMirrors types);
     
     default Assertion<T> and(Assertion<T> other) {
         return new And<>(this, other);
@@ -49,8 +49,8 @@ public interface Assertion<T> {
         return new Or<>(this, other);
     }
     
-    default BiPredicate<TypeMirrors, T> predicate() {
-        return (types, value) -> test(types, value) == null;
+    default BiPredicate<T, TypeMirrors> predicate() {
+        return (value, types) -> test(value, types) == null;
     }
     
 }

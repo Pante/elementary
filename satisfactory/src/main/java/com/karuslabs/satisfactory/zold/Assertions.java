@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.old;
+package com.karuslabs.satisfactory.zold;
 
 
 import java.util.Set;
@@ -30,7 +30,7 @@ import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
-import static com.karuslabs.satisfactory.old.Type.Relation.*;
+import static com.karuslabs.satisfactory.zold.Type.Relation.*;
 
 /**
  * This class provides constants for frequently used assertion and utility methods 
