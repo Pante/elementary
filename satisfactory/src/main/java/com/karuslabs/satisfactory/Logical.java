@@ -23,8 +23,10 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.zold.Flag;
 import com.karuslabs.satisfactory.Logical.*;
-import com.karuslabs.satisfactory.Result.Visitor;
+import com.karuslabs.satisfactory.R.Visitor;
+import com.karuslabs.satisfactory.Result.Failure;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
@@ -33,9 +35,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class Logical {
     
-    public static class AndResult extends Result {
-        
-        static boolean success(Result... clauses) {
+    static boolean success(R... clauses) {
             for (var clause : clauses) {
                if (!clause.success) {
                    return false;
@@ -44,29 +44,8 @@ public class Logical {
             
             return true;
         }
-
-        public final List<Result> clauses;
-        
-        AndResult(Result... clauses) {
-            super(success(clauses));
-            this.clauses = List.of(clauses);
-        }
-        
-        @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
-            return visitor.visit(this, flags, value);
-        }
-
-        @Override
-        public AndResult empty() {
-            return new AndResult();
-        }
-        
-    }
     
-    public static class OrResult extends Result {
-        
-        static boolean success(Result... clauses) {
+    static boolean success(R... clauses) {
             for (var clause : clauses) {
                 if (clause.success) {
                     return true;
@@ -75,31 +54,33 @@ public class Logical {
             
             return false;
         }
-        
-        public final List<Result> clauses;
-       
-        OrResult(Result... clauses) {
-            super(success(clauses));
-            this.clauses = List.of(clauses);
-        }
-
+    
+    public static record AndFailure(List<Failure> nested) implements Failure {
         @Override
-        public <T, R> @Nullable R accept(Visitor<T, R> visitor, Set<Flag> flags, T value) {
-            return visitor.visitOr(this, flags, value);
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitAnd(this, value);
         }
-
-        @Override
-        public OrResult empty() {
-            return new OrResult();
-        }
-       
     }
     
-    public static class NegationResult extends Result {
+    public static record OrFailure(List<Failure> nested) implements Failure {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitOr(this, value);
+        }
+    }
+    
+    public static record NegationFailure(Success success) implements Failure {
+        @Override
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitNegation(this, value);
+        }
+    }
+    
+    public static class NegationResult extends R {
 
-        public final Result negation;
+        public final R negation;
         
-        NegationResult(Result negation) {
+        NegationResult(R negation) {
             super(!negation.success);
             this.negation = negation;
         }
@@ -131,7 +112,7 @@ class And<T> implements Assertion<T> {
     @Override
     public AndResult test(T value, TypeMirrors types) {
         var first = left.test(value, types);
-        return new AndResult(first, first.success ? right.test(value, types) : first.empty());
+        return new AndResult(first, first instanceof ? right.test(value, types) : first.empty());
     }
 
 }

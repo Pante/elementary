@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.zold;
 
 public enum Flag {
 

@@ -13,10 +13,6 @@
     <name>Satisfactory</name>
     <description>Satisfactory is a Element matching library for annotation processors.</description>
     
-    <properties>
-        <maven.compiler.release>11</maven.compiler.release>
-    </properties>
-    
     <dependencies>
         <dependency>
             <groupId>com.karuslabs</groupId>
@@ -39,7 +35,7 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
-                    <release>${release}</release>
+                    <release>17</release>
                 </configuration>
             </plugin>
             
@@ -85,6 +81,16 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.3</version>
+                <configuration>
+                    <compilerArgs>
+                        <arg>--enable-preview</arg>
+                    </compilerArgs>
+                </configuration>
             </plugin>
         </plugins>
     </build>

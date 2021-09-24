@@ -23,53 +23,53 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.syntax.Modifiers;
 import com.karuslabs.satisfactory.Logical.*;
-import com.karuslabs.satisfactory.syntax.*;
-
-import java.util.Set;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public abstract class Result {
-        
-    public final boolean success;
-
-    public Result(boolean success) {
-        this.success = success;
+public sealed interface Result {
+    
+    static final Success SUCCESS = new Success();
+    
+    <T, R> R accept(Visitor<T, R> visitor, T value);
+    
+    
+    public static final class Success implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.success(this, value);
+        }
     }
-
-    public abstract <T, R> R accept(Visitor<T, R> visitor, Set<Flag> flags, T value);
-
-    public abstract Result empty();
+    
+    public static non-sealed interface Failure extends Result {}
     
     
     public static interface Visitor<T, R> {
         
-        default @Nullable R visitModifiers(Modifiers.Result result, Set<Flag> flags, T value) {
-            return visit(result, flags, value);
+        default @Nullable R visitAnd(AndFailure failure, T value) {
+            for (var nested : failure.nested()) {
+                nested.accept(this, value);
+            }
+            return null;
         }
         
-        default @Nullable R visitType(Type.Result result, Set<Flag> flags, T value) {
-            return visit(result, flags, value);
+        default @Nullable R visitOr(OrFailure failure, T value) {
+            for (var nested : failure.nested()) {
+                nested.accept(this, value);
+            }
+            return null;
         }
-
-        default @Nullable R visitAnd(AndResult result, Set<Flag> flags, T value) {
-            return visit(result, flags, value);
+        
+        
+        
+        default @Nullable R success(Success success, T value) {
+            return null;
         }
-
-        default @Nullable R visitOr(OrResult result, Set<Flag> flags, T value) {
-            return visit(result, flags, value);
-        }
-
-        default @Nullable R visitNegation(NegationResult result, Set<Flag> flags, T value) {
-            return visit(result, flags, value);
-        }
-
-        default @Nullable R visit(Result result, Set<Flag> flags, T value) {
+        
+        default @Nullable R failure(Failure failure, T value) {
             return null;
         }
 
     }
-
+    
 }
