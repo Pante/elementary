@@ -21,26 +21,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logic;
 
-import com.karuslabs.satisfactory.logic.Operator;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.function.*;
+import java.util.List;
 
-public interface Assertion<T> {
+import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.logic.Operator.NOT;
 
-    
-    Result test(T value, TypeMirrors types);
-    
-    Failure fail();
-    
-    default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
+class Not<T> implements Assertion<T> {
+
+    final Assertion<T> assertion;
+
+    Not(Assertion<T> assertion) {
+        this.assertion = assertion;
     }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
+
+    @Override
+    public Result test(T value, TypeMirrors types) {
+        return assertion.test(value, types) instanceof Failure ? SUCCESS : fail();
     }
-    
+
+    @Override
+    public Failure.Logical fail() {
+        return new Failure.Logical(NOT, List.of(assertion.fail()));
+    }
+
 }

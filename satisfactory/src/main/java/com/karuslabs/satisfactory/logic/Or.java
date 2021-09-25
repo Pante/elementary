@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logic;
 
-import com.karuslabs.satisfactory.logic.Operator;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.*;
 
-import java.util.function.*;
+import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.logic.Operator.OR;
 
-public interface Assertion<T> {
+class Or<T> implements Assertion<T> {
 
-    
-    Result test(T value, TypeMirrors types);
-    
-    Failure fail();
-    
-    default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
+    final List<Assertion<T>> assertions = new ArrayList<>();
+
+    Or(Assertion<T> clause, Assertion<T>... clauses) {
+        assertions.add(clause);
+        Collections.addAll(assertions, clauses);
     }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
+
+    @Override
+    public Result test(T value, TypeMirrors types) {
+        var failures = new ArrayList<Failure>();
+        for (var assertion : assertions) {
+            if (assertion.test(value, types) instanceof Failure failure) {
+                failures.add(failure);
+            }
+        }
+        
+        return failures.isEmpty() ? SUCCESS : new Failure.Logical(OR, failures);
     }
-    
+
+    @Override
+    public Failure.Logical fail() {
+        return new Failure.Logical(OR, assertions.stream().map(Assertion::fail).toList());
+    }
+
 }

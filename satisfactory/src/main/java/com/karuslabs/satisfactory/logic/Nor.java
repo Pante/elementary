@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logic;
 
-import com.karuslabs.satisfactory.logic.Operator;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.function.*;
+import java.util.*;
 
-public interface Assertion<T> {
+import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.logic.Operator.NOT;
 
-    
-    Result test(T value, TypeMirrors types);
-    
-    Failure fail();
-    
-    default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
+class Nor<T> implements Assertion<T> {
+
+    final List<Assertion<T>> assertions = new ArrayList<>();
+
+    Nor(Assertion<T> clause, Assertion<T>... clauses) {
+        assertions.add(clause);
+        Collections.addAll(assertions, clauses);
     }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
+
+    @Override
+    public Result test(T value, TypeMirrors types) {
+        for (var assertion : assertions) {
+            if (assertion.test(value, types) instanceof Success) {
+                return new Failure.Logical(NOT, List.of(assertion.fail()));
+            }
+        }
+        
+        return SUCCESS;
     }
-    
+
+    @Override
+    public Failure.Logical fail() {
+        return new Failure.Logical(NOT, List.of(assertions.get(0).fail()));
+    }
+
 }

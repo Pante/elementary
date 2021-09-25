@@ -21,26 +21,39 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.logic;
 
-import com.karuslabs.satisfactory.logic.Operator;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.function.*;
+import java.util.*;
 
-public interface Assertion<T> {
+import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.logic.Operator.NAND;
 
+class Nand<T> implements Assertion<T> {
     
-    Result test(T value, TypeMirrors types);
-    
-    Failure fail();
-    
-    default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
+    final List<Assertion<T>> assertions = new ArrayList<>();
+
+    Nand(Assertion<T> clause, Assertion<T>... clauses) {
+        assertions.add(clause);
+        Collections.addAll(assertions, clauses);
     }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
+
+    @Override
+    public Result test(T value, TypeMirrors types) {
+        for (var assertion : assertions) {
+            if (assertion.test(value, types) instanceof Failure) {
+                return SUCCESS;
+            }
+        }
+        
+        return fail();
     }
-    
+
+    @Override
+    public Failure fail() {
+        return new Failure.Logical(NAND, assertions.stream().map(Assertion::fail).toList());
+    }
+
 }

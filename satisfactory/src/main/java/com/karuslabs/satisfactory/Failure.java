@@ -24,23 +24,18 @@
 package com.karuslabs.satisfactory;
 
 import com.karuslabs.satisfactory.logic.Operator;
-import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.function.*;
+import java.util.List;
 
-public interface Assertion<T> {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
+public sealed interface Failure extends Result {
     
-    Result test(T value, TypeMirrors types);
-    
-    Failure fail();
-    
-    default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
-    }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
+    public static record Logical(Operator operator, List<Failure> failures) implements Failure {
+        @Override
+        public <T, R> @Nullable R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitLogical(this, value);
+        }
     }
     
 }

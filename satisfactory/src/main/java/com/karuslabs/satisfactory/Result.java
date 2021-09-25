@@ -23,44 +23,20 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Logical.*;
-
+import com.karuslabs.satisfactory.Failure.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public sealed interface Result {
+public sealed interface Result permits Failure, Success {
     
-    static final Success SUCCESS = new Success();
+    public static final Success SUCCESS = new Success();
     
     <T, R> R accept(Visitor<T, R> visitor, T value);
     
-    
-    public static final class Success implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.success(this, value);
-        }
-    }
-    
-    public static non-sealed interface Failure extends Result {}
-    
-    
     public static interface Visitor<T, R> {
         
-        default @Nullable R visitAnd(AndFailure failure, T value) {
-            for (var nested : failure.nested()) {
-                nested.accept(this, value);
-            }
-            return null;
+        default @Nullable R visitLogical(Logical failure, T value) {
+            return failure(failure, value);
         }
-        
-        default @Nullable R visitOr(OrFailure failure, T value) {
-            for (var nested : failure.nested()) {
-                nested.accept(this, value);
-            }
-            return null;
-        }
-        
-        
         
         default @Nullable R success(Success success, T value) {
             return null;
