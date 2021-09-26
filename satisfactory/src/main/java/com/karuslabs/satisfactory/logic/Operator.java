@@ -25,11 +25,15 @@ package com.karuslabs.satisfactory.logic;
 
 import com.karuslabs.satisfactory.Assertion;
 
+import java.util.*;
+
 public enum Operator {
     
-    NAND(true),
     NOT(true),
-    OR(false);
+    AND(false),
+    NAND(true),
+    OR(false),
+    NOR(true);
     
     public final boolean negation;
     
@@ -37,37 +41,27 @@ public enum Operator {
         this.negation = negation;
     }
     
-    public static <T> Assertion<T> and(Assertion<T> assertion, Assertion<T>... assertions) {
-        var and = assertion instanceof And match ? match : new And<>(assertion);
-        var negations = assertion instanceof Not || assertion instanceof Nor ? 1 : 0;
-        
-        for (var clause : assertions) {
-            if (clause instanceof And nested) {
-                and.assertions.addAll(nested.assertions);
-                continue;
-            }
-            
-            and.assertions.add(clause);
-            if (negations >= 1 && (clause instanceof Not || clause instanceof Nor)) {
-                negations++;
-            }
-        }
-        
-        if (negations != assertions.length + 1) {
-            return and;
-        }
-        
-        // Assertions will be either NOR or NOT 
-        var nor = assertion instanceof Nor match ? match : new Nor<>(((Not<T>) assertion).assertion);
-        for (var clause : assertions) {
-            if (clause instanceof Nor nested) {
-                nor.assertions.addAll(nested.assertions);
+    public static <T> Assertion<T> and(Assertion<T> left, Assertion<T>... right) {
+        var assertions = new ArrayList<Assertion<T>>();
+        for (var assertion : concat(left, right)) {
+            if (assertion instanceof And) {
+                Collections.addAll(assertions, ((And<T>) assertion).assertions());
+                
             } else {
-                nor.assertions.add(((Not<T>) clause).assertion);
+                assertions.add(assertion);
             }
         }
         
-        return nor;
+        return new And<>(assertions.toArray(Assertion[]::new));
+    }
+    
+    static <T> Assertion<T>[] concat(Assertion<T> left, Assertion<T>... right) {
+        var assertions = new Assertion[1 + right.length];
+        assertions[0] = left;
+        
+        System.arraycopy(right, 0, assertions, 1, right.length);
+        
+        return assertions;
     }
 
 }

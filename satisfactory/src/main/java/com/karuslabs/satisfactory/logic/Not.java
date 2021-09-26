@@ -31,13 +31,7 @@ import java.util.List;
 import static com.karuslabs.satisfactory.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.NOT;
 
-class Not<T> implements Assertion<T> {
-
-    final Assertion<T> assertion;
-
-    Not(Assertion<T> assertion) {
-        this.assertion = assertion;
-    }
+record Not<T>(Assertion<T> assertion) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {

@@ -26,19 +26,12 @@ package com.karuslabs.satisfactory.logic;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.*;
+import java.util.List;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.NAND;
 
-class Nand<T> implements Assertion<T> {
-    
-    final List<Assertion<T>> assertions = new ArrayList<>();
-
-    Nand(Assertion<T> clause, Assertion<T>... clauses) {
-        assertions.add(clause);
-        Collections.addAll(assertions, clauses);
-    }
+record Nand<T>(List<Assertion<T>> assertions) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {

@@ -25,19 +25,13 @@ package com.karuslabs.satisfactory.logic;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.*;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.OR;
 
-class Or<T> implements Assertion<T> {
-
-    final List<Assertion<T>> assertions = new ArrayList<>();
-
-    Or(Assertion<T> clause, Assertion<T>... clauses) {
-        assertions.add(clause);
-        Collections.addAll(assertions, clauses);
-    }
+record Or<T>(List<Assertion<T>> assertions) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {
@@ -45,14 +39,17 @@ class Or<T> implements Assertion<T> {
         for (var assertion : assertions) {
             if (assertion.test(value, types) instanceof Failure failure) {
                 failures.add(failure);
+                
+            } else {
+                return SUCCESS;
             }
         }
         
-        return failures.isEmpty() ? SUCCESS : new Failure.Logical(OR, failures);
+        return new Failure.Logical(OR, failures);
     }
 
     @Override
-    public Failure.Logical fail() {
+    public Failure fail() {
         return new Failure.Logical(OR, assertions.stream().map(Assertion::fail).toList());
     }
 

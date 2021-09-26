@@ -29,31 +29,29 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.*;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
-import static com.karuslabs.satisfactory.logic.Operator.NOT;
+import static com.karuslabs.satisfactory.logic.Operator.NOR;
 
-class Nor<T> implements Assertion<T> {
-
-    final List<Assertion<T>> assertions = new ArrayList<>();
-
-    Nor(Assertion<T> clause, Assertion<T>... clauses) {
-        assertions.add(clause);
-        Collections.addAll(assertions, clauses);
-    }
+record Nor<T>(List<Assertion<T>> assertions) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {
+        var successes = new ArrayList<Assertion<T>>();
         for (var assertion : assertions) {
             if (assertion.test(value, types) instanceof Success) {
-                return new Failure.Logical(NOT, List.of(assertion.fail()));
+                successes.add(assertion);
             }
         }
         
-        return SUCCESS;
+        return successes.isEmpty() ? SUCCESS : failure(successes);
     }
 
     @Override
-    public Failure.Logical fail() {
-        return new Failure.Logical(NOT, List.of(assertions.get(0).fail()));
+    public Failure fail() {
+        return failure(assertions);
+    }
+    
+    Failure failure(List<Assertion<T>> assertions) {
+        return new Failure.Logical(NOR, assertions.stream().map(Assertion::fail).toList());
     }
 
 }

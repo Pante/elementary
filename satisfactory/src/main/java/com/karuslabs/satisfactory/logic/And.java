@@ -25,33 +25,29 @@ package com.karuslabs.satisfactory.logic;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.*;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.logic.Operator.AND;
 
-class And<T> implements Assertion<T> {
+record And<T>(Assertion<T>... assertions) implements Assertion<T> {
     
-    final List<Assertion<T>> assertions = new ArrayList<>();
-
-    And(Assertion<T> clause, Assertion<T>... clauses) {
-        assertions.add(clause);
-        Collections.addAll(assertions, clauses);
-    }
-
     @Override
     public Result test(T value, TypeMirrors types) {
+        var failures = new ArrayList<Failure>();
         for (var assertion : assertions) {
             if (assertion.test(value, types) instanceof Failure failure) {
-                return failure;
+                failures.add(failure);
             }
         }
         
-        return SUCCESS;
+        return failures.isEmpty() ? SUCCESS : new Failure.Logical(AND, failures);
     }
 
     @Override
     public Failure fail() {
-        return assertions.get(0).fail();
+        return assertions[0].fail();
     }
-
+    
 }
