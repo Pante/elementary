@@ -55,6 +55,20 @@ public enum Operator {
         return new And<>(assertions.toArray(Assertion[]::new));
     }
     
+    public static <T> Assertion<T> or(Assertion<T> left, Assertion<T>... right) {
+        var assertions = new ArrayList<Assertion<T>>();
+        for (var assertion : concat(left, right)) {
+            if (assertion instanceof Or) {
+                Collections.addAll(assertions, ((Or<T>) assertion).assertions());
+                
+            } else {
+                assertions.add(assertion);
+            }
+        }
+        
+        return new Or<>(assertions.toArray(Assertion[]::new));
+    }
+    
     static <T> Assertion<T>[] concat(Assertion<T> left, Assertion<T>... right) {
         var assertions = new Assertion[1 + right.length];
         assertions[0] = left;
