@@ -26,12 +26,12 @@ package com.karuslabs.satisfactory.logic;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.List;
+import java.util.stream.Stream;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.NAND;
 
-record Nand<T>(List<Assertion<T>> assertions) implements Assertion<T> {
+record Nand<T>(Assertion<T>... assertions) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {
@@ -46,7 +46,7 @@ record Nand<T>(List<Assertion<T>> assertions) implements Assertion<T> {
 
     @Override
     public Failure fail() {
-        return new Failure.Logical(NAND, assertions.stream().map(Assertion::fail).toList());
+        return new Failure.Logical(NAND, Stream.of(assertions).map(Assertion::fail).toList());
     }
 
 }

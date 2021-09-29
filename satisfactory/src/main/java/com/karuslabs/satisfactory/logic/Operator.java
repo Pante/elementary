@@ -41,6 +41,22 @@ public enum Operator {
         this.negation = negation;
     }
     
+    public static <T> Assertion<T> not(Assertion<T> assertion) {
+        // TODO: Replace with switch pattern matching
+        if (assertion instanceof Not not) {
+            return not.assertion();
+            
+        } else if (assertion instanceof And and) {
+            return new Nand(and.assertions());
+            
+        } else if (assertion instanceof Or or) {
+            return new Nor(List.of(or.assertions()));
+            
+        } else {
+            return new Not<>(assertion);
+        }
+    }
+    
     public static <T> Assertion<T> and(Assertion<T> left, Assertion<T>... right) {
         var assertions = new ArrayList<Assertion<T>>();
         for (var assertion : concat(left, right)) {
