@@ -23,6 +23,23 @@
  */
 package com.karuslabs.satisfactory.syntax;
 
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.utilitary.type.TypeMirrors;
+import java.util.Set;
+import javax.lang.model.element.Modifier;
+
 public class Modifiers {
 
+}
+
+class ContainsModifiers implements Assertion<Set<Modifier>> {
+
+    @Override
+    public Result test(Set<Modifier> value, TypeMirrors types) {
+    }
+
+    @Override
+    public Failure fail() {
+    }
+    
 }
