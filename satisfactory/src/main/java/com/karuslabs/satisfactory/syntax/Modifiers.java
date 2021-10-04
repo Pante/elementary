@@ -25,21 +25,60 @@ package com.karuslabs.satisfactory.syntax;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.Set;
 import javax.lang.model.element.Modifier;
 
-public class Modifiers {
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-}
+import static com.karuslabs.satisfactory.Result.SUCCESS;
 
 class ContainsModifiers implements Assertion<Set<Modifier>> {
 
+    private final Set<Modifier> expected;
+    private @Nullable Failure failure;
+    
+    ContainsModifiers(Modifier... modifiers) {
+        expected = Set.of(modifiers);
+    }
+    
     @Override
-    public Result test(Set<Modifier> value, TypeMirrors types) {
+    public Result test(Set<Modifier> actual, TypeMirrors types) {
+        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
     }
 
     @Override
     public Failure fail() {
+        if (failure == null) {
+            failure = new Failure.Modifiers(expected, Set.of());
+        }
+        
+        return failure;
+    }
+    
+}
+
+class EqualsModifiers implements Assertion<Set<Modifier>> {
+    
+    private final Set<Modifier> expected;
+    private @Nullable Failure failure;
+    
+    EqualsModifiers(Modifier... modifiers) {
+        expected = Set.of(modifiers);
+    }
+    
+    @Override
+    public Result test(Set<Modifier> actual, TypeMirrors types) {
+        return actual.equals(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
+    }
+
+    @Override
+    public Failure fail() {
+        if (failure == null) {
+            failure = new Failure.Modifiers(expected, Set.of());
+        }
+        
+        return failure;
     }
     
 }
