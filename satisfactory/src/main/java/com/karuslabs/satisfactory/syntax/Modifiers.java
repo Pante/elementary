@@ -32,9 +32,10 @@ import javax.lang.model.element.Modifier;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.utilitary.Texts.sort;
 
 class ContainsModifiers implements Assertion<Set<Modifier>> {
-    
+
     private final List<Modifier> expected;
     private @Nullable Failure failure;
     
@@ -44,40 +45,13 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        if (actual.containsAll(expected)) {
-            return SUCCESS;
-        }
-        
-        var difference = new ArrayList<>();
-        for (var modifier : expected) {
-            if (!actual.contains(modifier)) {
-                
-            }
-        }
-        
-        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
-    }
-    
-}
-
-class ContainsModifiers implements Assertion<Set<Modifier>> {
-
-    private final Set<Modifier> expected;
-    private @Nullable Failure failure;
-    
-    ContainsModifiers(Modifier... modifiers) {
-        expected = Set.of(modifiers);
-    }
-    
-    @Override
-    public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
+        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
     }
 
     @Override
     public Failure fail() {
         if (failure == null) {
-            failure = new Failure.Modifiers(expected, Set.of());
+            failure = new Failure.Modifiers(expected, List.of());
         }
         
         return failure;
@@ -87,22 +61,22 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
 
 class EqualsModifiers implements Assertion<Set<Modifier>> {
     
-    private final Set<Modifier> expected;
+    private final List<Modifier> expected;
     private @Nullable Failure failure;
     
     EqualsModifiers(Modifier... modifiers) {
-        expected = Set.of(modifiers);
+        expected = List.of(modifiers);
     }
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.equals(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
+        return actual.containsAll(expected) && expected.containsAll(actual) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
     }
 
     @Override
     public Failure fail() {
         if (failure == null) {
-            failure = new Failure.Modifiers(expected, Set.of());
+            failure = new Failure.Modifiers(expected, List.of());
         }
         
         return failure;
