@@ -172,7 +172,7 @@ class TextsTest {
     
     @Test
     void sort() {
-        assertArrayEquals(new Modifier[] {PUBLIC, STATIC, ABSTRACT, FINAL}, Texts.sort(STATIC, FINAL, PUBLIC, ABSTRACT));
+        assertArrayEquals(new Modifier[] {PUBLIC, STATIC, FINAL, NATIVE}, Texts.sort(STATIC, FINAL, NATIVE, PUBLIC));
     }
 
 } 

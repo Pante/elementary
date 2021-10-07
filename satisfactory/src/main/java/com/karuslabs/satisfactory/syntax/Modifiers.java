@@ -26,12 +26,39 @@ package com.karuslabs.satisfactory.syntax;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.Set;
+import java.util.*;
 import javax.lang.model.element.Modifier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static com.karuslabs.satisfactory.Result.SUCCESS;
+
+class ContainsModifiers implements Assertion<Set<Modifier>> {
+    
+    private final List<Modifier> expected;
+    private @Nullable Failure failure;
+    
+    ContainsModifiers(Modifier... modifiers) {
+        expected = List.of(modifiers);
+    }
+    
+    @Override
+    public Result test(Set<Modifier> actual, TypeMirrors types) {
+        if (actual.containsAll(expected)) {
+            return SUCCESS;
+        }
+        
+        var difference = new ArrayList<>();
+        for (var modifier : expected) {
+            if (!actual.contains(modifier)) {
+                
+            }
+        }
+        
+        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, actual);
+    }
+    
+}
 
 class ContainsModifiers implements Assertion<Set<Modifier>> {
 

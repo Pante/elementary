@@ -410,6 +410,8 @@ public class Texts {
                 return 1;
             case ABSTRACT:
                 return 2;
+            case FINAL:
+                return 2;
             default:
                 return 3;
         }

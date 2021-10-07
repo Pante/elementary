@@ -32,7 +32,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public sealed interface Failure extends Result {
     
-    public static record Modifiers(Set<Modifier> expected, Set<Modifier> actual) implements Failure {
+    public static record Modifiers(List<Modifier> expected, List<Modifier> actual) implements Failure {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {
             return visitor.visitModifiers(this, value);
