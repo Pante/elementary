@@ -26,3 +26,7 @@ package com.karuslabs.satisfactory.syntax;
 public class Annotations {
 
 }
+
+class ContainsAnnotations {
+    
+}
