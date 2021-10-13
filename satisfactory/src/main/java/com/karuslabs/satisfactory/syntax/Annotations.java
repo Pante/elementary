@@ -23,10 +23,34 @@
  */
 package com.karuslabs.satisfactory.syntax;
 
-public class Annotations {
+import com.karuslabs.satisfactory.*;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
+import java.util.List;
+import javax.lang.model.element.AnnotationMirror;
+
+class ContainsAnnotations implements Assertion<List<? extends AnnotationMirror>> {
+
+    @Override
+    public Result test(List<? extends AnnotationMirror> value, TypeMirrors types) {
+    }
+
+    @Override
+    public Failure fail() {
+    }
+    
 }
 
-class ContainsAnnotations {
+// Ordering? Equality
+
+class ContainsSimpleAnnotations implements Assertion<List<? extends AnnotationMirror>> {
+
+    @Override
+    public Result test(List<? extends AnnotationMirror> value, TypeMirrors types) {
+    }
+
+    @Override
+    public Failure fail() {
+    }
     
 }

@@ -37,7 +37,7 @@ import static com.karuslabs.utilitary.Texts.sort;
 class ContainsModifiers implements Assertion<Set<Modifier>> {
 
     private final List<Modifier> expected;
-    private @Nullable Failure failure;
+    private Failure.Modifiers failure;
     
     ContainsModifiers(Modifier... modifiers) {
         expected = List.of(modifiers);
@@ -45,13 +45,13 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
+        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(List.of(sort(actual)), expected);
     }
 
     @Override
-    public Failure fail() {
+    public Failure.Modifiers fail() {
         if (failure == null) {
-            failure = new Failure.Modifiers(expected, List.of());
+            failure = new Failure.Modifiers(List.of(), expected);
         }
         
         return failure;
@@ -62,7 +62,7 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
 class EqualsModifiers implements Assertion<Set<Modifier>> {
     
     private final List<Modifier> expected;
-    private @Nullable Failure failure;
+    private Failure.Modifiers failure;
     
     EqualsModifiers(Modifier... modifiers) {
         expected = List.of(modifiers);
@@ -70,13 +70,13 @@ class EqualsModifiers implements Assertion<Set<Modifier>> {
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.containsAll(expected) && expected.containsAll(actual) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
+        return actual.containsAll(expected) && expected.containsAll(actual) ? SUCCESS : new Failure.Modifiers(List.of(sort(actual)), expected);
     }
 
     @Override
-    public Failure fail() {
+    public Failure.Modifiers fail() {
         if (failure == null) {
-            failure = new Failure.Modifiers(expected, List.of());
+            failure = new Failure.Modifiers(List.of(), expected);
         }
         
         return failure;
