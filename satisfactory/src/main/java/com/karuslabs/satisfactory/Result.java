@@ -34,6 +34,10 @@ public sealed interface Result permits Failure, Success {
     
     public static interface Visitor<T, R> {
         
+        default @Nullable R visitAnnotations(Annotations failure, T value) {
+            return failure(failure, value);
+        }
+        
         default @Nullable R visitModifiers(Modifiers failure, T value) {
             return failure(failure, value);
         }

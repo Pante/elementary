@@ -32,6 +32,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public sealed interface Failure extends Result {
     
+    public static record Annotations() implements Failure {
+
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitAnnotations(this, value);
+        }
+        
+    }
+    
     public static record Modifiers(List<Modifier> actual, List<Modifier> expected) implements Failure {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {

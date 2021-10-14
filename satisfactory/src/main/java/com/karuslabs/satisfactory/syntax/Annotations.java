@@ -26,29 +26,41 @@ package com.karuslabs.satisfactory.syntax;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+import java.lang.annotation.Annotation;
 import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.AnnotatedConstruct;
 
-class ContainsAnnotations implements Assertion<List<? extends AnnotationMirror>> {
+class ContainsAnnotations implements Assertion<AnnotatedConstruct> {
 
-    @Override
-    public Result test(List<? extends AnnotationMirror> value, TypeMirrors types) {
+    private final List<Class<? extends Annotation>> annotations;
+    
+    ContainsAnnotations(Class<? extends Annotation>... annotations) {
+        this.annotations = List.of(annotations);
     }
 
+    @Override
+    public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
+        
+    }
+    
     @Override
     public Failure fail() {
     }
     
 }
 
-// Ordering? Equality
+class EqualsAnnotations implements Assertion<AnnotatedConstruct> {
 
-class ContainsSimpleAnnotations implements Assertion<List<? extends AnnotationMirror>> {
-
-    @Override
-    public Result test(List<? extends AnnotationMirror> value, TypeMirrors types) {
+    private final Class<? extends Annotation>[] annotations;
+    
+    EqualsAnnotations(Class<? extends Annotation>... annotations) {
+        this.annotations = annotations;
     }
 
+    @Override
+    public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
+    }
+    
     @Override
     public Failure fail() {
     }

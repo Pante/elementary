@@ -29,8 +29,6 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import static com.karuslabs.satisfactory.Result.SUCCESS;
 import static com.karuslabs.utilitary.Texts.sort;
 
@@ -50,11 +48,7 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
 
     @Override
     public Failure.Modifiers fail() {
-        if (failure == null) {
-            failure = new Failure.Modifiers(List.of(), expected);
-        }
-        
-        return failure;
+        return failure == null ? failure = new Failure.Modifiers(List.of(), expected) : failure;
     }
     
 }
@@ -75,11 +69,7 @@ class EqualsModifiers implements Assertion<Set<Modifier>> {
 
     @Override
     public Failure.Modifiers fail() {
-        if (failure == null) {
-            failure = new Failure.Modifiers(List.of(), expected);
-        }
-        
-        return failure;
+        return failure == null ? failure = new Failure.Modifiers(List.of(), expected) : failure;
     }
     
 }
