@@ -23,7 +23,6 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Failure.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public sealed interface Result permits Failure, Success {
@@ -34,15 +33,25 @@ public sealed interface Result permits Failure, Success {
     
     public static interface Visitor<T, R> {
         
-        default @Nullable R visitAnnotations(Annotations failure, T value) {
+        default @Nullable R visitLogical(Failure.Logical failure, T value) {
             return failure(failure, value);
         }
         
-        default @Nullable R visitModifiers(Modifiers failure, T value) {
+        
+        default @Nullable R visitPrimitive(Failure.Primitive failure, T value) {
             return failure(failure, value);
         }
         
-        default @Nullable R visitLogical(Logical failure, T value) {
+        default @Nullable R visitType(Failure.Type failure, T value) {
+            return failure(failure, value);
+        }
+        
+        
+        default @Nullable R visitAnnotations(Failure.Annotations failure, T value) {
+            return failure(failure, value);
+        }
+        
+        default @Nullable R visitModifiers(Failure.Modifiers failure, T value) {
             return failure(failure, value);
         }
         

@@ -50,8 +50,8 @@ record Or<T>(Assertion<T>... assertions) implements Assertion<T> {
     }
 
     @Override
-    public Failure fail() {
-        return new Failure.Logical(OR, Stream.of(assertions).map(Assertion::fail).toList());
+    public Failure.Logical fail(T value, TypeMirrors types) {
+        return new Failure.Logical(OR, Stream.of(assertions).map(assertion -> assertion.fail(value, types)).toList());
     }
 
 }

@@ -21,48 +21,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.syntax;
+package com.karuslabs.satisfactory.assertions;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.lang.annotation.Annotation;
-import java.util.List;
-import javax.lang.model.AnnotatedConstruct;
+import javax.lang.model.type.*;
 
-class ContainsAnnotations implements Assertion<AnnotatedConstruct> {
+import static com.karuslabs.satisfactory.Result.SUCCESS;
 
-    private final List<Class<? extends Annotation>> annotations;
+record Primitive(TypeKind kind) implements Assertion<TypeMirror> {
     
-    ContainsAnnotations(Class<? extends Annotation>... annotations) {
-        this.annotations = List.of(annotations);
+    @Override
+    public Result test(TypeMirror actual, TypeMirrors types) {
+        return actual.getKind() == kind ? SUCCESS : fail(actual, types);
     }
 
     @Override
-    public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
-        
-    }
-    
-    @Override
-    public Failure fail() {
-    }
-    
-}
-
-class EqualsAnnotations implements Assertion<AnnotatedConstruct> {
-
-    private final Class<? extends Annotation>[] annotations;
-    
-    EqualsAnnotations(Class<? extends Annotation>... annotations) {
-        this.annotations = annotations;
-    }
-
-    @Override
-    public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
-    }
-    
-    @Override
-    public Failure fail() {
+    public Failure.Primitive fail(TypeMirror actual, TypeMirrors types) {
+        return new Failure.Primitive(kind, actual);
     }
     
 }

@@ -21,6 +21,6 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.sequence;
+package com.karuslabs.satisfactory;
 
 public record No<T>(T... values) {}

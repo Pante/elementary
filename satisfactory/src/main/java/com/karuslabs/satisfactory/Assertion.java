@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.function.*;
 
 public interface Assertion<T> {
-
+    
     public static <T> Assertion<T> not(Assertion<T> assertion) {
         return Operator.not(assertion);
     }
@@ -37,7 +37,7 @@ public interface Assertion<T> {
     
     Result test(T value, TypeMirrors types);
     
-    Failure fail();
+    Failure fail(T value, TypeMirrors types);
     
     default Assertion<T> and(Assertion<T>... others) {
         return Operator.and(this, others);

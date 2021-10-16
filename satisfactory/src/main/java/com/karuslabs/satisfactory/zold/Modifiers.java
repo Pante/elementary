@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.syntax;
+package com.karuslabs.satisfactory.zold;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -43,12 +43,12 @@ class ContainsModifiers implements Assertion<Set<Modifier>> {
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(List.of(sort(actual)), expected);
+        return actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
     }
 
     @Override
     public Failure.Modifiers fail() {
-        return failure == null ? failure = new Failure.Modifiers(List.of(), expected) : failure;
+        return failure == null ? failure = new Failure.Modifiers(expected, List.of()) : failure;
     }
     
 }
@@ -64,12 +64,12 @@ class EqualsModifiers implements Assertion<Set<Modifier>> {
     
     @Override
     public Result test(Set<Modifier> actual, TypeMirrors types) {
-        return actual.containsAll(expected) && expected.containsAll(actual) ? SUCCESS : new Failure.Modifiers(List.of(sort(actual)), expected);
+        return actual.size() == expected.size() && actual.containsAll(expected) ? SUCCESS : new Failure.Modifiers(expected, List.of(sort(actual)));
     }
 
     @Override
     public Failure.Modifiers fail() {
-        return failure == null ? failure = new Failure.Modifiers(List.of(), expected) : failure;
+        return failure == null ? failure = new Failure.Modifiers(expected, List.of()) : failure;
     }
     
 }

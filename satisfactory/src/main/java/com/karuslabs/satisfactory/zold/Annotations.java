@@ -23,74 +23,39 @@
  */
 package com.karuslabs.satisfactory.zold;
 
-import com.karuslabs.utilitary.text.Texts;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.lang.annotation.Annotation;
-import java.util.function.BiConsumer;
-import javax.lang.model.element.Element;
+import java.util.List;
+import javax.lang.model.AnnotatedConstruct;
 
-/**
- * A skeletal implementation of an assertion for annotations.
- */
-public abstract class Annotations implements Assertion<Element> {
-    
-    /**
-     * A format used to describe annotations.
-     */
-    public static final BiConsumer<Class<? extends Annotation>, StringBuilder> FORMAT = (type, builder) -> builder.append("@").append(type.getSimpleName());
-    /**
-     * The annotations.
-     */
-    protected final Class<? extends Annotation>[] annotations;
-    private final String condition;
-    
-    /**
-     * Creates an {@code Annotations} with the given annotations and condition.
-     * 
-     * @param annotations the annotations
-     * @param condition the condition for satisfying this assertion
-     */
-    public Annotations(Class<? extends Annotation>[] annotations, String condition) {
-        this.annotations = annotations;
-        this.condition = condition;
-    }
-    
-    @Override
-    public String condition() {
-        return condition;
-    }
-    
-    @Override
-    public Class<Annotation> part() {
-        return Annotation.class;
-    }
+import static com.karuslabs.satisfactory.Result.SUCCESS;
 
-}
+class ContainsAnnotations implements Assertion<AnnotatedConstruct> {
 
-/**
- * An assertion that is satisfied if an element contains the specified annotations.
- */
-class ContainsAnnotations extends Annotations {
+    private final List<Class<? extends Annotation>> expected;
+    private final Failure.Annotations failure;
     
-    /**
-     * Creates a {@code ContainsAnnotations} with the given annotations.
-     * 
-     * @param annotations the annotations that an element should contain
-     */
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
-        super(annotations, "contains [" + Texts.join(annotations, FORMAT, ", ") + "]");
+        expected = List.of(annotations);
+        failure = new Failure.Annotations(expected);
     }
 
     @Override
-    public boolean test(TypeMirrors types, Element element) {
-        for (var annotation : annotations) {
-            if (element.getAnnotationsByType(annotation).length == 0) {
-                return false;
+    public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
+        for (var annotation : expected) {
+            if (annotated.getAnnotationsByType(annotation).length == 0) {
+                return failure;
             }
         }
         
-        return true;
+        return SUCCESS;
+    }
+    
+    @Override
+    public Failure.Annotations fail() {
+        return failure;
     }
     
 }

@@ -23,30 +23,17 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.assertions.Type.Relation;
 import com.karuslabs.satisfactory.logic.Operator;
 
+import java.lang.annotation.Annotation;
 import java.util.*;
 import javax.lang.model.element.Modifier;
+import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public sealed interface Failure extends Result {
-    
-    public static record Annotations() implements Failure {
-
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitAnnotations(this, value);
-        }
-        
-    }
-    
-    public static record Modifiers(List<Modifier> actual, List<Modifier> expected) implements Failure {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.visitModifiers(this, value);
-        }
-    }
     
     public static record Logical(Operator operator, List<Failure> failures) implements Failure {
         @Override
@@ -54,5 +41,37 @@ public sealed interface Failure extends Result {
             return visitor.visitLogical(this, value);
         }
     }
+    
+    
+    public static record Primitive(TypeKind expected, TypeMirror actual) implements Failure {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitPrimitive(this, value);
+        }
+    }
+    
+    public static record Type(Relation relation, List<TypeMirror> expected, @Nullable TypeMirror actual) implements Failure {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitType(this, value);
+        }
+    }
+    
+    
+    public static record Annotations(List<Class<? extends Annotation>> expected) implements Failure {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitAnnotations(this, value);
+        }
+    }
+    
+    public static record Modifiers(List<Modifier> expected, List<Modifier> actual) implements Failure {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.visitModifiers(this, value);
+        }
+    }
+    
+    
     
 }

@@ -44,10 +44,10 @@ record And<T>(Assertion<T>... assertions) implements Assertion<T> {
         
         return failures.isEmpty() ? SUCCESS : new Failure.Logical(AND, failures);
     }
-
+    
     @Override
-    public Failure fail() {
-        return assertions[0].fail();
+    public Failure fail(T value, TypeMirrors types) {
+        return new Failure.Logical(AND, List.of(assertions[0].fail(value, types)));
     }
     
 }

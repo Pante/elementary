@@ -35,12 +35,12 @@ record Not<T>(Assertion<T> assertion) implements Assertion<T> {
 
     @Override
     public Result test(T value, TypeMirrors types) {
-        return assertion.test(value, types) instanceof Failure ? SUCCESS : fail();
+        return assertion.test(value, types) instanceof Failure ? SUCCESS : fail(value, types);
     }
 
     @Override
-    public Failure.Logical fail() {
-        return new Failure.Logical(NOT, List.of(assertion.fail()));
+    public Failure.Logical fail(T value, TypeMirrors types) {
+        return new Failure.Logical(NOT, List.of(assertion.fail(value,types)));
     }
 
 }

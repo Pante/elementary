@@ -24,8 +24,7 @@
 package com.karuslabs.satisfactory.zold;
 
 import cocom.karuslabs.satisfactorys;
-impor
-t com.karuslabs.utilitary.type.*;
+import com.karuslabs.utilitary.type.*;
 
 import java.util.function.BiConsumer;
 import javax.lang.model.type.*;

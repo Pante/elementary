@@ -42,16 +42,16 @@ record Nor<T>(List<Assertion<T>> assertions) implements Assertion<T> {
             }
         }
         
-        return successes.isEmpty() ? SUCCESS : failure(successes);
+        return successes.isEmpty() ? SUCCESS : fail(successes, value, types);
     }
 
     @Override
-    public Failure fail() {
-        return failure(assertions);
+    public Failure.Logical fail(T value, TypeMirrors types) {
+        return fail(assertions, value, types);
     }
-    
-    Failure failure(List<Assertion<T>> assertions) {
-        return new Failure.Logical(NOR, assertions.stream().map(Assertion::fail).toList());
+
+    Failure.Logical fail(List<Assertion<T>> assertions, T value, TypeMirrors types) {
+        return new Failure.Logical(NOR, assertions.stream().map(assertion -> assertion.fail(value, types)).toList());
     }
 
 }
