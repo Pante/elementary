@@ -23,12 +23,14 @@
  */
 package com.karuslabs.satisfactory.logic;
 
+import com.karuslabs.satisfactory.a.Result;
+import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.List;
 
-import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.a.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.NOT;
 
 record Not<T>(Assertion<T> assertion) implements Assertion<T> {

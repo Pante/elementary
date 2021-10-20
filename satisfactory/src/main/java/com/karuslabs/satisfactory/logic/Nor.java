@@ -23,12 +23,15 @@
  */
 package com.karuslabs.satisfactory.logic;
 
+import com.karuslabs.satisfactory.a.Result;
+import com.karuslabs.satisfactory.a.Success;
+import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 
-import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.a.Result.SUCCESS;
 import static com.karuslabs.satisfactory.logic.Operator.NOR;
 
 record Nor<T>(List<Assertion<T>> assertions) implements Assertion<T> {

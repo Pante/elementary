@@ -23,9 +23,11 @@
  */
 package com.karuslabs.satisfactory;
 
-public final class Success implements Result {
+public sealed interface Success extends Result {
+
     @Override
-    public <T, R> R accept(Visitor<T, R> visitor, T value) {
-        return visitor.success(this, value);
+    default boolean success() {
+        return true;
     }
+    
 }

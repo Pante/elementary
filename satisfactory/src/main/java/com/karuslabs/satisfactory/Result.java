@@ -23,46 +23,20 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.logic.Operator;
+import java.util.List;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public sealed interface Result permits Failure, Success {
-    
-    public static final Success SUCCESS = new Success();
-    
+public sealed interface Result permits Success, Failure {
+
     <T, R> R accept(Visitor<T, R> visitor, T value);
+    
+    boolean success();
+    
     
     public static interface Visitor<T, R> {
         
-        default @Nullable R visitLogical(Failure.Logical failure, T value) {
-            return failure(failure, value);
-        }
-        
-        
-        default @Nullable R visitPrimitive(Failure.Primitive failure, T value) {
-            return failure(failure, value);
-        }
-        
-        default @Nullable R visitType(Failure.Type failure, T value) {
-            return failure(failure, value);
-        }
-        
-        
-        default @Nullable R visitAnnotations(Failure.Annotations failure, T value) {
-            return failure(failure, value);
-        }
-        
-        default @Nullable R visitModifiers(Failure.Modifiers failure, T value) {
-            return failure(failure, value);
-        }
-        
-        default @Nullable R success(Success success, T value) {
-            return null;
-        }
-        
-        default @Nullable R failure(Failure failure, T value) {
-            return null;
-        }
-
     }
     
 }

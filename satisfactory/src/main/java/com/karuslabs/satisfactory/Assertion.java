@@ -26,18 +26,14 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.logic.Operator;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.function.*;
-
 public interface Assertion<T> {
     
     public static <T> Assertion<T> not(Assertion<T> assertion) {
         return Operator.not(assertion);
     }
     
-    
     Result test(T value, TypeMirrors types);
     
-    Failure fail(T value, TypeMirrors types);
     
     default Assertion<T> and(Assertion<T>... others) {
         return Operator.and(this, others);
@@ -45,10 +41,6 @@ public interface Assertion<T> {
     
     default Assertion<T> or(Assertion<T>... others) {
         return Operator.or(this, others);
-    }
-    
-    default BiPredicate<T, TypeMirrors> predicate() {
-        return (value, types) -> test(value, types) == null;
     }
     
 }

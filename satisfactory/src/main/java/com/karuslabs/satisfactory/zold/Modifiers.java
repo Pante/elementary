@@ -23,13 +23,15 @@
  */
 package com.karuslabs.satisfactory.zold;
 
+import com.karuslabs.satisfactory.a.Result;
+import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 import javax.lang.model.element.Modifier;
 
-import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.a.Result.SUCCESS;
 import static com.karuslabs.utilitary.Texts.sort;
 
 class ContainsModifiers implements Assertion<Set<Modifier>> {

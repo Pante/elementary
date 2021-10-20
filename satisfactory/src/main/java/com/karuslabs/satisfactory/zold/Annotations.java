@@ -23,6 +23,8 @@
  */
 package com.karuslabs.satisfactory.zold;
 
+import com.karuslabs.satisfactory.a.Result;
+import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -30,7 +32,7 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import javax.lang.model.AnnotatedConstruct;
 
-import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.a.Result.SUCCESS;
 
 class ContainsAnnotations implements Assertion<AnnotatedConstruct> {
 

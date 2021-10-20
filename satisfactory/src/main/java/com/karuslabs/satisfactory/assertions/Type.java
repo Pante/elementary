@@ -23,6 +23,8 @@
  */
 package com.karuslabs.satisfactory.assertions;
 
+import com.karuslabs.satisfactory.a.Result;
+import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -32,7 +34,7 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.satisfactory.Result.SUCCESS;
+import static com.karuslabs.satisfactory.a.Result.SUCCESS;
 
 public sealed abstract class Type implements Assertion<TypeMirror> {
 
@@ -84,6 +86,20 @@ public sealed abstract class Type implements Assertion<TypeMirror> {
     }
     
     abstract List<TypeMirror> expected(TypeMirrors types);
+    
+}
+
+record Primitive(TypeKind kind) implements Assertion<TypeMirror> {
+    
+    @Override
+    public Result test(TypeMirror actual, TypeMirrors types) {
+        return actual.getKind() == kind ? SUCCESS : fail(actual, types);
+    }
+
+    @Override
+    public Failure.Primitive fail(TypeMirror actual, TypeMirrors types) {
+        return new Failure.Primitive(kind, actual);
+    }
     
 }
 
