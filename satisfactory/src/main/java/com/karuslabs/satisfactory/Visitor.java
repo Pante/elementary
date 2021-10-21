@@ -21,34 +21,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logic;
+package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.a.Result;
-import com.karuslabs.satisfactory.a.Failure;
-import com.karuslabs.satisfactory.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import java.util.stream.Stream;
-
-import static com.karuslabs.satisfactory.a.Result.SUCCESS;
-import static com.karuslabs.satisfactory.logic.Operator.NAND;
-
-record Nand<T>(Assertion<T>... assertions) implements Assertion<T> {
-
-    @Override
-    public Result test(T value, TypeMirrors types) {
-        for (var assertion : assertions) {
-            if (assertion.test(value, types) instanceof Failure) {
-                return SUCCESS;
-            }
-        }
+public interface Visitor<T, R> {
         
-        return fail(value, types);
+    default @Nullable R type(com.karuslabs.satisfactory.Result.Type type, T value) {
+        return result(type, value);
     }
 
-    @Override
-    public Failure.Logical fail(T value, TypeMirrors types) {
-        return new Failure.Logical(NAND, Stream.of(assertions).map(assertion -> assertion.fail(value, types)).toList());
+    default @Nullable R primitive(com.karuslabs.satisfactory.Result.Primitive primitive, T value) {
+        return result(primitive, value);
     }
+
+
+    default @Nullable R not(com.karuslabs.satisfactory.Result.Not not, T value) {
+        return result(not, value);
+    }
+
+    default @Nullable R and(com.karuslabs.satisfactory.Result.And and, T value) {
+        return result(and, value);
+    }
+
+    default @Nullable R or(com.karuslabs.satisfactory.Result.Or or, T value) {
+        return result(or, value);
+    }
+
+    @Nullable R result(Result result, T value);
 
 }

@@ -23,24 +23,23 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.logic.Operator;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 public interface Assertion<T> {
     
-    public static <T> Assertion<T> not(Assertion<T> assertion) {
-        return Operator.not(assertion);
+    static <T> Assertion<T> not(Assertion<T> assertion) {
+        return Not.of(assertion);
     }
     
     Result test(T value, TypeMirrors types);
     
     
     default Assertion<T> and(Assertion<T>... others) {
-        return Operator.and(this, others);
+        return And.of(this, others);
     }
     
     default Assertion<T> or(Assertion<T>... others) {
-        return Operator.or(this, others);
+        return Or.of(this, others);
     }
     
 }

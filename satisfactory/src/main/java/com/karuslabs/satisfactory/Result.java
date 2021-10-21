@@ -23,20 +23,52 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.logic.Operator;
+import com.karuslabs.satisfactory.assertions.Type.Relation;
+
 import java.util.List;
+import javax.lang.model.type.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
-public sealed interface Result permits Success, Failure {
+public sealed interface Result {
 
     <T, R> R accept(Visitor<T, R> visitor, T value);
     
     boolean success();
     
     
-    public static interface Visitor<T, R> {
-        
+    static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.type(this, value);
+        }
+    }
+    
+    static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.primitive(this, value);
+        }
+    }
+    
+    
+    static record Not(Result negation, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.result(this, value);
+        }
+    }
+    
+    static record And(List<Result> operands, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.and(this, value);
+        }
+    }
+    
+    static record Or(List<Result> operands, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.or(this, value);
+        }
     }
     
 }

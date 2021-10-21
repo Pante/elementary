@@ -24,13 +24,16 @@
 package com.karuslabs.satisfactory.zold;
 
 
+import com.karuslabs.satisfactory.assertions.Primitive;
+import com.karuslabs.satisfactory.assertions.ClassType;
+import com.karuslabs.satisfactory.assertions.MirrorType;
 import java.util.Set;
 import java.util.function.Supplier;
 import java.lang.annotation.Annotation;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
-import static com.karuslabs.satisfactory.zold.Type.Relation.*;
+import static com.karuslabs.satisfactory.assertions.Type.Relation.*;
 
 /**
  * This class provides constants for frequently used assertion and utility methods 

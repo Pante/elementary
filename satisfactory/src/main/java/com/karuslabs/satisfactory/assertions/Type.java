@@ -23,8 +23,6 @@
  */
 package com.karuslabs.satisfactory.assertions;
 
-import com.karuslabs.satisfactory.a.Result;
-import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -34,33 +32,31 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import static com.karuslabs.satisfactory.a.Result.SUCCESS;
-
 public sealed abstract class Type implements Assertion<TypeMirror> {
 
     public static enum Relation {
         IS {
             @Override
-            boolean test(TypeMirror expected, TypeMirror actual, TypeMirrors types) {
+            boolean test(TypeMirror actual, TypeMirror expected, TypeMirrors types) {
                 return types.isSameType(expected, actual);
             }
         },
         
         SUBTYPE {
             @Override
-            boolean test(TypeMirror expected, TypeMirror actual, TypeMirrors types) {
+            boolean test(TypeMirror actual, TypeMirror expected, TypeMirrors types) {
                 return types.isSubtype(actual, expected);
             }
         },
         
         SUPERTYPE {
             @Override
-            boolean test(TypeMirror expected, TypeMirror actual, TypeMirrors types) {
+            boolean test(TypeMirror actual, TypeMirror expected, TypeMirrors types) {
                 return types.isSubtype(expected, actual);
             }
         };
         
-        abstract boolean test(TypeMirror expected, TypeMirror actual, TypeMirrors types);
+        abstract boolean test(TypeMirror actual, TypeMirror expected, TypeMirrors types);
     }
     
     final Relation relation;
@@ -71,35 +67,18 @@ public sealed abstract class Type implements Assertion<TypeMirror> {
     
     @Override
     public Result test(TypeMirror actual, TypeMirrors types) {
-        for (var expected : expected(types)) {
-            if (!relation.test(expected, actual, types)) {
-                return fail(actual, types);
+        var success = true;
+        for (var type : expected(types)) {
+            if (!relation.test(actual, type, types)) {
+                success = false;
+                break;
             }
         }
 
-        return SUCCESS;
-    }
-
-    @Override
-    public Failure.Type fail(TypeMirror actual, TypeMirrors types) {
-        return new Failure.Type(relation, expected(types), actual);
+        return new Result.Type(actual, relation, expected(types), success);
     }
     
     abstract List<TypeMirror> expected(TypeMirrors types);
-    
-}
-
-record Primitive(TypeKind kind) implements Assertion<TypeMirror> {
-    
-    @Override
-    public Result test(TypeMirror actual, TypeMirrors types) {
-        return actual.getKind() == kind ? SUCCESS : fail(actual, types);
-    }
-
-    @Override
-    public Failure.Primitive fail(TypeMirror actual, TypeMirrors types) {
-        return new Failure.Primitive(kind, actual);
-    }
     
 }
 
@@ -138,5 +117,12 @@ final class MirrorType extends Type {
         return expected;
     }
     
+}
+
+record Primitive(TypeKind kind) implements Assertion<TypeMirror> {
+    @Override
+    public Result test(TypeMirror actual, TypeMirrors types) {
+        return new Result.Primitive(actual.getKind(), kind, actual.getKind() == kind);
+    }
 }
     

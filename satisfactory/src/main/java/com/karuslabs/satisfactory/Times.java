@@ -21,40 +21,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.logic;
+package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.a.Result;
-import com.karuslabs.satisfactory.a.Success;
-import com.karuslabs.satisfactory.a.Failure;
-import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.*;
+import java.util.Collection;
 
-import static com.karuslabs.satisfactory.a.Result.SUCCESS;
-import static com.karuslabs.satisfactory.logic.Operator.NOR;
+public class Times<T> {
 
-record Nor<T>(List<Assertion<T>> assertions) implements Assertion<T> {
-
-    @Override
-    public Result test(T value, TypeMirrors types) {
-        var successes = new ArrayList<Assertion<T>>();
-        for (var assertion : assertions) {
-            if (assertion.test(value, types) instanceof Success) {
-                successes.add(assertion);
-            }
+    private final Assertion<T> assertion;
+    private final Range range;
+    
+    public Times(Assertion<T> assertion, Range range) {
+        this.assertion = assertion;
+        this.range = range;
+    }
+    
+    public Result test(Collection<? extends T> values, TypeMirrors types) {
+        var count = 0;
+        for (var value : values) {
+            
         }
-        
-        return successes.isEmpty() ? SUCCESS : fail(successes, value, types);
     }
-
-    @Override
-    public Failure.Logical fail(T value, TypeMirrors types) {
-        return fail(assertions, value, types);
+    
+    public static sealed interface Range {
+        boolean test(int count);
     }
-
-    Failure.Logical fail(List<Assertion<T>> assertions, T value, TypeMirrors types) {
-        return new Failure.Logical(NOR, assertions.stream().map(assertion -> assertion.fail(value, types)).toList());
-    }
-
+    
 }
