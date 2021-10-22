@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.Times.Range;
 import com.karuslabs.satisfactory.assertions.Type.Relation;
 
 import java.util.List;
@@ -46,6 +47,14 @@ public sealed interface Result {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {
             return visitor.primitive(this, value);
+        }
+    }
+    
+    
+    static record Times(List<Result> results, int count, Range range, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.times(this, value);
         }
     }
     

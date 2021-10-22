@@ -27,24 +27,29 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface Visitor<T, R> {
         
-    default @Nullable R type(com.karuslabs.satisfactory.Result.Type type, T value) {
+    default @Nullable R type(Result.Type type, T value) {
         return result(type, value);
     }
 
-    default @Nullable R primitive(com.karuslabs.satisfactory.Result.Primitive primitive, T value) {
+    default @Nullable R primitive(Result.Primitive primitive, T value) {
         return result(primitive, value);
+    }
+    
+    
+    default @Nullable R times(Result.Times times, T value) {
+        return result(times, value);
     }
 
 
-    default @Nullable R not(com.karuslabs.satisfactory.Result.Not not, T value) {
+    default @Nullable R not(Result.Not not, T value) {
         return result(not, value);
     }
 
-    default @Nullable R and(com.karuslabs.satisfactory.Result.And and, T value) {
+    default @Nullable R and(Result.And and, T value) {
         return result(and, value);
     }
 
-    default @Nullable R or(com.karuslabs.satisfactory.Result.Or or, T value) {
+    default @Nullable R or(Result.Or or, T value) {
         return result(or, value);
     }
 
