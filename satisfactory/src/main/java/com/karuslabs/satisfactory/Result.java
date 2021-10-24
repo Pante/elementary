@@ -51,10 +51,15 @@ public sealed interface Result {
     }
     
     
-    static record Times(List<Result> results, int count, Range range, boolean success) implements Result {
+    static record Times(List<Result> results, Range range, int count) implements Result {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {
             return visitor.times(this, value);
+        }
+        
+        @Override
+        public boolean success() {
+            return range.contains(count);
         }
     }
     

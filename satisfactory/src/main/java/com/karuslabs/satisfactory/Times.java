@@ -27,7 +27,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 
-public class Times<T> {
+public abstract class Times<T> {
 
     private final Assertion<T> assertion;
     private final Range range;
@@ -53,7 +53,7 @@ public class Times<T> {
             }
         }
         
-        return range.contains(count) ? new Result.Times(successes, count, range, true) : new Result.Times(failures, count, range, false);
+        return new Result.Times(range.contains(count) ? successes : failures, range, count);
     }
     
     public static sealed interface Range {
@@ -65,6 +65,27 @@ public class Times<T> {
         public boolean contains(int count) {
             return min <= count && count < max;
         }
-    }   
+    }
+    
+    public static record Exact(int times) implements Range {
+        @Override
+        public boolean contains(int count) {
+            return times == count;
+        }
+    }
+    
+    public static record Min(int min) implements Range {
+        @Override
+        public boolean contains(int count) {
+            return min <= count;
+        }
+    }
+    
+    public static record Max(int max) implements Range {
+        @Override
+        public boolean contains(int count) {
+            return count <= max;
+        }
+    }
     
 }
