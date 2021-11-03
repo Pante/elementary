@@ -21,10 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.zold;
+package com.karuslabs.satisfactory.assertions;
 
-import com.karuslabs.satisfactory.a.Result;
-import com.karuslabs.satisfactory.a.Failure;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -32,32 +30,24 @@ import java.lang.annotation.Annotation;
 import java.util.List;
 import javax.lang.model.AnnotatedConstruct;
 
-import static com.karuslabs.satisfactory.a.Result.SUCCESS;
-
 class ContainsAnnotations implements Assertion<AnnotatedConstruct> {
 
     private final List<Class<? extends Annotation>> expected;
-    private final Failure.Annotations failure;
     
     ContainsAnnotations(Class<? extends Annotation>... annotations) {
         expected = List.of(annotations);
-        failure = new Failure.Annotations(expected);
     }
 
     @Override
     public Result test(AnnotatedConstruct annotated, TypeMirrors types) {
         for (var annotation : expected) {
+            annotated.getAnnotationsByType(annotation)
             if (annotated.getAnnotationsByType(annotation).length == 0) {
                 return failure;
             }
         }
         
         return SUCCESS;
-    }
-    
-    @Override
-    public Failure.Annotations fail() {
-        return failure;
     }
     
 }

@@ -26,7 +26,7 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.Times.Range;
 import com.karuslabs.satisfactory.assertions.Type.Relation;
 
-import java.util.List;
+import java.util.*;
 import javax.lang.model.type.*;
 
 public sealed interface Result {
@@ -60,6 +60,14 @@ public sealed interface Result {
         @Override
         public boolean success() {
             return range.contains(count);
+        }
+    }
+    
+    
+    static record Equality(int actual, int expected, List<Result> results, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.equality(this, value);
         }
     }
     

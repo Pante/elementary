@@ -26,13 +26,18 @@ package com.karuslabs.satisfactory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface Visitor<T, R> {
-        
+    
     default @Nullable R type(Result.Type type, T value) {
         return result(type, value);
     }
 
     default @Nullable R primitive(Result.Primitive primitive, T value) {
         return result(primitive, value);
+    }
+    
+    
+    default @Nullable R equality(Result.Equality equality, T value) {
+        return result(equality, value);
     }
     
     
