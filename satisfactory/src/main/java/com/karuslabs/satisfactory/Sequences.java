@@ -75,4 +75,19 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     
 
 record Each<T>(Assertion<T> assertion) implements Unordered<T> {
+    @Override
+    public Result test(Collection<? extends T> values, TypeMirrors types) {
+        var results = new ArrayList<Result>();
+        var success = true;
+        for (var value : values) {
+            var result = assertion.test(value, types);
+            results.add(result);
+            
+            if (!result.success()) {
+                success = false;
+            }
+        }
+        
+        return new Result.Each(results, success);
+    }
 }

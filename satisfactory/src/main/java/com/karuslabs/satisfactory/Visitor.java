@@ -40,6 +40,10 @@ public interface Visitor<T, R> {
         return result(equality, value);
     }
     
+    default @Nullable R each(Result.Each each, T value) {
+        return result(each, value);
+    }
+    
     
     default @Nullable R times(Result.Times times, T value) {
         return result(times, value);
