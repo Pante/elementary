@@ -55,20 +55,6 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
         var tests = new ArrayList<Assertion<T>>(assertions);
         var results = new ArrayList<Result>();
         
-        tests.removeIf(assertion -> {
-            
-        });
-        
-        int i = 0;
-        for (var value : values) {
-            tests.removeIf(assertion -> {
-                var result = assertion.test(value, types);
-                if (!result.success()) {
-                    success = false;
-                }
-            });
-        }
-        
         return new Result.Equality(values.size(), assertions.size(), results, success);
     }
 }

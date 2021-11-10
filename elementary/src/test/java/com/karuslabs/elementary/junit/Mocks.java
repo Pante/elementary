@@ -30,6 +30,7 @@ import java.util.function.Function;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.Store;
+import org.junit.jupiter.api.parallel.ExecutionMode;
 
 class MockContext implements ExtensionContext {
 
@@ -125,6 +126,11 @@ class MockContext implements ExtensionContext {
     @Override
     public Store getStore(Namespace namespace) {
         return stores.computeIfAbsent(namespace, (a) -> new MockStore());
+    }
+
+    @Override
+    public ExecutionMode getExecutionMode() {
+        return null;
     }
     
 }
