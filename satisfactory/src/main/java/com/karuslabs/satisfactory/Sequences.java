@@ -52,11 +52,11 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
         var success = assertions.size() == values.size();
+        
         var tests = new ArrayList<Assertion<T>>(assertions);
         var elements = new ArrayList<T>(values);
         
-        var results = new ArrayList<Result>();
-        values.toArray(T[]::new);
+        
         
         return new Result.Equality(values.size(), assertions.size(), results, success);
     }
