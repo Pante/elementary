@@ -48,7 +48,7 @@ record Equals<T>(Assertion<T>... assertions) implements Ordered<T> {
     }
 }
     
-//Must be idiomatic
+// Must be idiomatic
 record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
