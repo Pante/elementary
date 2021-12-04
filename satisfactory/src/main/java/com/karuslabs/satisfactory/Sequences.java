@@ -58,6 +58,7 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
         var elements = new HashMap<T, List<Assertion<T>>>();
         
         for (var assertion : assertions) {
+            Result result;
             var matches = get(asserts, assertion);
             for (var value : values) {
                 if (assertion.test(value, types).success()) {
