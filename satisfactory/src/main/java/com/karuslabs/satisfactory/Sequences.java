@@ -52,35 +52,21 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
         var success = assertions.size() == values.size();
+        
+        var multimap = new BiMultiMap<Assertion, T>();
         var results = new ArrayList<Result>();
         
-        var asserts = new HashMap<Assertion<T>, List<T>>();
-        var elements = new HashMap<T, List<Assertion<T>>>();
-        
         for (var assertion : assertions) {
-            Result result;
-            var matches = get(asserts, assertion);
             for (var value : values) {
-                if (assertion.test(value, types).success()) {
-                    matches.add(value);
-                    get(elements, value).add(assertion);
+                if (assertion.test(value, types).success() && !multimap.bidirectional(value)) {
+                    multimap.put(assertion, value);
+                    success &= true;
                 }
             }
-            
-            success &= !matches.isEmpty();
         }
         
         
         return new Result.Equality(values.size(), assertions.size(), results, success);
-    }
-    
-    <K, V> List<V> get(Map<K, List<V>> map, K key) {
-        var list = map.get(key);
-        if (list == null) {
-            map.put(key, list = new ArrayList<>());
-        }
-        
-        return list;
     }
 }
     
