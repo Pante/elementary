@@ -29,6 +29,10 @@ class BiMultiMap<K, V> {
     private final Map<K, List<V>> map = new HashMap<>();
     private final Map<V, List<K>> inverse = new HashMap<>();
 
+    boolean contains(Collection<? extends K> keys, Collection<? extends V> values) {
+        return map.keySet().containsAll(keys) && inverse.keySet().containsAll(values);
+    }
+    
     boolean bidirectional(V value) {
         var keys = inverse(value);
         return keys.size() == 1 && values(keys.get(0)).size() == 1;
