@@ -50,6 +50,12 @@ class BiMultiMap<K, V> {
         list(map, key).add(value);
         list(inverse, value).add(key);
     }
+    
+    void remove(V value) {
+        for (var key : list(inverse, value)) {
+            list(map, key).remove(value);
+        }
+    }
 
     private <K, V> List<V> list(Map<K, List<V>> map, K key) {
         var list = map.get(key);

@@ -52,18 +52,34 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
         var multimap = new BiMultiMap<Assertion<T>, T>();
+        var unmatched = new ArrayDeque<T>();
         var results = new ArrayList<Result>();
         
-        for (var assertion : assertions) {
-            for (var value : values) {
+        for (var value : values) {
+            for (var assertion : assertions) {
                 if (assertion.test(value, types).success() && !multimap.bidirectional(value)) {
                     multimap.put(assertion, value);
                 }
             }
+            
+            if (multimap.inverse(value).isEmpty()) {
+                unmatched.add(value);
+            }
         }
         
         var success = multimap.contains(assertions, values);
-        
+        for (var assertion : assertions) {
+            var elements = multimap.values(assertion);
+            if (elements.isEmpty() && !unmatched.isEmpty()) {
+                results.add(assertion.test(unmatched.pop(), types));
+                continue;
+            }
+            
+            var least = elements.stream().min((a, b) -> multimap.inverse(a).size() - multimap.inverse(b).size()).orElseThrow();
+            multimap.remove(least);
+            
+            results.add(assertion.test(least, types));
+        }
         
         return new Result.Equality(values.size(), assertions.size(), results, success);
     }
