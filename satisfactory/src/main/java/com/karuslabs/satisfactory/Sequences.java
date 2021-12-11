@@ -29,6 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.*;
 
 import static java.lang.Long.min;
+import static java.util.Comparator.comparingInt;
 
 record Equals<T>(Assertion<T>... assertions) implements Ordered<T> {
     @Override
@@ -67,7 +68,7 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
             }
         }
         
-        var success = multimap.contains(assertions, values);
+        var success = multimap.contains(assertions, values); 
         for (var assertion : assertions) {
             var elements = multimap.values(assertion);
             if (elements.isEmpty() && !unmatched.isEmpty()) {
@@ -75,7 +76,7 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
                 continue;
             }
             
-            var least = elements.stream().min((a, b) -> multimap.inverse(a).size() - multimap.inverse(b).size()).orElseThrow();
+            var least = elements.stream().min(comparingInt(element -> multimap.inverse(element).size())).get();
             multimap.remove(least);
             
             results.add(assertion.test(least, types));
