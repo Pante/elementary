@@ -21,48 +21,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.assertions;
 
-import java.util.*;
+public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
+    var multimap = new BiMultiMap<Assertion<T>, T>();
+    var unmatched = new ArrayDeque<T>();
 
-class BiMultiMap<K, V> {
-    private final Map<K, List<V>> map = new HashMap<>();
-    private final Map<V, List<K>> inverse = new HashMap<>();
+    for (var value : values) {
+        for (var assertion : assertions) {
+            if (assertion.test(value, types).success() && !multimap.bidirectional(value)) {
+                multimap.put(assertion, value);
+            }
+        }
 
-    boolean contains(Collection<? extends K> keys, Collection<? extends V> values) {
-        return map.keySet().containsAll(keys) && inverse.keySet().containsAll(values);
-    }
-    
-    boolean bidirectional(V value) {
-        var keys = inverse(value);
-        return keys.size() == 1 && values(keys.get(0)).size() == 1;
-    }
-    
-    List<V> values(K key) {
-        return list(map, key);
-    }
-    
-    List<K> inverse(V value) {
-        return list(inverse, value);
-    }
-    
-    void put(K key, V value) {
-        list(map, key).add(value);
-        list(inverse, value).add(key);
-    }
-    
-    void remove(V value) {
-        for (var key : list(inverse, value)) {
-            list(map, key).remove(value);
+        if (multimap.inverse(value).isEmpty()) {
+            unmatched.add(value);
         }
     }
 
-    private <K, V> List<V> list(Map<K, List<V>> map, K key) {
-        var list = map.get(key);
-        if (list == null) {
-            map.put(key, list = new ArrayList<>());
+    var results = assertions.stream().map(assertion -> assertion.test(find(multimap, multimap.values(assertion), unmatched), types)).toList();        
+    return new Result.Equality(values.size(), assertions.size(), results, multimap.contains(assertions, values));
+}
+
+    T find(BiMultiMap multimap, List<T> elements, Deque<T> unmatched) {
+        if (elements.isEmpty() && !unmatched.isEmpty()) {
+            return unmatched.pop();
         }
 
-        return list;
+        var least = elements.stream().min(comparingInt(element -> multimap.inverse(element).size())).get();
+        multimap.remove(least);
+
+        return least;
     }
 }

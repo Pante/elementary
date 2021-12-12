@@ -76,13 +76,57 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
                 continue;
             }
             
+            // wrong
+        
             var least = elements.stream().min(comparingInt(element -> multimap.inverse(element).size())).get();
             multimap.remove(least);
-            
+
             results.add(assertion.test(least, types));
         }
-        
+    
         return new Result.Equality(values.size(), assertions.size(), results, success);
+    }
+}
+
+class BiMultiMap<K, V> {
+    private final Map<K, List<V>> map = new HashMap<>();
+    private final Map<V, List<K>> inverse = new HashMap<>();
+
+    boolean contains(Collection<? extends K> keys, Collection<? extends V> values) {
+        return map.keySet().containsAll(keys) && inverse.keySet().containsAll(values);
+    }
+    
+    boolean bidirectional(V value) {
+        var keys = inverse(value);
+        return keys.size() == 1 && values(keys.get(0)).size() == 1;
+    }
+    
+    List<V> values(K key) {
+        return list(map, key);
+    }
+    
+    List<K> inverse(V value) {
+        return list(inverse, value);
+    }
+    
+    void put(K key, V value) {
+        list(map, key).add(value);
+        list(inverse, value).add(key);
+    }
+    
+    void remove(V value) {
+        for (var key : list(inverse, value)) {
+            list(map, key).remove(value);
+        }
+    }
+
+    private <K, V> List<V> list(Map<K, List<V>> map, K key) {
+        var list = map.get(key);
+        if (list == null) {
+            map.put(key, list = new ArrayList<>());
+        }
+
+        return list;
     }
 }
     
