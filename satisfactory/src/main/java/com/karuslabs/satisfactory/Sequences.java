@@ -49,20 +49,20 @@ record Equals<T>(Assertion<T>... assertions) implements Ordered<T> {
     }
 }
 
-record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
+record A<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
         var multimap = new BiMultiMap<Assertion<T>, T>();
         var unmatched = new ArrayDeque<T>();
         var results = new ArrayList<Result>();
-        
+    
         for (var value : values) {
             for (var assertion : assertions) {
                 if (assertion.test(value, types).success() && !multimap.bidirectional(value)) {
                     multimap.put(assertion, value);
                 }
             }
-            
+    
             if (multimap.inverse(value).isEmpty()) {
                 unmatched.add(value);
             }
@@ -74,8 +74,8 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
             if (elements.isEmpty() && !unmatched.isEmpty()) {
                 results.add(assertion.test(unmatched.pop(), types));
                 continue;
-            }
-            
+    }
+    
             // wrong
         
             var least = elements.stream().min(comparingInt(element -> multimap.inverse(element).size())).get();
@@ -84,8 +84,6 @@ record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
             results.add(assertion.test(least, types));
         }
     
-        return new Result.Equality(values.size(), assertions.size(), results, success);
-    }
 }
 
 class BiMultiMap<K, V> {
@@ -97,16 +95,17 @@ class BiMultiMap<K, V> {
     }
     
     boolean bidirectional(V value) {
-        var keys = inverse(value);
+        var keys = keys(value);
         return keys.size() == 1 && values(keys.get(0)).size() == 1;
+    }
+    
+    
+    List<K> keys(V value) {
+        return list(inverse, value);
     }
     
     List<V> values(K key) {
         return list(map, key);
-    }
-    
-    List<K> inverse(V value) {
-        return list(inverse, value);
     }
     
     void put(K key, V value) {
