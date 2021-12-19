@@ -49,86 +49,78 @@ record Equals<T>(Assertion<T>... assertions) implements Ordered<T> {
     }
 }
 
-record A<T>(List<Assertion<T>> assertions) implements Unordered<T> {
+record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
-        var multimap = new BiMultiMap<Assertion<T>, T>();
+        var matches = new MultiMap<Assertion<T>, T, Result>();
         var unmatched = new ArrayDeque<T>();
-        var results = new ArrayList<Result>();
-    
+        
         for (var value : values) {
             for (var assertion : assertions) {
-                if (assertion.test(value, types).success() && !multimap.bidirectional(value)) {
-                    multimap.put(assertion, value);
+                var result = assertion.test(value, types);
+                if (result.success()) {
+                    matches.put(assertion, value, result);
                 }
             }
-    
-            if (multimap.inverse(value).isEmpty()) {
+            
+            if (matches.inverse(value).isEmpty()) {
                 unmatched.add(value);
             }
         }
         
-        var success = multimap.contains(assertions, values); 
+        var success = assertions.size() == values.size() && matches.containsAll(assertions, values);
+        var results = results(types, matches, unmatched);
+        return new Result.Equality(values.size(), assertions.size(), results, success);
+    }
+    
+    List<Result> results(TypeMirrors types, MultiMap<Assertion<T>, T, Result> matches, Deque<T> unmatched) {
+        var results = new ArrayList<Result>();
         for (var assertion : assertions) {
-            var elements = multimap.values(assertion);
-            if (elements.isEmpty() && !unmatched.isEmpty()) {
-                results.add(assertion.test(unmatched.pop(), types));
+            var values = matches.get(assertion);
+            if (values.isEmpty() && unmatched.isEmpty()) {
                 continue;
-    }
-    
-            // wrong
+            }
+
+            results.add(values.stream().min(comparingInt(value -> matches.inverse(value).size()))
+                                       .map(least -> matches.pop(assertion, least))
+                                       .orElseGet(() -> assertion.test(unmatched.pop(), types)));
+        }
         
-            var least = elements.stream().min(comparingInt(element -> multimap.inverse(element).size())).get();
-            multimap.remove(least);
+        return results;
+    }
+    
+    static class MultiMap<K, V, R> {
+        private final Map<K, List<V>> map = new HashMap<>();
+        private final Map<V, Map<K, R>> inverse = new HashMap<>();
 
-            results.add(assertion.test(least, types));
-        }
-    
-}
-
-class BiMultiMap<K, V> {
-    private final Map<K, List<V>> map = new HashMap<>();
-    private final Map<V, List<K>> inverse = new HashMap<>();
-
-    boolean contains(Collection<? extends K> keys, Collection<? extends V> values) {
-        return map.keySet().containsAll(keys) && inverse.keySet().containsAll(values);
-    }
-    
-    boolean bidirectional(V value) {
-        var keys = keys(value);
-        return keys.size() == 1 && values(keys.get(0)).size() == 1;
-    }
-    
-    
-    List<K> keys(V value) {
-        return list(inverse, value);
-    }
-    
-    List<V> values(K key) {
-        return list(map, key);
-    }
-    
-    void put(K key, V value) {
-        list(map, key).add(value);
-        list(inverse, value).add(key);
-    }
-    
-    void remove(V value) {
-        for (var key : list(inverse, value)) {
-            list(map, key).remove(value);
-        }
-    }
-
-    private <K, V> List<V> list(Map<K, List<V>> map, K key) {
-        var list = map.get(key);
-        if (list == null) {
-            map.put(key, list = new ArrayList<>());
+        List<V> get(K key) {
+            return map.computeIfAbsent(key, (k) -> new ArrayList<>());
         }
 
-        return list;
+        Map<K, R> inverse(V value) {
+            return inverse.computeIfAbsent(value, (k) -> new HashMap<>());
+        }
+
+        boolean containsAll(Collection<? extends K> keys, Collection<? extends V> values) {
+            return map.keySet().containsAll(keys) && inverse.keySet().containsAll(values);
+        }
+
+        void put(K key, V value, R result) {
+            get(key).add(value);
+            inverse(value).put(key, result);
+        }
+
+        R pop(K key, V value) {
+            var result = inverse.get(value).get(key);
+            for (var values : map.values()) {
+                values.remove(value);
+            }
+            inverse.remove(value);
+            
+            return result;
+        }
     }
-}
-    
+}   
 
 record Each<T>(Assertion<T> assertion) implements Unordered<T> {
     @Override
