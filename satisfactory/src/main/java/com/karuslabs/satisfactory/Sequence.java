@@ -25,7 +25,7 @@ package com.karuslabs.satisfactory;
 
 import java.util.*;
 
-public sealed interface Sequence<T extends Collection<?>> extends Assertion<T> {
+public sealed interface Sequence<T extends Collection<?>> extends Assertion<T>{
     
     static non-sealed interface Ordered<T> extends Sequence<List<? extends T>> {}
     
