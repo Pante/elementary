@@ -23,123 +23,26 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.Sequence.Unordered;
+import com.karuslabs.utilitary.type.TypeMirrors;
+
 import java.util.*;
 
+record Every<T>(Times<T>... times) implements Unordered<T> {
 
-//public abstract class TimeSequence<T> extends Sequence<T> {
-//    
-//    /**
-//     * Formats the given {@code Times}.
-//     * 
-//     * @param times the times
-//     * @return a formatted description of the given {@code Times}
-//     */
-//    static String format(Times<?>... times) {
-//        return "[" + Texts.join(times, (time, builder) -> builder.append(time.condition()), ", ") + "]";
-//    }
-//    
-//    /**
-//     * The {@code Times} that must be satisfied.
-//     */
-//    protected final Times<T>[] times;
-//    
-//    /**
-//     * Creates a {@code TimeSequence} with the given prefix and times.
-//     * 
-//     * @param prefix the prefix for the condition
-//     * @param times the times that needs to be satisfied
-//     */
-//    public TimeSequence(String prefix, Times<T>... times) {
-//        super(prefix + " " + format(times));
-//        this.times = times;
-//    }
-//    
-//}
-//
-///**
-// * A {@code Sequence} that is satisfied if a sequence of elements contains all
-// * {@code Times}. The order of the sequence of elements is ignored.
-// * 
-// * @param <T> the type of the tested values
-// */
-//class ContainsSequence<T> extends TimeSequence<T> {
-//    
-//    /**
-//     * Creates a {@code ContainsSequence} with the given times.
-//     * 
-//     * @param times the times
-//     */
-//    ContainsSequence(Times<T>... times) {
-//        super("contains", times);
-//    }
-//
-//    @Override
-//    public boolean test(TypeMirrors types, Collection<? extends T> values) {
-//        for (var value : values) {
-//            for (var time : times) {
-//                time.test(types, value);
-//            }
-//        }
-//        
-//        for (var time : times) {
-//            if (!time.times()) {
-//                return false;
-//            }
-//        }
-//        
-//        return true;
-//    }
-//
-//    @Override
-//    public Class<?> part() {
-//        return times[0].part();
-//    }
-//    
-//}
-//
-///**
-// * A {@code Sequence} that is satisfied if a sequence of elements is equal to this
-// * sequence of {@code Times}. The order of the sequence of elements is ignored.
-// * 
-// * @param <T> the type of the tested values
-// */
-//class EqualTimeSequence<T> extends TimeSequence<T> {
-//
-//    /**
-//     * Creates a {@code EqualTimeSequence} with the given times.
-//     * 
-//     * @param times the times
-//     */
-//    EqualTimeSequence(Times<T>... times) {
-//        super("equal", times);
-//    }
-//    
-//    @Override
-//    public boolean test(TypeMirrors types, Collection<? extends T> values) {
-//        for (var value : values) {
-//            var equal = false;
-//            for (var time : times) {
-//                equal |= time.test(types, value);
-//            }
-//            
-//            if (!equal) {
-//                return false;
-//            }
-//        }
-//        
-//        for (var time : times) {
-//            if (!time.times()) {
-//                return false;
-//            }
-//        }
-//        
-//        return true;
-//    }
-//
-//    @Override
-//    public Class<?> part() {
-//        return times[0].part();
-//    }
-//    
-//}
+    @Override
+    public Result test(Collection<? extends T> value, TypeMirrors types) {
+        return null;
+    }
+    
+}
+
+record Any<T>(Times<T>... times) implements Unordered<T> {
+
+    @Override
+    public Result test(Collection<? extends T> value, TypeMirrors types) {
+        return null;
+    }
+    
+}
 

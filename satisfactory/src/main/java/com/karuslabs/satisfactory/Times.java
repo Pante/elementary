@@ -27,7 +27,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 
-public abstract class Times<T> {
+public abstract  class Times<T> implements Assertion<Collection<? extends T>> {
 
     private final Assertion<T> assertion;
     private final Range range;
@@ -36,7 +36,8 @@ public abstract class Times<T> {
         this.assertion = assertion;
         this.range = range;
     }
-    
+
+    @Override
     public Result test(Collection<? extends T> values, TypeMirrors types) {
         var successes = new ArrayList<Result>();
         var failures = new ArrayList<Result>();
