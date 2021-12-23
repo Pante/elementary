@@ -23,7 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Times.Range;
+import com.karuslabs.satisfactory.zold.Times.Range;
 import com.karuslabs.satisfactory.assertions.Type.Relation;
 
 import java.util.*;
