@@ -23,8 +23,36 @@
  */
 package com.karuslabs.satisfactory;
 
-public class Times {
-
-    public static interface Subsequence<T> extends Sequence.Ordered<T> {}
+public sealed interface Times {
+    
+    boolean contains(int count);
+    
+    static record Between(int min, int max) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return min <= count && count < max;
+        }
+    }
+    
+    static record Exact(int times) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return times == count;
+        }
+    }
+    
+    public static record Min(int min) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return min <= count;
+        }
+    }
+    
+    public static record Max(int max) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return count <= max;
+        }
+    }
     
 }

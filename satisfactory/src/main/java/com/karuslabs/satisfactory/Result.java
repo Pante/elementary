@@ -23,8 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.zold.Times.Range;
-import com.karuslabs.satisfactory.assertions.Type.Relation;
+import com.karuslabs.satisfactory.ast.Type.Relation;
 
 import java.util.*;
 import javax.lang.model.type.*;
@@ -35,49 +34,35 @@ public sealed interface Result {
     
     boolean success();
     
-    
-    static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.type(this, value);
+    static interface AST {
+        static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.type(this, value);
+            }
         }
+    
+        static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.primitive(this, value);
+            }
+        } 
     }
     
-    static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.primitive(this, value);
+    static interface Sequence {
+        static record Equality(Times times, List<Result> results, int count) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.equality(this, value);
+            }
+
+            @Override
+            public boolean success() {
+                return times.contains(count);
+            } 
         }
     }
-    
-    
-    static record Times(List<Result> results, Range range, int count) implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.times(this, value);
-        }
-        
-        @Override
-        public boolean success() {
-            return range.contains(count);
-        }
-    }
-    
-    
-    static record Equality(int actual, int expected, List<Result> results, boolean success) implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.equality(this, value);
-        }
-    }
-    
-    static record Each(List<Result> results, boolean success) implements Result {
-        @Override
-        public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.each(this, value);
-        }
-    }
-    
     
     static record Not(Result negation, boolean success) implements Result {
         @Override

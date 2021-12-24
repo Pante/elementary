@@ -23,37 +23,46 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.satisfactory.Result.*;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import java.util.*;
 
-public interface Visitor<T, R> {
+interface Cursor {
     
-    default @Nullable R type(AST.Type type, T value) {
-        return result(type, value);
+    static Cursor of(List<?> list) {
+        return list instanceof Range range ? range : Range.EMPTY;
     }
-
-    default @Nullable R primitive(AST.Primitive primitive, T value) {
-        return result(primitive, value);
-    }
-
     
-    default @Nullable R equality(Result.Sequence.Equality equality, T value) {
-        return result(equality, value);
+    default void move(int count) {}
+    
+    default int current() { return 0; }
+}
+
+class Range<T> extends AbstractSequentialList<T> implements Cursor {
+    static final Cursor EMPTY = new Cursor() {};
+    
+    private final List<T> list;
+    private int cursor = 0;
+    
+    Range(List<T> list) {
+        this.list = list;
+    }
+    
+    @Override
+    public void move(int count) {
+        cursor += count;
     }
 
-
-    default @Nullable R not(Result.Not not, T value) {
-        return result(not, value);
+    @Override
+    public int current() {
+        return cursor;
+    }
+    
+    @Override
+    public ListIterator<T> listIterator(int index) {
+        return list.listIterator(index);
     }
 
-    default @Nullable R and(Result.And and, T value) {
-        return result(and, value);
+    @Override
+    public int size() {
+        return list.size();
     }
-
-    default @Nullable R or(Result.Or or, T value) {
-        return result(or, value);
-    }
-
-    @Nullable R result(Result result, T value);
-
 }

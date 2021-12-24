@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.assertions;
+package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -75,7 +75,7 @@ public sealed abstract class Type implements Assertion<TypeMirror> {
             }
         }
 
-        return new Result.Type(actual, relation, expected(types), success);
+        return new Result.AST.Type(actual, relation, expected(types), success);
     }
     
     abstract List<TypeMirror> expected(TypeMirrors types);
@@ -122,7 +122,7 @@ final class MirrorType extends Type {
 record Primitive(TypeKind kind) implements Assertion<TypeMirror> {
     @Override
     public Result test(TypeMirror actual, TypeMirrors types) {
-        return new Result.Primitive(actual.getKind(), kind, actual.getKind() == kind);
+        return new Result.AST.Primitive(actual.getKind(), kind, actual.getKind() == kind);
     }
 }
     
