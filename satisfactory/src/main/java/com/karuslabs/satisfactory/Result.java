@@ -51,6 +51,13 @@ public sealed interface Result {
     }
     
     static interface Sequence {
+        static record Pattern(List<Result> results, boolean success) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.pattern(this, value);
+            }
+        }
+        
         static record Equality(Times times, List<Result> results, int count) implements Result {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {

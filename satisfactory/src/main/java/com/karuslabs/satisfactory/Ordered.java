@@ -28,7 +28,24 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 
-record Equals<T>(Times times, Assertion<T>... assertions) implements Ordered<T> {
+record Pattern<T>(Ordered<T>... subsequences) implements Sequence.Ordered<T> {
+    @Override
+    public Result test(List<? extends T> values, TypeMirrors types) {
+        values = subsequences.length <= 1 ? values : new Range(values);
+        var results = new ArrayList<Result>();
+        var success = true;
+        
+        for (var subsequence : subsequences) {
+            var result = subsequence.test(values, types);
+            results.add(result);
+            success &= result.success();
+        }
+        
+        return new Result.Sequence.Pattern(results, success);
+    }  
+}
+
+record Equals<T>(Times times, Assertion<T>... assertions) implements Sequence.Ordered<T> {
     @Override
     public Result test(List<? extends T> values, TypeMirrors types) {
         var cursor = Cursor.of(values);
@@ -43,7 +60,7 @@ record Equals<T>(Times times, Assertion<T>... assertions) implements Ordered<T> 
             
             results.add(result);
         }
-        
+
         cursor.move(count);
         return new Result.Sequence.Equality(times, results, count);
     }

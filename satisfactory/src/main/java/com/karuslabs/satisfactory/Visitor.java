@@ -37,6 +37,10 @@ public interface Visitor<T, R> {
     }
 
     
+    default @Nullable R pattern(Result.Sequence.Pattern pattern, T value) {
+        return result(pattern, value);
+    }
+    
     default @Nullable R equality(Result.Sequence.Equality equality, T value) {
         return result(equality, value);
     }
