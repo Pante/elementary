@@ -21,90 +21,54 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Sequence.*;
-import com.karuslabs.utilitary.type.TypeMirrors;
+import com.karuslabs.satisfactory.Assertion;
+import java.util.List;
 
-import java.util.*;
-
-record Pattern<T>(Ordered<T>... subsequences) implements Sequence.Ordered<T> {
+record Contents<T>(Times times, List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
-    public Result test(List<? extends T> values, TypeMirrors types) {
-        values = subsequences.length <= 1 ? values : new Range(values);
-        var results = new ArrayList<Result>();
-        var success = true;
+    public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
+        var matches = new MultiMap<Assertion<T>, T, Result>();
+        var unmatched = new ArrayDeque<T>();
         
-        for (var subsequence : subsequences) {
-            var result = subsequence.test(values, types);
-            results.add(result);
-            success &= result.success();
-        }
-        
-        return new Result.Sequence.Pattern(results, success);
-    }  
-}
-
-record Equals<T>(Times times, Assertion<T>... assertions) implements Sequence.Ordered<T> {
-    @Override
-    public Result test(List<? extends T> values, TypeMirrors types) {
-        var cursor = Cursor.of(values);
-        var results = new ArrayList<Result>();
-        var count = 0;
-        
-        for (var i = cursor.current(); i < values.size(); i++, count++) {
-            var result = assertions[count % assertions.length].test(values.get(i), types);
-            if (!result.success()) {
-                break;  
+        for (var value : values) {
+            for (var assertion : assertions) {
+                var result = assertion.test(value, types);
+                if (result.success()) {
+                    matches.put(assertion, value, result);
+                }
             }
             
-            results.add(result);
+            if (matches.inverse(value).isEmpty()) {
+                unmatched.add(value);
+            }
         }
+        
+        var success = assertions.length == values.size() && matches.containsAll(assertions, values);
+        var results = results(types, matches, unmatched);
+        return new Result.Equality(values.size(), List.of(assertions), results, success);
+    }
+    
+    List<Result> results(TypeMirrors types, MultiMap<Assertion<T>, T, Result> matches, Deque<T> unmatched) {
+        var results = new ArrayList<Result>();
+        for (var assertion : assertions) {
+            var values = matches.of(assertion);
+            if (values.isEmpty() && unmatched.isEmpty()) {
+                continue;
+            }
 
-        cursor.move(count);
-        return new Result.Sequence.Equality(times, results, count);
+            results.add(values.stream().min(comparingInt(value -> matches.inverse(value).size()))
+                                       .map(least -> matches.pop(assertion, least))
+                                       .orElseGet(() -> assertion.test(unmatched.pop(), types)));
+        }
+        
+        return results;
     }
 }
 
 //record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
-//    @Override
-//    public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
-//        var matches = new MultiMap<Assertion<T>, T, Result>();
-//        var unmatched = new ArrayDeque<T>();
-//        
-//        for (var value : values) {
-//            for (var assertion : assertions) {
-//                var result = assertion.test(value, types);
-//                if (result.success()) {
-//                    matches.put(assertion, value, result);
-//                }
-//            }
-//            
-//            if (matches.inverse(value).isEmpty()) {
-//                unmatched.add(value);
-//            }
-//        }
-//        
-//        var success = assertions.size() == values.size() && matches.containsAll(assertions, values);
-//        var results = results(types, matches, unmatched);
-//        return new Result.Equality(values.size(), assertions.size(), results, success);
-//    }
 //    
-//    List<Result> results(TypeMirrors types, MultiMap<Assertion<T>, T, Result> matches, Deque<T> unmatched) {
-//        var results = new ArrayList<Result>();
-//        for (var assertion : assertions) {
-//            var values = matches.of(assertion);
-//            if (values.isEmpty() && unmatched.isEmpty()) {
-//                continue;
-//            }
-//
-//            results.add(values.stream().min(comparingInt(value -> matches.inverse(value).size()))
-//                                       .map(least -> matches.pop(assertion, least))
-//                                       .orElseGet(() -> assertion.test(unmatched.pop(), types)));
-//        }
-//        
-//        return results;
-//    }
 //    
 //    static class MultiMap<K, V, R> {
 //        private final Map<K, List<V>> map = new HashMap<>();

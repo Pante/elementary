@@ -21,48 +21,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory;
+package com.karuslabs.satisfactory.sequence;
 
-import java.util.*;
-
-interface Cursor {
+public sealed interface Times {
     
-    static Cursor of(List<?> list) {
-        return list instanceof Range range ? range : Range.EMPTY;
+    boolean contains(int count);
+    
+    static record Between(int min, int max) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return min <= count && count < max;
+        }
     }
     
-    default void move(int count) {}
-    
-    default int current() { return 0; }
-}
-
-class Range<T> extends AbstractSequentialList<T> implements Cursor {
-    static final Cursor EMPTY = new Cursor() {};
-    
-    private final List<T> list;
-    private int cursor = 0;
-    
-    Range(List<T> list) {
-        this.list = list;
+    static record Exact(int times) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return times == count;
+        }
     }
     
-    @Override
-    public void move(int count) {
-        cursor += count;
-    }
-
-    @Override
-    public int current() {
-        return cursor;
+    public static record Min(int min) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return min <= count;
+        }
     }
     
-    @Override
-    public ListIterator<T> listIterator(int index) {
-        return list.listIterator(index);
+    public static record Max(int max) implements Times {
+        @Override
+        public boolean contains(int count) {
+            return count <= max;
+        }
     }
-
-    @Override
-    public int size() {
-        return list.size();
-    }
+    
 }

@@ -21,29 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.zold;
+package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Result;
-import com.karuslabs.satisfactory.Sequence.Unordered;
-import com.karuslabs.utilitary.type.TypeMirrors;
-
+import com.karuslabs.satisfactory.Assertion;
 import java.util.*;
 
-record Every<T>(Times<T>... times) implements Unordered<T> {
-
-    @Override
-    public Result test(Collection<? extends T> value, TypeMirrors types) {
-        return null;
-    }
+public sealed interface Sequence<T extends Collection<?>> extends Assertion<T>{
+    
+    static non-sealed interface Ordered<T> extends Sequence<List<? extends T>> {}
+    
+    static non-sealed interface Unordered<T> extends Sequence<Collection<? extends T>> {}
     
 }
-
-record Any<T>(Times<T>... times) implements Unordered<T> {
-
-    @Override
-    public Result test(Collection<? extends T> value, TypeMirrors types) {
-        return null;
-    }
-    
-}
-

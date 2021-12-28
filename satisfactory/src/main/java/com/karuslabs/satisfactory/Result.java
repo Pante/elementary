@@ -23,6 +23,7 @@
  */
 package com.karuslabs.satisfactory;
 
+import com.karuslabs.satisfactory.sequence.Times;
 import com.karuslabs.satisfactory.ast.Type.Relation;
 
 import java.util.*;
