@@ -24,9 +24,11 @@
 package com.karuslabs.satisfactory.sequence;
 
 import com.karuslabs.satisfactory.Assertion;
-import java.util.List;
+import com.karuslabs.utilitary.type.TypeMirrors;
 
-record Contents<T>(Times times, List<Assertion<T>> assertions) implements Unordered<T> {
+import java.util.*;
+
+record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
     @Override
     public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
         var matches = new MultiMap<Assertion<T>, T, Result>();
