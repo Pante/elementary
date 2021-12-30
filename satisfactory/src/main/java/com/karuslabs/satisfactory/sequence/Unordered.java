@@ -23,50 +23,47 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.*;
 
-record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
+record Contents<T>(List<Assertion<T>> assertions) implements Sequence.Unordered<T> {
     @Override
-    public Result.Equality test(Collection<? extends T> values, TypeMirrors types) {
-        var matches = new MultiMap<Assertion<T>, T, Result>();
-        var unmatched = new ArrayDeque<T>();
+    public Result test(Collection<? extends T> values, TypeMirrors types) {
+        var graph = new Graph<T>();
+        var unasserted = new ArrayDeque<T>();
         
         for (var value : values) {
             for (var assertion : assertions) {
                 var result = assertion.test(value, types);
                 if (result.success()) {
-                    matches.put(assertion, value, result);
+                    graph.edge(assertion, value, result);
                 }
             }
             
-            if (matches.inverse(value).isEmpty()) {
-                unmatched.add(value);
+            if (!graph.contains(value)) {
+                unasserted.add(value);
             }
         }
         
-        var success = assertions.length == values.size() && matches.containsAll(assertions, values);
-        var results = results(types, matches, unmatched);
-        return new Result.Equality(values.size(), List.of(assertions), results, success);
+        var a = new ArrayList<>(assertions);
+    }
+}
+
+class Graph<T> {
+    
+    private final Map<Assertion<T>, Map<T, Result>> assertions = new HashMap<>();
+    private final Map<T, Assertion<T>> values = new HashMap<>();
+    
+    boolean contains(T value) {
+        return false;
     }
     
-    List<Result> results(TypeMirrors types, MultiMap<Assertion<T>, T, Result> matches, Deque<T> unmatched) {
-        var results = new ArrayList<Result>();
-        for (var assertion : assertions) {
-            var values = matches.of(assertion);
-            if (values.isEmpty() && unmatched.isEmpty()) {
-                continue;
-            }
-
-            results.add(values.stream().min(comparingInt(value -> matches.inverse(value).size()))
-                                       .map(least -> matches.pop(assertion, least))
-                                       .orElseGet(() -> assertion.test(unmatched.pop(), types)));
-        }
+    void edge(Assertion<T> assertion, T value, Result result) {
         
-        return results;
     }
+    
 }
 
 //record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
