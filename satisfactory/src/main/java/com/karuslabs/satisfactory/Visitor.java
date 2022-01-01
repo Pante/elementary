@@ -44,6 +44,10 @@ public interface Visitor<T, R> {
     default @Nullable R equality(Result.Sequence.Equality equality, T value) {
         return result(equality, value);
     }
+    
+    default @Nullable R each(Result.Sequence.Each each, T value) {
+        return result(each, value);
+    }
 
 
     default @Nullable R not(Result.Not not, T value) {

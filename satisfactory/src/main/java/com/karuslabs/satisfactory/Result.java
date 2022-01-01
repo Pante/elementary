@@ -70,6 +70,13 @@ public sealed interface Result {
                 return times.contains(count);
             } 
         }
+        
+        static record Each(List<Result> results, boolean success) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.each(this, value);
+            }
+        }
     }
     
     static record Not(Result negation, boolean success) implements Result {
