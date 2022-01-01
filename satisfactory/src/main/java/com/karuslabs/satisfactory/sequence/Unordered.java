@@ -32,38 +32,99 @@ record Contents<T>(List<Assertion<T>> assertions) implements Sequence.Unordered<
     @Override
     public Result test(Collection<? extends T> values, TypeMirrors types) {
         var graph = new Graph<T>();
-        var unasserted = new ArrayDeque<T>();
+        var connected = new ArrayDeque<Assertion<T>>(assertions.size());
         
-        for (var value : values) {
-            for (var assertion : assertions) {
-                var result = assertion.test(value, types);
-                if (result.success()) {
-                    graph.edge(assertion, value, result);
-                }
+        for (var assertion : assertions) {
+            for (var value : values) {
+                graph.putIfSuccess(assertion, value, assertion.test(value, types));
             }
             
-            if (!graph.contains(value)) {
-                unasserted.add(value);
-            }
+            
         }
         
-        var a = new ArrayList<>(assertions);
+        var results = new ArrayList<Result>();
+        for (var assertion : connected) { // Just like me IRL :(
+            var associated = graph.remove(assertion);
+            if (associated.isEmpty()) {
+                graph.isolated.add(assertion);
+                continue;
+            }
+            
+            var first = associated.entrySet().iterator().next();
+            results.add(first.getValue());
+            
+            for (var touched : graph.remove(first.getKey())) {
+                graph.get(assertion)
+            }
+        }
+    }
+    
+    void add(Deque conntected Graph<T> graph, Assertion<T> assertion) {
+        var size = graph.get(assertion).size();
+            if (size == 1) {
+                connected.addFirst(assertion);
+                
+            } else if (size > 1) {
+                connected.addLast(assertion);
+            }
     }
 }
 
 class Graph<T> {
     
+    final Set<Assertion<T>> isolated = new HashSet<>();
     private final Map<Assertion<T>, Map<T, Result>> assertions = new HashMap<>();
-    private final Map<T, Assertion<T>> values = new HashMap<>();
+    private final Map<T, List<Assertion<T>>> values = new HashMap<>();
     
-    boolean contains(T value) {
-        return false;
+    Map<T, Result> get(Assertion<T> assertion) {
+        return assertions.getOrDefault(assertion, Map.of());
     }
     
-    void edge(Assertion<T> assertion, T value, Result result) {
+    List<Assertion<T>> get(T value) {
+        return values.getOrDefault(value, List.of());
+    }
+    
+    void putIfSuccess(Assertion<T> assertion, T value, Result result) {
+        var results = assertions.computeIfAbsent(assertion, key -> new HashMap<>());
+        var asserts = values.computeIfAbsent(value, key -> new ArrayList<>());
         
+        if (result.success()) {
+            results.put(value, result);
+            asserts.add(assertion);
+            isolated.remove(assertion);
+
+        } else if (results.isEmpty()) {
+            isolated.add(assertion);
+        }
     }
     
+    Map<T, Result> remove(Assertion<T> assertion) {
+        var associated = assertions.remove(assertion);
+        if (associated == null) {
+            return Map.of();
+        }
+        
+        isolated.remove(assertion);
+        for (var value : associated.keySet()) {
+            values.get(value).remove(assertion);
+        }
+        
+        return associated;
+    }
+    
+    List<Assertion<T>> remove(T value) {
+        var associated = values.remove(value);
+        if (associated == null) {
+            return List.of();
+        }
+        
+        for (var assertion : associated) {
+            assertions.get(assertion).remove(value);
+        }
+        
+        return associated;
+    }
+
 }
 
 //record Contents<T>(List<Assertion<T>> assertions) implements Unordered<T> {
@@ -86,7 +147,7 @@ class Graph<T> {
 //        }
 //
 //        void put(K key, V value, R result) {
-//            of(key).add(value);
+//            of(key).putIfSuccess(value);
 //            inverse(value).put(key, result);
 //        }
 //
@@ -109,7 +170,7 @@ class Graph<T> {
 //        var success = true;
 //        for (var value : values) {
 //            var result = assertion.test(value, types);
-//            results.add(result);
+//            results.putIfSuccess(result);
 //            
 //            if (!result.success()) {
 //                success = false;
