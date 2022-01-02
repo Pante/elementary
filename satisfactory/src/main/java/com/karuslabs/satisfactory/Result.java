@@ -27,6 +27,7 @@ import com.karuslabs.satisfactory.sequence.Times;
 import com.karuslabs.satisfactory.ast.Type.Relation;
 
 import java.util.*;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.type.*;
 
 public sealed interface Result {
@@ -36,6 +37,13 @@ public sealed interface Result {
     boolean success();
     
     static interface AST {
+        static record Modifiers(Set<? extends Modifier> actual, Set<Modifier> expected, boolean success) implements Result {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.modifiers(this, value);
+            }
+        }
+        
         static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements Result {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {

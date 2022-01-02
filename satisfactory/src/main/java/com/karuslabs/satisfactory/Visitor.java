@@ -28,6 +28,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface Visitor<T, R> {
     
+    default @Nullable R modifiers(AST.Modifiers modifiers, T value) {
+        return result(modifiers, value);
+    }
+    
     default @Nullable R type(AST.Type type, T value) {
         return result(type, value);
     }

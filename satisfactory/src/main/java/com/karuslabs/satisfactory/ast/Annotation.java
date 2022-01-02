@@ -1,7 +1,7 @@
 /*
  * The MIT License
  *
- * Copyright 2021 Karus Labs.
+ * Copyright 2022 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,15 +21,8 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.sequence;
+package com.karuslabs.satisfactory.ast;
 
-import com.karuslabs.satisfactory.Assertion;
-import java.util.*;
+class Annotation {
 
-public sealed interface Sequence<T extends Collection<?>> extends Assertion<T>{
-    
-    static non-sealed interface Ordered<T> extends Sequence<List<? extends T>> {}
-    
-    static non-sealed interface Unordered<T> extends Sequence<Set<? extends T>> {}
-    
 }
