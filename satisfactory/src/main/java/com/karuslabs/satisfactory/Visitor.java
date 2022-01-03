@@ -53,6 +53,10 @@ public interface Visitor<T, R> {
         return result(each, value);
     }
 
+    
+    default @Nullable R equals(Result.Equals equals, T value) {
+        return result(equals, value);
+    }
 
     default @Nullable R not(Result.Not not, T value) {
         return result(not, value);

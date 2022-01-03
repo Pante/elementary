@@ -87,6 +87,13 @@ public sealed interface Result {
         }
     }
     
+    static record Equals<T>(T actual, T other, boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.equals(this, value);
+        }
+    }
+    
     static record Not(Result negation, boolean success) implements Result {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {

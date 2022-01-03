@@ -25,7 +25,12 @@ package com.karuslabs.satisfactory;
 
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+@FunctionalInterface
 public interface Assertion<T> {
+    
+    static <T> Assertion<T> equal(T other) {
+        return (value, types) -> new Result.Equals(value, other, value.equals(other));
+    }
     
     static <T> Assertion<T> not(Assertion<T> assertion) {
         return Not.of(assertion);
