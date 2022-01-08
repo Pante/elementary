@@ -23,23 +23,26 @@
  */
 package com.karuslabs.satisfactory.ast;
 
-import com.karuslabs.satisfactory.Result;
-import com.karuslabs.satisfactory.sequence.Sequence;
+import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.*;
+import java.util.Map;
 import javax.lang.model.element.*;
+import javax.lang.model.type.TypeMirror;
 
-record ContainsModifiers(Set<Modifier> expected) implements Sequence.Unordered<Modifier> {
-    @Override
-    public Result test(Set<? extends Modifier> actual, TypeMirrors types) {
-        return new Result.AST.Modifiers(actual, expected, actual.containsAll(expected));
-    }
-}
+public abstract class Annotation implements Assertion<AnnotationMirror> {
 
-record EqualsModifiers(Set<Modifier> expected) implements Sequence.Unordered<Modifier> {
-    @Override
-    public Result test(Set<? extends Modifier> actual, TypeMirrors types) {
-        return new Result.AST.Modifiers(actual, expected, actual.equals(expected));
+    private final Assertion<TypeMirror> type;
+    
+    public Annotation(Assertion<TypeMirror> type) {
+        this.type = type;
     }
+    
+    @Override
+    public Result test(AnnotationMirror value, TypeMirrors types) {
+        return 
+    }
+    
+    protected abstract boolean test(Map<ExecutableElement, AnnotationValue> values);
+
 }

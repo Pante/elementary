@@ -37,9 +37,47 @@ public sealed interface AnnotationField extends Assertion<AnnotationValue> {
 
     // TODO: annotation mirror, enum
     
+    static AnnotationField of(boolean value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(byte value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(char value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(double value, double epsilon) {
+        return new DoubleField(value, epsilon);
+    }
+    
+    static AnnotationField of(float value, float epsilon) {
+        return new FloatField(value, epsilon);
+    }
+    
+    static AnnotationField of(int value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(long value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(short value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(String value) {
+        return new SimpleField<>(value);
+    }
+    
+    static AnnotationField of(Assertion<TypeMirror> type) {
+        return new TypeField(type);
+    }
+    
 }
-
-// In project Vahalla we trust
 
 record ArrayField(Sequence.Ordered<AnnotationValue> expected) implements AnnotationField {
     @Override
@@ -49,31 +87,15 @@ record ArrayField(Sequence.Ordered<AnnotationValue> expected) implements Annotat
     }
 }
 
-record BooleanField(boolean expected) implements AnnotationField {
+record SimpleField<T>(T expected) implements AnnotationField {
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Boolean bool && bool == expected);
+        return new Result.Equals<>(actual, expected, expected.getClass() == actual.getClass() && expected.equals(actual));
     }
 }
 
-record ByteField(byte expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Byte val && val == expected);
-    }
-}
-
-record CharField(char expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Character character && character == expected);
-    }
-}
-
-record DoubleField(double expected, double epsilon) implements AnnotationField {
+record DoubleField<T extends Number>(double expected, double epsilon) implements AnnotationField {
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
@@ -86,38 +108,6 @@ record FloatField(float expected, float epsilon) implements AnnotationField {
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
         return new Result.Equals<>(actual, expected, actual instanceof Float number && abs(expected - number) < epsilon);
-    }
-}
-
-record IntField(int expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Integer number && number == expected);
-    }
-}
-
-record LongField(long expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Long number && number == expected);
-    }
-}
-
-record ShortField(short expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Short number && number == expected);
-    }
-}
-
-record StringField(String expected) implements AnnotationField {
-    @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof String string && string.equals(expected));
     }
 }
 
