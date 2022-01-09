@@ -25,24 +25,72 @@ package com.karuslabs.satisfactory;
 
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+/**
+ * An assertion for conditions that parts of a code snippet's abstract syntax tree
+ * must satisfy.
+ * 
+ * In most cases, it is not necessary to manually implement {@code Assertion}.
+ * Consider using the composable assertions provided out-of-box before implementing
+ * a custom assertion.
+ * 
+ * @param <T> the type of the value to be asserted
+ * 
+ * @see com.karuslabs.satisfactory.ast
+ * @see com.karuslabs.satisfactory.sequence
+ */
 @FunctionalInterface
 public interface Assertion<T> {
     
+    /**
+     * Returns an assertion that tests if a given value is equal to {@code other}.
+     * 
+     * @param <T> the type of the value to be asserted
+     * @param other the expected value
+     * @return an assertion that determines if two values are equal
+     */
     static <T> Assertion<T> equal(T other) {
-        return (value, types) -> new Result.Equals(value, other, value.equals(other));
+        return (value, types) -> new Result.Equal(value, other, value.equals(other));
     }
     
+    /**
+     * Returns a logical negation of the given assertion.
+     * 
+     * @param <T> the type of the value to be asserted
+     * @param assertion the assertion to be negated
+     * @return a negation of the given assertion
+     */
     static <T> Assertion<T> not(Assertion<T> assertion) {
         return Not.of(assertion);
     }
     
+    /**
+     * Tests if the given value satisfies this assertion. A {@link Result} that 
+     * describes the results of this assertion is returned.
+     * 
+     * @param value the value to be asserted
+     * @param types a {@code TypeMirrors} used to facilitate this assertion
+     * @return the results of this assertion
+     */
     Result test(T value, TypeMirrors types);
     
-    
+    /**
+     * Returns a composed {@code Assertion} that represents a non-short-circuiting
+     * logical AND of this assertion and {@code others}.
+     * 
+     * @param others the predicates will be logically-ANDed with this predicate
+     * @return a composed predicate that represents a non-short-circuiting logical AND
+     */
     default Assertion<T> and(Assertion<T>... others) {
         return And.of(this, others);
     }
     
+    /**
+     * Returns a composed {@code Assertion} that represents a non-short-circuiting
+     * logical OR of this assertion and {@code others}.
+     * 
+     * @param others the predicates will be logically-ORed with this predicate
+     * @return a composed predicate that represents a non-short-circuiting logical OR
+     */
     default Assertion<T> or(Assertion<T>... others) {
         return Or.of(this, others);
     }

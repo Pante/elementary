@@ -27,7 +27,7 @@ import com.karuslabs.satisfactory.sequence.Times;
 import com.karuslabs.satisfactory.ast.Type.Relation;
 
 import java.util.*;
-import javax.lang.model.element.Modifier;
+import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
 public sealed interface Result {
@@ -36,22 +36,29 @@ public sealed interface Result {
     
     boolean success();
     
-    static interface AST {
-        static record Modifiers(Set<? extends Modifier> actual, Set<Modifier> expected, boolean success) implements Result {
+    static sealed interface AST extends Result {
+        static record Annotation(AnnotationMirror annotation, Result type, Result values, boolean success) implements AST {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.annotation(this, value);
+            }
+        }
+        
+        static record Modifiers(Set<? extends Modifier> actual, Set<Modifier> expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
                 return visitor.modifiers(this, value);
             }
         }
         
-        static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements Result {
+        static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
                 return visitor.type(this, value);
             }
         }
     
-        static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements Result {
+        static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
                 return visitor.primitive(this, value);
@@ -59,38 +66,49 @@ public sealed interface Result {
         } 
     }
     
-    static interface Sequence {
-        static record Pattern(List<Result> results, boolean success) implements Result {
-            @Override
-            public <T, R> R accept(Visitor<T, R> visitor, T value) {
-                return visitor.pattern(this, value);
+    static sealed interface Sequence extends Result {
+        static sealed interface Ordered extends Sequence {
+            static record Pattern(List<Result> results, boolean success) implements Ordered {
+                @Override
+                public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                    return visitor.pattern(this, value);
+                }
             }
-        }
         
-        static record Equality(Times times, List<Result> results, int count) implements Result {
-            @Override
-            public <T, R> R accept(Visitor<T, R> visitor, T value) {
-                return visitor.equality(this, value);
-            }
+            static record Equal(Times times, List<Result> results, int count) implements Ordered {
+                @Override
+                public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                    return visitor.equal(this, value);
+                }
 
-            @Override
-            public boolean success() {
-                return times.contains(count);
-            } 
+                @Override
+                public boolean success() {
+                    return times.contains(count);
+                } 
+            }
         }
         
-        static record Each(List<Result> results, boolean success) implements Result {
-            @Override
-            public <T, R> R accept(Visitor<T, R> visitor, T value) {
-                return visitor.each(this, value);
+        static sealed interface Unordered extends Sequence {
+            static record Equal(List<Result> results, int actual, int expected, boolean success) implements Unordered {
+                @Override
+                public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                    return visitor.equal(this, value);
+                }
+            }
+            
+            static record Each(List<Result> results, boolean success) implements Unordered {
+                @Override
+                public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                    return visitor.each(this, value);
+                }
             }
         }
     }
     
-    static record Equals<T>(T actual, T other, boolean success) implements Result {
+    static record Equal<T>(T actual, T other, boolean success) implements Result {
         @Override
         public <T, R> R accept(Visitor<T, R> visitor, T value) {
-            return visitor.equals(this, value);
+            return visitor.equal(this, value);
         }
     }
     

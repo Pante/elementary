@@ -28,6 +28,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface Visitor<T, R> {
     
+    default @Nullable R annotation(AST.Annotation annotation, T value) {
+        return result(annotation, value);
+    }
+    
     default @Nullable R modifiers(AST.Modifiers modifiers, T value) {
         return result(modifiers, value);
     }
@@ -41,21 +45,26 @@ public interface Visitor<T, R> {
     }
 
     
-    default @Nullable R pattern(Result.Sequence.Pattern pattern, T value) {
+    default @Nullable R pattern(Result.Sequence.Ordered.Pattern pattern, T value) {
         return result(pattern, value);
     }
     
-    default @Nullable R equality(Result.Sequence.Equality equality, T value) {
+    default @Nullable R equal(Result.Sequence.Ordered.Equal equality, T value) {
         return result(equality, value);
     }
     
-    default @Nullable R each(Result.Sequence.Each each, T value) {
+    
+    default @Nullable R equal(Result.Sequence.Unordered.Equal equality, T value) {
+        return result(equality, value);
+    }
+    
+    default @Nullable R each(Result.Sequence.Unordered.Each each, T value) {
         return result(each, value);
     }
 
     
-    default @Nullable R equals(Result.Equals equals, T value) {
-        return result(equals, value);
+    default @Nullable R equal(Result.Equal equality, T value) {
+        return result(equality, value);
     }
 
     default @Nullable R not(Result.Not not, T value) {

@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.ast;
+package com.karuslabs.satisfactory.zold;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.satisfactory.sequence.Sequence;
@@ -83,7 +83,7 @@ record ArrayField(Sequence.Ordered<AnnotationValue> expected) implements Annotat
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return actual instanceof List values ? expected.test(values, types) : new Result.Equals<>(actual, Object[].class, false);
+        return actual instanceof List values ? expected.test(values, types) : new Result.Equal<>(actual, Object[].class, false);
     }
 }
 
@@ -91,7 +91,7 @@ record SimpleField<T>(T expected) implements AnnotationField {
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, expected.getClass() == actual.getClass() && expected.equals(actual));
+        return new Result.Equal<>(actual, expected, expected.getClass() == actual.getClass() && expected.equals(actual));
     }
 }
 
@@ -99,7 +99,7 @@ record DoubleField<T extends Number>(double expected, double epsilon) implements
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Double number && abs(expected - number) < epsilon);
+        return new Result.Equal<>(actual, expected, actual instanceof Double number && abs(expected - number) < epsilon);
     }
 }
 
@@ -107,7 +107,7 @@ record FloatField(float expected, float epsilon) implements AnnotationField {
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return new Result.Equals<>(actual, expected, actual instanceof Float number && abs(expected - number) < epsilon);
+        return new Result.Equal<>(actual, expected, actual instanceof Float number && abs(expected - number) < epsilon);
     }
 }
 
@@ -115,7 +115,7 @@ record TypeField(Assertion<TypeMirror> expected) implements AnnotationField {
     @Override
     public Result test(AnnotationValue value, TypeMirrors types) {
         var actual = value.getValue();
-        return actual instanceof TypeMirror type ? expected.test(type, types) : new Result.Equals<>(actual, TypeMirror.class, false);
+        return actual instanceof TypeMirror type ? expected.test(type, types) : new Result.Equal<>(actual, TypeMirror.class, false);
     }
         
 }

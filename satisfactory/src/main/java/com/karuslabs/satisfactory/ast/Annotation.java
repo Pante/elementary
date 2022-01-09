@@ -24,25 +24,28 @@
 package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
+import com.karuslabs.satisfactory.sequence.Sequence.Unordered;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.Map;
+import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-public abstract class Annotation implements Assertion<AnnotationMirror> {
+public class Annotation implements Assertion<AnnotationMirror> {
 
     private final Assertion<TypeMirror> type;
+    private final Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values; 
     
-    public Annotation(Assertion<TypeMirror> type) {
+    public Annotation(Assertion<TypeMirror> type, Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values) {
         this.type = type;
+        this.values = values;
     }
     
     @Override
-    public Result test(AnnotationMirror value, TypeMirrors types) {
-        return 
+    public Result test(AnnotationMirror annotation, TypeMirrors types) {
+        var type = this.type.test(annotation.getAnnotationType(), types);
+        var values = this.values.test(annotation.getElementValues().entrySet(), types);
+        return new Result.AST.Annotation(annotation, type, values, type.success() && values.success());
     }
-    
-    protected abstract boolean test(Map<ExecutableElement, AnnotationValue> values);
 
 }

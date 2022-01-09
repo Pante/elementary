@@ -42,7 +42,7 @@ record Pattern<T>(Ordered<T>... subsequences) implements Sequence.Ordered<T> {
             success &= result.success();
         }
         
-        return new Result.Sequence.Pattern(results, success);
+        return new Result.Sequence.Ordered.Pattern(results, success);
     }  
 }
 
@@ -63,6 +63,6 @@ record Equals<T>(Times times, Assertion<T>... assertions) implements Sequence.Or
         }
 
         cursor.move(count);
-        return new Result.Sequence.Equality(times, results, count);
+        return new Result.Sequence.Ordered.Equal(times, results, count);
     }
 }
