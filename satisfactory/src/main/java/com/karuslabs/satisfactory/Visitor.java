@@ -53,8 +53,11 @@ public interface Visitor<T, R> {
         return result(equality, value);
     }
     
+    default @Nullable R contains(Result.Sequence.Unordered.Contains contains, T value) {
+        return result(contains, value);
+    }
     
-    default @Nullable R equal(Result.Sequence.Unordered.Equal equality, T value) {
+    default @Nullable R contents(Result.Sequence.Unordered.Contents equality, T value) {
         return result(equality, value);
     }
     

@@ -88,11 +88,18 @@ public sealed interface Result {
             }
         }
         
-        static sealed interface Unordered extends Sequence {
-            static record Equal(List<Result> results, int actual, int expected, boolean success) implements Unordered {
+        static sealed interface Unordered extends Sequence {      
+            static record Contains(List<Result> results, int actual, int expected, boolean success) implements Unordered {
                 @Override
                 public <T, R> R accept(Visitor<T, R> visitor, T value) {
-                    return visitor.equal(this, value);
+                    return visitor.contains(this, value);
+                }
+            }
+            
+            static record Contents(List<Result> results, int actual, int expected, boolean success) implements Unordered {
+                @Override
+                public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                    return visitor.contents(this, value);
                 }
             }
             

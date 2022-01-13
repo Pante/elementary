@@ -32,12 +32,33 @@ import org.jgrapht.alg.interfaces.MatchingAlgorithm.Matching;
 import org.jgrapht.alg.matching.HopcroftKarpMaximumCardinalityBipartiteMatching;
 import org.jgrapht.graph.SimpleGraph;
 
-record Equals<T>(Set<Assertion<T>> assertions) implements Sequence.Unordered<T> {
+record Contains<T>(Set<Assertion<T>> assertions) implements Sequence.Unordered<T> {
     @Override
     public Result test(Set<? extends T> values, TypeMirrors types) {
-        var matches = Graphs.matches(assertions, values, types);
+        var matches = Graphs.matches(assertions, values, types);     
+        var vertex = matches.getGraph().vertexSet();
+        
+        var unasserted = new ArrayDeque<>(this.assertions);
+        unasserted.removeAll(vertex);
+        
+        var remaining = new ArrayDeque<>(values);
+        remaining.removeAll(vertex);
+        
+        var success = unasserted.isEmpty();
+        
         var results = new ArrayList<>(matches.getEdges());
-                
+        while (!unasserted.isEmpty() && !remaining.isEmpty()) {
+            results.add(unasserted.pop().test(remaining.pop(), types));
+        }
+        
+        return new Result.Sequence.Unordered.Contains(results, values.size(), assertions.size(), success);
+    }
+}
+
+record Contents<T>(Set<Assertion<T>> assertions) implements Sequence.Unordered<T> {
+    @Override
+    public Result test(Set<? extends T> values, TypeMirrors types) {
+        var matches = Graphs.matches(assertions, values, types);     
         var vertex = matches.getGraph().vertexSet();
         
         var unasserted = new ArrayDeque<>(this.assertions);
@@ -48,11 +69,12 @@ record Equals<T>(Set<Assertion<T>> assertions) implements Sequence.Unordered<T> 
         
         var success = unasserted.isEmpty() && remaining.isEmpty();
         
+        var results = new ArrayList<>(matches.getEdges());
         while (!unasserted.isEmpty() && !remaining.isEmpty()) {
             results.add(unasserted.pop().test(remaining.pop(), types));
         }
         
-        return new Result.Sequence.Unordered.Equal(results, values.size(), assertions.size(), success);
+        return new Result.Sequence.Unordered.Contents(results, values.size(), assertions.size(), success);
     }
 }
 
