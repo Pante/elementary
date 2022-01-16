@@ -27,6 +27,7 @@ import com.karuslabs.satisfactory.sequence.Times;
 import com.karuslabs.satisfactory.ast.Type.Relation;
 
 import java.util.*;
+import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
@@ -41,6 +42,13 @@ public sealed interface Result {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
                 return visitor.annotation(this, value);
+            }
+        }
+        
+        static record AnnotationField(Entry<String, AnnotationValue> actual, String name, Object value, boolean success) implements AST {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.annotationField(this, value);
             }
         }
         

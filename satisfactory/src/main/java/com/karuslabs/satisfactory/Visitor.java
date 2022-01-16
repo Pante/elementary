@@ -32,6 +32,10 @@ public interface Visitor<T, R> {
         return result(annotation, value);
     }
     
+    default @Nullable R annotationField(AST.AnnotationField field, T value) {
+        return result(field, value);
+    }
+    
     default @Nullable R modifiers(AST.Modifiers modifiers, T value) {
         return result(modifiers, value);
     }
