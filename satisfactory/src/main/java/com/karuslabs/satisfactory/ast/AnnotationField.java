@@ -24,67 +24,16 @@
 package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
-import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.*;
 import java.util.Map.Entry;
 import javax.lang.model.element.*;
-import javax.lang.model.type.TypeMirror;
 
-import static java.lang.Math.abs;
-
-public sealed interface AnnotationField extends Assertion<Entry<String, AnnotationValue>> {
-    
-    // TODO: annotation mirror, enum
-    
-    static AnnotationField of(String name, boolean value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(String name, byte value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(String name, char value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(double value, double epsilon) {
-        return new DoubleField(value, epsilon);
-    }
-    
-    static AnnotationField of(float value, float epsilon) {
-        return new FloatField(value, epsilon);
-    }
-    
-    static AnnotationField of(String name, int value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(String name, long value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(String name, short value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(String name, String value) {
-        return new SimpleField<>(name, value);
-    }
-    
-    static AnnotationField of(Assertion<TypeMirror> type) {
-        return new TypeField(type);
-    }
-    
-}
-
-record SimpleField<T>(String name, T expected) implements AnnotationField {
+public record AnnotationField(String name, Literal literal) implements Assertion<Entry<? extends ExecutableElement, ? extends AnnotationValue>> {
     @Override
-    public Result test(Entry<String, AnnotationValue> field, TypeMirrors types) {
-        var actual = field.getValue().getValue();
-        var success = name.equals(field.getKey()) && expected.getClass() == actual.getClass() && expected.equals(actual);
-        return new Result.AST.AnnotationField(field, name, expected, success);
+    public Result test(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry, TypeMirrors types) {
+        var value = literal.test(entry.getValue().getValue(), types);
+        var success = name.equals(entry.getKey().getSimpleName().toString()) && value.success();
+        return new Result.AST.AnnotationField(entry, name, value, success);
     }
 }

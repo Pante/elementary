@@ -45,7 +45,7 @@ public sealed interface Result {
             }
         }
         
-        static record AnnotationField(Entry<String, AnnotationValue> actual, String name, Object value, boolean success) implements AST {
+        static record AnnotationField(Entry<? extends ExecutableElement, ? extends AnnotationValue> actual, String name, Result literal, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
                 return visitor.annotationField(this, value);

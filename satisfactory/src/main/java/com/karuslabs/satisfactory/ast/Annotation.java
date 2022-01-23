@@ -27,8 +27,6 @@ import com.karuslabs.satisfactory.*;
 import com.karuslabs.satisfactory.sequence.Sequence.Unordered;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
-import java.util.AbstractMap.SimpleEntry;
-import java.util.HashSet;
 import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
@@ -36,9 +34,9 @@ import javax.lang.model.type.TypeMirror;
 public class Annotation implements Assertion<AnnotationMirror> {
 
     private final Assertion<TypeMirror> type;
-    private final Unordered<Entry<String, AnnotationValue>> values; 
+    private final Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values; 
     
-    public Annotation(Assertion<TypeMirror> type, Unordered<Entry<String, AnnotationValue>> values) {
+    public Annotation(Assertion<TypeMirror> type, Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values) {
         this.type = type;
         this.values = values;
     }
@@ -46,12 +44,7 @@ public class Annotation implements Assertion<AnnotationMirror> {
     @Override
     public Result test(AnnotationMirror annotation, TypeMirrors types) {
         var type = this.type.test(annotation.getAnnotationType(), types);
-        var fields = new HashSet<Entry<String, AnnotationValue>>(annotation.getElementValues().size());
-        for (var entry : annotation.getElementValues().entrySet()) {
-            fields.add(new SimpleEntry<>(entry.getKey().getSimpleName().toString(), entry.getValue()));
-        }
-        
-        var values = this.values.test(fields, types);
+        var values = this.values.test(annotation.getElementValues().entrySet(), types);
         return new Result.AST.Annotation(annotation, type, values, type.success() && values.success());
     }
 

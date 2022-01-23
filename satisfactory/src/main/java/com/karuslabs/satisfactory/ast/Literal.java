@@ -21,100 +21,94 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.zold;
+package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.List;
-import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.type.TypeMirror;
 
 import static java.lang.Math.abs;
 
-public sealed interface AnnotationField extends Assertion<AnnotationValue> {
+public sealed interface Literal extends Assertion<Object> {
 
     // TODO: annotation mirror, enum
     
-    static AnnotationField of(boolean value) {
-        return new SimpleField<>(value);
+    static Literal of(boolean value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(byte value) {
-        return new SimpleField<>(value);
+    static Literal of(byte value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(char value) {
-        return new SimpleField<>(value);
+    static Literal of(char value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(double value, double epsilon) {
-        return new DoubleField(value, epsilon);
+    static Literal of(double value, double epsilon) {
+        return new DoubleLiteral(value, epsilon);
     }
     
-    static AnnotationField of(float value, float epsilon) {
-        return new FloatField(value, epsilon);
+    static Literal of(float value, float epsilon) {
+        return new FloatLiteral(value, epsilon);
     }
     
-    static AnnotationField of(int value) {
-        return new SimpleField<>(value);
+    static Literal of(int value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(long value) {
-        return new SimpleField<>(value);
+    static Literal of(long value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(short value) {
-        return new SimpleField<>(value);
+    static Literal of(short value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(String value) {
-        return new SimpleField<>(value);
+    static Literal of(String value) {
+        return new ValueLiteral<>(value);
     }
     
-    static AnnotationField of(Assertion<TypeMirror> type) {
-        return new TypeField(type);
+    static Literal of(Assertion<TypeMirror> type) {
+        return new TypeLiteral(type);
     }
     
 }
 
-record ArrayField(Sequence.Ordered<AnnotationValue> expected) implements AnnotationField {
+record ArrayLiteral(Sequence.Ordered<Object> expected) implements Literal {
     @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
+    public Result test(Object actual, TypeMirrors types) {
         return actual instanceof List values ? expected.test(values, types) : new Result.Equal<>(actual, Object[].class, false);
     }
 }
 
-record SimpleField<T>(T expected) implements AnnotationField {
+record ValueLiteral<T>(T expected) implements Literal {
     @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
+    public Result test(Object actual, TypeMirrors types) {
         return new Result.Equal<>(actual, expected, expected.getClass() == actual.getClass() && expected.equals(actual));
     }
 }
 
-record DoubleField<T extends Number>(double expected, double epsilon) implements AnnotationField {
+record DoubleLiteral<T extends Number>(double expected, double epsilon) implements Literal {
     @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
+    public Result test(Object actual, TypeMirrors types) {
         return new Result.Equal<>(actual, expected, actual instanceof Double number && abs(expected - number) < epsilon);
     }
 }
 
-record FloatField(float expected, float epsilon) implements AnnotationField {
+record FloatLiteral(float expected, float epsilon) implements Literal {
     @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
+    public Result test(Object actual, TypeMirrors types) {
         return new Result.Equal<>(actual, expected, actual instanceof Float number && abs(expected - number) < epsilon);
     }
 }
 
-record TypeField(Assertion<TypeMirror> expected) implements AnnotationField {
+record TypeLiteral(Assertion<TypeMirror> expected) implements Literal {
     @Override
-    public Result test(AnnotationValue value, TypeMirrors types) {
-        var actual = value.getValue();
+    public Result test(Object actual, TypeMirrors types) {
         return actual instanceof TypeMirror type ? expected.test(type, types) : new Result.Equal<>(actual, TypeMirror.class, false);
     }
         
