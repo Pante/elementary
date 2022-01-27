@@ -29,7 +29,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.Map.Entry;
 import javax.lang.model.element.*;
 
-public record AnnotationField(String name, Literal literal) implements Assertion<Entry<? extends ExecutableElement, ? extends AnnotationValue>> {
+public record AnnotationField(String name, Assertion<Object> literal) implements Assertion<Entry<? extends ExecutableElement, ? extends AnnotationValue>> {
     @Override
     public Result test(Entry<? extends ExecutableElement, ? extends AnnotationValue> entry, TypeMirrors types) {
         var value = literal.test(entry.getValue().getValue(), types);

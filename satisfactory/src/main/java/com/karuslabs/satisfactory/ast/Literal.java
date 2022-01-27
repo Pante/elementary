@@ -28,13 +28,14 @@ import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.List;
+import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.type.TypeMirror;
 
 import static java.lang.Math.abs;
 
 public sealed interface Literal extends Assertion<Object> {
 
-    // TODO: annotation mirror, enum
+    // TODO: enum
     
     static Literal of(boolean value) {
         return new ValueLiteral<>(value);
@@ -72,17 +73,18 @@ public sealed interface Literal extends Assertion<Object> {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(Assertion<TypeMirror> type) {
+    static Literal annotation(Assertion<AnnotationMirror> assertion) {
+        return new AnnotationLiteral(assertion);
+    }
+    
+    static Literal array(Sequence.Ordered<Object> sequence) {
+        return new ArrayLiteral(sequence);
+    }
+    
+    static Literal type(Assertion<TypeMirror> type) {
         return new TypeLiteral(type);
     }
     
-}
-
-record ArrayLiteral(Sequence.Ordered<Object> expected) implements Literal {
-    @Override
-    public Result test(Object actual, TypeMirrors types) {
-        return actual instanceof List values ? expected.test(values, types) : new Result.Equal<>(actual, Object[].class, false);
-    }
 }
 
 record ValueLiteral<T>(T expected) implements Literal {
@@ -105,11 +107,24 @@ record FloatLiteral(float expected, float epsilon) implements Literal {
         return new Result.Equal<>(actual, expected, actual instanceof Float number && abs(expected - number) < epsilon);
     }
 }
+ 
+record AnnotationLiteral(Assertion<AnnotationMirror> expected) implements Literal {
+    @Override
+    public Result test(Object actual, TypeMirrors types) {
+        return actual instanceof AnnotationMirror annotation ? expected.test(annotation, types) : new Result.Equal<>(actual, "Annotation", false);
+    }
+}
+
+record ArrayLiteral(Sequence.Ordered<Object> expected) implements Literal {
+    @Override
+    public Result test(Object actual, TypeMirrors types) {
+        return actual instanceof List values ? expected.test(values, types) : new Result.Equal<>(actual, Object[].class, false);
+    }
+}
 
 record TypeLiteral(Assertion<TypeMirror> expected) implements Literal {
     @Override
     public Result test(Object actual, TypeMirrors types) {
         return actual instanceof TypeMirror type ? expected.test(type, types) : new Result.Equal<>(actual, TypeMirror.class, false);
     }
-        
 }

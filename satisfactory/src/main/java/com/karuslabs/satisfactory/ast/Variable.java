@@ -24,30 +24,19 @@
 package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
-import com.karuslabs.satisfactory.sequence.Sequence.Unordered;
+import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
-
-import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-public class Annotation implements Assertion<AnnotationMirror> {
+public class Variable implements Assertion<VariableElement> {
 
-    // TODO: add simple matcher for type
-    
+    private final Sequence.Ordered<AnnotationMirror> annotations;
+    private final Sequence.Unordered<Modifier> modifiers;
     private final Assertion<TypeMirror> type;
-    private final Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values; 
-    
-    public Annotation(Assertion<TypeMirror> type, Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values) {
-        this.type = type;
-        this.values = values;
-    }
-    
-    @Override
-    public Result test(AnnotationMirror annotation, TypeMirrors types) {
-        var type = this.type.test(annotation.getAnnotationType(), types);
-        var values = this.values.test(annotation.getElementValues().entrySet(), types);
-        return new Result.AST.Annotation(annotation, type, values, type.success() && values.success());
-    }
 
+    @Override
+    public Result test(VariableElement value, TypeMirrors types) {
+    }
+    
 }
