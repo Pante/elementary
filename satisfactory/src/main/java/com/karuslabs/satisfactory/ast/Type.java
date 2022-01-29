@@ -1,4 +1,4 @@
-/*
+ /*
  * The MIT License
  *
  * Copyright 2021 Karus Labs.
@@ -32,8 +32,41 @@ import javax.lang.model.type.*;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-public sealed abstract class Type implements Assertion<TypeMirror> {
+import static com.karuslabs.satisfactory.ast.Type.Relation.*;
 
+public sealed abstract class Type implements Assertion<TypeMirror> {
+    
+    public static Assertion<TypeMirror> ANY_TYPE = (value, types) -> Result.TRUE;
+    
+    public static Assertion<TypeMirror> is(Class<?> type) {
+        return type.isPrimitive() ? new Primitive(TypeMirrors.kind(type)) : new ClassType(IS, type);
+    }
+    
+    public static Type is(Class<?>... types) {
+        return new ClassType(IS, types);
+    }
+    
+    public static Type is(TypeMirror... types) {
+        return new MirrorType(IS, types);
+    }
+    
+    public static Type subtype(Class<?>... parents) {
+        return new ClassType(SUBTYPE, parents);
+    }
+    
+    public static Type subtype(TypeMirror... parents) {
+        return new MirrorType(SUBTYPE, parents);
+    }
+    
+    public static Type supertype(Class<?>... children) {
+        return new ClassType(SUBTYPE, children);
+    }
+    
+    public static Type supertype(TypeMirror... children) {
+        return new MirrorType(SUBTYPE, children);
+    }
+
+    
     public static enum Relation {
         IS {
             @Override

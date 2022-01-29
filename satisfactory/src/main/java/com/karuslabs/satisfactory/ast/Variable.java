@@ -26,6 +26,7 @@ package com.karuslabs.satisfactory.ast;
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
+
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
@@ -34,9 +35,30 @@ public class Variable implements Assertion<VariableElement> {
     private final Sequence.Ordered<AnnotationMirror> annotations;
     private final Sequence.Unordered<Modifier> modifiers;
     private final Assertion<TypeMirror> type;
+    private final Assertion<String> name;
+    
+    public Variable(Sequence.Ordered<AnnotationMirror> annotations, Sequence.Unordered<Modifier> modifiers, Assertion<TypeMirror> type, Assertion<String> name) {
+        this.annotations = annotations;
+        this.modifiers = modifiers;
+        this.type = type;
+        this.name = name;
+    }
 
     @Override
-    public Result test(VariableElement value, TypeMirrors types) {
+    public Result test(VariableElement variable, TypeMirrors types) {
+        var annotations = this.annotations.test(variable.getAnnotationMirrors(), types);
+        var modifiers = this.modifiers.test(variable.getModifiers(), types);
+        var type = this.type.test(variable.asType(), types);
+        var name = this.name.test(variable.getSimpleName().toString(), types);
+        
+        return new Result.AST.Variable(
+            variable, 
+            annotations, 
+            modifiers, 
+            type, 
+            name, 
+            annotations.success() && modifiers.success() && type.success() && name.success()
+        );
     }
     
 }

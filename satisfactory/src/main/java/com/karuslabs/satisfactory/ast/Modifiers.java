@@ -30,6 +30,16 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import java.util.*;
 import javax.lang.model.element.*;
 
+public interface Modifiers {
+    static Sequence.Unordered<Modifier> contains(Set<Modifier> modifiers) {
+        return new ContainsModifiers(modifiers);
+    }
+    
+    static Sequence.Unordered<Modifier> equals(Set<Modifier> modifiers) {
+        return new EqualsModifiers(modifiers);
+    }
+}
+
 record ContainsModifiers(Set<Modifier> expected) implements Sequence.Unordered<Modifier> {
     @Override
     public Result test(Set<? extends Modifier> actual, TypeMirrors types) {

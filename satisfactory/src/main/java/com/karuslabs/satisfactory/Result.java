@@ -33,11 +33,22 @@ import javax.lang.model.type.*;
 
 public sealed interface Result {
 
+    static final Result TRUE = new Constant(true);
+    static final Result FALSE = new Constant(false);
+    
     <T, R> R accept(Visitor<T, R> visitor, T value);
     
     boolean success();
     
     static sealed interface AST extends Result {
+        static record Variable(VariableElement actual, Result annotations, Result modifiers, Result type, Result name, boolean success) implements AST {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.variable(this, value);
+            }
+        }
+        
+        
         static record Annotation(AnnotationMirror annotation, Result type, Result values, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -117,6 +128,25 @@ public sealed interface Result {
                     return visitor.each(this, value);
                 }
             }
+        }
+        
+        static record Size(int actual, int expected) implements Sequence {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.size(this, value);
+            }
+
+            @Override
+            public boolean success() {
+                return actual == expected;
+            }
+        }
+    }
+    
+    static record Constant(boolean success) implements Result {
+        @Override
+        public <T, R> R accept(Visitor<T, R> visitor, T value) {
+            return visitor.constant(this, value);
         }
     }
     

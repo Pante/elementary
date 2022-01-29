@@ -23,13 +23,30 @@
  */
 package com.karuslabs.satisfactory.sequence;
 
-import com.karuslabs.satisfactory.Assertion;
+import com.karuslabs.satisfactory.*;
+
 import java.util.*;
 
-public sealed interface Sequence<T extends Collection<?>> extends Assertion<T>{
+public sealed interface Sequence<T extends Collection<?>> extends Assertion<T> {
     
-    static non-sealed interface Ordered<T> extends Sequence<List<? extends T>> {}
+    static non-sealed interface Ordered<T> extends Sequence<List<? extends T>> {
+        static <T> Ordered<T> any() {
+            return (value, types) -> Result.TRUE;
+        }
+        
+        static <T> Ordered<T> empty() {
+            return (values, types) -> new Result.Sequence.Size(values.size(), 0);
+        }
+    }
     
-    static non-sealed interface Unordered<T> extends Sequence<Set<? extends T>> {}
+    static non-sealed interface Unordered<T> extends Sequence<Set<? extends T>> {
+        static <T> Unordered<T> any() {
+            return (value, types) -> Result.TRUE;
+        }
+        
+        static <T> Unordered<T> empty() {
+            return (values, types) -> new Result.Sequence.Size(values.size(), 0);
+        }
+    }
     
 }

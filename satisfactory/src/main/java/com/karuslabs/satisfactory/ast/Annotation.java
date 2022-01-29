@@ -33,7 +33,11 @@ import javax.lang.model.type.TypeMirror;
 
 public class Annotation implements Assertion<AnnotationMirror> {
 
-    // TODO: add simple matcher for type
+    public static Assertion<AnnotationMirror> ANY_ANNOTATION = (value, type) -> Result.TRUE;
+    
+    public static Annotation of(Class<? extends java.lang.annotation.Annotation> type) {
+        return new Annotation(Type.is(type), Unordered.any());
+    }
     
     private final Assertion<TypeMirror> type;
     private final Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values; 

@@ -40,7 +40,7 @@ class Range<T> extends AbstractSequentialList<T> implements Cursor {
     static final Cursor EMPTY = new Cursor() {};
     
     private final List<T> list;
-    private int cursor = 0;
+    private int cursor;
     
     Range(List<T> list) {
         this.list = list;

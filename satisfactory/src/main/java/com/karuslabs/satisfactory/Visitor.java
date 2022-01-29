@@ -28,6 +28,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface Visitor<T, R> {
     
+    default @Nullable R variable(AST.Variable variable, T value) {
+        return result(variable, value);
+    }
+    
     default @Nullable R annotation(AST.Annotation annotation, T value) {
         return result(annotation, value);
     }
@@ -68,7 +72,15 @@ public interface Visitor<T, R> {
     default @Nullable R each(Result.Sequence.Unordered.Each each, T value) {
         return result(each, value);
     }
+    
+    default @Nullable R size(Result.Sequence.Size size, T value) {
+        return result(size, value);
+    }
+    
 
+    default @Nullable R constant(Result.Constant constant, T value) {
+        return result(constant, value);
+    }
     
     default @Nullable R equal(Result.Equal equality, T value) {
         return result(equality, value);
