@@ -27,6 +27,7 @@ import com.karuslabs.satisfactory.*;
 import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
+import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
@@ -59,6 +60,20 @@ public class Variable implements Assertion<VariableElement> {
             name, 
             annotations.success() && modifiers.success() && type.success() && name.success()
         );
+    }
+    
+    public static class Builder implements Supplier<Variable> {
+
+        private Sequence.Ordered<AnnotationMirror> annotations = Sequence.Ordered.any();
+        private Sequence.Unordered<Modifier> modifiers = Sequence.Unordered.any();
+        private Assertion<TypeMirror> type = Assertion.any();
+        private Assertion<String> name = Assertion.any();
+        
+        @Override
+        public Variable get() {
+            return new Variable(annotations, modifiers, type, name);
+        }
+        
     }
     
 }

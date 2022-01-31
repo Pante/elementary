@@ -41,6 +41,10 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 @FunctionalInterface
 public interface Assertion<T> {
     
+    static <T> Assertion<T> any() {
+        return (value, types) -> Result.TRUE;
+    }
+    
     /**
      * Returns an assertion that tests if a given value is equal to {@code other}.
      * 
