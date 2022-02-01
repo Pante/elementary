@@ -31,6 +31,9 @@ import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
+import static com.karuslabs.satisfactory.ast.A.parameters;
+import static com.karuslabs.satisfactory.ast.B.parameters;
+
 public class Variable implements Assertion<VariableElement> {
 
     private final Sequence.Ordered<AnnotationMirror> annotations;
@@ -74,6 +77,35 @@ public class Variable implements Assertion<VariableElement> {
             return new Variable(annotations, modifiers, type, name);
         }
         
+    }
+    
+}
+
+class A {
+    
+    A(AI ai) {}
+    
+    static AI parameters() { return new AI(); }
+    
+    static class AI {}
+    
+}
+
+class B {
+    
+    B(BI bi) {}
+    
+    static BI parameters() { return new BI(); }
+    
+    static class BI {}
+    
+}
+
+class C {
+    
+    static void help() {
+        variable(matches());
+        new B(parameters());
     }
     
 }
