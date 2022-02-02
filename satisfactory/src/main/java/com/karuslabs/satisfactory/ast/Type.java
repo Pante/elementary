@@ -38,15 +38,15 @@ public sealed abstract class Type implements Assertion<TypeMirror> {
     
     public static Assertion<TypeMirror> ANY_TYPE = (value, types) -> Result.TRUE;
     
-    public static Assertion<TypeMirror> is(Class<?> type) {
+    public static Assertion<TypeMirror> equal(Class<?> type) {
         return type.isPrimitive() ? new Primitive(TypeMirrors.kind(type)) : new ClassType(IS, type);
     }
     
-    public static Type is(Class<?>... types) {
+    public static Type equal(Class<?>... types) {
         return new ClassType(IS, types);
     }
     
-    public static Type is(TypeMirror... types) {
+    public static Type equal(TypeMirror... types) {
         return new MirrorType(IS, types);
     }
     

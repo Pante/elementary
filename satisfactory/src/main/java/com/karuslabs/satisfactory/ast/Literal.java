@@ -37,51 +37,51 @@ public sealed interface Literal extends Assertion<Object> {
 
     // TODO: enum
     
-    static Literal of(boolean value) {
+    static Literal is(boolean value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(byte value) {
+    static Literal is(byte value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(char value) {
+    static Literal is(char value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(double value, double epsilon) {
+    static Literal is(double value, double epsilon) {
         return new DoubleLiteral(value, epsilon);
     }
     
-    static Literal of(float value, float epsilon) {
+    static Literal is(float value, float epsilon) {
         return new FloatLiteral(value, epsilon);
     }
     
-    static Literal of(int value) {
+    static Literal is(int value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(long value) {
+    static Literal is(long value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(short value) {
+    static Literal is(short value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal of(String value) {
+    static Literal is(String value) {
         return new ValueLiteral<>(value);
     }
     
-    static Literal annotation(Assertion<AnnotationMirror> assertion) {
+    static Literal is(Assertion<AnnotationMirror> assertion) {
         return new AnnotationLiteral(assertion);
     }
     
-    static Literal array(Sequence.Ordered<Object> sequence) {
+    static Literal is(Sequence.Ordered<Object> sequence) {
         return new ArrayLiteral(sequence);
     }
     
-    static Literal type(Assertion<TypeMirror> type) {
+    static Literal is(Type type) {
         return new TypeLiteral(type);
     }
     

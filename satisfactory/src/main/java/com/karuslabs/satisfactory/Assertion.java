@@ -26,8 +26,9 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * An assertion for conditions that parts of a code snippet's abstract syntax tree
- * must satisfy.
+ * An assertion for conditions that parts of Java's abstract syntax tree (AST) must satisfy. 
+ * Composing several assertions provides a declarative approach to matching Java's AST.
+ * An analogy to this is RegEx for language elements.
  * 
  * In most cases, it is not necessary to manually implement {@code Assertion}.
  * Consider using the composable assertions provided out-of-box before implementing
@@ -41,6 +42,12 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 @FunctionalInterface
 public interface Assertion<T> {
     
+    /**
+     * Returns an assertion that is always true.
+     * 
+     * @param <T> the type of the value to be asserted
+     * @return an assertion that is always true
+     */
     static <T> Assertion<T> any() {
         return (value, types) -> Result.TRUE;
     }

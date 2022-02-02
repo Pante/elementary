@@ -31,7 +31,6 @@ import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-import static com.karuslabs.satisfactory.ast.A.parameters;
 import static com.karuslabs.satisfactory.ast.B.parameters;
 
 public class Variable implements Assertion<VariableElement> {
@@ -104,8 +103,7 @@ class B {
 class C {
     
     static void help() {
-        variable(matches());
-        new B(parameters());
+        variable(with().type(equal(String.class).name(is("field"))))
     }
     
 }
