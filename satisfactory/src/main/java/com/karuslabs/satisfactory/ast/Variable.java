@@ -31,16 +31,18 @@ import java.util.function.Supplier;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
-import static com.karuslabs.satisfactory.ast.B.parameters;
-
 public class Variable implements Assertion<VariableElement> {
 
+    public static Builder variable() {
+        return new Builder();
+    }
+    
     private final Sequence.Ordered<AnnotationMirror> annotations;
     private final Sequence.Unordered<Modifier> modifiers;
     private final Assertion<TypeMirror> type;
     private final Assertion<String> name;
     
-    public Variable(Sequence.Ordered<AnnotationMirror> annotations, Sequence.Unordered<Modifier> modifiers, Assertion<TypeMirror> type, Assertion<String> name) {
+    Variable(Sequence.Ordered<AnnotationMirror> annotations, Sequence.Unordered<Modifier> modifiers, Assertion<TypeMirror> type, Assertion<String> name) {
         this.annotations = annotations;
         this.modifiers = modifiers;
         this.type = type;
@@ -71,39 +73,31 @@ public class Variable implements Assertion<VariableElement> {
         private Assertion<TypeMirror> type = Assertion.any();
         private Assertion<String> name = Assertion.any();
         
+        public Builder annotations(Sequence.Ordered<AnnotationMirror> annotations) {
+            this.annotations = annotations;
+            return this;
+        }
+        
+        public Builder modifiers(Sequence.Unordered<Modifier> modifiers) {
+            this.modifiers = modifiers;
+            return this;
+        }
+        
+        public Builder type(Assertion<TypeMirror> type) {
+            this.type = type;
+            return this;
+        }
+        
+        public Builder name(Assertion<String> name) {
+            this.name = name;
+            return this;
+        }
+        
         @Override
         public Variable get() {
             return new Variable(annotations, modifiers, type, name);
         }
         
-    }
-    
-}
-
-class A {
-    
-    A(AI ai) {}
-    
-    static AI parameters() { return new AI(); }
-    
-    static class AI {}
-    
-}
-
-class B {
-    
-    B(BI bi) {}
-    
-    static BI parameters() { return new BI(); }
-    
-    static class BI {}
-    
-}
-
-class C {
-    
-    static void help() {
-        variable(with().type(equal(String.class).name(is("field"))))
     }
     
 }

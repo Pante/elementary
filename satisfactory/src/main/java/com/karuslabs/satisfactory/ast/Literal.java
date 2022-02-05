@@ -28,14 +28,29 @@ import com.karuslabs.satisfactory.sequence.Sequence;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.List;
-import javax.lang.model.element.AnnotationMirror;
+import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
 import static java.lang.Math.abs;
 
 public sealed interface Literal extends Assertion<Object> {
-
-    // TODO: enum
+    
+    static Literal annotation(Assertion<AnnotationMirror> annotation) {
+        return new AnnotationLiteral(annotation);
+    }
+    
+    static Literal enumeration(Assertion<VariableElement> enumeration) {
+        return new EnumLiteral(enumeration);
+    }
+    
+    static Literal array(Sequence.Ordered<Object> array) {
+        return new ArrayLiteral(array);
+    }
+    
+    static Literal type(Type type) {
+        return new TypeLiteral(type);
+    }
+    
     
     static Literal is(boolean value) {
         return new ValueLiteral<>(value);
@@ -71,18 +86,6 @@ public sealed interface Literal extends Assertion<Object> {
     
     static Literal is(String value) {
         return new ValueLiteral<>(value);
-    }
-    
-    static Literal is(Assertion<AnnotationMirror> assertion) {
-        return new AnnotationLiteral(assertion);
-    }
-    
-    static Literal is(Sequence.Ordered<Object> sequence) {
-        return new ArrayLiteral(sequence);
-    }
-    
-    static Literal is(Type type) {
-        return new TypeLiteral(type);
     }
     
 }
@@ -126,5 +129,12 @@ record TypeLiteral(Assertion<TypeMirror> expected) implements Literal {
     @Override
     public Result test(Object actual, TypeMirrors types) {
         return actual instanceof TypeMirror type ? expected.test(type, types) : new Result.Equal<>(actual, TypeMirror.class, false);
+    }
+}
+
+record EnumLiteral(Assertion<VariableElement> expected) implements Literal {
+    @Override
+    public Result test(Object actual, TypeMirrors types) {
+        return actual instanceof VariableElement type ? expected.test(type, types) : new Result.Equal<>(actual, VariableElement.class, false);
     }
 }

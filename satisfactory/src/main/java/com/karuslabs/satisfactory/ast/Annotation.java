@@ -35,8 +35,8 @@ public class Annotation implements Assertion<AnnotationMirror> {
 
     public static Assertion<AnnotationMirror> ANY_ANNOTATION = (value, type) -> Result.TRUE;
     
-    public static Annotation of(Class<? extends java.lang.annotation.Annotation> type) {
-        return new Annotation(Type.is(type), Unordered.any());
+    public static Annotation annotation(Class<? extends java.lang.annotation.Annotation> type) {
+        return new Annotation(Type.equal(type), Unordered.any());
     }
     
     private final Assertion<TypeMirror> type;
