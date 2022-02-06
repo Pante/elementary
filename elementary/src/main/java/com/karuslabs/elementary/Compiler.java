@@ -95,8 +95,9 @@ public class Compiler {
         
         var task = compiler.getTask(null, manager, diagnostics, options, null, files);
         task.setProcessors(processors);
+        var success = task.call();
         
-        return new Results(manager.outputFiles(), manager.generatedSources(), diagnostics, task.call());
+        return new Results(manager.outputFiles(), manager.generatedSources(), diagnostics, success);
     }
     
     /**

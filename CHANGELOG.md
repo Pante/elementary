@@ -1,3 +1,11 @@
+## 1.1.2 (06/02/2022)
+
+This is a hotfix for a few issues.
+
+## Elementary
+- Fix `Results` returning empty generated files
+
+
 ## 1.1.1 - Polish & Shine (20/06/2021)
 
 This release focuses on fixing a few pesky issues.
