@@ -23,15 +23,21 @@
  */
 package com.karuslabs.elementary;
 
+import com.karuslabs.utilitary.AnnotationProcessor;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
+import javax.lang.model.element.TypeElement;
 import javax.tools.*;
 
 import org.junit.jupiter.api.*;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
+import static javax.lang.model.SourceVersion.latest;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -56,6 +62,13 @@ class CompilerTest {
     void processors_collection() {
         var results = javac().processors(List.of(new WarningProcessor())).compile(DUMMY);
         assertEquals(1, results.warnings.size());
+    }
+    
+    
+    @Test
+    void processors_generated_files() {
+         var results = javac().processors(List.of(new GeneratorProcessor())).compile(DUMMY);
+         assertEquals(1, results.generated.size());
     }
     
     
@@ -111,4 +124,27 @@ class CompilerTest {
         assertEquals("package org.checkerframework.checker.nullness.qual does not exist", results.find().list().get(0).getMessage(Locale.ENGLISH));
     }
     
+}
+
+
+@SupportedAnnotationTypes({"*"})
+class GeneratorProcessor extends AnnotationProcessor {
+    @Override
+    public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
+        if (round.processingOver()) {
+            try {
+                processingEnv.getFiler().createSourceFile("GeneratedFile", elements.getTypeElement("java.util.ArrayList"));
+                
+            } catch (IOException ex) {
+                return false;
+            }
+        }
+        
+        return false;
+    }
+    
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return latest();
+    }
 }

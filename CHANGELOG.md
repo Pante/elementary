@@ -31,6 +31,14 @@ This release focuses on providing facilities for creating more precise and detai
 - Remove `Texts.quote(String)`
 - Remove `Walker.erasuredAncestor(TypeMirrors)` - Erasured ancestors is subtlely flawed since a Collection<String> will be an ancestor of a List<Integer>
 
+## 1.1.2 (06/02/2022)
+
+This is a hotfix for a few issues.
+
+## Elementary
+- Fix `Results` returning empty generated files
+
+
 ## 1.1.1 - Polish & Shine (20/06/2021)
 
 This release focuses on fixing a few pesky issues.
