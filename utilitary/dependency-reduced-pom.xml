@@ -13,7 +13,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
+        <version>3.9.0</version>
         <configuration>
           <release>${release}</release>
         </configuration>
@@ -142,7 +142,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-core</artifactId>
-      <version>4.2.0</version>
+      <version>4.3.1</version>
       <scope>test</scope>
       <exclusions>
         <exclusion>
@@ -162,7 +162,7 @@
     <dependency>
       <groupId>org.mockito</groupId>
       <artifactId>mockito-junit-jupiter</artifactId>
-      <version>4.2.0</version>
+      <version>4.3.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>

@@ -24,7 +24,7 @@
 package com.karuslabs.satisfactory.ast;
 
 import com.karuslabs.satisfactory.*;
-import com.karuslabs.satisfactory.sequence.Sequence;
+import com.karuslabs.satisfactory.sequence.Sequence.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import java.util.function.Supplier;
@@ -37,12 +37,12 @@ public class Variable implements Assertion<VariableElement> {
         return new Builder();
     }
     
-    private final Sequence.Ordered<AnnotationMirror> annotations;
-    private final Sequence.Unordered<Modifier> modifiers;
+    private final Ordered<AnnotationMirror> annotations;
+    private final Unordered<Modifier> modifiers;
     private final Assertion<TypeMirror> type;
     private final Assertion<String> name;
     
-    Variable(Sequence.Ordered<AnnotationMirror> annotations, Sequence.Unordered<Modifier> modifiers, Assertion<TypeMirror> type, Assertion<String> name) {
+    Variable(Ordered<AnnotationMirror> annotations, Unordered<Modifier> modifiers, Assertion<TypeMirror> type, Assertion<String> name) {
         this.annotations = annotations;
         this.modifiers = modifiers;
         this.type = type;
@@ -68,17 +68,17 @@ public class Variable implements Assertion<VariableElement> {
     
     public static class Builder implements Supplier<Variable> {
 
-        private Sequence.Ordered<AnnotationMirror> annotations = Sequence.Ordered.any();
-        private Sequence.Unordered<Modifier> modifiers = Sequence.Unordered.any();
+        private Ordered<AnnotationMirror> annotations = Ordered.any();
+        private Unordered<Modifier> modifiers = Unordered.any();
         private Assertion<TypeMirror> type = Assertion.any();
         private Assertion<String> name = Assertion.any();
         
-        public Builder annotations(Sequence.Ordered<AnnotationMirror> annotations) {
+        public Builder annotations(Ordered<AnnotationMirror> annotations) {
             this.annotations = annotations;
             return this;
         }
         
-        public Builder modifiers(Sequence.Unordered<Modifier> modifiers) {
+        public Builder modifiers(Unordered<Modifier> modifiers) {
             this.modifiers = modifiers;
             return this;
         }

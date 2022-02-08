@@ -41,6 +41,16 @@ public sealed interface Result {
     boolean success();
     
     static sealed interface AST extends Result {
+        static record Method(
+            ExecutableElement actual, Result annotations,  Result modifiers, 
+            Result type, Result name, Result parameters, Result exceptions, boolean success
+        ) implements AST {
+            @Override
+            public <T, R> R accept(Visitor<T, R> visitor, T value) {
+                return visitor.method(this, value);
+            }
+        }
+        
         static record Variable(VariableElement actual, Result annotations, Result modifiers, Result type, Result name, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
