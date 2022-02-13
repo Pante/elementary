@@ -35,18 +35,19 @@ public class Method implements Assertion<ExecutableElement> {
     
     private final Ordered<AnnotationMirror> annotations;
     private final Unordered<Modifier> modifiers;
+    private final Ordered<TypeMirror> bounds;
     private final Assertion<TypeMirror> type;
     private final Assertion<String> name;
-    // TODO: add support for TypeParameters
     private final Ordered<VariableElement> parameters;
     private final Ordered<TypeMirror> thrown;
     
     Method(
-        Ordered<AnnotationMirror> annotations, Unordered<Modifier> modifiers, Assertion<TypeMirror> type,
-        Assertion<String> name, Ordered<VariableElement> parameters, Ordered<TypeMirror> thrown
+        Ordered<AnnotationMirror> annotations, Unordered<Modifier> modifiers, Ordered<TypeMirror> bounds,
+        Assertion<TypeMirror> type, Assertion<String> name, Ordered<VariableElement> parameters, Ordered<TypeMirror> thrown
     ) {
         this.annotations = annotations;
         this.modifiers = modifiers;
+        this.bounds = bounds;
         this.type = type;
         this.name = name;
         this.parameters = parameters;
