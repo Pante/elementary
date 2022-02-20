@@ -67,7 +67,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 ```XML
 <dependency>
     <groupId>com.karuslabs</groupId>
-    <artifactId>satisfactory</artifactId>
+    <artifactId>utilitary</artifactId>
     <version>1.1.2/version>
 </dependency>
 ```
