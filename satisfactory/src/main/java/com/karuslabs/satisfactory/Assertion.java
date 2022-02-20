@@ -26,11 +26,17 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 /**
- * An assertion for conditions that parts of Java's abstract syntax tree (AST) must satisfy. 
- * Composing several assertions provides a declarative approach to matching Java's AST.
- * An analogy to this is RegEx for language elements.
+ * An assertion that elements of Java's abstract syntax tree (AST) must satisfy.
+ * Assertions are intended to be a declarative approach to matching elements.
+ * By composing primitive assertions, increasingly complex conditions and elements
+ * can be asserted, i.e. an assertion may contain other assertions. 
  * 
- * In most cases, it is not necessary to manually implement {@code Assertion}.
+ * An analogy for assertions is "RegEx for Java's AST".
+ * 
+ * An assertion provides the {@code test} to assert an element. It returns a {@code Result}
+ * which can be inspected to determine exactly which part of an assertion failed.
+ * 
+ * In most cases, it should not necessary to manually implement {@code Assertion}.
  * Consider using the composable assertions provided out-of-box before implementing
  * a custom assertion.
  * 

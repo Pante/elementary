@@ -58,6 +58,7 @@ public class Method implements Assertion<ExecutableElement> {
     public Result test(ExecutableElement executable, TypeMirrors types) {
         var annotations = this.annotations.test(executable.getAnnotationMirrors(), types);
         var modifiers = this.modifiers.test(executable.getModifiers(), types);
+        var bounds = this.bounds.test(executable.getTypeParameters().stream().map(TypeParameterElement::asType).toList(), types);
         var type = this.type.test(executable.asType(), types);
         var name = this.name.test(executable.getSimpleName().toString(), types);
         var parameters = this.parameters.test(executable.getParameters(), types);
@@ -67,11 +68,12 @@ public class Method implements Assertion<ExecutableElement> {
             executable, 
             annotations, 
             modifiers, 
+            bounds,
             type, 
             name,
             parameters,
             thrown,
-            annotations.success() && modifiers.success() && type.success() && name.success() && parameters.success() && thrown.success()
+            annotations.success() && modifiers.success() && bounds.success() && type.success() && name.success() && parameters.success() && thrown.success()
         );
     }
     
@@ -79,6 +81,7 @@ public class Method implements Assertion<ExecutableElement> {
 
         private Ordered<AnnotationMirror> annotations = Ordered.any();
         private Unordered<Modifier> modifiers = Unordered.any();
+        private Ordered<TypeMirror> bounds = Ordered.any();
         private Assertion<TypeMirror> type = Assertion.any();
         private Assertion<String> name = Assertion.any();
         private Ordered<VariableElement> parameters;
@@ -91,6 +94,11 @@ public class Method implements Assertion<ExecutableElement> {
         
         public Builder modifiers(Unordered<Modifier> modifiers) {
             this.modifiers = modifiers;
+            return this;
+        }
+        
+        public Builder bounds(Ordered<TypeMirror> bounds) {
+            this.bounds = bounds;
             return this;
         }
         
@@ -116,7 +124,7 @@ public class Method implements Assertion<ExecutableElement> {
         
         @Override
         public Method get() {
-            return new Method(annotations, modifiers, type, name, parameters, thrown);
+            return new Method(annotations, modifiers, bounds, type, name, parameters, thrown);
         }
         
     }

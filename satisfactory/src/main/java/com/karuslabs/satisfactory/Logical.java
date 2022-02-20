@@ -29,8 +29,18 @@ import java.util.*;
 
 import static com.karuslabs.satisfactory.Concatenation.concat;
 
+/**
+ * Represents a logical negation of a given assertion.
+ */
 record Not<T>(Assertion<T> negation) implements Assertion<T> {
     
+    /**
+     * Returns a logical negation of the given assertion.
+     * 
+     * @param <T> the type of the value to be asserted
+     * @param assertion the assertion to be negated
+     * @return a negation of the given assertion
+     */
     static <T> Assertion<T> of(Assertion<T> assertion) {
         return assertion instanceof Not not ? not.negation : new Not<>(assertion);
     }
@@ -43,8 +53,18 @@ record Not<T>(Assertion<T> negation) implements Assertion<T> {
     
 }
 
+/**
+ * Represents a non-short-circuiting logical AND of the given assertions.
+ */
 record And<T>(Assertion<T>... operands) implements Assertion<T> {
     
+    /**
+     * Returns a composed {@code Assertion} that represents a non-short-circuiting
+     * logical AND of {@code left} and {@code others}.
+     * 
+     * @param others the predicates will be logically-ANDed with this predicate
+     * @return a composed predicate that represents a non-short-circuiting logical AND
+     */
     static <T> Assertion<T> of(Assertion<T> left, Assertion<T>... right) {
         var assertions = new ArrayList<Assertion<T>>();
         for (var assertion : concat(left, right)) {
@@ -82,8 +102,18 @@ record And<T>(Assertion<T>... operands) implements Assertion<T> {
     }
 }
 
+/**
+ * Represents a non-short-circuiting logical OR of the given assertions.
+ */
 record Or<T>(Assertion<T>... operands) implements Assertion<T> {
     
+    /**
+     * Returns a composed {@code Assertion} that represents a non-short-circuiting
+     * logical OR of this assertion and {@code others}.
+     * 
+     * @param others the predicates will be logically-ORed with this predicate
+     * @return a composed predicate that represents a non-short-circuiting logical OR
+     */
     static <T> Assertion<T> of(Assertion<T> left, Assertion<T>... right) {
         var assertions = new ArrayList<Assertion<T>>();
         for (var assertion : concat(left, right)) {
@@ -122,6 +152,14 @@ record Or<T>(Assertion<T>... operands) implements Assertion<T> {
 }
 
 class Concatenation {
+    /**
+     * Combines the given assertions into a single array.
+     * 
+     * @param <T> the type of the value to be asserted 
+     * @param left an assertion
+     * @param right the other assertions
+     * @return an array which contains all of the given assertions
+     */
     static <T> Assertion<T>[] concat(Assertion<T> left, Assertion<T>... right) {
         var assertions = new Assertion[1 + right.length];
         assertions[0] = left;

@@ -31,18 +31,53 @@ import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.*;
 
+/**
+ * The results of an {@code Assertion}. Like {@code Assertion}s, {@code Result}s
+ * can be composed to describe the results of a complex assertion. 
+ * 
+ * A {@code Result} may be inspected to determine exactly which part of an assertion 
+ * failed. In addition, it may also contain other {@code Result}s. To traverse a
+ * tree of nested {@code Result}s, consider implementing and using a {@code Visitor}.
+ */
 public sealed interface Result {
 
+    /**
+     * A {@code Result} that is always {@code true}.
+     */
     static final Result TRUE = new Constant(true);
+    /**
+     * A {@code Result} that is always {@code false}.
+     */
     static final Result FALSE = new Constant(false);
     
+    /**
+     * Applies a visitor to this {@code Result}.
+     * 
+     * @param <T> the type of the additional parameter to the visitor's methods
+     * @param <R> the return type of the visitor's methods 
+     * @param visitor the visitor operating on this {@code Result}
+     * @param value an additional parameter to the visitor
+     * @return a visitor-specified result
+     */
     <T, R> R accept(Visitor<T, R> visitor, T value);
     
+    /**
+     * Whether an assertion is successful.
+     * 
+     * @return {@code true} if an assertion is successful; otherwise {@code false}
+     */
     boolean success();
     
+    /**
+     * A {@code Result} for assertions on Java's abstract syntax tree (AST).
+     */
     static sealed interface AST extends Result {
+        
+        /**
+         * The results of an assertion on a method.
+         */
         static record Method(
-            ExecutableElement actual, Result annotations,  Result modifiers, 
+            ExecutableElement actual, Result annotations,  Result modifiers, Result bounds,
             Result type, Result name, Result parameters, Result exceptions, boolean success
         ) implements AST {
             @Override
@@ -51,6 +86,9 @@ public sealed interface Result {
             }
         }
         
+        /**
+         * The results of an assertion on a variable.
+         */
         static record Variable(VariableElement actual, Result annotations, Result modifiers, Result type, Result name, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -58,7 +96,9 @@ public sealed interface Result {
             }
         }
         
-        
+        /**
+         * The results of an assertion on a variable.
+         */
         static record Annotation(AnnotationMirror annotation, Result type, Result values, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -66,6 +106,9 @@ public sealed interface Result {
             }
         }
         
+        /**
+         * The results of an assertion on an annotation value.
+         */
         static record AnnotationField(Entry<? extends ExecutableElement, ? extends AnnotationValue> actual, String name, Result literal, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -73,6 +116,9 @@ public sealed interface Result {
             }
         }
         
+        /**
+         * The results of an assertion on an AST element's modifiers.
+         */
         static record Modifiers(Set<? extends Modifier> actual, Set<Modifier> expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -80,6 +126,9 @@ public sealed interface Result {
             }
         }
         
+        /**
+         * The results of an assertion on an AST element's type.
+         */
         static record Type(TypeMirror actual, Relation relation, List<TypeMirror> expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -87,6 +136,9 @@ public sealed interface Result {
             }
         }
     
+        /**
+         * The results of an assertion on an AST element's modifiers.
+         */
         static record Primitive(TypeKind actual, TypeKind expected, boolean success) implements AST {
             @Override
             public <T, R> R accept(Visitor<T, R> visitor, T value) {
@@ -95,7 +147,13 @@ public sealed interface Result {
         } 
     }
     
+    /**
+     * A {@code Result} that represents a sequence of {@code Result}s.
+     */
     static sealed interface Sequence extends Result {
+        /**
+         * A {@code Result} that represents an ordered sequence of {@code Result}s.
+         */
         static sealed interface Ordered extends Sequence {
             static record Pattern(List<Result> results, boolean success) implements Ordered {
                 @Override
@@ -117,6 +175,9 @@ public sealed interface Result {
             }
         }
         
+        /**
+         * A {@code Result} that represents an unordered sequence of {@code Result}s.
+         */
         static sealed interface Unordered extends Sequence {      
             static record Contains(List<Result> results, int actual, int expected, boolean success) implements Unordered {
                 @Override
