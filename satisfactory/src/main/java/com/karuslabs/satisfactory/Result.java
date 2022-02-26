@@ -33,11 +33,13 @@ import javax.lang.model.type.*;
 
 /**
  * The results of an {@code Assertion}. Like {@code Assertion}s, {@code Result}s
- * can be composed to describe the results of a complex assertion. 
+ * can be combined to describe the results of a complex assertion. 
  * 
  * A {@code Result} may be inspected to determine exactly which part of an assertion 
  * failed. In addition, it may also contain other {@code Result}s. To traverse a
  * tree of nested {@code Result}s, consider implementing and using a {@code Visitor}.
+ * 
+ * @see com.karuslabs.satisfactory.Visitor
  */
 public sealed interface Result {
 

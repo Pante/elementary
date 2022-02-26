@@ -35,19 +35,19 @@ public class Method implements Assertion<ExecutableElement> {
     
     private final Ordered<AnnotationMirror> annotations;
     private final Unordered<Modifier> modifiers;
-    private final Ordered<TypeMirror> bounds;
+    private final Ordered<TypeMirror> generics;
     private final Assertion<TypeMirror> type;
     private final Assertion<String> name;
     private final Ordered<VariableElement> parameters;
     private final Ordered<TypeMirror> thrown;
     
     Method(
-        Ordered<AnnotationMirror> annotations, Unordered<Modifier> modifiers, Ordered<TypeMirror> bounds,
+        Ordered<AnnotationMirror> annotations, Unordered<Modifier> modifiers, Ordered<TypeMirror> generics,
         Assertion<TypeMirror> type, Assertion<String> name, Ordered<VariableElement> parameters, Ordered<TypeMirror> thrown
     ) {
         this.annotations = annotations;
         this.modifiers = modifiers;
-        this.bounds = bounds;
+        this.generics = generics;
         this.type = type;
         this.name = name;
         this.parameters = parameters;
@@ -58,7 +58,7 @@ public class Method implements Assertion<ExecutableElement> {
     public Result test(ExecutableElement executable, TypeMirrors types) {
         var annotations = this.annotations.test(executable.getAnnotationMirrors(), types);
         var modifiers = this.modifiers.test(executable.getModifiers(), types);
-        var bounds = this.bounds.test(executable.getTypeParameters().stream().map(TypeParameterElement::asType).toList(), types);
+        var generics = this.generics.test(executable.getTypeParameters().stream().map(TypeParameterElement::asType).toList(), types);
         var type = this.type.test(executable.asType(), types);
         var name = this.name.test(executable.getSimpleName().toString(), types);
         var parameters = this.parameters.test(executable.getParameters(), types);
@@ -68,12 +68,13 @@ public class Method implements Assertion<ExecutableElement> {
             executable, 
             annotations, 
             modifiers, 
-            bounds,
+            generics,
             type, 
             name,
             parameters,
             thrown,
-            annotations.success() && modifiers.success() && bounds.success() && type.success() && name.success() && parameters.success() && thrown.success()
+            annotations.success() && modifiers.success() && generics.success() && type.success() && 
+            name.success() && parameters.success() && thrown.success()
         );
     }
     
@@ -81,7 +82,7 @@ public class Method implements Assertion<ExecutableElement> {
 
         private Ordered<AnnotationMirror> annotations = Ordered.any();
         private Unordered<Modifier> modifiers = Unordered.any();
-        private Ordered<TypeMirror> bounds = Ordered.any();
+        private Ordered<TypeMirror> generics = Ordered.any();
         private Assertion<TypeMirror> type = Assertion.any();
         private Assertion<String> name = Assertion.any();
         private Ordered<VariableElement> parameters;
@@ -97,8 +98,8 @@ public class Method implements Assertion<ExecutableElement> {
             return this;
         }
         
-        public Builder bounds(Ordered<TypeMirror> bounds) {
-            this.bounds = bounds;
+        public Builder generics(Ordered<TypeMirror> generics) {
+            this.generics = generics;
             return this;
         }
         
@@ -124,7 +125,7 @@ public class Method implements Assertion<ExecutableElement> {
         
         @Override
         public Method get() {
-            return new Method(annotations, modifiers, bounds, type, name, parameters, thrown);
+            return new Method(annotations, modifiers, generics, type, name, parameters, thrown);
         }
         
     }

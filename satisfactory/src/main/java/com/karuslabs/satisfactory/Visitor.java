@@ -26,6 +26,13 @@ package com.karuslabs.satisfactory;
 import com.karuslabs.satisfactory.Result.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+/**
+ * A {@code Visitor} for inspecting the {@code Result} of an assertion. By default,
+ * all methods forward to {@link #result(Result, Object)}.
+ * 
+ * @param <T> the type of the additional parameter to the visitor's methods 
+ * @param <R> the return type of the visitor's methods 
+ */
 public interface Visitor<T, R> {
     
     default @Nullable R method(AST.Method method, T value) {
