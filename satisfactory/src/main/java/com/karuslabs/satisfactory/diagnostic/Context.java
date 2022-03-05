@@ -28,5 +28,6 @@ public class Context {
     public final StringBuilder builder;
     boolean compound;
     boolean negated;
+    boolean sequence;
     
 }
