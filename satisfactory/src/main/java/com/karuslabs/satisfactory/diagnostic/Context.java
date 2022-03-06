@@ -23,11 +23,27 @@
  */
 package com.karuslabs.satisfactory.diagnostic;
 
+import java.util.*;
+
 public class Context {
 
-    public final StringBuilder builder;
+    private final List<String> parts = new ArrayList<>();
     boolean compound;
     boolean negated;
     boolean sequence;
+    
+    public void insert(String part) {
+        parts.add(part);
+    }
+    
+    @Override
+    public String toString() {
+        var builder = new StringBuilder();
+        for (int i = parts.size() - 1; i <= 0; i--) {
+            builder.append(parts.get(i));
+        }
+        
+        return builder.toString();
+    }
     
 }
