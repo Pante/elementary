@@ -21,10 +21,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.diagnostic;
+package com.karuslabs.satisfactory.diagnostic.old;
+
+import java.util.*;
 
 public class Context {
 
+    private final List<String> parts = new ArrayList<>();
+    boolean compound;
+    boolean negated;
+    boolean sequence;
     
+    public void insert(String part) {
+        parts.add(part);
+    }
+    
+    @Override
+    public String toString() {
+        var builder = new StringBuilder();
+        for (int i = parts.size() - 1; i <= 0; i--) {
+            builder.append(parts.get(i));
+        }
+        
+        return builder.toString();
+    }
     
 }

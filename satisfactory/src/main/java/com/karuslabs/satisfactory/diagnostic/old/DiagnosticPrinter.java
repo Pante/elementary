@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.satisfactory.diagnostic;
+package com.karuslabs.satisfactory.diagnostic.old;
 
 import com.karuslabs.satisfactory.*;
 import com.karuslabs.utilitary.Texts;
@@ -31,22 +31,6 @@ public class DiagnosticPrinter implements Visitor<Context, Void> {
 
     @Override
     public Void type(Result.AST.Type result, Context context) {
-        if (result.success() || context.negated) {
-            return null;
-        }
-        
-        var verb = context.negated ? "should not be " : "should be ";
-        var relation = switch (result.relation()) {
-            case IS -> "";
-            case SUBTYPE -> "subtype of ";
-            case SUPERTYPE -> "supertype of ";
-        };
-            
-        var conditions = context.negated ? 
-            Texts.or(result.expected(), (type, builder) -> type.accept(TypePrinter.qualified(), builder)) :
-            Texts.and(result.expected(), (type, builder) -> type.accept(TypePrinter.qualified(), builder));
-                
-        context.builder.append(verb).append(relation).append(conditions);
         
         return null;
     }
