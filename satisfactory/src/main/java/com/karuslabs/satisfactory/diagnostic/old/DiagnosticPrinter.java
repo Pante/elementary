@@ -24,8 +24,6 @@
 package com.karuslabs.satisfactory.diagnostic.old;
 
 import com.karuslabs.satisfactory.*;
-import com.karuslabs.utilitary.Texts;
-import com.karuslabs.utilitary.type.TypePrinter;
 
 public class DiagnosticPrinter implements Visitor<Context, Void> {
 
