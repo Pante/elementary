@@ -24,6 +24,9 @@
 package com.karuslabs.satisfactory.diagnostic.old;
 
 import com.karuslabs.satisfactory.*;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.*;
 
 public class DiagnosticPrinter implements Visitor<Context, Void> {
 
@@ -36,6 +39,23 @@ public class DiagnosticPrinter implements Visitor<Context, Void> {
     @Override
     public Void result(Result result, Context value) {
         return null;
+    }
+    
+}
+
+class Foo {
+    
+    void createFoo(String path) throws IOException {
+        var file = new File(path);
+        file.createNewFile();
+        
+        try (var writer = new FileWriter(file)) {
+            writer.write("Hello world!");
+        }
+    }
+    
+    void createBar(String path) throws IOException {
+        Files.write(Paths.get(path), "Hello world!".getBytes(StandardCharsets.UTF_8));
     }
     
 }
