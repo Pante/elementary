@@ -43,19 +43,3 @@ public class DiagnosticPrinter implements Visitor<Context, Void> {
     
 }
 
-class Foo {
-    
-    void createFoo(String path) throws IOException {
-        var file = new File(path);
-        file.createNewFile();
-        
-        try (var writer = new FileWriter(file)) {
-            writer.write("Hello world!");
-        }
-    }
-    
-    void createBar(String path) throws IOException {
-        Files.write(Paths.get(path), "Hello world!".getBytes(StandardCharsets.UTF_8));
-    }
-    
-}
