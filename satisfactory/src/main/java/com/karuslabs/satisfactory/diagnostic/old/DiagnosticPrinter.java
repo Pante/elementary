@@ -24,9 +24,6 @@
 package com.karuslabs.satisfactory.diagnostic.old;
 
 import com.karuslabs.satisfactory.*;
-import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.*;
 
 public class DiagnosticPrinter implements Visitor<Context, Void> {
 
@@ -42,4 +39,3 @@ public class DiagnosticPrinter implements Visitor<Context, Void> {
     }
     
 }
-
