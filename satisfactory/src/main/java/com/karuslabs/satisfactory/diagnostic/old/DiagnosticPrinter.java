@@ -29,7 +29,6 @@ public class DiagnosticPrinter implements Visitor<Context, Void> {
 
     @Override
     public Void type(Result.AST.Type result, Context context) {
-        
         return null;
     }
 
