@@ -31,10 +31,23 @@ import java.util.Map.Entry;
 import javax.lang.model.element.*;
 import javax.lang.model.type.TypeMirror;
 
+/**
+ * Represents an assertion on an annotation.
+ */
 public class Annotation implements Assertion<AnnotationMirror> {
 
+    /**
+     * An assertion on an annotation that always returns true.
+     */
     public static Assertion<AnnotationMirror> ANY_ANNOTATION = (value, type) -> Result.TRUE;
     
+    /**
+     * Returns an assertion which is satisfied if an annotation's type is exactly
+     * the given type.
+     * 
+     * @param type the expected type of an annotation
+     * @return an assertion on an annotation
+     */
     public static Annotation annotation(Class<? extends java.lang.annotation.Annotation> type) {
         return new Annotation(Type.equal(type), Unordered.any());
     }
@@ -42,6 +55,12 @@ public class Annotation implements Assertion<AnnotationMirror> {
     private final Assertion<TypeMirror> type;
     private final Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values; 
     
+    /**
+     * Creates an {@code Annotation} with the given parameters.
+     * 
+     * @param type the expected type of an annotation
+     * @param values the expected values of an annotation
+     */
     public Annotation(Assertion<TypeMirror> type, Unordered<Entry<? extends ExecutableElement, ? extends AnnotationValue>> values) {
         this.type = type;
         this.values = values;
