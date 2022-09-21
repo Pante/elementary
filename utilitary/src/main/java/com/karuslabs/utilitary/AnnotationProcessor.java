@@ -23,7 +23,6 @@
  */
 package com.karuslabs.utilitary;
 
-import com.karuslabs.annotations.*;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.annotation.processing.*;
@@ -39,17 +38,17 @@ public abstract class AnnotationProcessor extends AbstractProcessor {
      * The {@code Elements} in the current annotation processing environment.
      * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
-    protected @Lazy Elements elements;
+    protected Elements elements;
     /**
      * The {@code TypeMirrors} in the current annotation processing environment.
      * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
-    protected @Lazy TypeMirrors types;
+    protected TypeMirrors types;
     /**
      * The {@code Logger} in the current annotation processing environment.
      * Not available until {@link #init(ProcessingEnvironment)} is called.
      */
-    protected @Lazy Logger logger;
+    protected Logger logger;
     
     /**
      * Initializes this annotation processor and its fields.

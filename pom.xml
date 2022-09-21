@@ -53,13 +53,6 @@
     
     <dependencies>
         <dependency>
-            <groupId>com.karuslabs</groupId>
-            <artifactId>annotations</artifactId>
-            <version>4.9.0-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
-         
-        <dependency>
             <groupId>org.checkerframework</groupId>
             <artifactId>checker-qual</artifactId>
             <version>3.14.0</version>

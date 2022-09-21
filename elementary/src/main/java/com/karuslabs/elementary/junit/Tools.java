@@ -23,7 +23,6 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.annotations.Static;
 import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
@@ -41,7 +40,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * 
  * @see ToolsExtension
  */
-public @Static class Tools {
+public class Tools {
     
     static @Nullable Environment environment;
     

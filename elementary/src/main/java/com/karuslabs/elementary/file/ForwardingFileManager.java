@@ -23,8 +23,6 @@
  */
 package com.karuslabs.elementary.file;
 
-import com.karuslabs.annotations.Delegate;
-
 import java.io.*;
 import java.nio.file.Path;
 import java.util.*;
@@ -33,7 +31,7 @@ import javax.tools.*;
 /**
  * A file manager that forwards all calls to an underlying {@code StandardJavaFileManager}.
  */
-public abstract @Delegate class ForwardingFileManager implements StandardJavaFileManager {
+public abstract class ForwardingFileManager implements StandardJavaFileManager {
 
     private final StandardJavaFileManager manager;
     

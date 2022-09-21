@@ -23,8 +23,6 @@
  */
 package com.karuslabs.elementary.file;
 
-import com.karuslabs.annotations.*;
-
 import java.io.*;
 import java.net.URI;
 import javax.tools.*;
@@ -65,7 +63,7 @@ class MemoryFileObject extends SimpleJavaFileObject {
     
     
     @Override
-    public Reader openReader(@Ignored boolean ignoreEncodingErrors) throws FileNotFoundException {
+    public Reader openReader(boolean ignoreEncodingErrors) throws FileNotFoundException {
         return source().openReader(ignoreEncodingErrors);
     }
     
@@ -89,7 +87,7 @@ class MemoryFileObject extends SimpleJavaFileObject {
     
     
     @Override
-    public CharSequence getCharContent(@Ignored boolean ignoreEncodingErrors) throws FileNotFoundException {
+    public CharSequence getCharContent(boolean ignoreEncodingErrors) throws FileNotFoundException {
         return source().getCharContent(ignoreEncodingErrors);
     }
     

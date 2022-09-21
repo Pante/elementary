@@ -23,8 +23,6 @@
  */
 package com.karuslabs.utilitary;
 
-import com.karuslabs.annotations.Static;
-
 import javax.lang.model.element.Name;
 
 /**
@@ -32,7 +30,7 @@ import javax.lang.model.element.Name;
  * <br><br>
  * <b>This class should not be used in production.</b>
  */
-public @Static class Names {
+public class Names {
     
     /**
      * Creates a {@code Name} from the given type's simple name.

@@ -23,15 +23,13 @@
  */
 package com.karuslabs.utilitary;
 
-import com.karuslabs.annotations.Static;
-
 import java.util.Collection;
 import java.util.function.BiConsumer;
 
 /**
  * Utilities for formatting messages.
  */
-public @Static class Texts {
+public class Texts {
     
     /**
      * The format used to describe strings.

@@ -23,7 +23,6 @@
  */
 package com.karuslabs.satisfactory;
 
-import com.karuslabs.annotations.Static;
 import com.karuslabs.satisfactory.logical.*;
 
 import java.util.Set;
@@ -38,7 +37,7 @@ import static com.karuslabs.satisfactory.Type.Relation.*;
  * This class provides constants for frequently used assertion and utility methods 
  * for creating {@code Assertion}s.
  */
-public @Static class Assertions {
+public class Assertions {
     
     /**
      * An assertion that is satisfied by any {@code VariableElement}.

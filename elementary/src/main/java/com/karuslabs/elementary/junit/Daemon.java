@@ -23,7 +23,6 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.annotations.Ignored;
 import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
 import com.karuslabs.elementary.junit.annotations.*;
 
@@ -56,7 +55,7 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      * @throws UnsupportedOperationException if parallel test execution is enabled
      */
     @Override
-    public Object createTestInstance(@Ignored TestInstanceFactoryContext factory, ExtensionContext context) throws TestInstantiationException {
+    public Object createTestInstance(TestInstanceFactoryContext factory, ExtensionContext context) throws TestInstantiationException {
         var constructors = context.getRequiredTestClass().getDeclaredConstructors();
         if (constructors.length != 1) {
             throw new TestInstantiationException("Test class contains " + constructors.length + " constructors, should contain only 1");
@@ -125,7 +124,7 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      * @throws Throwable if the invocation throws an exception
      */
     @Override
-    public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> method, @Ignored ExtensionContext context) throws Throwable {
+    public void interceptTestMethod(Invocation<Void> invocation, ReflectiveInvocationContext<Method> method, ExtensionContext context) throws Throwable {
         var executable = method.getExecutable();
         if (executable.getAnnotationsByType(Resource.class).length > 0 || executable.getAnnotationsByType(Inline.class).length > 0) {
             throw new IllegalArgumentException("Method cannot be annotated with @Classpath, @Inline or @Resource when using ToolsExtension");

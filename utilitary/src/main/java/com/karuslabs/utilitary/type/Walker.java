@@ -23,8 +23,6 @@
  */
 package com.karuslabs.utilitary.type;
 
-import com.karuslabs.annotations.Ignored;
-
 import javax.lang.model.type.*;
 import javax.lang.model.util.SimpleTypeVisitor9;
 
@@ -76,7 +74,7 @@ public abstract class Walker<T> extends SimpleTypeVisitor9<TypeMirror, T> {
     }
     
     @Override
-    public @Nullable TypeMirror defaultAction(TypeMirror type, @Ignored T parameter) {
+    public @Nullable TypeMirror defaultAction(TypeMirror type, T parameter) {
         return null;
     }
     
