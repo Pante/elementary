@@ -23,10 +23,12 @@
  */
 package com.karuslabs.elementary.junit;
 
+import com.karuslabs.elementary.*;
+import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.junit.DaemonCompiler.DaemonProcessor;
 import com.karuslabs.elementary.junit.annotations.Inline;
 
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.CompletionException;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
@@ -51,11 +53,28 @@ class DaemonCompilerTest {
     }
     
     @Test
-    void run_throws_exception() {
+    void run_compiler_crash() {
+        var compiler = mock(Compiler.class);
+        when(compiler.processors(any(Processor[].class))).thenReturn(compiler);
+        when(compiler.compile(any(List.class))).thenThrow(RuntimeException.class);
+        
+        var daemon = new DaemonCompiler(compiler, List.of());
+        daemon.start();
+        
+        assertEquals(CompilationException.class, assertThrows(CompletionException.class, daemon::environment).getCause().getClass());
+    }
+    
+    @Test
+    void run_invalid_source() {
         var compiler = DaemonCompiler.of(DaemonCompilerTest.class);
         compiler.start();
         
-        assertThrows(CompletionException.class, compiler::environment).getMessage();
+        assertEquals(
+            "com.karuslabs.elementary.CompilationException: invalid.java:1: error: reached end of file while parsing\n" +
+            "f\n" +
+            "^",
+            assertThrows(CompletionException.class, compiler::environment).getMessage()
+        );
     }
     
 }

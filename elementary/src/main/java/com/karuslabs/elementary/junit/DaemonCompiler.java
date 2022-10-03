@@ -24,7 +24,7 @@
 package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.Compiler;
-import com.karuslabs.elementary.CompilationException;
+import com.karuslabs.elementary.*;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -105,14 +105,18 @@ class DaemonCompiler extends Thread {
     
     @Override
     public void run() {
+        Results results;
+        
         try {
-            var results = compiler.compile(files);
-            if (!results.success) {
-                throw new CompilationException(results.find().diagnostics());
-            }
+            results = compiler.compile(files);
             
         } catch (Throwable e) {
-            processor.environment.completeExceptionally(new CompilationException("Failed to start javac", e));
+            processor.environment.completeExceptionally(new CompilationException("javac either crashed or failed to start.", e));
+            return;
+        }
+        
+        if (!results.success) {
+            processor.environment.completeExceptionally(new CompilationException(results.find().diagnostics()));
         }
     }
     
