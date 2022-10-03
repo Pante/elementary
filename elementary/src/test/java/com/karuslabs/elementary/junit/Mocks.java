@@ -132,6 +132,11 @@ class MockContext implements ExtensionContext {
     public ExecutionMode getExecutionMode() {
         return null;
     }
+
+    @Override
+    public ExecutableInvoker getExecutableInvoker() {
+        return null;
+    }
     
 }
 
