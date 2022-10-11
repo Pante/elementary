@@ -72,7 +72,7 @@ public class JavacExtension implements ParameterResolver {
      */
     void resolve(Compiler compiler, AnnotatedElement annotated) {
         var flags = annotated.getAnnotation(Options.class);
-        compiler.options(flags == null ? EMPTY : flags.value().split(" -"));
+        compiler.options(flags == null ? EMPTY : flags.value().split(" "));
         
         var processors = new ArrayList<Processor>();
         var annotation = annotated.getAnnotation(Processors.class);
