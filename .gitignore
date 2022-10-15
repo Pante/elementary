@@ -50,11 +50,7 @@ Temporary Items
 # JetBrains .gitignore
 .idea/
 /nbproject/
-/satisfactory/target/
 
+*dependency-reduced-pom.xml
 *.iml
-/elementary/target/
-/elementary-core/target/
-/utilitary/target/
-/sample/.gradle/
-/sample/build/
+**/target/
