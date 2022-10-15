@@ -49,6 +49,7 @@
         <module>elementary</module>
         <module>satisfactory</module>
         <module>utilitary</module>
+        <module>utilitary-itest</module>
     </modules>
     
     <dependencies>
