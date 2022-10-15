@@ -24,7 +24,10 @@
 package com.karuslabs.elementary.file;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URI;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.tools.*;
 import javax.tools.JavaFileObject.Kind;
@@ -45,7 +48,12 @@ public class MemoryFileManager extends ForwardingFileManager {
      * @return a URI
      */
     static URI of(Location location, String pack, String relative) {
-        return URI.create("mem:///" + location.getName() + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
+        try {
+            final String locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8.toString());
+            return URI.create("mem:///" + locationName + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
     
     /**
@@ -57,7 +65,12 @@ public class MemoryFileManager extends ForwardingFileManager {
      * @return a URI
      */
     static URI of(Location location, String type, Kind kind) {
-        return URI.create("mem:///" + location.getName() + "/" + type.replace('.', '/') + kind.extension);
+        try {
+            final String locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8.toString());
+            return URI.create("mem:///" + locationName + "/" + type.replace('.', '/') + kind.extension);
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     
