@@ -4,7 +4,7 @@
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17. [Why Java 11?](https://github.com/Pante/elementary/wiki/FAQ#why-does-elementary-require-java-11-and-above) Read the [wiki](https://github.com/Pante/elementary/wiki) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
+**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17. Read the [wiki](https://github.com/Pante/elementary/wiki) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
 
 **Please read [The Problem With Annotation Processors](https://dzone.com/articles/the-problem-with-annotation-processors) if you're interested in what problem Elementary solves.**
 
