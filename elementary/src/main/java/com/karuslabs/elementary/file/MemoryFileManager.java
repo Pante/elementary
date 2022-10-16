@@ -24,7 +24,6 @@
 package com.karuslabs.elementary.file;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -41,54 +40,46 @@ public class MemoryFileManager extends ForwardingFileManager {
 
     /**
      * Creates a URI using the given location, package and relative file name.
-     * 
+     *
      * @param location the location
-     * @param pack the package
+     * @param pack     the package
      * @param relative the relative file name
      * @return a URI
      */
     static URI of(Location location, String pack, String relative) {
-        try {
-            final String locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8.toString());
-            return URI.create("mem:///" + locationName + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        var locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8);
+        return URI.create("mem:///" + locationName + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
     }
-    
+
     /**
      * Creates a URI using the given location, class name and file kind.
-     * 
+     *
      * @param location the location
-     * @param type the class name
-     * @param kind the file kind
+     * @param type     the class name
+     * @param kind     the file kind
      * @return a URI
      */
     static URI of(Location location, String type, Kind kind) {
-        try {
-            final String locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8.toString());
-            return URI.create("mem:///" + locationName + "/" + type.replace('.', '/') + kind.extension);
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException(e);
-        }
+        var locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8);
+        return URI.create("mem:///" + locationName + "/" + type.replace('.', '/') + kind.extension);
     }
 
-    
+
     private final Map<URI, JavaFileObject> files = new HashMap<>();
-    
+
     /**
      * Creates a {@code MemoryFileManager} with the given underlying manager.
-     * 
+     *
      * @param manager the underlying file manager
      */
     public MemoryFileManager(StandardJavaFileManager manager) {
         super(manager);
     }
-    
-    
+
+
     /**
      * Determines if the two {@code FileObject}s are equal by comparing their URIs.
-     * 
+     *
      * @param a the first {@code FileObject}
      * @param b the second {@code FileObject}
      * @return {@code true} if the URIs of the two {@code FileObject}s are equal
@@ -97,65 +88,65 @@ public class MemoryFileManager extends ForwardingFileManager {
     public boolean isSameFile(FileObject a, FileObject b) {
         return a.toUri().equals(b.toUri());
     }
-    
-    
+
+
     @Override
     public @Nullable FileObject getFileForInput(Location location, String pack, String relative) throws IOException {
         if (location.isOutputLocation()) {
             return files.get(of(location, pack, relative));
-                    
+
         } else {
             return super.getFileForInput(location, pack, relative);
         }
     }
-    
+
     @Override
     public @Nullable JavaFileObject getJavaFileForInput(Location location, String type, Kind kind) throws IOException {
         if (location.isOutputLocation()) {
             return files.get(of(location, type, kind));
-            
+
         } else {
             return super.getJavaFileForInput(location, type, kind);
         }
     }
-    
-    
+
+
     @Override
     public FileObject getFileForOutput(Location location, String pack, String relative, FileObject sibling) {
         return files.computeIfAbsent(of(location, pack, relative), MemoryFileObject::new);
     }
-    
+
     @Override
     public JavaFileObject getJavaFileForOutput(Location location, String type, Kind kind, FileObject sibling) {
         return files.computeIfAbsent(of(location, type, kind), MemoryFileObject::new);
     }
-    
-    
+
+
     /**
      * Returns the generated Java source files.
-     * 
+     *
      * @return the generated Java source files
      */
     public List<JavaFileObject> generatedSources() {
         var sources = new ArrayList<JavaFileObject>();
         var prefix = "/" + StandardLocation.SOURCE_OUTPUT.name();
-        
+
         for (var entry : files.entrySet()) {
             if (entry.getKey().getPath().startsWith(prefix) && entry.getValue().getKind() == Kind.SOURCE) {
                 sources.add(entry.getValue());
             }
         }
-        
+
         return sources;
     }
-    
+
     /**
      * Returns the output files.
-     * 
+     *
      * @return the output files
      */
     public List<JavaFileObject> outputFiles() {
         return new ArrayList<>(files.values());
     }
-    
+
 }
