@@ -1,0 +1,11 @@
+"area: elementary":
+  - elementary/**
+
+"area: satisfactory":
+  - satisfactory/**
+
+"area: utilitary":
+  - utilitary/**
+
+"area: infrastructure":
+  - .github/**

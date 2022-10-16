@@ -1,17 +1,14 @@
-name: Elementary CI/CD
+name: Build & Test
 
-on:
-  push:
-    branches:
-      - stable
-
+on: pull_request
+      
 env:
   SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
   SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
 
 jobs:
-  stable:
-    runs-on: ubuntu-20.04
+  build:
+    runs-on: ubuntu-latest
     steps:
       - uses: styfle/cancel-workflow-action@0.4.1
         with:
@@ -19,6 +16,6 @@ jobs:
       - uses: actions/checkout@v2
       - uses: actions/setup-java@v1
         with:
-          java-version: 11
-      - run: mvn deploy site site:stage-deploy site-deploy -Drepository-head=latest --settings ci-settings.xml --no-transfer-progress
+          java-version: 17
+      - run: mvn install --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
