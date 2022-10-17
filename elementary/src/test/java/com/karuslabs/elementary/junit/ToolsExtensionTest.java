@@ -67,20 +67,20 @@ class ToolsExtensionTest {
     }
     
     @Test
-    void introspect_class(Cases cases) {
+    void introspect_class(Labels cases) {
         assertEquals(1, cases.count());
     }
     
     static class IntrospectMethod {
         
-        @Case
+        @Label
         void test() {}
         
     }
     
     
     @Test
-    void cases(Cases cases) {
+    void cases(Labels cases) {
         assertNotNull(cases);
     }
     

@@ -186,7 +186,7 @@ class DaemonCompiler extends Thread {
         public final Types types;
         public final Messager messager;
         public final Filer filer;
-        public final Cases cases;
+        public final Labels cases;
         public final TypeMirrors typeMirrors;
         public final Logger logger;
         
@@ -196,7 +196,7 @@ class DaemonCompiler extends Thread {
             this.types = types;
             this.messager = messager;
             this.filer = filer;
-            cases = new Cases(round);
+            cases = new Labels(round);
             typeMirrors = new TypeMirrors(elements, types);
             logger = new Logger(messager);
         }

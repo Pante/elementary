@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-import com.karuslabs.elementary.junit.annotations.Case;
+import com.karuslabs.elementary.junit.annotations.Label;
 
 public class ValidCase {
 
-    @Case("first") public final String field = "";
+    @Label("first") public final String field = "";
     
 }

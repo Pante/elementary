@@ -23,10 +23,9 @@
  */
 package example;
 
-import com.karuslabs.elementary.junit.Cases;
+import com.karuslabs.elementary.junit.Labels;
 import com.karuslabs.elementary.junit.Tools;
 import com.karuslabs.elementary.junit.ToolsExtension;
-import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.elementary.junit.annotations.Introspect;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -38,6 +37,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.karuslabs.elementary.junit.annotations.Label;
 
 /**
  * This example demonstrates how to use ToolsExtension to test a lint, described below,
@@ -66,20 +67,20 @@ class ToolsExtensionExampleTest {
     Lint lint = new Lint(Tools.typeMirrors());
     
     @Test
-    void lint_string_variable(Cases cases) { // Cases can also be obtained via Tools.cases() and used to initialize a field
+    void lint_string_variable(Labels cases) { // Labels can also be obtained via Tools.cases() and used to initialize a field
         var first = cases.one("first");
         assertTrue(lint.lint(first));
     }
     
     @Test
-    void lint_method_that_returns_string(Cases cases) {
-        var second = cases.get(1); // Alternatively, we can use cases.one("second")
+    void lint_method_that_returns_string(Labels cases) {
+        var second = cases.get(1); // Alternatively, we can use cases.single("second")
         assertFalse(lint.lint(second));
     }
     
     static class Sample {
-        @Case("first") String something;
-        @Case String second() { return ""; } // The method/variable name is used as the get if none is specified
+        @Label("first") String something;
+        @Label String second() { return ""; } // The method/variable name is used as the get if none is specified
     }
     
 }

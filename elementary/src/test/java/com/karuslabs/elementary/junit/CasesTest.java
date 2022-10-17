@@ -34,11 +34,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Classpath("com.karuslabs.elementary.junit.CasesCases")
 class CasesTest {
 
-    Cases cases = Tools.cases();
+    Labels cases = Tools.cases();
     
     @Test
     void one() {
-        assertNull(cases.one());
+        assertNull(cases.single());
     }
     
     
@@ -56,7 +56,7 @@ class CasesTest {
     
     @Test
     void get_index() {
-        assertEquals("a", cases.get(1).getAnnotation(Case.class).value());
+        assertEquals("a", cases.get(1).getAnnotation(Label.class).value());
     }
     
     @Test

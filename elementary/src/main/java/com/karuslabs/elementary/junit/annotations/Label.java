@@ -30,27 +30,32 @@ import java.lang.annotation.*;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * An annotation to mark and simplify retrieval of test cases in tests extended 
+ * An annotation to mark and simplify retrieval of elements in tests extended 
  * with {@code ToolsExtension}.
  * 
- * @see com.karuslabs.elementary.junit.Cases
+ * @see com.karuslabs.elementary.junit.Labels
  */
 @Usage(ToolsExtension.class)
 @Documented
 @Retention(RUNTIME)
-public @interface Case {
+public @interface Label {
     
     /**
-     * A default value for {@code @Case} used to denote that the annotated target's
-     * name should be used as its label.
-     */
-    static final String DEFAULT_LABEL = "${DEFAULT_LABEL}";
-    
-    /**
-     * An optional label for this case.
+     * A unique value for this label.
+     * 
+     * All labels in a single test class must be unique.
      * 
      * @return a label
      */
-    String value() default DEFAULT_LABEL;
+    String value();
+    
+    /**
+     * The group to which this label belongs.
+     * 
+     * A group can contain several labels.
+     * 
+     * @return a group
+     */
+    String group() default "";
     
 }

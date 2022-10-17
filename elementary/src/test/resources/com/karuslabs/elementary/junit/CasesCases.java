@@ -1,5 +1,5 @@
 
-import com.karuslabs.elementary.junit.annotations.Case;
+import com.karuslabs.elementary.junit.annotations.Label;
 
 /*
  * The MIT License
@@ -26,8 +26,8 @@ import com.karuslabs.elementary.junit.annotations.Case;
  */
 public class CasesCases {
 
-    @Case("a") public void a() {}
+    @Label("a") public void a() {}
     
-    @Case static class A {}
+    @Label static class A {}
     
 }

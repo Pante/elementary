@@ -25,7 +25,6 @@ package example;
 
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
-import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.elementary.junit.annotations.Classpath;
 import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
@@ -42,6 +41,8 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import com.karuslabs.elementary.junit.annotations.Label;
 
 /**
  * This example demonstrates how to use JavacExtension to test the results of
@@ -85,7 +86,7 @@ class StringFieldProcessor extends AnnotationProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
-        var elements = round.getElementsAnnotatedWith(Case.class);
+        var elements = round.getElementsAnnotatedWith(Label.class);
         for (var element : elements) {
             if (!(element instanceof VariableElement)) {
                 logger.error(element, "Element is not a variable");

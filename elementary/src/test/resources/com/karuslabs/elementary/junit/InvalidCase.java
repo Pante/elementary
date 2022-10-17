@@ -22,10 +22,10 @@
  * THE SOFTWARE.
  */
 
-import com.karuslabs.elementary.junit.annotations.Case;
+import com.karuslabs.elementary.junit.annotations.Label;
 
 public class InvalidCase {
 
-    @Case public final int field = 0;
+    @Label public final int field = 0;
     
 }
