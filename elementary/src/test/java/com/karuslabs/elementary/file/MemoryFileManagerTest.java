@@ -27,16 +27,17 @@ import com.karuslabs.elementary.Diagnostics;
 
 import java.io.IOException;
 import java.util.List;
-import javax.tools.JavaFileManager;
-import javax.tools.ToolProvider;
+import javax.tools.*;
 
 import org.junit.jupiter.api.*;
 
 import static com.karuslabs.elementary.file.FileObjects.ofResource;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static java.util.Locale.ENGLISH;
 import static javax.tools.JavaFileObject.Kind.SOURCE;
 import static javax.tools.StandardLocation.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemoryFileManagerTest {
@@ -44,15 +45,15 @@ class MemoryFileManagerTest {
     MemoryFileManager manager = new MemoryFileManager(ToolProvider.getSystemJavaCompiler().getStandardFileManager(new Diagnostics(), ENGLISH, UTF_8));
     
     @Test
-    void of_lpr_doesNotThrow_locationName_illegalCharacters() {
-        JavaFileManager.Location location = locationFor("string[with] illegal\"characters"); 
+    void of_relative_location_illegalCharacters() {
+        var location = locationFor("string[with] illegal\"characters"); 
         
         assertDoesNotThrow(() -> MemoryFileManager.of(location, "my.package", "MyClass.java"));
     }
     
     @Test
-    void of_ltk_doesNotThrow_locationName_illegalCharacters() {
-        JavaFileManager.Location location = locationFor("string[with] illegal\"characters");
+    void of_string_illegalCharacters() {
+        var location = locationFor("string[with] illegal\"characters");
 
         assertDoesNotThrow(() -> MemoryFileManager.of(location, "my.package.MyClass", SOURCE));
     }

@@ -24,8 +24,7 @@
 package com.karuslabs.elementary.file;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URLEncoder;
+import java.net.*;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import javax.tools.*;
@@ -47,8 +46,7 @@ public class MemoryFileManager extends ForwardingFileManager {
      * @return a URI
      */
     static URI of(Location location, String pack, String relative) {
-        var locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8);
-        return URI.create("mem:///" + locationName + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
+        return URI.create("mem:///" + URLEncoder.encode(location.getName(), StandardCharsets.UTF_8) + "/" + (pack.isEmpty() ? "" : (pack.replace('.', '/') + "/")) + relative);
     }
 
     /**
@@ -60,8 +58,7 @@ public class MemoryFileManager extends ForwardingFileManager {
      * @return a URI
      */
     static URI of(Location location, String type, Kind kind) {
-        var locationName = URLEncoder.encode(location.getName(), StandardCharsets.UTF_8);
-        return URI.create("mem:///" + locationName + "/" + type.replace('.', '/') + kind.extension);
+        return URI.create("mem:///" + URLEncoder.encode(location.getName(), StandardCharsets.UTF_8) + "/" + type.replace('.', '/') + kind.extension);
     }
 
 
