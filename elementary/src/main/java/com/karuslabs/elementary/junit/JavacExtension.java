@@ -75,6 +75,7 @@ public class JavacExtension implements ParameterResolver {
         resolveOptions(compiler, annotated);
         resolveModuleOptions(compiler, annotated);
         resolveModulePathOptions(compiler, annotated);
+        resolveProcessorPathOptions(compiler, annotated);
         resolveProcessors(compiler, annotated);
     }
 
@@ -100,20 +101,29 @@ public class JavacExtension implements ParameterResolver {
         var modulePathAnnotations = annotated.getAnnotationsByType(ModulePath.class);
         if (modulePathAnnotations.length > 0) {
             var modulePath = Arrays.stream(modulePathAnnotations)
-                    .map(JavacExtension::getPath)
+                    .map(modulePathAnnotation -> getPath(modulePathAnnotation.value(), resolveEnvVars(modulePathAnnotation.repository())))
                     .collect(Collectors.joining(";"));
             compiler.options("--module-path", modulePath);
         }
     }
 
-    private static String getPath(ModulePath modulePathAnnotation) {
-        var artifactSegments = modulePathAnnotation.value().split(":");
+    private static void resolveProcessorPathOptions(Compiler compiler, AnnotatedElement annotated) {
+        var modulePathAnnotations = annotated.getAnnotationsByType(ProcessorPath.class);
+        if (modulePathAnnotations.length > 0) {
+            var modulePath = Arrays.stream(modulePathAnnotations)
+                    .map(modulePathAnnotation -> getPath(modulePathAnnotation.value(), resolveEnvVars(modulePathAnnotation.repository())))
+                    .collect(Collectors.joining(";"));
+            compiler.options("--processor-path", modulePath);
+        }
+    }
+
+    private static String getPath(String artifact, String repository) {
+        var artifactSegments = artifact.split(":");
         if (artifactSegments.length != 3) {
-            throw new ParameterResolutionException("Failed to resolve artifact \"" + modulePathAnnotation.value() + "\", the artifact should look like <groupId>:<artifactId>:<version>");
+            throw new ParameterResolutionException("Failed to resolve artifact \"" + artifact + "\", the artifact should look like <groupId>:<artifactId>:<version>");
         }
         var relPath = artifactSegments[0].replace(".", "/") + "/" + artifactSegments[1] + "/" + artifactSegments[2] + "/" + artifactSegments[1] + "-" + artifactSegments[2] + ".jar";
 
-        var repository = resolveEnvVars(modulePathAnnotation.repository());
         if (repository.endsWith("/")){
             return repository + relPath;
         }

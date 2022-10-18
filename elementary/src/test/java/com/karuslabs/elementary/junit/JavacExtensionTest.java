@@ -27,6 +27,7 @@ import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.junit.annotations.Module;
 import com.karuslabs.elementary.junit.annotations.ModulePath;
 import com.karuslabs.elementary.junit.annotations.Options;
+import com.karuslabs.elementary.junit.annotations.ProcessorPath;
 import com.karuslabs.elementary.junit.annotations.Processors;
 
 import java.util.List;
@@ -203,6 +204,101 @@ class JavacExtensionTest {
             var annotated = this.getClass();
             var expectedOptions = List.of(
                     "--module-path", "https://repo1.maven.org/maven2/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ProcessorPath("foo.bar:baz:1.0-RC1")
+    class ProcessorPathAnnotationTest {
+
+        @Test
+        @EnabledIfEnvironmentVariable(named = "HOME", matches = "(.*)")
+        void resolve_happyflow_processorPathLinux() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            var expectedOptions = List.of(
+                    "--processor-path", System.getenv("HOME") + "/.m2/repository/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+
+        @Test
+        @EnabledIfEnvironmentVariable(named = "USERPROFILE", matches = "(.*)")
+        void resolve_happyflow_processorPathWindows() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            var expectedOptions = List.of(
+                    "--processor-path", System.getenv("USERPROFILE") + "/.m2/repository/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ProcessorPath("foo")
+    class InvalidProcessorPathAnnotationTest {
+
+        @Test
+        void resolve_ParameterResolutionException_processorPathInvalidPattern() {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            // execute
+            var actualException = assertThrows(
+                    ParameterResolutionException.class,
+                    () -> extension.resolve(compiler, annotated)
+            );
+
+            // verify
+            assertEquals(
+                    "Failed to resolve artifact \"foo\", the artifact should look like <groupId>:<artifactId>:<version>",
+                    actualException.getMessage()
+            );
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ProcessorPath(value = "foo.bar:baz:1.0-RC1", repository = REPO1)
+    class ProcessorPathWithRepositoryAnnotationTest {
+
+        @Test
+        void resolve_happyflow_processorPathAndRepository() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            var expectedOptions = List.of(
+                    "--processor-path", "https://repo1.maven.org/maven2/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
             );
 
             // execute
