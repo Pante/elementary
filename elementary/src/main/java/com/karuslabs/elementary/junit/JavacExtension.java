@@ -27,10 +27,12 @@ import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.annotations.*;
 
+import java.io.File;
 import java.util.*;
 import java.lang.reflect.AnnotatedElement;
 import javax.annotation.processing.Processor;
 
+import com.karuslabs.elementary.junit.annotations.Module;
 import org.junit.jupiter.api.extension.*;
 
 import static com.karuslabs.elementary.Compiler.javac;
@@ -46,8 +48,6 @@ import static com.karuslabs.elementary.file.FileObjects.scan;
  * @see com.karuslabs.elementary.junit.annotations
  */
 public class JavacExtension implements ParameterResolver {
-
-    private static final String[] EMPTY = new String[] {};
     
     @Override
     public Object resolveParameter(ParameterContext parameter, ExtensionContext context) throws ParameterResolutionException {
@@ -71,13 +71,24 @@ public class JavacExtension implements ParameterResolver {
      * @param annotated the annotated element
      */
     void resolve(Compiler compiler, AnnotatedElement annotated) {
-        var flags = annotated.getAnnotation(Options.class);
-        compiler.options(flags == null ? EMPTY : flags.value().split(" "));
+        var optionsAnnotation = annotated.getAnnotation(Options.class);
+        if (optionsAnnotation != null) {
+            compiler.options(Arrays.asList(optionsAnnotation.value().split(" ")));
+        }
+        
+        var moduleAnnotation = annotated.getAnnotation(Module.class);
+        if (moduleAnnotation != null) {
+            compiler.options("--module", moduleAnnotation.value());
+            compiler.options("--module-source-path", "." + File.separatorChar + "src" + File.separatorChar + "test" + File.separatorChar + "resources" + File.separatorChar + moduleAnnotation.sourcePath());
+            
+            // The value of this option is not important, but it does have to be supplied
+            compiler.options("-d", ".");
+        }
         
         var processors = new ArrayList<Processor>();
-        var annotation = annotated.getAnnotation(Processors.class);
-        if (annotation != null) {
-            for (var type : annotation.value()) {
+        var processorsAnnotation = annotated.getAnnotation(Processors.class);
+        if (processorsAnnotation != null) {
+            for (var type : processorsAnnotation.value()) {
                 try {
                     var constructor = type.getDeclaredConstructor();
                     constructor.setAccessible(true);

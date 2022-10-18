@@ -23,8 +23,14 @@
  */
 package com.karuslabs.elementary.junit;
 
+import com.karuslabs.elementary.Compiler;
+import com.karuslabs.elementary.junit.annotations.Module;
+import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
 
+import java.io.File;
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.TypeElement;
@@ -35,28 +41,125 @@ import org.junit.jupiter.api.extension.ParameterResolutionException;
 import static com.karuslabs.elementary.Compiler.javac;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Processors(InvalidProcessor.class)
 class JavacExtensionTest {
-
+    
     JavacExtension extension = new JavacExtension();
-    
-    @Test
-    void resolve_fails() {
-        assertEquals(
-            "Failed to create \"" + InvalidProcessor.class.getName() + "\", annotation processor should have a constructor with no arguments",
-            assertThrows(ParameterResolutionException.class, () -> extension.resolve(javac(), JavacExtensionTest.class)).getMessage()
-        );
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @Options("foo bar")
+    class OptionsAnnotationTest {
+        
+        @Test
+        void resolve_happyflow_options() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            var expectedOptions = List.of("foo", "bar");
+
+            // execute
+            extension.resolve(compiler, annotated);
+            
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @Module("foo")
+    class ModuleAnnotationTest {
+
+        @Test
+        void resolve_happyflow_module() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            var expectedOptions = List.of(
+                    "--module", "foo", 
+                    "--module-source-path", "." + File.separatorChar + "src" + File.separatorChar + "test" + File.separatorChar + "resources" + File.separatorChar,
+                    "-d", "."
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @Module(value = "foo", sourcePath = "my/modules")
+    class ModuleWithSourcePathAnnotationTest {
+
+        @Test
+        void resolve_happyflow_moduleAndSourcePath() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            var expectedOptions = List.of(
+                    "--module", "foo",
+                    "--module-source-path", "." + File.separatorChar + "src" + File.separatorChar + "test" + File.separatorChar + "resources" + File.separatorChar + "my/modules",
+                    "-d", "."
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
     }
     
-}
-
-class InvalidProcessor extends AbstractProcessor {
     
-    InvalidProcessor(String a) {}
+    @Nested
+    @Processors(InvalidProcessor.class)
+    class InvalidProcessorTest {
 
-    @Override
-    public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
-        return false;
+        @Test
+        void resolve_fails_invalidProcessor() {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            
+            // execute
+            var actualException = assertThrows(
+                    ParameterResolutionException.class, 
+                    () -> extension.resolve(compiler, annotated)
+            );
+            
+            // verify
+            assertEquals(
+                    "Failed to create \"" + InvalidProcessor.class.getName() + "\", annotation processor should have a constructor with no arguments",
+                    actualException.getMessage()
+            );
+        }
     }
-    
+
+    static class InvalidProcessor extends AbstractProcessor {
+
+        InvalidProcessor(String a) {
+        }
+
+        @Override
+        public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
+            return false;
+        }
+    }
+
+    static class ValidProcessor extends AbstractProcessor {
+
+        @Override
+        public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
+            return false;
+        }
+    }
 }
