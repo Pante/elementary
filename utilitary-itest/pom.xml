@@ -10,8 +10,8 @@
     </parent>
     <artifactId>utilitary-itest</artifactId>
     <packaging>jar</packaging>
-    <name>Utilitary integration test</name>
-    <description>The integration test module for testing the Utilitary module.</description>
+    <name>Utilitary Integration Tests</name>
+    <description>Integration tests for Utilitary.</description>
 
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
