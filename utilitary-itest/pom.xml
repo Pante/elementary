@@ -1,22 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.karuslabs</groupId>
         <artifactId>elementary-project</artifactId>
+        <groupId>com.karuslabs</groupId>
         <version>1.2.0-SNAPSHOT</version>
     </parent>
-    <artifactId>utilitary</artifactId>
+    <artifactId>utilitary-itest</artifactId>
     <packaging>jar</packaging>
-    <name>Utilitary</name>
-    <description>Utilitary contains classes to simplify annotation processing.</description>
-    
+    <name>Utilitary Integration Tests</name>
+    <description>Integration tests for Utilitary.</description>
+
     <properties>
         <maven.compiler.release>11</maven.compiler.release>
     </properties>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.karuslabs</groupId>
+            <artifactId>elementary</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    
     <build>
-        <plugins>  
+        <plugins>
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
@@ -24,7 +35,7 @@
                     <release>${release}</release>
                 </configuration>
             </plugin>
-            
+
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.0</version>
@@ -49,21 +60,7 @@
                     </execution>
                 </executions>
             </plugin>
-            
-            <plugin>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>3.4.0</version>
-                <configuration>
-                    <minimizeJar>true</minimizeJar>
-                </configuration>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
     </build>
+
 </project>
