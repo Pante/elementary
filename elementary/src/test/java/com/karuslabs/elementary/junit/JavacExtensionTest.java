@@ -25,20 +25,21 @@ package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.junit.annotations.Module;
+import com.karuslabs.elementary.junit.annotations.ModulePath;
 import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
 
-import java.io.File;
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Set;
 import javax.annotation.processing.*;
 import javax.lang.model.element.TypeElement;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable;
 import org.junit.jupiter.api.extension.ParameterResolutionException;
 
 import static com.karuslabs.elementary.Compiler.javac;
+import static com.karuslabs.elementary.junit.annotations.ModulePath.Repository.REPO1;
 import static org.junit.jupiter.api.Assertions.*;
 
 class JavacExtensionTest {
@@ -79,7 +80,7 @@ class JavacExtensionTest {
             var annotated = this.getClass();
             var expectedOptions = List.of(
                     "--module", "foo", 
-                    "--module-source-path", "." + File.separatorChar + "src" + File.separatorChar + "test" + File.separatorChar + "resources" + File.separatorChar,
+                    "--module-source-path", "./src/test/resources/",
                     "-d", "."
             );
 
@@ -105,8 +106,103 @@ class JavacExtensionTest {
             var annotated = this.getClass();
             var expectedOptions = List.of(
                     "--module", "foo",
-                    "--module-source-path", "." + File.separatorChar + "src" + File.separatorChar + "test" + File.separatorChar + "resources" + File.separatorChar + "my/modules",
+                    "--module-source-path", "./src/test/resources/my/modules",
                     "-d", "."
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ModulePath("foo.bar:baz:1.0-RC1")
+    class ModulePathAnnotationTest {
+
+        @Test
+        @EnabledIfEnvironmentVariable(named = "HOME", matches = "(.*)")
+        void resolve_happyflow_modulePathLinux() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            var expectedOptions = List.of(
+                    "--module-path", System.getenv("HOME") + "/.m2/repository/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+
+        @Test
+        @EnabledIfEnvironmentVariable(named = "USERPROFILE", matches = "(.*)")
+        void resolve_happyflow_modulePathWindows() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            var expectedOptions = List.of(
+                    "--module-path", System.getenv("USERPROFILE") + "/.m2/repository/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
+            );
+
+            // execute
+            extension.resolve(compiler, annotated);
+
+            // verify
+            var optionsField = Compiler.class.getDeclaredField("options");
+            optionsField.setAccessible(true);
+            assertIterableEquals(expectedOptions, (Iterable<?>) optionsField.get(compiler));
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ModulePath("foo")
+    class InvalidModulePathAnnotationTest {
+
+        @Test
+        void resolve_ParameterResolutionException_modulePathInvalidPattern() {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+
+            // execute
+            var actualException = assertThrows(
+                    ParameterResolutionException.class,
+                    () -> extension.resolve(compiler, annotated)
+            );
+
+            // verify
+            assertEquals(
+                    "Failed to resolve artifact \"foo\", the artifact should look like <groupId>:<artifactId>:<version>",
+                    actualException.getMessage()
+            );
+        }
+    }
+
+    @Nested
+    @Processors(ValidProcessor.class)
+    @ModulePath(value = "foo.bar:baz:1.0-RC1", repository = REPO1)
+    class ModulePathWithRepositoryAnnotationTest {
+
+        @Test
+        void resolve_happyflow_modulePathAndRepository() throws IllegalAccessException, NoSuchFieldException {
+            // prepare
+            var compiler = javac();
+            var annotated = this.getClass();
+            var expectedOptions = List.of(
+                    "--module-path", "https://repo1.maven.org/maven2/foo/bar/baz/1.0-RC1/baz-1.0-RC1.jar"
             );
 
             // execute
