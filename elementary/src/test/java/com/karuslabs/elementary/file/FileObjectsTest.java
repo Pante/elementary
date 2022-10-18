@@ -60,7 +60,7 @@ class FileObjectsTest {
     
     @Test
     void ofLines_varargs() {
-        assertTrue(javac().compile(ofLines("Dummy", List.of("class Dummy {}"))).success);
+        assertTrue(javac().compile(ofLines("Dummy", new String[] {"class Dummy {}"})).success);
     }
     
     @Test
