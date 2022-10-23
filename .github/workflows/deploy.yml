@@ -20,5 +20,6 @@ jobs:
       - uses: actions/setup-java@v3
         with:
           java-version: 17
+          distribution: temurin
       - run: mvn deploy site site-deploy --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
