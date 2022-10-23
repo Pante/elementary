@@ -6,7 +6,7 @@
     <parent>
         <artifactId>elementary-project</artifactId>
         <groupId>com.karuslabs</groupId>
-        <version>1.1.2</version>
+        <version>1.1.3</version>
     </parent>
     <artifactId>utilitary-itest</artifactId>
     <packaging>jar</packaging>

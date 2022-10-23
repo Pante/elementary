@@ -1,10 +1,8 @@
-## 1.2.0 - Snippety Snip
+## Next Release - Snippety Snip
 
 This release focuses on providing facilities for creating more precise and detailed diagnostic messages.
 
 ## Utilitary
-
-
 - Add `com.karuslabs.utilitary.snippet`
 - Add `AnnotationValuePrinter`
 - Add `Logger.error(Element, AnnotationMirror, Object)`
@@ -30,6 +28,16 @@ This release focuses on providing facilities for creating more precise and detai
 - Remove `Logger.note(Element, Object, String)`
 - Remove `Texts.quote(String)`
 - Remove `Walker.erasuredAncestor(TypeMirrors)` - Erasured ancestors is subtlely flawed since a Collection<String> will be an ancestor of a List<Integer>
+
+## 1.1.3 (23/10/2022)
+
+This is a hotfix for a few issues.
+
+## Elementary
+- Change `DaemonCompiler.run(...)`'s diagnostic message to better explain java crashes
+- Fix cyclic dependency between Elementary and Utilitary
+- Fix `MemoryFileManager` not encoding URLs, causing modules to not compile 
+
 
 ## 1.1.2 (06/02/2022)
 
