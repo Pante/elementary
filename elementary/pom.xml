@@ -4,7 +4,7 @@
     <parent>
         <groupId>com.karuslabs</groupId>
         <artifactId>elementary-project</artifactId>
-        <version>1.2.0-SNAPSHOT</version>
+        <version>1.1.3</version>
     </parent>
     
     <artifactId>elementary</artifactId>
@@ -78,7 +78,7 @@
 
         <plugin>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>3.4.0</version>
+            <version>3.4.1</version>
             <configuration>
                 <minimizeJar>true</minimizeJar>
                 <shadedArtifactAttached>true</shadedArtifactAttached>

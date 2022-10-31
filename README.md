@@ -4,9 +4,11 @@
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-**Please view the [stable branch](https://github.com/Pante/elementary/tree/stable) for a production version. Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17. Read the [wiki](https://github.com/Pante/elementary/wiki) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
+**Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17.**
 
-**Please read [The Problem With Annotation Processors](https://dzone.com/articles/the-problem-with-annotation-processors) if you're interested in what problem Elementary solves.**
+**Read the [wiki](https://github.com/Pante/elementary/wiki) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
+
+**Please read [The Problem With Annotation Processors](https://dzone.com/articles/the-problem-with-annotation-processors) for more information on what problem Elementary solves.**
 
 #### Maven Repository
 ```XML
@@ -39,7 +41,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>elementary</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
   <scope>test</scope>
 </dependency>
 ```
@@ -54,7 +56,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>satisfactory</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
 
@@ -68,6 +70,6 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>utilitary</artifactId>
-    <version>1.1.2</version>
+    <version>1.1.3</version>
 </dependency>
 ```
