@@ -1,3 +1,5 @@
+package example;
+
 /*
  * The MIT License
  *
@@ -22,10 +24,6 @@
  * THE SOFTWARE.
  */
 
-import com.karuslabs.elementary.junit.annotations.Label;
-
-public class InvalidCase {
-
-    @Label public final int field = 0;
+public @interface ExampleAnnotation {
     
 }

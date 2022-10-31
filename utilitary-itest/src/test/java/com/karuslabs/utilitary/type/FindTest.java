@@ -40,16 +40,16 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 @Introspect
 class FindTest {
       
-    Cases cases = Tools.cases();
-    Element module = Tools.elements().getModuleOf(cases.one("type"));
-    Element pack = Tools.elements().getPackageOf(cases.one("type"));
+    Labels labels = Tools.labels();
+    Element module = Tools.elements().getModuleOf(labels.get("type"));
+    Element pack = Tools.elements().getPackageOf(labels.get("type"));
     
-    @Case("type")
+    @Label("type")
     static class Type {
         
-        @Case("variable") String variable = "a";
+        @Label("variable") String variable = "a";
         
-        @Case("executable")
+        @Label("executable")
         void execute() {}
         
     }
@@ -87,7 +87,7 @@ class FindTest {
     @ParameterizedTest
     @MethodSource("type_parameters")
     void type(Find finder, boolean found) {
-        assertEquals(found, cases.one("type").accept(finder, null) != null);
+        assertEquals(found, labels.get("type").accept(finder, null) != null);
     }
     
     static Stream<Arguments> type_parameters() {
@@ -102,7 +102,7 @@ class FindTest {
     @ParameterizedTest
     @MethodSource("executable_parameters")
     void executable(Find finder, boolean found) {
-        assertEquals(found, cases.one("executable").accept(finder, null) != null);
+        assertEquals(found, labels.get("executable").accept(finder, null) != null);
     }
     
     static Stream<Arguments> executable_parameters() {
@@ -117,7 +117,7 @@ class FindTest {
     @ParameterizedTest
     @MethodSource("variable_parameters")
     void variable(Find finder, boolean found) {
-        assertEquals(found, cases.one("variable").accept(finder, null) != null);
+        assertEquals(found, labels.get("variable").accept(finder, null) != null);
     }
     
     // We cannot test Find.EXECUTABLE since javac performs dead code elimation on

@@ -55,10 +55,10 @@ public class Tools {
     /**
      * Returns a {@code Labels}.
      * 
-     * @return a {@code Casses}
+     * @return a {@code Labels}
      */
-    public static Labels cases() {
-        return environment().cases;
+    public static Labels labels() {
+        return environment().labels;
     }
     
     /**

@@ -37,7 +37,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
  * By repeatedly composing 
  * assertions, increasingly complex elements can be asserted.
  * 
- * In most cases, it should not necessary to manually implement {@code Assertion}.
+ * In most labels, it should not necessary to manually implement {@code Assertion}.
  * Consider using the assertions provided out-of-box before implementing a custom 
  * assertion.
  * 

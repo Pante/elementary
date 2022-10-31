@@ -38,71 +38,71 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class AnnotationValuePrinterTest {
     
-    Cases cases = Tools.cases();
+    Labels labels = Tools.labels();
     
     String print(String label) {
-        var annotation = cases.one(label).getAnnotationMirrors().get(2);
+        var annotation = labels.get(label).getAnnotationMirrors().get(2);
         return AnnotationValuePrinter.annotation(annotation);
     }
     
     @Test
-    @Case("empty")
+    @Label("empty")
     @Nested
     void annotation_empty() {
         assertEquals("@Nested", print("empty"));
     }
     
     @Test
-    @Case("multiple")
+    @Label("multiple")
     @Multiple(a = "1", b = "2")
     void annotation_multiple_values() {
         assertEquals("@Multiple(a = \"1\", b = \"2\")", print("multiple"));
     }
     
     @Test
-    @Case("nested")
+    @Label("nested")
     @Nest(@Nested)
     void visitAnnotation_nested() {
         assertEquals("@Nest(@Nested)", print("nested"));
     }
     
     @Test
-    @Case("array_single")
+    @Label("array_single")
     @Array(1)
     void visitArray_single() {
         assertEquals("@Array(1)", print("array_single"));
     }
     
     @Test
-    @Case("array_many")
+    @Label("array_many")
     @Array({1, 2, 3})
     void visitArray_many() {
         assertEquals("@Array({1, 2, 3})", print("array_many"));
     }
     
     @Test
-    @Case("array_empty")
+    @Label("array_empty")
     @Array({})
     void visitArray_empty() {
         assertEquals("@Array({})", print("array_empty"));
     }
     
     @Test
-    @Case("enum")
+    @Label("enum")
     @Enumeration(STATIC)
     void visitEnum() {
         assertEquals("@Enumeration(STATIC)", print("enum"));
     }
     
     @Test
-    @Case("string")
+    @Label("string")
     @StringValue("a")
     void visitString() {
         assertEquals("@StringValue(\"a\")", print("string"));
     }
     
     @Test
-    @Case("type")
+    @Label("type")
     @Type(String.class)
     void visitType() {
         assertEquals("@Type(String.class)", print("type"));

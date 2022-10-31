@@ -38,10 +38,10 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("case")
+@Label("case")
 class LineTest {
     
-    Line line = Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2);
+    Line line = Line.annotation(Tools.labels().get("case").getAnnotationMirrors().get(2), 1, 2);
     
     @Test
     void empty() {
@@ -50,7 +50,7 @@ class LineTest {
     
     @Test
     void length() {
-        assertEquals(13, line.length());
+        assertEquals(14, line.length());
     }
     
     @Test
@@ -60,7 +60,7 @@ class LineTest {
     
     @Test
     void subSequence() {
-        assertEquals("Case", line.subSequence(1, 5));
+        assertEquals("Label", line.subSequence(1, 6));
     }
     
     @ParameterizedTest
@@ -86,22 +86,22 @@ class LineTest {
     
     @Test
     void equals_others() {
-        assertFalse(line.equals("@Case(\"case\")"));
+        assertFalse(line.equals("@Label(\"case\")"));
     }
     
     @Test
     void equals() {
-        assertTrue(line.equals(Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2)));
+        assertTrue(line.equals(Line.annotation(Tools.labels().get("case").getAnnotationMirrors().get(2), 1, 2)));
     }
     
     @Test
     void hashCode_() {
-        assertEquals(line.hashCode(), Line.annotation(Tools.cases().one("case").getAnnotationMirrors().get(2), 1, 2).hashCode());
+        assertEquals(line.hashCode(), Line.annotation(Tools.labels().get("case").getAnnotationMirrors().get(2), 1, 2).hashCode());
     }
     
     @Test
     void toString_() {
-        assertEquals("@Case(\"case\")", line.toString());
+        assertEquals("@Label(\"case\")", line.toString());
     } 
 
 } 

@@ -41,7 +41,7 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
     
     
     /**
-     * Creates a {@code Cases} for the given annotation processing round.
+     * Creates a {@code Labels} for the given annotation processing round.
      * 
      * @param environment the round's environment
      */
@@ -54,12 +54,12 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
      * 
      * @param label the index of the element
      * @return the element at the given index
-     * @thhrows NoSuchElementException if no element with the given label exists
+     * @throws NoSuchElementException if no element with the given label exists
      */
     public Element get(String label) {
         var element = all().get(label);
         if (element == null) {
-            throw new NoSuchElementException("An element annotated with @Label(\"" + label + "\" does not exist. Did you spell the label correctly?");
+            throw new NoSuchElementException("An element annotated with @Label(\"" + label + "\") does not exist. Did you spell the label correctly?");
         }
         
         return element;
@@ -74,15 +74,12 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
      */
     public Element single() {
         var elements = all().values();
-        if (elements.size() != 1) {
-            throw new IllegalStateException("");
+        if (elements.size() == 1) {
+            return elements.toArray(Element[]::new)[0];
+            
+        } else {
+            throw new IllegalStateException("Labels.single() can only be called if 1 element is annotated with @Label. However, there are " + elements.size() + " elements annotated with @Label.");
         }
-        
-        for (var element : elements) {
-            return element;
-        }
-        
-        throw new IllegalStateException("This exception should never be thrown");
     }
 
     /**
@@ -90,13 +87,14 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
      * 
      * @param group the get
      * @return the annotated elements
+     * @throws NoSuchElementException if no elements with the given group exists
      */
     public Map<String, Element> group(String group) {
         var elements = groups().get(group);
         if (elements == null) {
             throw new NoSuchElementException("The group, \"" + group + "\" does not exist. Did you spell the group correctly?");
         }
-        
+    
         return elements;
     }
     
@@ -134,7 +132,7 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
             for (var element : environment.getElementsAnnotatedWith(Label.class)) {
                 var annotation = element.getAnnotation(Label.class);
                 if (all.put(annotation.value(), element) != null) {
-                    throw new IllegalStateException("An element annotated with @Label(\"" + annotation.value() + "\" already exists. Labels must be unique in a single annotation processing round.");
+                    throw new IllegalStateException("An element annotated with @Label(\"" + annotation.value() + "\") already exists. Labels must be unique in a single annotation processing round.");
                 }
                 
                 var group = groups.get(annotation.group());

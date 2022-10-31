@@ -1,10 +1,7 @@
-
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 /*
  * The MIT License
  *
- * Copyright 2021 Karus Labs.
+ * Copyright 2022 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +22,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * THE SOFTWARE.
  */
 
-public @interface A {
+// This file is meant to be used as a placeholder for tests in com.karuslabs.elementary.file.*.
+
+public @interface Placeholder {
     
 }

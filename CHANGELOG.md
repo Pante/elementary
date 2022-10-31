@@ -1,6 +1,18 @@
-## Next Release - Snippety Snip
+## 2.0.0 - Next Release
 
 This release focuses on providing facilities for creating more precise and detailed diagnostic messages.
+
+## Elementary
+
+This release contains breaking changes that overhaul how elements are retrieved in tests.
+It also provides first-class parameterized test support and JDK9 modules support.
+
+Please
+
+- Change `@Case` to `@Label`
+- Change `Labels` to `Labels`
+- Change `Tools.labels()` to `ToolsExtension.labels()`
+- Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`
 
 ## Utilitary
 - Add `com.karuslabs.utilitary.snippet`
@@ -55,7 +67,7 @@ This release focuses on fixing a few pesky issues.
 - Fix source jars not being uploaded to the maven repository
 
 ## Elementary
-- Change `Cases.label(String)` to `Cases.get(String)`, the inconsistency between `Cases.label(String)` and `Cases.get(int)` was driving me nuts
+- Change `Labels.label(String)` to `Labels.get(String)`, the inconsistency between `Labels.label(String)` and `Labels.get(int)` was driving me nuts
 
 ## Satisfactory
 - Fix `EqualTimeSequence` not comparing sequences properly
@@ -64,14 +76,14 @@ This release focuses on fixing a few pesky issues.
 - Add `Walker.erasuredAncestor(TypeMirrors)`
 - Change `Walker.ancestor(TypeMirrors)` to `Walker.specializedAncestor(TypeMirrors)`
 
-## 1.1.0 - The Case for Cases (17/05/2021)
+## 1.1.0 - The Case for Labels (17/05/2021)
 
-This release focuses on improving the quality of life for cases.
+This release focuses on improving the quality of life for labels.
 
 ### Elementary
-- Add `Cases.labels()`
-- Change `Cases.get(String)` to `Cases.label(String)`
-- Change `Cases.list()` to `Cases.all()`
+- Add `Labels.labels()`
+- Change `Labels.get(String)` to `Labels.label(String)`
+- Change `Labels.list()` to `Labels.all()`
 - Change `@Case` annotation to use the annotated target's name if available as its label by default
 - Fix missing annotations
 

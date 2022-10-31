@@ -37,25 +37,25 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class TypeSnippetTest {
     
-    @Case("type")
+    @Label("type")
     static abstract class Type<T extends String> extends Supertype implements Runnable {}
             
     static class Supertype {}
     
-    TypeElement type = (TypeElement) Tools.cases().one("type");
+    TypeElement type = (TypeElement) Tools.labels().get("type");
     TypeSnippet snippet = TypeSnippet.of(type, 0);
     
     @Test
     void toString_() {
         assertEquals(
-            "@Case(\"type\")\nstatic abstract class Type<T extends String> extends TypeSnippetTest.Supertype implements Runnable {",
+            "@Label(\"type\")\nstatic abstract class Type<T extends String> extends TypeSnippetTest.Supertype implements Runnable {",
             snippet.toString()
         );
     }
     
     @Test
     void fields() {
-        assertEquals("@Case(\"type\")", snippet.annotations.toString());
+        assertEquals("@Label(\"type\")", snippet.annotations.toString());
         assertEquals("static abstract ", snippet.modifiers.toString());
         assertEquals("class", snippet.type.toString());
         assertEquals("Type", snippet.name.toString());

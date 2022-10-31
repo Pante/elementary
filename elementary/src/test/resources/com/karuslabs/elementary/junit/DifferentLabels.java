@@ -1,6 +1,3 @@
-
-import com.karuslabs.elementary.junit.annotations.Label;
-
 /*
  * The MIT License
  *
@@ -24,10 +21,13 @@ import com.karuslabs.elementary.junit.annotations.Label;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-public class CasesCases {
 
-    @Label("a") public void a() {}
+import com.karuslabs.elementary.junit.annotations.Label;
+
+public class DifferentLabels {
+
+    @Label("class") static class A {}
     
-    @Label static class A {}
+    @Label(value = "method", group = "methods") public void a() {}
     
 }

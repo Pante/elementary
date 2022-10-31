@@ -44,16 +44,16 @@ import com.karuslabs.elementary.junit.annotations.Label;
  * This example demonstrates how to use ToolsExtension to test a lint, described below,
  * which checks if an element is a string variable. 
  * 
- * We use the @Quine annotation to include this file which contain test cases for 
- * compilation, for the lint to check. Each test case is annotated with @Case to 
- * simplify retrieval.
+ * We use the @Introspect annotation to include this file which contain test elements
+ * for the lint to check. Each test element is annotated with @Label to simplify retrieval.
+ * A @Label's value must be unique. 
  * 
  * Alternatively, we can also use the @Classpath annotation to include the class
  * which contains test cases for compilation if it is available on the current
  * classpath, i.e. "@Classpath("Samples")".
  * 
  * Other annotations can also be used to mark test cases, but we provide specialized
- * utilities to simplify retrieval of elements annotated with @Case.
+ * utilities to simplify retrieval of elements annotated with @Label.
  * 
  * In a real world context, the lint may be found in annotation processors to perform a 
  * variety of other checks.
@@ -67,20 +67,20 @@ class ToolsExtensionExampleTest {
     Lint lint = new Lint(Tools.typeMirrors());
     
     @Test
-    void lint_string_variable(Labels cases) { // Labels can also be obtained via Tools.cases() and used to initialize a field
-        var first = cases.one("first");
+    void lint_string_variable(Labels labels) { // Labels can also be obtained via Tools.labels() and used to initialize a field
+        var first = labels.get("first");
         assertTrue(lint.lint(first));
     }
     
     @Test
-    void lint_method_that_returns_string(Labels cases) {
-        var second = cases.get(1); // Alternatively, we can use cases.single("second")
+    void lint_method_that_returns_string(Labels labels) {
+        var second = labels.group("invalid").get("second"); // Alternatively, we can use labels.get("second")
         assertFalse(lint.lint(second));
     }
     
     static class Sample {
         @Label("first") String something;
-        @Label String second() { return ""; } // The method/variable name is used as the get if none is specified
+        @Label(value = "second", group = "invalid") String second() { return ""; }
     }
     
 }

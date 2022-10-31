@@ -42,70 +42,70 @@ import static org.mockito.Mockito.*;
 @Introspect
 class TypePrinterTest {
     
-    Cases cases = Tools.cases();
-    @Case("declared") String declared;
-    @Case("type_variables") Map<String, Integer> type_variables;
-    @Case("upper_bound") class upper_bound<T extends String> {}
-    @Case("wildcard_extends") List<? extends String> wildcard_extends;
-    @Case("wildcard_super") List<? super String> wildcard_super;
-    @Case("intersection") class Intersection<T extends Runnable & Iterable<T> & Consumer<T>> {}
-    @Case("array") String[] array;
-    @Case("primitive") int primitive;
-    @Case("no") void no() {}
-    @Case("circular") class Circular<T extends Circular<T, C>, C extends Consumer<T>> {}
+    Labels labels = Tools.labels();
+    @Label("declared") String declared;
+    @Label("type_variables") Map<String, Integer> type_variables;
+    @Label("upper_bound") class upper_bound<T extends String> {}
+    @Label("wildcard_extends") List<? extends String> wildcard_extends;
+    @Label("wildcard_super") List<? super String> wildcard_super;
+    @Label("intersection") class Intersection<T extends Runnable & Iterable<T> & Consumer<T>> {}
+    @Label("array") String[] array;
+    @Label("primitive") int primitive;
+    @Label("no") void no() {}
+    @Label("circular") class Circular<T extends Circular<T, C>, C extends Consumer<T>> {}
     
     
     @Test
     void visitDeclared() {
-        assertEquals("String", simple(cases.one("declared").asType()));
+        assertEquals("String", simple(labels.get("declared").asType()));
     }
     
     @Test
     void visitDeclared_type_variables() {
-        assertEquals("Map<String, Integer>", simple(cases.one("type_variables").asType()));
+        assertEquals("Map<String, Integer>", simple(labels.get("type_variables").asType()));
     }
     
     @Test
     void visitTypeVariable_upper() {
-        assertEquals("TypePrinterTest.upper_bound<T extends String>", simple(cases.one("upper_bound").asType()));
+        assertEquals("TypePrinterTest.upper_bound<T extends String>", simple(labels.get("upper_bound").asType()));
     }
     
     @Test
     void visitWildcard_extends() {
-        assertEquals("List<? extends String>", simple(cases.one("wildcard_extends").asType()));
+        assertEquals("List<? extends String>", simple(labels.get("wildcard_extends").asType()));
     }
     
     @Test
     void visitWildcard_super() {
-        assertEquals("List<? super String>", simple(cases.one("wildcard_super").asType()));
+        assertEquals("List<? super String>", simple(labels.get("wildcard_super").asType()));
     }
     
     @Test
     void visitIntersection() {
         assertEquals(
             "TypePrinterTest.Intersection<T extends Runnable & Iterable<T> & Consumer<T>>", 
-            simple(cases.one("intersection").asType())
+            simple(labels.get("intersection").asType())
         );
     }
     
     @Test
     void visitArray() {
-        assertEquals("String[]", simple(cases.one("array").asType()));
+        assertEquals("String[]", simple(labels.get("array").asType()));
     }
     
     @Test
     void visitPrimitive() {
-        assertEquals("int", simple(cases.one("primitive").asType()));
+        assertEquals("int", simple(labels.get("primitive").asType()));
     }
     
     @Test
     void visitNoType() {
-        assertEquals("void", simple(((ExecutableElement) cases.one("no")).getReturnType()));
+        assertEquals("void", simple(((ExecutableElement) labels.get("no")).getReturnType()));
     }
     
     @Test
     void visit_circular() {
-        assertEquals("TypePrinterTest.Circular<T extends TypePrinterTest.Circular<T, C extends Consumer<T>>, C>", simple(cases.one("circular").asType()));
+        assertEquals("TypePrinterTest.Circular<T extends TypePrinterTest.Circular<T, C extends Consumer<T>>, C>", simple(labels.get("circular").asType()));
     }
     
     @Test
@@ -124,12 +124,12 @@ class TypePrinterTest {
 @Introspect("TypePrinterTest")
 class QualifiedTypePrinterTest {
     
-    Cases cases = Tools.cases();
-    @Case("qualified") List<String> qualified;
+    Labels labels = Tools.labels();
+    @Label("qualified") List<String> qualified;
     
     @Test
     void rawType() {        
-        assertEquals("java.util.List<java.lang.String>", qualified(cases.one("qualified").asType()));
+        assertEquals("java.util.List<java.lang.String>", qualified(labels.get("qualified").asType()));
     }
     
     @Test
@@ -149,12 +149,12 @@ class QualifiedTypePrinterTest {
 @Introspect("TypePrinterTest")
 class SimpleTypePrinterTest {
 
-    Cases cases = Tools.cases();
-    @Case("simple") List<String> simple;
+    Labels labels = Tools.labels();
+    @Label("simple") List<String> simple;
     
     @Test
     void rawType() {
-        assertEquals("List<String>", TypePrinter.simple(cases.one("simple").asType()));
+        assertEquals("List<String>", TypePrinter.simple(labels.get("simple").asType()));
     }
     
     @Test

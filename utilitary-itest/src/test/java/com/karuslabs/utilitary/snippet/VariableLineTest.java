@@ -38,21 +38,21 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class VariableLineTest {
     
-    @Case("variable")
+    @Label("variable")
     public final List<String> something = List.of();
     
-    VariableElement variable = (VariableElement) Tools.cases().one("variable");
+    VariableElement variable = (VariableElement) Tools.labels().get("variable");
     VariableLine line = VariableLine.of(variable, 0, 1);
     
     @Test
     void toString_() {
-        assertEquals("public final @Case(\"variable\") List<String> something", line.toString());
+        assertEquals("public final @Label(\"variable\") List<String> something", line.toString());
     }
     
     @Test
     void fields() {
         assertEquals("public final ", line.modifiers.toString());
-        assertEquals("@Case(\"variable\") ", line.annotations.toString());
+        assertEquals("@Label(\"variable\") ", line.annotations.toString());
         assertEquals("List<String>", line.type.toString());
         assertEquals("something", line.name.toString());
     }

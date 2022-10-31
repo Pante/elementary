@@ -104,7 +104,7 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
      */
     static @Nullable Object resolve(Environment environment, Class<?> type) {
         if (type == Labels.class) {
-            return environment.cases;
+            return environment.labels;
             
         } else if (type == RoundEnvironment.class) {
             return environment.round;
