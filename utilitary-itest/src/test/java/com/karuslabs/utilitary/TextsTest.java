@@ -44,19 +44,19 @@ import static org.junit.jupiter.params.provider.Arguments.of;
 @Introspect
 class TextsTest {
     
-    Cases cases = Tools.cases();
+    Labels labels = Tools.labels();
     
-    @Case("line")
+    @Label("line")
     static final String LINE = "";
     
-    @Case("long")
+    @Label("long")
     static final void extremelyLongMethodThatThrowsManyExceptions(String a, String b, String c) throws IllegalArgumentException {
         
     }
     
     @Test
     void highlight_multiple() {
-        var method = (ExecutableElement) cases.one("long");
+        var method = (ExecutableElement) labels.get("long");
         var snippet = MethodSnippet.of(method, 0);
         var message = Texts.diagnose("<summary>", snippet, Map.of(
             snippet.modifiers, "method should not be static", 
@@ -68,7 +68,7 @@ class TextsTest {
         assertEquals(
             "<summary>\n" +
             "|    \n" +
-            "|    @Case(\"long\")\n" +
+            "|    @Label(\"long\")\n" +
             "|    static final  void extremelyLongMethodThatThrowsManyExceptions(String a, String b, String c) throws IllegalArgumentException\n" +
             "|    ~~~~~~~~~~~~~ ~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~        ^ method should not contain a string parameter\n" +
             "|    |             |    |\n" +
@@ -83,14 +83,14 @@ class TextsTest {
     
     @Test
     void highlight_line() {
-        var line = VariableLine.of((VariableElement) cases.one("line"), 0, 4);
+        var line = VariableLine.of((VariableElement) labels.get("line"), 0, 4);
         var message = Texts.diagnose("<summary>", line, line.name, "what happened");
         // Message seems misaligned due to additional "\"s
         assertEquals(
             "<summary>\n" +
             "|    \n" +
-            "|        static final @Case(\"line\") String LINE\n" +
-            "|                                          ~~~~ what happened\n" +
+            "|        static final @Label(\"line\") String LINE\n" +
+            "|                                           ~~~~ what happened\n" +
             "|    ", 
             message
         );
@@ -98,12 +98,12 @@ class TextsTest {
     
     @Test
     void highlight_snippet() {
-        var snippet = VariableSnippet.of((VariableElement) cases.one("line"), 4);
+        var snippet = VariableSnippet.of((VariableElement) labels.get("line"), 4);
         var message = Texts.diagnose("<summary>", snippet, snippet.name, "what happened");
         assertEquals(
             "<summary>\n" +
             "|    \n" +
-            "|    @Case(\"line\")\n" +
+            "|    @Label(\"line\")\n" +
             "|    static final String LINE\n" +
             "|                        ~~~~ what happened\n" +
             "|    ",

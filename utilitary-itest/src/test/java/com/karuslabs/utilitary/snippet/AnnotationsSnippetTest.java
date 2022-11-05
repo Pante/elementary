@@ -35,22 +35,22 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(ToolsExtension.class)
 @Introspect
-@Case("annotations")
+@Label("annotations")
 class AnnotationsSnippetTest {
     
-    List<? extends AnnotationMirror> annotations = Tools.cases().one("annotations").getAnnotationMirrors();
+    List<? extends AnnotationMirror> annotations = Tools.labels().get("annotations").getAnnotationMirrors();
     AnnotationsSnippet snippet = AnnotationsSnippet.of(annotations, 0);
     
     @Test
     void toString_() {
-        assertEquals("@ExtendWith(ToolsExtension.class)\n@Introspect\n@Case(\"annotations\")", snippet.toString());
+        assertEquals("@ExtendWith(ToolsExtension.class)\n@Introspect\n@Label(\"annotations\")", snippet.toString());
     }
     
     @Test
     void values() {
         assertEquals("@ExtendWith(ToolsExtension.class)", snippet.values.get(annotations.get(0)).toString());
         assertEquals("@Introspect", snippet.values.get(annotations.get(1)).toString());
-        assertEquals("@Case(\"annotations\")", snippet.values.get(annotations.get(2)).toString());
+        assertEquals("@Label(\"annotations\")", snippet.values.get(annotations.get(2)).toString());
     }
 
 } 

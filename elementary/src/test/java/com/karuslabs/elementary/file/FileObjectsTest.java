@@ -37,8 +37,8 @@ import static com.karuslabs.elementary.file.FileObjects.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-@Classpath("com.karuslabs.elementary.junit.CasesCases")
-@Resource("com/karuslabs/elementary/junit/A.java")
+@Classpath("com.karuslabs.elementary.junit.example.ValidCase")
+@Resource("com/karuslabs/elementary/junit/Placeholder.java")
 @Inline(name = "Dummy", source = "class Dummy {}")
 class FileObjectsTest {
 

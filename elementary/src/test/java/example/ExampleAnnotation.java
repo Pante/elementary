@@ -1,5 +1,4 @@
-
-import org.checkerframework.checker.nullness.qual.Nullable;
+package example;
 
 /*
  * The MIT License
@@ -25,6 +24,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
  * THE SOFTWARE.
  */
 
-public @interface A {
+public @interface ExampleAnnotation {
     
 }

@@ -46,33 +46,33 @@ import static org.mockito.Mockito.*;
 class TypeMirrorsTest {
     
     TypeMirrors types = new TypeMirrors(Tools.elements(), Tools.types());
-    Cases cases = Tools.cases();
+    Labels labels = Tools.labels();
     
-    @Case("primitive") int primitive;
-    @Case("string_variable") String string_variable;
-    @Case("generic_executable") <T extends String> T generic_executable() { return null; }
+    @Label("primitive") int primitive;
+    @Label("string_variable") String string_variable;
+    @Label("generic_executable") <T extends String> T generic_executable() { return null; }
     
     
     @Test
     void is_primitive() {
         var type = mock(PrimitiveType.class);
-        assertTrue(TypeMirrors.is(cases.one("primitive").asType(), int.class));
+        assertTrue(TypeMirrors.is(labels.get("primitive").asType(), int.class));
     }
     
     @Test
     void is_not_primitive() {
         var type = mock(PrimitiveType.class);
-        assertFalse(TypeMirrors.is(cases.one("primitive").asType(), String.class));
+        assertFalse(TypeMirrors.is(labels.get("primitive").asType(), String.class));
     }
     
     @Test
     void is_declared_type() {
-        assertTrue(TypeMirrors.is(cases.one("string_variable").asType(), String.class));
+        assertTrue(TypeMirrors.is(labels.get("string_variable").asType(), String.class));
     }
     
     @Test
     void is_not_declared_type() {
-        assertFalse(TypeMirrors.is(((ExecutableElement) cases.one("generic_executable")).getReturnType(), String.class));
+        assertFalse(TypeMirrors.is(((ExecutableElement) labels.get("generic_executable")).getReturnType(), String.class));
     }
     
     
@@ -100,27 +100,27 @@ class TypeMirrorsTest {
     
     @Test
     void annotation() {
-        var element = cases.one("string_variable");
+        var element = labels.get("string_variable");
         var annotation = element.getAnnotationMirrors().get(0);
         assertEquals(annotation, types.annotation(element, annotation.getAnnotationType()));
     }
     
     @Test
     void annotation_null() {
-        var element = cases.one("string_variable");
+        var element = labels.get("string_variable");
         assertNull(types.annotation(element, (DeclaredType) element.asType()));
     }
     
     @Test
     void annotations() {
-        var element = cases.one("string_variable");
+        var element = labels.get("string_variable");
         var annotation = element.getAnnotationMirrors().get(0);
         assertEquals(List.of(annotation), types.annotations(element, annotation.getAnnotationType()));
     }
     
     @Test
     void annotations_empty() {
-        var element = cases.one("string_variable");
+        var element = labels.get("string_variable");
         assertEquals(List.of(), types.annotations(element, (DeclaredType) element.asType()));
     }
     
@@ -128,12 +128,12 @@ class TypeMirrorsTest {
     @Test
     void element_type() {
         var element = Tools.typeMirrors().asElement(types.type(String.class));
-        assertEquals(element, types.asTypeElement(cases.one("string_variable").asType()));
+        assertEquals(element, types.asTypeElement(labels.get("string_variable").asType()));
     }
     
     @Test
     void element_primitive() {
-        assertNull(types.asTypeElement(cases.one("primitive").asType()));
+        assertNull(types.asTypeElement(labels.get("primitive").asType()));
     }
     
     @Test

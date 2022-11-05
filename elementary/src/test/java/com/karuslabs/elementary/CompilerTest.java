@@ -119,9 +119,9 @@ class CompilerTest {
     @Test
     void classpath_files() throws URISyntaxException {
         var file = new File(getClass().getClassLoader().getResource("com/karuslabs/elementary/junit").toURI());
-        var results = javac().classpath(List.of(file)).compile(ofLines("B", "class B { void b() {new A().method();} }"));
+        var results = javac().classpath(List.of(file)).compile(ofLines("B", "class B { void b() {Placeholder.class.toString();} }"));
         
-        assertEquals("package org.checkerframework.checker.nullness.qual does not exist", results.find().list().get(0).getMessage(Locale.ENGLISH));
+        assertTrue(results.find().list().isEmpty());
     }
     
 }

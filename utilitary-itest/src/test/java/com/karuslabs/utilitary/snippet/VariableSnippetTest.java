@@ -38,20 +38,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class VariableSnippetTest {
     
-    @Case("variable")
+    @Label("variable")
     public final List<String> something = List.of();
     
-    VariableElement variable = (VariableElement) Tools.cases().one("variable");
+    VariableElement variable = (VariableElement) Tools.labels().get("variable");
     VariableSnippet snippet = VariableSnippet.of(variable, 0);
     
     @Test
     void toString_() {
-        assertEquals("@Case(\"variable\")\npublic final List<String> something", snippet.toString());
+        assertEquals("@Label(\"variable\")\npublic final List<String> something", snippet.toString());
     }
     
     @Test
     void fields() {
-        assertEquals("@Case(\"variable\")", snippet.annotations.toString());
+        assertEquals("@Label(\"variable\")", snippet.annotations.toString());
         assertEquals("public final ", snippet.modifiers.toString());
         assertEquals("List<String>", snippet.type.toString());
         assertEquals("something", snippet.name.toString());

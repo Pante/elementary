@@ -37,20 +37,20 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class MethodSnippetTest {
     
-    ExecutableElement method = (ExecutableElement) Tools.cases().one("test");
+    ExecutableElement method = (ExecutableElement) Tools.labels().get("test");
     MethodSnippet snippet = MethodSnippet.of(method, 0);
     
-    @Case("test")
+    @Label("test")
     <T> void test(Line line, T a) throws NullPointerException {}
     
     @Test
     void toString_() {
-        assertEquals("@Case(\"test\")\n<T> void test(Line line, T a) throws NullPointerException", snippet.toString());
+        assertEquals("@Label(\"test\")\n<T> void test(Line line, T a) throws NullPointerException", snippet.toString());
     }
     
     @Test
     void values() {
-        assertEquals("@Case(\"test\")", snippet.annotations.toString());
+        assertEquals("@Label(\"test\")", snippet.annotations.toString());
         assertEquals("<T>", snippet.typeParameters.toString());
         assertEquals("void", snippet.type.toString());
         assertEquals("test", snippet.name.toString());

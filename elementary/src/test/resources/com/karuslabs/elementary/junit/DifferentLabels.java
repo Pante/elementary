@@ -21,36 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit.annotations;
 
-import com.karuslabs.elementary.junit.ToolsExtension;
+import com.karuslabs.elementary.junit.annotations.Label;
 
-import java.lang.annotation.*;
+public class DifferentLabels {
 
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
-/**
- * An annotation to mark and simplify retrieval of test cases in tests extended 
- * with {@code ToolsExtension}.
- * 
- * @see com.karuslabs.elementary.junit.Cases
- */
-@Usage(ToolsExtension.class)
-@Documented
-@Retention(RUNTIME)
-public @interface Case {
+    @Label("class") static class A {}
     
-    /**
-     * A default value for {@code @Case} used to denote that the annotated target's
-     * name should be used as its label.
-     */
-    static final String DEFAULT_LABEL = "${DEFAULT_LABEL}";
-    
-    /**
-     * An optional label for this case.
-     * 
-     * @return a label
-     */
-    String value() default DEFAULT_LABEL;
+    @Label(value = "method", group = "methods") public void a() {}
     
 }

@@ -61,13 +61,13 @@ class MemoryFileManagerTest {
     
     @Test
     void isSameFile() {
-        assertTrue(manager.isSameFile(ofResource("com/karuslabs/elementary/junit/A.java"), ofResource("com/karuslabs/elementary/junit/A.java")));
+        assertTrue(manager.isSameFile(ofResource("com/karuslabs/elementary/junit/Placeholder.java"), ofResource("com/karuslabs/elementary/junit/Placeholder.java")));
     }
     
     
     @Test
     void getFileInput_input_location() throws IOException {
-        assertNotNull(manager.getFileForInput(CLASS_PATH, "", "com/karuslabs/elementary/junit/A.java"));
+        assertNotNull(manager.getFileForInput(CLASS_PATH, "", "com/karuslabs/elementary/junit/Placeholder.java"));
     }
     
     @Test
@@ -81,7 +81,7 @@ class MemoryFileManagerTest {
     
     @Test
     void getJavaFileInput_input_location() throws IOException {
-        assertNotNull(manager.getJavaFileForInput(CLASS_PATH, "com/karuslabs/elementary/junit/A", SOURCE));
+        assertNotNull(manager.getJavaFileForInput(CLASS_PATH, "com/karuslabs/elementary/junit/Placeholder", SOURCE));
     }
     
     @Test

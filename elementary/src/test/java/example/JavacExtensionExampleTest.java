@@ -25,7 +25,6 @@ package example;
 
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
-import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.elementary.junit.annotations.Classpath;
 import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
@@ -64,7 +63,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @ExtendWith(JavacExtension.class)
 @Options("-Werror")
 @Processors({StringFieldProcessor.class})
-@Classpath("com.karuslabs.elementary.junit.ValidCase")
+@Classpath("com.karuslabs.elementary.junit.example.ValidCase")
 class JavacExtensionExampleTest {
     
     @Test
@@ -73,19 +72,19 @@ class JavacExtensionExampleTest {
     }
     
     @Test
-    @Classpath("com.karuslabs.elementary.junit.InvalidCase")
+    @Classpath("com.karuslabs.elementary.junit.example.InvalidCase")
     void process_int_field(Results results) {
         assertEquals(1, results.find().errors().contains("Element is not a string").count());
     }
     
 }
 
-@SupportedAnnotationTypes({"com.karuslabs.elementary.junit.annotations.Case"})
+@SupportedAnnotationTypes({"example.ExampleAnnotation"})
 class StringFieldProcessor extends AnnotationProcessor {
     
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
-        var elements = round.getElementsAnnotatedWith(Case.class);
+        var elements = round.getElementsAnnotatedWith(ExampleAnnotation.class);
         for (var element : elements) {
             if (!(element instanceof VariableElement)) {
                 logger.error(element, "Element is not a variable");

@@ -21,11 +21,41 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
+package com.karuslabs.elementary.junit.annotations;
 
-import com.karuslabs.elementary.junit.annotations.Case;
+import com.karuslabs.elementary.junit.ToolsExtension;
 
-public class ValidCase {
+import java.lang.annotation.*;
 
-    @Case("first") public final String field = "";
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+/**
+ * An annotation to mark and simplify retrieval of elements in tests extended 
+ * with {@code ToolsExtension}.
+ * 
+ * @see com.karuslabs.elementary.junit.Labels
+ */
+@Usage(ToolsExtension.class)
+@Documented
+@Retention(RUNTIME)
+public @interface Label {
+    
+    /**
+     * A unique value for this label.
+     * 
+     * All labels in a single test class must be unique.
+     * 
+     * @return a label
+     */
+    String value();
+    
+    /**
+     * The group to which this label belongs.
+     * 
+     * A group can contain several labels.
+     * 
+     * @return a group
+     */
+    String group() default "";
     
 }

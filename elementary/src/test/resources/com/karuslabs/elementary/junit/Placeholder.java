@@ -1,10 +1,7 @@
-
-import com.karuslabs.elementary.junit.annotations.Case;
-
 /*
  * The MIT License
  *
- * Copyright 2021 Karus Labs.
+ * Copyright 2022 Karus Labs.
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +21,9 @@ import com.karuslabs.elementary.junit.annotations.Case;
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-public class CasesCases {
 
-    @Case("a") public void a() {}
-    
-    @Case static class A {}
+// This file is meant to be used as a placeholder for tests in com.karuslabs.elementary.file.*.
+
+public @interface Placeholder {
     
 }

@@ -40,26 +40,26 @@ class AncestorWalkerTest {
     
     TypeMirrors types = Tools.typeMirrors();
     Walker<TypeMirror> walker = Walker.ancestor(types);
-    Cases cases = Tools.cases();
-    @Case("ancestor") Collection<String> ancestor;
-    @Case("descendent") List<String> descendent;
-    @Case("other") List<Integer> other;
+    Labels labels = Tools.labels();
+    @Label("ancestor") Collection<String> ancestor;
+    @Label("descendent") List<String> descendent;
+    @Label("other") List<Integer> other;
     
     @Test
     void visitDeclared_same() {
-        var ancestor = cases.one("ancestor").asType();
+        var ancestor = labels.get("ancestor").asType();
         assertTrue(types.isSameType(ancestor, ancestor.accept(walker, ancestor)));
     }
     
     @Test
     void visitDeclared_found_ancestor() {
-        var ancestor = cases.one("ancestor").asType();
-        assertTrue(types.isSameType(ancestor, cases.one("descendent").asType().accept(walker, ancestor)));
+        var ancestor = labels.get("ancestor").asType();
+        assertTrue(types.isSameType(ancestor, labels.get("descendent").asType().accept(walker, ancestor)));
     }
     
     @Test
     void visitDeclared_no_ancestor() {
-        assertNull(cases.one("other").asType().accept(walker, cases.one("ancestor").asType()));
+        assertNull(labels.get("other").asType().accept(walker, labels.get("ancestor").asType()));
     }
     
     @Test

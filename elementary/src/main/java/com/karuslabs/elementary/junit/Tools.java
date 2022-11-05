@@ -53,12 +53,12 @@ public class Tools {
     }
     
     /**
-     * Returns a {@code Cases}.
+     * Returns a {@code Labels}.
      * 
-     * @return a {@code Casses}
+     * @return a {@code Labels}
      */
-    public static Cases cases() {
-        return environment().cases;
+    public static Labels labels() {
+        return environment().labels;
     }
     
     /**

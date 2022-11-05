@@ -36,42 +36,42 @@ import static org.junit.jupiter.api.Assertions.*;
 @Introspect
 class TypeLineTest {
     
-    @Case("annotation")
+    @Label("annotation")
     static @interface Annotation {}
     
-    @Case("enum")
+    @Label("enum")
     static enum Enum {}
     
-    @Case("interface")
+    @Label("interface")
     static interface Interface {}
     
-    @Case("class")
+    @Label("class")
     static class Type {}
     
     @Test
     void annotation() {
-        var line = TypeLine.of(Tools.cases().one("annotation").getKind(), 0, 1);
+        var line = TypeLine.of(Tools.labels().get("annotation").getKind(), 0, 1);
         assertEquals("@interface", line.toString());
         assertEquals(ANNOTATION_TYPE, line.kind);
     }
     
     @Test
     void enum_() {
-        var line = TypeLine.of(Tools.cases().one("enum").getKind(), 0, 1);
+        var line = TypeLine.of(Tools.labels().get("enum").getKind(), 0, 1);
         assertEquals("enum", line.toString());
         assertEquals(ENUM, line.kind);
     }
     
     @Test
     void interface_() {
-        var line = TypeLine.of(Tools.cases().one("interface").getKind(), 0, 1);
+        var line = TypeLine.of(Tools.labels().get("interface").getKind(), 0, 1);
         assertEquals("interface", line.toString());
         assertEquals(INTERFACE, line.kind);
     }
     
     @Test
     void class_() {
-        var line = TypeLine.of(Tools.cases().one("class").getKind(), 0, 1);
+        var line = TypeLine.of(Tools.labels().get("class").getKind(), 0, 1);
         assertEquals("class", line.toString());
         assertEquals(CLASS, line.kind);
     }

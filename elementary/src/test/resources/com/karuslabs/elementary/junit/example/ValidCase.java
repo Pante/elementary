@@ -21,63 +21,11 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package com.karuslabs.elementary.junit;
 
-import com.karuslabs.elementary.junit.annotations.*;
+import com.karuslabs.elementary.junit.annotations.Label;
 
-import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
+public class ValidCase {
 
-import static org.junit.jupiter.api.Assertions.*;
-
-@ExtendWith(ToolsExtension.class)
-@Classpath("com.karuslabs.elementary.junit.CasesCases")
-class CasesTest {
-
-    Cases cases = Tools.cases();
-    
-    @Test
-    void one() {
-        assertNull(cases.one());
-    }
-    
-    
-    @Test
-    void one_label() {
-        assertNotNull(cases.one("a"));
-        assertNotNull(cases.one("A"));
-    }
-    
-    @Test
-    void one_label_not_found() {
-        assertNull(cases.one("invalid"));
-    }
-    
-    
-    @Test
-    void get_index() {
-        assertEquals("a", cases.get(1).getAnnotation(Case.class).value());
-    }
-    
-    @Test
-    void get_string() {
-        assertEquals(1, cases.get("a").size());
-    }
-    
-    
-    @Test
-    void all() {
-        assertEquals(2, cases.all().size());
-    }
-    
-    @Test
-    void labels() {
-        assertEquals(2, cases.labels().size());
-    }
-    
-    @Test
-    void count() {
-        assertEquals(2, cases.count());
-    }
+    @Label("first") public final String field = "";
     
 }
