@@ -27,6 +27,7 @@ import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.*;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
+import com.sun.source.util.Trees;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -160,7 +161,7 @@ class DaemonCompiler extends Thread {
                 return false;
             }
             
-            environment.complete(new Environment(round, env.getElementUtils(), env.getTypeUtils(), env.getMessager(), env.getFiler()));
+            environment.complete(new Environment(round, env.getElementUtils(), env.getTypeUtils(), Trees.instance(env), env.getMessager(), env.getFiler()));
             try {
                 completion.await();
             } catch (InterruptedException e) {
@@ -184,16 +185,18 @@ class DaemonCompiler extends Thread {
         public final RoundEnvironment round;
         public final Elements elements;
         public final Types types;
+        public final Trees trees;
         public final Messager messager;
         public final Filer filer;
         public final Labels labels;
         public final TypeMirrors typeMirrors;
         public final Logger logger;
         
-        Environment(RoundEnvironment round, Elements elements, Types types, Messager messager, Filer filer) {
+        Environment(RoundEnvironment round, Elements elements, Types types, Trees trees, Messager messager, Filer filer) {
             this.round = round;
             this.elements = elements;
             this.types = types;
+            this.trees = trees;
             this.messager = messager;
             this.filer = filer;
             labels = new Labels(round);

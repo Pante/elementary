@@ -31,6 +31,7 @@ import java.lang.reflect.*;
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
+import com.sun.source.util.Trees;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 
@@ -97,6 +98,11 @@ class ToolsExtensionTest {
     @Test
     void types(Types types) {
         assertNotNull(types);
+    }
+
+    @Test
+    void types(Trees trees) {
+        assertNotNull(trees);
     }
     
     @Test
