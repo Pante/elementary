@@ -30,6 +30,7 @@ import com.karuslabs.utilitary.type.TypeMirrors;
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
+import com.sun.source.util.Trees;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 /**
@@ -86,6 +87,15 @@ public class Tools {
      */
     public static Types types() {
         return environment().types;
+    }
+
+    /**
+     * Returns a {@code Trees}.
+     *
+     * @return a {@code Trees}
+     */
+    public static Trees trees() {
+        return environment().trees;
     }
     
     /**

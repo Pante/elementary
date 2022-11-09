@@ -33,7 +33,9 @@ import java.util.concurrent.CompletionException;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 
+import com.sun.source.util.Trees;
 import org.junit.jupiter.api.*;
+import org.mockito.MockedStatic;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -84,15 +86,20 @@ class DaemonProcessorTest {
     DaemonProcessor processor = new DaemonProcessor();
     ProcessingEnvironment environment = mock(ProcessingEnvironment.class);
     RoundEnvironment round = mock(RoundEnvironment.class);
-    
+
     @Test
     void process() {
-        new Thread(() -> processor.completion.countDown()).start();
-        
-        processor.init(mock(ProcessingEnvironment.class));
-        
-        assertFalse(processor.process(Set.of(), round));
-        assertEquals(0L, processor.completion.getCount());
+        try (MockedStatic<Trees> trees = mockStatic(Trees.class)) {
+            trees.when(() -> Trees.instance(environment))
+                    .thenReturn(mock(Trees.class));
+            
+            new Thread(() -> processor.completion.countDown()).start();
+
+            processor.init(environment);
+
+            assertFalse(processor.process(Set.of(), round));
+            assertEquals(0L, processor.completion.getCount());
+        }
     }
     
     @Test

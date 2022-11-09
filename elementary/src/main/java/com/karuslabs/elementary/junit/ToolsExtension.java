@@ -31,6 +31,7 @@ import java.lang.reflect.Constructor;
 import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
+import com.sun.source.util.Trees;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.junit.jupiter.api.extension.*;
@@ -114,6 +115,9 @@ public class ToolsExtension extends Daemon implements ParameterResolver {
                 
         } else if (type == Types.class) {
             return environment.types;
+
+        } else if (type == Trees.class) {
+            return environment.trees;
             
         } else if (type == Messager.class) {
             return environment.messager;
