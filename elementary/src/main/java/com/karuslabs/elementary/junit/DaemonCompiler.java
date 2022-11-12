@@ -31,7 +31,6 @@ import com.sun.source.util.Trees;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.lang.reflect.AnnotatedElement;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
@@ -55,36 +54,21 @@ class DaemonCompiler extends Thread {
     /**
      * Creates a {@code DaemonCompiler} that compiles the Java source files provided
      * by {@code @Classpath} and {@code Inline} annotations on the given annotated
-     * element.
-     * 
-     * @param annotated the annotated element
-     * @return a {@code DaemonCompiler}
-     */
-    public static DaemonCompiler of(AnnotatedElement annotated) {
-        return of(scan(annotated));
-    }
-    
-    /**
-     * Creates a {@code DaemonCompiler} that compiles the Java source files provided
-     * by {@code @Classpath} and {@code Inline} annotations on the given annotated
      * class.
+     * 
+     * It also adds the classpath and module of the given class if the module is named
+     * to the compilation environment.
      * 
      * @param annotated the annotated class
      * @return a {@code DaemonCompiler}
      */
     public static DaemonCompiler of(Class<?> annotated) {
-        return of(scan(annotated));
-    }
-    
-    /**
-     * Creates a {@code DaemonCompiler} that compiles the given Java source files.
-     * 
-     * @param files the Java source files
-     * @return a {@code DaemonCompiler}
-     */
-    static DaemonCompiler of(List<JavaFileObject> files) {
-        files.add(DUMMY);
-        return new DaemonCompiler(javac().currentClasspath(), files);
+        var files = scan(annotated);
+        if (files.isEmpty()) {
+            files.add(DUMMY);
+        }
+        
+        return new DaemonCompiler(javac().module(annotated.getModule()).currentClasspath(), files);
     }
     
     

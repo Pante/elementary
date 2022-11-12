@@ -34,7 +34,7 @@ import javax.tools.*;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
-import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.*;
 
 /**
  * Represents a Java compiler.
@@ -57,7 +57,7 @@ public class Compiler {
     private final JavaCompiler compiler;
     private final List<Processor> processors = new ArrayList<>();
     private final List<String> options = new ArrayList<>();
-    private @Nullable List<File> classpath;
+    @Nullable Set<File> classpath;
     
     /**
      * Creates a {@code Compiler} with the given underlying compiler.
@@ -171,7 +171,32 @@ public class Compiler {
     
     
     /**
-     * Sets the current classpath as the compilation classpath.
+     * Adds the module and its transitive dependencies to the compilation classpath.
+     * 
+     * @param module the module
+     * @return {@code this}
+     */
+    public Compiler module(Module module) {
+        var layer = module.getLayer();
+        if (layer == null) {
+            return this;
+        }
+        
+        for (var resolved : layer.configuration().modules()) {
+            var location = resolved.reference().location().orElseThrow(() -> new IllegalStateException("Could not find location for module: " + resolved.name()));
+            if (classpath == null) {
+                classpath = new HashSet<>();
+            }
+            
+            classpath.add(new File(location.getPath()));
+        }
+
+        return this;
+    }
+    
+    
+    /**
+     * Adds the current classpath as the compilation classpath.
      * 
      * @return {@code this}
      */
@@ -179,9 +204,8 @@ public class Compiler {
         return classpath(getClass().getClassLoader());
     }
     
-    
     /**
-     * Sets the classpath of the given {@code ClassLoader} as the compilation classpath.
+     * Adds the classpath of the given {@code ClassLoader} as the compilation classpath.
      * 
      * @param loader the {@code ClassLoader} which classpath is to be used during compilation
      * @return {@code this}
@@ -218,19 +242,27 @@ public class Compiler {
             loader = loader.getParent();
         }
         
-        classpath = paths.stream().map(File::new).collect(toList());
+        if (classpath == null) {
+            classpath = new HashSet<>();
+        }
+        
+        classpath.addAll(paths.stream().map(File::new).collect(toSet()));
         
         return this;
     }
     
     /**
-     * Sets the given classpath as the compilation classpath.
+     * Adds the given classpath as the compilation classpath.
      * 
-     * @param classpath the compilation classpath
+     * @param files the compilation classpath
      * @return {@code this}
      */
-    public Compiler classpath(Collection<File> classpath) {
-        this.classpath = new ArrayList<>(classpath);
+    public Compiler classpath(Collection<File> files) {
+        if (classpath == null) {
+            classpath = new HashSet<>();
+        }
+        
+        classpath.addAll(files);
         return this;
     }
     
