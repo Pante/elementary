@@ -14,8 +14,7 @@ Please read [upgrading to Elementary 2](./upgrading-to-elementary-2.md) for more
 - Change `Cases` to `Labels`
 - Change `Tools.cases()` to `ToolsExtension.labels()`
 - Change `Compiler`'s classpath related methods to add to the classpath rather than set the classpath
-- Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`
-- Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`
+- Change `DaemonCompiler.Environment.cases` to `DaemonCompiler.Environment.labels`
 - Change` DaemonCompiler.of(Class<?>)` to process the given class's module if the module is named
 - Remove `DaemonCompiler.of(AnnotatedConstruct)`
 - Remove `DaemonCompiler.of(List<JavaFileObject>)`
