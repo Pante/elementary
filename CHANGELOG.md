@@ -11,8 +11,8 @@ Please read [upgrading to Elementary 2](./upgrading-to-elementary-2.md) for more
 
 - Add `Compiler.module(...)`
 - Change `@Case` to `@Label`
-- Change `Labels` to `Labels`
-- Change `Tools.labels()` to `ToolsExtension.labels()`
+- Change `Cases` to `Labels`
+- Change `Tools.cases()` to `ToolsExtension.labels()`
 - Change `Compiler`'s classpath related methods to add to the classpath rather than set the classpath
 - Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`
 - Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`

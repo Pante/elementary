@@ -184,11 +184,7 @@ public class Compiler {
         
         for (var resolved : layer.configuration().modules()) {
             var location = resolved.reference().location().orElseThrow(() -> new IllegalStateException("Could not find location for module: " + resolved.name()));
-            if (classpath == null) {
-                classpath = new HashSet<>();
-            }
-            
-            classpath.add(new File(location.getPath()));
+            classpath().add(new File(location.getPath()));
         }
 
         return this;
@@ -242,11 +238,7 @@ public class Compiler {
             loader = loader.getParent();
         }
         
-        if (classpath == null) {
-            classpath = new HashSet<>();
-        }
-        
-        classpath.addAll(paths.stream().map(File::new).collect(toSet()));
+        classpath().addAll(paths.stream().map(File::new).collect(toSet()));
         
         return this;
     }
@@ -258,12 +250,18 @@ public class Compiler {
      * @return {@code this}
      */
     public Compiler classpath(Collection<File> files) {
+        
+        classpath().addAll(files);
+        return this;
+    }
+    
+    
+    Set<File> classpath() {
         if (classpath == null) {
             classpath = new HashSet<>();
         }
         
-        classpath.addAll(files);
-        return this;
+        return classpath;
     }
     
 }
