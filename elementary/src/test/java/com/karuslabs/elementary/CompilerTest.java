@@ -85,6 +85,21 @@ class CompilerTest {
     }
     
     
+    
+    @Test
+    void module() {
+        var compiler = javac().module(Object.class.getModule());
+        System.out.println(compiler.classpath);
+        assertFalse(compiler.classpath.isEmpty());
+    }
+    
+    @Test
+    void module_none() {
+        var compiler = javac().module(getClass().getModule()); // This assumes that we're not going to use modules anytime soon
+        assertNull(compiler.classpath);
+    }
+    
+    
     @Test
     void classpath_classloader() throws MalformedURLException {
         var loader = new URLClassLoader(new URL[] {new URL("file", "", 0, "")}, getClass().getClassLoader());

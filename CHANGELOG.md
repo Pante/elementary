@@ -7,12 +7,17 @@ This release focuses on providing facilities for creating more precise and detai
 This release contains breaking changes that overhaul how elements are retrieved in tests.
 It also provides first-class parameterized test support and JDK9 modules support.
 
-Please
+Please read [upgrading to Elementary 2](./upgrading-to-elementary-2.md) for more information.
 
+- Add `Compiler.module(...)`
 - Change `@Case` to `@Label`
-- Change `Labels` to `Labels`
-- Change `Tools.labels()` to `ToolsExtension.labels()`
-- Change `DaemonCompiler.Environment.labels` to `DaemonCompiler.Environment.labels`
+- Change `Cases` to `Labels`
+- Change `Tools.cases()` to `ToolsExtension.labels()`
+- Change `Compiler`'s classpath related methods to add to the classpath rather than set the classpath
+- Change `DaemonCompiler.Environment.cases` to `DaemonCompiler.Environment.labels`
+- Change` DaemonCompiler.of(Class<?>)` to process the given class's module if the module is named
+- Remove `DaemonCompiler.of(AnnotatedConstruct)`
+- Remove `DaemonCompiler.of(List<JavaFileObject>)`
 
 ## Utilitary
 - Add `com.karuslabs.utilitary.snippet`
