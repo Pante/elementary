@@ -24,6 +24,7 @@
 package com.karuslabs.elementary.junit;
 
 import com.karuslabs.elementary.junit.DaemonCompiler.Environment;
+import com.karuslabs.elementary.junit.annotations.LabelSource;
 import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
@@ -32,9 +33,12 @@ import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
 import com.sun.source.util.Trees;
+import java.util.stream.Stream;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.support.AnnotationConsumer;
 
 /**
  * A JUnit extension that provides an annotation processing environment in which
@@ -45,7 +49,28 @@ import org.junit.jupiter.api.extension.*;
  * Java source files may be included for compilation by annotating the test class
  * with {@code @Classpath}, {@code @Inline}, {@code @Introspect} or {@code @Resource}.
  */
-public class ToolsExtension extends Daemon implements ParameterResolver {
+public class ToolsExtension extends Daemon implements ArgumentsProvider, AnnotationConsumer<LabelSource>, ParameterResolver {
+
+    private LabelSource source;
+    
+    @Override
+    public void accept(LabelSource source) {
+        this.source = source;
+    }
+    
+    @Override
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+        var builder = Stream.<Arguments>builder();
+        for (var group : source.groups()) {
+            var elements = compiler(context).environment().labels.group(group);
+            for (var entry : elements.entrySet()) {
+                builder.add(Arguments.of(entry.getKey(), entry.getValue()));
+            }
+        }
+        
+        return builder.build();
+    }
+
     
     @Override
     public Object resolveParameter(ParameterContext parameter, ExtensionContext context) throws ParameterResolutionException {
