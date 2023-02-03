@@ -89,7 +89,6 @@ class CompilerTest {
     @Test
     void module() {
         var compiler = javac().module(Object.class.getModule());
-        System.out.println(compiler.classpath);
         assertFalse(compiler.classpath.isEmpty());
     }
     

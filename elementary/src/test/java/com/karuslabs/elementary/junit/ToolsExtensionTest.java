@@ -32,8 +32,10 @@ import javax.annotation.processing.*;
 import javax.lang.model.util.*;
 
 import com.sun.source.util.Trees;
+import javax.lang.model.element.Element;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.params.ParameterizedTest;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -43,6 +45,21 @@ import static org.mockito.Mockito.*;
 class ToolsExtensionTest {
 
     ToolsExtension extension = spy(new ToolsExtension());
+    
+    
+    @ParameterizedTest
+    @LabelSource(groups = {"valid group"})
+    void labelSource(String label, Element element, RoundEnvironment round) {
+        assertEquals("label value", label);
+    }
+    
+    static class LabelSourceLabels {
+        
+        @Label(value = "label value", group = "valid group")
+        void test() {}
+        
+    }
+    
     
     @Test
     void resolveParmeter_unsupported() {
@@ -69,7 +86,7 @@ class ToolsExtensionTest {
     
     @Test
     void introspect_class(Labels labels) {
-        assertEquals(1, labels.size());
+        assertEquals(2, labels.size());
     }
     
     static class IntrospectMethod {
