@@ -18,5 +18,5 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
-      - run: mvn install --settings ci-settings.xml --no-transfer-progress
+      - run: ./mvnw install --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)

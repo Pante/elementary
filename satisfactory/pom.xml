@@ -9,9 +9,10 @@
     
     <artifactId>satisfactory</artifactId>
     <packaging>jar</packaging>
+    <version>1.1.2</version>
     
     <name>Satisfactory</name>
-    <description>Satisfactory is a Element matching library for annotation processors.</description>
+    <description>Satisfactory is an Element matching library for annotation processors.</description>
     
     <dependencies>
         <dependency>
