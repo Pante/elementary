@@ -1,13 +1,14 @@
 ## 2.0.0 - Next Release
 
-This release focuses on providing facilities for creating more precise and detailed diagnostic messages.
+This release focuses on providing facilities for creating more precise and detailed diagnostic messages. 
+Note that `Satsifactory` still remains on `1.1.2` as it is not ready for a stable release yet.
 
 ## Elementary
 
 This release contains breaking changes that overhaul how elements are retrieved in tests.
 It also provides first-class parameterized test support and JDK9 modules support.
 
-Please read [upgrading to Elementary 2](./upgrading-to-elementary-2.md) for more information.
+Please read [migrating to Elementary 2](./docs/elementary/migration/migrating-to-elementary-2.md) for more information.
 
 - Add `Compiler.module(...)`
 - Change `@Case` to `@Label`

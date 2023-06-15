@@ -48,6 +48,8 @@ import org.junit.jupiter.params.support.AnnotationConsumer;
  * <br><br>
  * Java source files may be included for compilation by annotating the test class
  * with {@code @Classpath}, {@code @Inline}, {@code @Introspect} or {@code @Resource}.
+ * <br><br>
+ * Elements can be used in parameterized tests using {@code @LabelSource}.
  */
 public class ToolsExtension extends Daemon implements ArgumentsProvider, AnnotationConsumer<LabelSource>, ParameterResolver {
 

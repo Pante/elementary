@@ -12,6 +12,28 @@
     
     <name>Elementary</name>
     <description>A suite of JUnit 5 extensions for testing Java compilation and annotation processors</description>
+    <url>https://github.com/Pante/elementary</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/pante/elementary.git</connection>
+        <developerConnection>scm:git:ssh://github.com/pante/elementary.git</developerConnection>
+        <url>https://github.com/Pante/elementary</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Matthias Ngeo</name>
+            <email>matthiasngeo@gmail.com</email>
+            <url>https://github.com/Pante</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
     
     <properties>
         <maven.compiler.release>11</maven.compiler.release>

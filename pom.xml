@@ -9,6 +9,28 @@
     
     <name>Elementary Project</name>
     <description>Elementary is a collection of annotation processing libraries and tools</description>
+    <url>https://github.com/Pante/elementary</url>
+
+    <scm>
+        <connection>scm:git:git://github.com/pante/elementary.git</connection>
+        <developerConnection>scm:git:ssh://github.com/pante/elementary.git</developerConnection>
+        <url>https://github.com/Pante/elementary</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Matthias Ngeo</name>
+            <email>matthiasngeo@gmail.com</email>
+            <url>https://github.com/Pante</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -38,7 +60,7 @@
             <id>elementary-releases</id>
             <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
         </repository>
-        
+
         <repository>
             <id>elementary-snapshots</id>
             <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
@@ -187,15 +209,14 @@
                         <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/utilitary/apidocs</link>
                     </links>
                 </configuration>
-                <executions> 
+                <executions>
                     <execution>
-                        <phase>deploy</phase>
+                        <id>attach-javadoc</id>
                         <goals>
-                            <goal>javadoc</goal>
                             <goal>jar</goal>
                         </goals>
                     </execution>
-                </executions> 
+                </executions>
             </plugin>
             
             <plugin> 
@@ -209,6 +230,33 @@
                         </goals> 
                     </execution> 
                 </executions> 
+            </plugin>
+
+            <plugin>
+                <groupId>org.jreleaser</groupId>
+                <artifactId>jreleaser-maven-plugin</artifactId>
+                <version>1.3.1</version>
+                <configuration>
+                    <jreleaser>
+                        <signing>
+                            <active>ALWAYS</active>
+                            <armored>true</armored>
+                        </signing>
+                        <deploy>
+                            <maven>
+                                <nexus2>
+                                    <maven-central>
+                                        <active>ALWAYS</active>
+                                        <url>https://s01.oss.sonatype.org/service/local</url>;
+                                        <closeRepository>false</closeRepository>
+                                        <releaseRepository>false</releaseRepository>
+                                        <stagingRepositories>target/staging-deploy</stagingRepositories>
+                                    </maven-central>
+                                </nexus2>
+                            </maven>
+                        </deploy>
+                    </jreleaser>
+                </configuration>
             </plugin>
             
             <plugin>

@@ -1,4 +1,4 @@
-## Elementary is a suite of libraries that simplify creating and unit testing annotation processors.
+# Elementary is a suite of libraries that simplify creating and unit testing annotation processors.
 
 [![CI/CD](https://github.com/Pante/elementary/workflows/Elementary%20CI/CD/badge.svg)](https://github.com/Pante/elementary/actions?query=workflow%3ACI%2FCD)
 [![Codecov](https://codecov.io/gh/Pante/elementary/branch/master/graph/badge.svg)](https://codecov.io/gh/Pante/elementary)
@@ -6,20 +6,12 @@
 
 **Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17.**
 
-**Read the [wiki](https://github.com/Pante/elementary/wiki) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
+**Read the [docs](https://github.com/Pante/elementary/docs) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
 
 **Please read [The Problem With Annotation Processors](https://dzone.com/articles/the-problem-with-annotation-processors) for more information on what problem Elementary solves.**
 
-#### Maven Repository
-```XML
-<repository>
-  <id>elementary-releases</id>
-  <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
-</repository>
-```
-
 ***
-#### Elementary - A suite of tools and JUnit extensions to test annotation processors and compilation
+## Elementary - A suite of tools and JUnit extensions to test annotation processors and compilation
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/elementary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/elementary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html)
@@ -28,6 +20,8 @@
 > _"If I have seen further that others, it is by standing on the shoulder of giants"_
 
 This project is heavily inspired by Google's [compile-testing](https://github.com/google/compile-testing) project.
+
+Migrating from Elementary 1? See [migrating to Elementary 2](./docs/elementary/migration/migrating-to-elementary-2.md).
 
 ```XML
 <!-- Requires JUnit 5.7.1 & above -->
@@ -47,7 +41,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 ```
 
 ***
-#### Satisfactory - A composable `Element` matching library
+## Satisfactory - A composable `Element` matching library
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/satisfactory/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/satisfactory/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/satisfactory/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/satisfactory/)
 [![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/satisfactory/apidocs/index.html)
@@ -61,7 +55,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 ```
 
 ***
-#### Utilitary - Utilities to simplify implementation of annotation processors.
+## Utilitary - Utilities to simplify implementation of annotation processors.
 [![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/utilitary/)
 [![snapshots-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-snapshots/com/karuslabs/utilitary/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-snapshots/com/karuslabs/utilitary/)
 [![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/utilitary/apidocs/index.html)

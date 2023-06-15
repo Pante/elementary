@@ -9,10 +9,35 @@
     
     <artifactId>satisfactory</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.2</version>
     
     <name>Satisfactory</name>
     <description>Satisfactory is an Element matching library for annotation processors.</description>
+    <url>https://github.com/Pante/elementary</url>
+
+    <properties>
+        <maven.deploy.skip>true</maven.deploy.skip>
+    </properties>
+
+    <scm>
+        <connection>scm:git:git://github.com/pante/elementary.git</connection>
+        <developerConnection>scm:git:ssh://github.com/pante/elementary.git</developerConnection>
+        <url>https://github.com/Pante/elementary</url>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Matthias Ngeo</name>
+            <email>matthiasngeo@gmail.com</email>
+            <url>https://github.com/Pante</url>
+        </developer>
+    </developers>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
     
     <dependencies>
         <dependency>

@@ -1,5 +1,7 @@
 # Migrating to Elementary 2
 
+This document covers the breaking changes made in Elementary 2.
+
 Elementary 2 aims to provide an API with better ergonomics. This means code written with Elementary 2 will be both less error-prone and easier to understand. 
 To achieve that, Elementary's API for retrieving elements during tests had to be overhauled.
 
@@ -65,11 +67,11 @@ we realized after release that it can be used in a wider variety scenarios, some
 shoehorn developers into thinking it can be only used for denoting test cases. Hence, a more generalized name, `Label`, was chosen as a replacement.
 
 Secondly, retrieving of elements by index is no longer support. This has proven to both be confusing and error-prone in practice. It often happens that the
-annotated elements are re-ordered during refactoring, causing unrelated tests to break. More fundemenetally, ordering annotated elements, espically
+annotated elements are re-ordered during refactoring, causing unrelated tests to break. More fundemenetally, ordering annotated elements, especially
 across multiple source files is ill-defined. 
 
 Thirdly, to support retrieving of elements by labels, labels must now contain a mandatory and unique identifier (scoped to the test class). This makes retrieval
-of elements less ambigious (which element am I retrieving?) and hence less error-prone.
+of elements less ambiguous (which element am I retrieving?) and hence less error-prone.
 
 Lastly, several method names has been renamed to better reflect their purpose/less confusing between the transition from `Cases` to `Labels`. The most prominent being
 `Cases.one(String)` -> `Labels.get(String)`.
