@@ -56,7 +56,7 @@ This project is heavily inspired by Google's [compile-testing](https://github.co
 <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>satisfactory</artifactId>
-    <version>1.1.3</version>
+    <version>1.1.2</version>
 </dependency>
 ```
 
