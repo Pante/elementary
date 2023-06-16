@@ -1,4 +1,4 @@
-## 2.0.0 - Next Release
+## 2.0.0 - (16/06/2023)
 
 This release focuses on providing facilities for creating more precise and detailed diagnostic messages. 
 Note that `Satsifactory` still remains on `1.1.2` as it is not ready for a stable release yet.
