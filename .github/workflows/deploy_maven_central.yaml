@@ -13,6 +13,7 @@ jobs:
         with:
           java-version: 17
           distribution: temurin
+      - run: chmod +x ./mvnw
       - name: Publish package
         env:
           JRELEASER_NEXUS2_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
