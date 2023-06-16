@@ -14,6 +14,7 @@
     <name>Utilitary Integration Tests</name>
     <description>Integration tests for Utilitary.</description>
     <url>https://github.com/Pante/elementary</url>
+    <inceptionYear>2021</inceptionYear>
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -37,7 +38,8 @@
     <licenses>
         <license>
             <name>MIT License</name>
-            <url>http://www.opensource.org/licenses/mit-license.php</url>
+            <url>https://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
     <dependencies>

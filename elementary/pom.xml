@@ -13,6 +13,7 @@
     <name>Elementary</name>
     <description>A suite of JUnit 5 extensions for testing Java compilation and annotation processors</description>
     <url>https://github.com/Pante/elementary</url>
+    <inceptionYear>2021</inceptionYear>
 
     <scm>
         <connection>scm:git:git://github.com/pante/elementary.git</connection>
@@ -32,6 +33,7 @@
         <license>
             <name>MIT License</name>
             <url>https://www.opensource.org/licenses/mit-license.php</url>
+            <distribution>repo</distribution>
         </license>
     </licenses>
     
