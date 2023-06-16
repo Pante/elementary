@@ -39,35 +39,50 @@
         <release>11</release>
         <repository-head>nightly</repository-head>
     </properties>
-    
-    <distributionManagement>
-        <repository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/elementary-releases</url>
-        </repository>
 
-        <snapshotRepository>
-            <id>karus</id>
-            <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
-        </snapshotRepository>
-        
-        <site>
-            <id>karus</id>
-            <url>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</url>
-        </site>
-    </distributionManagement>
-    
-    <repositories>
-        <repository>
-            <id>elementary-releases</id>
-            <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
-        </repository>
+    <profiles>
+        <profile>
+            <id>release</id>
+        </profile>
 
-        <repository>
-            <id>elementary-snapshots</id>
-            <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
-        </repository>
-    </repositories>
+        <profile>
+            <id>development</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+
+            <distributionManagement>
+                <repository>
+                    <id>karus</id>
+                    <url>https://repo.karuslabs.com/repository/elementary-releases</url>
+                </repository>
+
+                <snapshotRepository>
+                    <id>karus</id>
+                    <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
+                </snapshotRepository>
+
+                <site>
+                    <id>karus</id>
+                    <url>dav:https://repo.karuslabs.com/repository/elementary/${repository-head}/</url>
+                </site>
+            </distributionManagement>
+
+            <repositories>
+                <repository>
+                    <id>elementary-releases</id>
+                    <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
+                </repository>
+
+                <repository>
+                    <id>elementary-snapshots</id>
+                    <url>https://repo.karuslabs.com/repository/elementary-snapshots/</url>
+                </repository>
+            </repositories>
+        </profile>
+    </profiles>
+    
+
     
     <modules>
         <module>elementary</module>
