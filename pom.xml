@@ -35,6 +35,7 @@
     </licenses>
     
     <properties>
+        <maven.deploy.site>true</maven.deploy.site>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <release>11</release>
         <repository-head>nightly</repository-head>
@@ -222,14 +223,15 @@
                         <link>https://checkerframework.org/api/</link>
                         <link>https://junit.org/junit5/docs/current/api/</link>
                         <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/elementary/apidocs</link>
-                        <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/satisfactory/apidocs</link>
+<!--                        <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/satisfactory/apidocs</link>-->
                         <link>https://repo.karuslabs.com/repository/elementary/${repository-head}/utilitary/apidocs</link>
                     </links>
                 </configuration>
                 <executions>
                     <execution>
-                        <id>attach-javadoc</id>
+                        <phase>deploy</phase>
                         <goals>
+                            <goal>javadoc</goal>
                             <goal>jar</goal>
                         </goals>
                     </execution>

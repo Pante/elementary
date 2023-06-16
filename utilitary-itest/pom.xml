@@ -18,6 +18,7 @@
 
     <properties>
         <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.site.skip>true</maven.site.skip>
         <maven.compiler.release>11</maven.compiler.release>
     </properties>
 

@@ -1,0 +1,26 @@
+name: Deploy to Nightly Self-hosted Nexus Repository
+
+on:
+  push:
+    branches:
+      - master
+      
+env:
+  SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
+  SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
+
+jobs:
+  deploy-self-hosted:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: styfle/cancel-workflow-action@0.11.0
+        with:
+          access_token: ${{ github.token }}
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
+        with:
+          java-version: 17
+          distribution: temurin
+      - run: chmod +x ./mvnw
+      - run: ./mvnw deploy site site-deploy --settings ci-settings.xml --no-transfer-progress
+      - run: bash <(curl -s https://codecov.io/bash)

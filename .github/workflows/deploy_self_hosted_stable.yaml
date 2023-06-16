@@ -1,9 +1,9 @@
-name: Deploy to Self-hosted Nexus Repository
+name: Deploy to Stable Self-hosted Nexus Repository
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '**'
       
 env:
   SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
@@ -22,5 +22,5 @@ jobs:
           java-version: 17
           distribution: temurin
       - run: chmod +x ./mvnw
-      - run: ./mvnw deploy site site-deploy --settings ci-settings.xml --no-transfer-progress
+      - run: ./mvnw deploy site site:stage-deploy site-deploy -Drepository-head=latest --settings ci-settings.xml --no-transfer-progress
       - run: bash <(curl -s https://codecov.io/bash)
