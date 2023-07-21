@@ -6,7 +6,7 @@
 
 **Elementary and Utilitary requires Java 11+. Satisfactory requires Java 17.**
 
-**Read the [docs](https://github.com/Pante/elementary/docs) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
+**Read the [docs](https://github.com/Pante/elementary/tree/master/docs/elementary) or check out the [Gradle demo project](https://github.com/toolforger/elementary-demo) to get started!**
 
 ***
 ## Elementary - A suite of tools and JUnit extensions to test annotation processors and compilation
