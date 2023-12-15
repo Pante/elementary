@@ -46,7 +46,7 @@ Migrating from Elementary 1? See [migrating to Elementary 2](./docs/elementary/m
 
 **Project Status: 1.X is mature, 2.X is on hold**
 
-We believe that pattern matching is essential to what Satisfactory is trying to achieve. Unforunately, even Java 21 doesn't currently have fully pledged pattern matching. Therefore, we elected to put the 2.X rewrite on hold until then.
+We believe that pattern matching is essential to what Satisfactory is trying to achieve. Unforunately, even Java 21 doesn't currently have fully fledged pattern matching. Therefore, we have elected to put the 2.X rewrite on hold until then.
 
 Satisfactory is hosted the following repository.
 
