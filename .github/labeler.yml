@@ -1,11 +1,15 @@
 "area: elementary":
-  - elementary/**
+  - changed-files:
+    - any-glob-to-any-file: elementary/**
 
 "area: satisfactory":
-  - satisfactory/**
+  - changed-files:
+    - any-glob-to-any-file: satisfactory/**
 
 "area: utilitary":
-  - utilitary/**
+  - changed-files:
+    - any-glob-to-any-file: utilitary/**
 
 "area: infrastructure":
-  - .github/**
+  - changed-files:
+    - any-glob-to-any-file: .github/**
