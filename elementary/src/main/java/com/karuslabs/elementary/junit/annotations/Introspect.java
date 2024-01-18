@@ -40,7 +40,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * the annotated element is used to resolve the file name. The file may not always
  * be named after the top level class of an annotated element if it contains multiple top level
  * classes.
- * 
+ * <br>
  * In addition, this annotation requires a build tool to copy source files from the
  * source directory to the output directory.
  * 

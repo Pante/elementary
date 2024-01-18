@@ -22,5 +22,5 @@ jobs:
           java-version: 17
           distribution: temurin
       - run: chmod +x ./mvnw
-      - run: ./mvnw deploy site site:stage-deploy site-deploy -Drepository-head=latest --settings ci-settings.xml --no-transfer-progress
+      - run: ./mvnw deploy site site:stage-deploy site-deploy -Drepository-head=latest --settings ci-settings.xml
       - run: bash <(curl -s https://codecov.io/bash)

@@ -1,130 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-    <parent>
-        <groupId>com.karuslabs</groupId>
-        <artifactId>elementary-project</artifactId>
-        <version>2.0.0</version>
-    </parent>
-    
-    <artifactId>elementary</artifactId>
-    <packaging>jar</packaging>
-    
-    <name>Elementary</name>
-    <description>A suite of JUnit 5 extensions for testing Java compilation and annotation processors</description>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.karuslabs</groupId>
+    <artifactId>elementary-project</artifactId>
+    <version>2.0.1</version>
+  </parent>
+  <artifactId>elementary</artifactId>
+  <packaging>jar</packaging>
+  <name>Elementary</name>
+  <description>JUnit 5 extensions for testing Java compilation and annotation processors</description>
+  <url>https://github.com/Pante/elementary</url>
+  <inceptionYear>2021</inceptionYear>
+  <scm>
+    <connection>scm:git:git://github.com/pante/elementary.git</connection>
+    <developerConnection>scm:git:ssh://github.com/pante/elementary.git</developerConnection>
     <url>https://github.com/Pante/elementary</url>
-    <inceptionYear>2021</inceptionYear>
-
-    <scm>
-        <connection>scm:git:git://github.com/pante/elementary.git</connection>
-        <developerConnection>scm:git:ssh://github.com/pante/elementary.git</developerConnection>
-        <url>https://github.com/Pante/elementary</url>
-    </scm>
-
-    <developers>
-        <developer>
-            <name>Matthias Ngeo</name>
-            <email>matthiasngeo@gmail.com</email>
-            <url>https://github.com/Pante</url>
-        </developer>
-    </developers>
-
-    <licenses>
-        <license>
-            <name>MIT License</name>
-            <url>https://www.opensource.org/licenses/mit-license.php</url>
-            <distribution>repo</distribution>
-        </license>
-    </licenses>
-    
-    <properties>
-        <maven.compiler.release>11</maven.compiler.release>
-    </properties>
-    
-    <dependencies>
-        <dependency>
-            <groupId>com.karuslabs</groupId>
-            <artifactId>utilitary</artifactId>
-            <version>${project.version}</version>
-            <scope>compile</scope>
-        </dependency>
-        
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>5.10.1</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>5.10.1</version>
-            <type>jar</type>
-        </dependency>
-    </dependencies>
-    
-<build>
-    <plugins>  
-        <plugin>
-            <artifactId>maven-compiler-plugin</artifactId>
-            <version>3.12.1</version>
+  </scm>
+  <developers>
+    <developer>
+      <name>Matthias Ngeo</name>
+      <email>matthiasngeo@gmail.com</email>
+      <url>https://github.com/Pante</url>
+    </developer>
+  </developers>
+  <licenses>
+    <license>
+      <name>MIT License</name>
+      <url>https://www.opensource.org/licenses/mit-license.php</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+  <dependencies>
+    <dependency>
+      <groupId>com.karuslabs</groupId>
+      <artifactId>utilitary</artifactId>
+      <version>${project.version}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-params</artifactId>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.3.1</version>
+        <executions>
+          <execution>
+            <id>copy-resources</id>
+            <phase>process-test-classes</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
             <configuration>
-                <release>${release}</release>
+              <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>${basedir}/src/test/java/</directory>
+                  <includes>
+                    <include>**/*.*</include>
+                  </includes>
+                </resource>
+              </resources>
             </configuration>
-        </plugin>
-        
-        <plugin>
-            <artifactId>maven-resources-plugin</artifactId>
-            <version>3.3.1</version>
-            <executions>
-                <execution>
-                    <id>copy-resources</id>
-                    <phase>process-test-classes</phase>
-                    <goals>
-                        <goal>copy-resources</goal>
-                    </goals>
-                    <configuration>
-                        <outputDirectory>${basedir}/target/test-classes/</outputDirectory>
-                        <resources>
-                            <resource>
-                                <directory>${basedir}/src/test/java/</directory>
-                                <includes>
-                                    <include>**/*.*</include>
-                                </includes>
-                            </resource>
-                        </resources>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-
-        <plugin>
-            <artifactId>maven-surefire-plugin</artifactId>
-            <version>3.2.5</version>
-            <configuration>
-                <trimStackTrace>false</trimStackTrace>
-            </configuration>
-        </plugin>
-
-        <plugin>
-            <artifactId>maven-shade-plugin</artifactId>
-            <version>3.5.1</version>
-            <configuration>
-                <minimizeJar>true</minimizeJar>
-                <shadedArtifactAttached>true</shadedArtifactAttached>
-                <transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
-                </transformers>
-            </configuration>
-            <executions>
-                <execution>
-                    <goals>
-                            <goal>shade</goal>
-                    </goals>
-                </execution>
-            </executions>
-        </plugin>
-            
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-</build>
+  </build>
 </project>

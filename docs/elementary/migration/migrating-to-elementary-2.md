@@ -1,5 +1,14 @@
 # Migrating to Elementary 2
 
+## TL;DR
+- `@Case` renamed to `@Label`
+- `Cases` renamed to `Labels`
+- Replace `Cases.one(String)` with `Labels.get(String)`
+- `@Label` values must be unique
+- Retrieval by index is longer supported
+
+## Detailed Explanation
+
 This document covers the breaking changes made in Elementary 2.
 
 Elementary 2 aims to provide an API with better ergonomics. This means code written with Elementary 2 will be both less error-prone and easier to understand. 
@@ -75,11 +84,3 @@ of elements less ambiguous (which element am I retrieving?) and hence less error
 
 Lastly, several method names has been renamed to better reflect their purpose/less confusing between the transition from `Cases` to `Labels`. The most prominent being
 `Cases.one(String)` -> `Labels.get(String)`.
-
-
-## TL;DR
-- `@Case` renamed to `@Label`
-- `Cases` renamed to `Labels`
-- Replace `Cases.one(String)` with `Labels.get(String)`
-- Label values must be unique
-- Retrieval by index is longer supported

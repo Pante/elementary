@@ -1,16 +1,13 @@
-name: Deploy to Nightly Self-hosted Nexus Repository
+name: Build Elementary
 
 on:
   push:
     branches:
       - master
-      
-env:
-  SONATYPE_USERNAME: ${{secrets.SONATYPE_USERNAME}}
-  SONATYPE_PASSWORD: ${{secrets.SONATYPE_PASSWORD}}
+  pull_request: {}
 
 jobs:
-  deploy-self-hosted:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: styfle/cancel-workflow-action@0.12.0
@@ -22,5 +19,5 @@ jobs:
           java-version: 17
           distribution: temurin
       - run: chmod +x ./mvnw
-      - run: ./mvnw deploy site site-deploy --settings ci-settings.xml --no-transfer-progress
+      - run: ./mvnw install
       - run: bash <(curl -s https://codecov.io/bash)

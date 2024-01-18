@@ -1,3 +1,8 @@
+## 2.0.1 - (18/01/2024)
+
+This release fixes an issue with shaded artifacts not being deployed to Maven.
+
+
 ## 2.0.0 - (16/06/2023)
 
 This release focuses on providing facilities for creating more precise and detailed diagnostic messages. 
