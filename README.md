@@ -40,7 +40,7 @@ This project is mature. It requires Java 11.
 ```
 
 ```xml
-<!-- Required if you're using the @Introspect annotation -->
+<!-- Required if you're using the @Introspect annotation. See tour.md for a Gradle equivalent -->
 <build>
   <plugins>
     <plugin>
