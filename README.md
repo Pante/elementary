@@ -1,11 +1,10 @@
 # Elementary - Simplify creating and testing annotation processors.
 
-[![CI/CD](https://github.com/Pante/elementary/workflows/Elementary%20CI/CD/badge.svg)](https://github.com/Pante/elementary/actions?query=workflow%3ACI%2FCD)
+[![Elementary](https://github.com/Pante/elementary/actions/workflows/build.yaml/badge.svg)](https://github.com/Pante/elementary/actions/workflows/build.yaml)
 [![Discord](https://img.shields.io/discord/140273735772012544.svg?style=flat-square)](https://discord.gg/uE4C9NQ)
 
-To get started, check out the [docs](https://github.com/Pante/elementary/tree/master/docs/elementary) & [Gradle example](https://github.com/toolforger/elementary-demo).
+To get started, check out the [docs](https://github.com/Pante/elementary/tree/master/docs/elementary/tour.md) & [Gradle example](https://github.com/toolforger/elementary-demo).
 
-***
 ## Elementary - JUnit extensions to test compilation & annotation processors
 [![releases-maven](https://img.shields.io/maven-central/v/com.karuslabs/elementary)](https://central.sonatype.com/artifact/com.karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html)
