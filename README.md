@@ -11,7 +11,15 @@ the [docs](https://github.com/Pante/elementary/tree/master/docs/elementary/tour.
 [![releases-maven](https://img.shields.io/maven-central/v/com.karuslabs/elementary)](https://central.sonatype.com/artifact/com.karuslabs/elementary/)
 [![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html)
 
-This project is mature. It requires Java 11.
+This project is mature. It requires Java 11. 
+
+Used by OSS projects such as Quarkus, Jenkins & Redis Spring OM.
+
+### Features
+* Allow blackbox & whitebox testing of annotation processing.
+* First class integration with JUnit 5, including parameterized tests.
+* Same-file declaration of tests & test cases.
+* Support for Java 9 modules.
 
 ```XML
 <!-- Requires JUnit 5.9.3 & above -->
