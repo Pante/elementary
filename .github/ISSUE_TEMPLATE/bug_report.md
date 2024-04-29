@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: "[BUG] "
 labels: bug
-assignees: ''
+assignees: 'Pante'
 
 ---
 
@@ -24,10 +24,9 @@ A clear and concise description of what you expected to happen.
 If applicable, add screenshots to help explain your problem.
 
 **Environment (please complete the following information):**
- - Java Version [e.g. 11, 15]
- - Platform [e.g. Bukkit, PaperSpigot, Spigot]
- - Platform Version [e.g. 1.14, 1.5.2]
-- Chimera Version [e.g. 4.5.0, 4.6.0]
+ - Java Version [e.g. 11, 17]
+ - Platform [e.g. Windows, MacOS, Linux]
+ - Elementary Version [e.g. 2.0.0, 2.0.1]
 
 **Additional context**
 Add any other context about the problem here.
