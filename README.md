@@ -93,27 +93,3 @@ This project is mature. It requires Java 11.
   <version>2.0.1</version>
 </dependency>
 ```
-
-## Satisfactory - Composable `Element` matching library
-
-[![releases-maven](https://img.shields.io/maven-metadata/v/https/repo.karuslabs.com/repository/elementary-releases/com/karuslabs/satisfactory/maven-metadata.xml.svg)](https://repo.karuslabs.com/service/rest/repository/browse/elementary-releases/com/karuslabs/satisfactory/)
-[![javadoc](https://img.shields.io/badge/javadoc-stable-brightgreen.svg)](https://repo.karuslabs.com/repository/elementary/latest/satisfactory/apidocs/index.html)
-
-This project is currently on hiatus until Java has fully fledged pattern matching.
-
-```xml
-<repositories>
-  <repository>
-    <id>elementary-releases</id>
-    <url>https://repo.karuslabs.com/repository/elementary-releases/</url>
-  </repository>
-</repositories>
-```
-
-```XML
-<dependency>
-  <groupId>com.karuslabs</groupId>
-  <artifactId>satisfactory</artifactId>
-  <version>1.1.2</version>
-</dependency>
-```
