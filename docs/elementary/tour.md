@@ -297,7 +297,7 @@ Let’s break down the example:
 Elementary provides two more examples that illustrate how to use `JavacExtension` and `ToolsExtension` which may be found [here](https://github.com/Pante/elementary/tree/master/elementary/src/test/java/example).
 Consider checking out the [Gradle demo project](https://github.com/toolforger/elementary-demo) too.
 
-The Javadocs can be found [here](https://repo.karuslabs.com/repository/elementary/latest/elementary/apidocs/index.html).
+The Javadocs can be found [here](https://www.javadoc.io/doc/com.karuslabs/elementary).
 
 ## Parallel JUnit Tests
 Elementary does not support parallel testing (at the moment).
