@@ -3,19 +3,6 @@
   "dependencyDashboard": true,
   "addLabels": ["dependencies"],
   "prCreation": "not-pending",
-  "platformAutomerge": true,
-
-  "hostRules": [
-    {
-      "matchHost": "repo.foruslabs.com",
-      "hostType": "maven",
-      "encrypted": {
-        "username": "wcFMA/xDdHCJBTolAQ//bij9EM8WbyVE4KvanL7irWiOFHpkKJYxH0+Hmc/QB1s5zHhWXPu5Z0DF8ki4Zm83bMu+W8F1gaWxiyZMoHBIfEWkJssBKzaxF/8/61IJrwF/8ejEFAg90iv11bxrOqikhnpbuuDYYtQdlaR4E5q53cCzgtL8Loyz2/GuGwmoB8AcZQODMUrfqqK/q9TDDY4quYcTjCYw2YJ+XoOKNsh+tKS4L69cFXZe2T/YaN3leTzJiVQiJOkD/6xAw/71dBaMTPbGJBgQAl7ZJZ0232jjnbYy/RsnIoMyiOr8U2MksuYpiU/pBrhBytNGArAcLmn+o4pVIEMxaDXQejN2P3A+I52JtaBmzPVwbFUh+hkqIN7xdDzeobc7BDHGYwE6dXn5nJXOSgh/Ao16AHrLGWx5U85d627EG9P1ltWPb0FfBwqs3qcGaxtXk5kfvVma8bmlWkIzZ+yVJZMxuRBStNjquE0otziusgxALHYI3DpPTZsGrRMlQ0E6qVljzzyOUdEBnVBWEyoJIImrDkBW/D7CoPRWSV+4cVXfHGkdkhEpRga9Z4wZMiSeIL3Gip0KmMnkiExh5F1Vat62Mb5NT9xTK9gzO1z0M7acBPzPp9Hi+u0u1Y8d0c4rK7N9R84xOfTsvs3EVdfP2JtzDndu0W6F65ksC/esFTV7uJ9d6yLoBHrSUQGJriP+JPTbMWC1GNxXuBuwUDgkOtXrIRQEdyqIZL+PgZVKhlv4wJe4h+k1vaEsG0Ac6+aFE4UyTCae55xgaf51inkAXB2iEvDYqkG8fZQ4uQ",
-        "password": "wcFMA/xDdHCJBTolAQ/9EQMsjqslNvkfzX3GQbVoLFXFhPg3JDkKY4U84t5dz4PzO0kT2k2f0A4JkL52YJrBNZVYGElGKzyfVMBfDfbOBEflJE4Yb1s7yYVfIiRoK0h8V/mLGK6VVfnR/fKTxRqXyw+Vvg1SEgoTXA4NNxKyP7oV6uToF8k8oKn9sui2n6ptLEWBiNZXvc32hZpBZmu58NlSkDZoPNu7992D5nXnkC/JM726c66kgGeZxIyFB3VIYkeeQbCOfuYMhxH9rTgUSwbvUZne0U0MUiBwd0Nb9c09BjR2wvDElHzCMWEvQff9qcGYXMh+cKLqpzH6Q/yRcjCw/dvPMsJ5bfc/756iSnf0nIv7wBPefNB8TfP5UlaM1CUkSkFruE3/waUN3KbpqAQVbL1sXmz6bZCusMnBg6YSD2N+RDG/xzqxZ+PyZifIz6B2YbA3fpEtKk6WOpFPGMiTIl82H7Hj+fG4r5sb3UDSYhjGTsK5s55MXST5TZ4EfwZtDTOAiTr6oTFIqlVlksf/6XpuuZG8GbnlwFrj7YJFLA+qCYzEiWU4vHEPb2ofaVhBAQzeAnfD3zu5mCbvpyyZJSiVhINHLZyOOwBE2WASe4JSkusp3UBaFw0tVTkodRQ7pVR1J2u8VVTzB3fDkNX7FqgLAC7sS6knodaBQucU/tj9XiRrezw2KEvK6+/SVQHy1jc3UMXzSEu1dbVPHz1LLKvaDhsRr8zoo9FX93b20hNH90jKriq9arzg6q8NvbSrrxoc3Q7GHvkD/RjUP+z+qOkobDh3584fEOQyF/N/nF0RutM"
-      }
-    }
-  ],
-
   "packageRules": [
     {
       "groupName": "GitHub Actions - Major Revisions",
