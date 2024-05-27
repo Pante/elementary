@@ -23,99 +23,50 @@
  */
 package com.karuslabs.elementary.file;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.*;
 
 import org.junit.jupiter.api.*;
 
+import static javax.tools.JavaFileObject.Kind.SOURCE;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-class MemoryFileObjectTest {
+class ByteFileObjectTest {
 
-    MemoryFileObject file;
-    ImmutableFileObject source = mock(ImmutableFileObject.class);
+    ByteFileObject object;
 
-    MemoryFileObjectTest() throws URISyntaxException {
-        this.file = new MemoryFileObject(new URI("A.java"));
-        file.source = source;
-    }
-    
-    
-    @Test
-    void openInputStream() throws FileNotFoundException {
-        file.openInputStream();
-        verify(source).openInputStream();
+    ByteFileObjectTest() throws URISyntaxException {
+        object = new ByteFileObject(new URI("/foo/bar"), SOURCE, "a".getBytes());
     }
     
     @Test
-    void openOutputStream() throws IOException {
-        try (var stream = file.openOutputStream()) {
-            stream.write("help".getBytes());
-        }
-        
-        assertEquals("help", file.source.getCharContent(true));
+    void openInputStream() throws IOException {
+        assertArrayEquals("a".getBytes(), object.openInputStream().readAllBytes());
     }
     
     @Test
-    void openReader() throws FileNotFoundException {
-        file.openReader(true);
-        verify(source).openReader(true);
+    void openReader() throws IOException {
+        assertEquals(99, object.openReader(true).read());
+    }
+    
+}
+
+class StringFileObjectTest {
+    
+    StringFileObject object;
+    
+    StringFileObjectTest() throws URISyntaxException {
+        object = new StringFileObject(new URI("/foo/bar"), SOURCE, "a");
     }
     
     @Test
-    void openWriter() throws IOException {
-        try (var writer = file.openWriter()) {
-            writer.write("help");
-        }
-        
-        assertEquals("help", file.source.getCharContent(true));
-    }
-    
-    
-    @Test
-    void delete() {
-        assertTrue(file.delete());
-        assertNull(file.source);
-    }
-    
-    
-    @Test
-    void getCharContent() throws FileNotFoundException, IOException {
-        try (var writer = file.openWriter()) {
-            writer.write("help");
-        }
-        assertEquals("help", file.getCharContent(true));
-    }
-    
-    
-    @Test
-    void getLastModified() throws IOException {
-        try (var writer = file.openWriter()) {
-            writer.write("help");
-        }
-        
-        assertNotEquals(0L, file.getLastModified());
+    void openInputStream() throws IOException {
+        assertArrayEquals("a".getBytes(), object.openInputStream().readAllBytes());
     }
     
     @Test
-    void getLastModified_null() {
-        file.source = null;
-        assertEquals(0L, file.getLastModified());
-    }
-    
-    
-    @Test
-    void source_empty() {
-        file.source = null;
-        assertThrows(FileNotFoundException.class, () -> file.source());
-    }
-    
-    
-    @Test
-    void toString_() {
-        assertEquals("MemoryFileObject{uri = A.java, kind = SOURCE}", file.toString());
+    void openReader() throws IOException {
+        assertEquals(97, object.openReader(true).read());
     }
     
 }

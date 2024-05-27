@@ -34,7 +34,7 @@ Elementary is available as a maven artifact. It requires Java 11+.
    <dependency>
       <groupId>com.karuslabs</groupId>
       <artifactId>elementary</artifactId>
-      <version>2.0.1</version>
+      <version>3.0.0</version>
       <scope>test</scope>
    </dependency>
 </dependencies>
@@ -77,7 +77,7 @@ Elementary is available as a maven artifact. It requires Java 11+.
 dependencies {
    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.3'
    testImplementation 'org.junit.jupiter:junit-jupiter-params:5.9.3'
-   testImplementation 'com.karuslabs:elementary:2.0.1'
+   testImplementation 'com.karuslabs:elementary:3.0.0'
 }
 ```
 
@@ -111,6 +111,7 @@ import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
 import com.karuslabs.elementary.junit.annotations.Case;
 import com.karuslabs.elementary.junit.annotations.Classpath;
+import com.karuslabs.elementary.junit.annotations.Generation;
 import com.karuslabs.elementary.junit.annotations.Options;
 import com.karuslabs.elementary.junit.annotations.Processors;
 
@@ -118,15 +119,16 @@ import com.karuslabs.elementary.junit.annotations.Processors;
 @Options("-Werror") // (1)
 @Processors({ImaginaryProcessor.class}) // (2)
 @Classpath("my.package.ValidCase") // (3) (4)
+@Generation(retain = true, classes = "path/to/generated-classes", sources = "path/to/generated-sources") // (5)
 class ImaginaryTest {
   @Test
-  void process_string_field(Results results) { // (5)
+  void process_string_field(Results results) { // (6)
     assertEquals(0, results.find().errors().count());
   }
 
   @Test
   @Classpath("my.package.InvalidCase") // (4)
-  void process_int_field(Results results) { // (5)
+  void process_int_field(Results results) { // (6)
     assertEquals(1, results.find().errors().contains("Element is not a string").count());
   }
 }
@@ -160,10 +162,15 @@ Let’s break down the example:
    separates directories using `.` while `@Resource` uses `/`. `@Inline` contains a string which is transformed into an
    inline source file for compilation.
 
-4. Annotation scopes are tied to the annotated class/method. An annotation on a test class is applied to all test methods
+4. `@Generation` allows you to specify the location of generated classes and source files. In this case, `retain = true`
+   indicates that generated classes and sources should not be automatically deleted after each test. This is useful for
+   debugging issues with generated files. By default, classes and source files are generated in temporary directories and 
+   automatically deleted after each test.
+
+5. Annotation scopes are tied to the annotated class/method. An annotation on a test class is applied to all test methods
    in that class while an annotation on a test method is applied to only that method.
 
-5. `Results` is the compilation results. It is injected as a test method argument. `process_string_field(...)` will receive
+6. `Results` is the compilation results. It is injected as a test method argument. `process_string_field(...)` will receive
    the results for `ValidCase` while `process_int_field(...)` will receive the results for both `ValidCase` and `InvalidCase`.
 
 ### Supported Annotations
@@ -172,6 +179,7 @@ Let’s break down the example:
 | `@Classpath`  | Includes a class on the classpath for compilation. Directories are separated by `.`. | Test class/method |
 | `@Inline`     | Includes a string representation of a class for compilation.                         | Test class/method |
 | `@Options`    | The compiler flags.                                                                  | Test class/method |
+| `@Generation` | The location of generated classes and source files.                                  | Test class        |
 | `@Processors` | The annotation processors to apply.                                                  | Test class/method |
 | `@Resource`   | Includes a class on the classpath for compilation. Directories are separated by `/`  | Test class/method |
 
@@ -193,10 +201,11 @@ Consider using `ToolsExtension` in these cases:
 import com.karuslabs.elementary.junit.Labels;
 import com.karuslabs.elementary.junit.Tools;
 import com.karuslabs.elementary.junit.ToolsExtension;
-import com.karuslabs.elementary.junit.annotations.Label;
-import com.karuslabs.elementary.junit.annotations.LabelSource;
+import com.karuslabs.elementary.junit.annotations.Generation;
 import com.karuslabs.elementary.junit.annotations.Inline;
 import com.karuslabs.elementary.junit.annotations.Introspect;
+import com.karuslabs.elementary.junit.annotations.Label;
+import com.karuslabs.elementary.junit.annotations.LabelSource;
 import com.karuslabs.utilitary.type.TypeMirrors;
 
 import javax.annotation.processing.RoundEnvironment;
@@ -212,11 +221,12 @@ import javax.annotation.processing.RoundEnvironment;
   }
   """
 })
+@Generation(retain = true, classes = "path/to/generated-classes", sources = "path/to/generated-sources") // (3)
 class ToolsExtensionExampleTest {
 
-  Lint lint = new Lint(Tools.typeMirrors()); // (3)
+  Lint lint = new Lint(Tools.typeMirrors()); // (4)
 
-  @Label("second")  // (5)
+  @Label("second")  // (6)
   boolean second() {
     return false;
   }
@@ -229,17 +239,17 @@ class ToolsExtensionExampleTest {
   
   @Test
   void lint_method_that_returns_boolean(Labels labels) {
-    var second = labels.get("second"); // (5)
+    var second = labels.get("second"); // (6)
     assertFalse(lint.lint(second));
   }
   
   @ParameterizedTest
-  @LabelSource(groups = {"my group"}) // (6)
-  void lint_grouped_elements(String label, Element element, RoundEnvironment environment) { // (3) (7)
+  @LabelSource(groups = {"my group"}) // (7)
+  void lint_grouped_elements(String label, Element element, RoundEnvironment environment) { // (4) (8)
     assertTrue(lint.lint(element));
   }
   
-  @Label(value = "string variable", group = "my group") // (4) (6)
+  @Label(value = "string variable", group = "my group") // (5) (7)
   String stringVariable = "";
   
   @Label(value = "boolean variable", group = "my group")
@@ -267,19 +277,24 @@ Let’s break down the example:
 
 2. `@Inline` allows you to specify an inline Java source file for `ToolsExtension` to compile.
 
-3. `Tools` contains utilities and the current annotation processing environment such as `RoundEnvironment`. They can
+3. `@Generation` allows you to specify the location of generated classes and source files. In this case, `retain = true`
+   indicates that generated classes and sources should not be automatically deleted after each test. This is useful for
+   debugging issues with generated files. By default, classes and source files are generated in temporary directories and
+   automatically deleted after each test.
+
+4. `Tools` contains utilities and the current annotation processing environment such as `RoundEnvironment`. They can
    access via `Tools` or individually injected into the test class's constructor and methods.
 
-4. Annotating things with `@Label` inside a source file compiled by `ToolsExtension` allows you to get their `Element`s 
+5. Annotating things with `@Label` inside a source file compiled by `ToolsExtension` allows you to get their `Element`s 
    in tests. A `@Label` contains a unique label and an optional group for parameterized tests.
 
-5. You can get `Element`s by their `@Label` using `Labels`. `Labels` can be accessed via `Tools` or injected into the test 
+6. You can get `Element`s by their `@Label` using `Labels`. `Labels` can be accessed via `Tools` or injected into the test 
    class's constructor and methods.
 
-6. You can supply elements to a parameterized test using `@LabelSource`. A `@LabelSource` will iterate through all elements
+7. You can supply elements to a parameterized test using `@LabelSource`. A `@LabelSource` will iterate through all elements
    in the group(s).
 
-7. A label, element and the annotation processing environment is injected into the parameterized test method. The label 
+8. A label, element and the annotation processing environment is injected into the parameterized test method. The label 
    and corresponding element **must** be the first parameters when injected alongside utilities and environments.
 
 ### Supported Annotations
@@ -290,6 +305,7 @@ Let’s break down the example:
 | `@Classpath`   | Includes the Denotes a class on the current classpath to be included for compilation. Directories are separated by `.`.                                                                                                                                                                         | Test class    |
 | `@Inline`      | Includes a string representation of a class for compilation.                                                                                                                                                                                                                                    | Test class    |
 | `@Introspect`  | Includes the test file for compilation. The annotated test class must also be extended with `ToolsExtension`. An additional name must be specified in the annotation if the annotated class and file are named differently. **Requires additional configuration mentioned in Getting Started.** | Test class    |
+| `@Generation`  | The location of generated classes and source files.                                                                                                                                                                                                                                             | Test class    |
 | `@Resource`    | Includes a class on the classpath for compilation. Directories are separated by `/`                                                                                                                                                                                                             | Test class    |
 
 ## Further Reading

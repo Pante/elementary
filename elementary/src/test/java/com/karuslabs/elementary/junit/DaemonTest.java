@@ -43,11 +43,11 @@ class DaemonTest {
 
     Daemon daemon = new Daemon() {
         @Override
-        Object create(Constructor constructor, Environment environment) { return ""; }
+        Object create(Constructor<?> constructor, Environment environment) { return ""; }
     };
     
     @Test
-    void createTestInstance_multiple_contructors() {
+    void createTestInstance_multiple_constructors() {
         var context = new MockContext(MultipleConstructors.class);
         assertEquals(
             "Test class contains 2 constructors, should contain only 1",

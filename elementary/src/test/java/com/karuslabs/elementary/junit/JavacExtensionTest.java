@@ -23,14 +23,21 @@
  */
 package com.karuslabs.elementary.junit;
 
-import com.karuslabs.elementary.junit.annotations.Processors;
+import com.karuslabs.elementary.Results;
+import com.karuslabs.elementary.junit.annotations.*;
 
+import java.io.*;
+import java.nio.file.Paths;
 import java.util.Set;
 import javax.annotation.processing.*;
+import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
+import javax.tools.StandardLocation;
 
+import com.karuslabs.utilitary.AnnotationProcessor;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ParameterResolutionException;
+import org.junit.jupiter.api.extension.*;
+import org.junit.jupiter.api.io.TempDir;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,25 +45,72 @@ import static org.junit.jupiter.api.Assertions.*;
 @Processors(InvalidProcessor.class)
 class JavacExtensionTest {
 
+    @TempDir
+    File classes;
+    @TempDir
+    File sources;
+
     JavacExtension extension = new JavacExtension();
     
     @Test
     void resolve_fails() {
         assertEquals(
             "Failed to create \"" + InvalidProcessor.class.getName() + "\", annotation processor should have a constructor with no arguments",
-            assertThrows(ParameterResolutionException.class, () -> extension.resolve(javac(), JavacExtensionTest.class)).getMessage()
+            assertThrows(
+                ParameterResolutionException.class,
+                () -> extension.resolveOptions(javac(classes, sources), JavacExtensionTest.class)
+            ).getMessage()
         );
     }
     
 }
 
 class InvalidProcessor extends AbstractProcessor {
-    
+
     InvalidProcessor(String a) {}
 
     @Override
     public boolean process(Set<? extends TypeElement> types, RoundEnvironment round) {
         return false;
     }
-    
+
 }
+
+
+@ExtendWith(JavacExtension.class)
+@Options("-Werror")
+@Processors({ElementaryIssue315Processor.class})
+@Classpath("com.karuslabs.elementary.junit.example.ValidCase")
+class ElementaryIssue315Test {
+
+    @Test
+    void generate_source_does_not_throw_error(Results results) {
+        assertTrue(results.errors.isEmpty());
+    }
+
+}
+
+@SupportedAnnotationTypes({"*"})
+class ElementaryIssue315Processor extends AnnotationProcessor {
+    @Override
+    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+        if (roundEnv.processingOver()) {
+            try {
+                var file = processingEnv.getFiler().createResource(StandardLocation.SOURCE_OUTPUT, "", "ignore.tmp");
+                Paths.get(file.toUri()).getParent();
+
+            } catch (IOException e) {
+                throw new UncheckedIOException(e);
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public SourceVersion getSupportedSourceVersion() {
+        return SourceVersion.latest();
+    }
+}
+
+

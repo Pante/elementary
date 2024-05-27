@@ -29,15 +29,14 @@ import com.karuslabs.utilitary.Logger;
 import com.karuslabs.utilitary.type.TypeMirrors;
 import com.sun.source.util.Trees;
 
-import java.util.*;
-import java.util.concurrent.*;
 import javax.annotation.processing.*;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.util.*;
 import javax.tools.JavaFileObject;
+import java.util.*;
+import java.util.concurrent.*;
 
-import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
 import static javax.lang.model.SourceVersion.latest;
 
@@ -58,17 +57,18 @@ class DaemonCompiler extends Thread {
      * 
      * It also adds the classpath and module of the given class if the module is named
      * to the compilation environment.
-     * 
+     *
+     * @param compiler the javac compiler
      * @param annotated the annotated class
      * @return a {@code DaemonCompiler}
      */
-    public static DaemonCompiler of(Class<?> annotated) {
+    public static DaemonCompiler of(Compiler compiler, Class<?> annotated) {
         var files = scan(annotated);
         if (files.isEmpty()) {
             files.add(DUMMY);
         }
         
-        return new DaemonCompiler(javac().module(annotated.getModule()).currentClasspath(), files);
+        return new DaemonCompiler(compiler.module(annotated.getModule()).currentClasspath(), files);
     }
     
     

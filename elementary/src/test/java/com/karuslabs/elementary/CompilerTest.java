@@ -34,6 +34,7 @@ import javax.lang.model.element.TypeElement;
 import javax.tools.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
@@ -42,99 +43,107 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class CompilerTest {
-    
+
+    @TempDir
+    File classes;
+    @TempDir
+    File sources;
+
     @Test
     void setLocation() throws IOException {
         var manager = mock(StandardJavaFileManager.class);
         doThrow(IOException.class).when(manager).setLocation(any(), any());
-        
-        assertThrows(UncheckedIOException.class, () -> javac().setLocation(manager, StandardLocation.CLASS_PATH, List.of()));
+
+        assertThrows(UncheckedIOException.class, () -> javac(classes, sources).setLocation(manager, StandardLocation.CLASS_PATH, List.of()));
     }
-    
-    
+
+
     @Test
     void processors_varargs() {
-        var results = javac().processors(new WarningProcessor()).compile(DUMMY);
+        var results = javac(classes, sources).processors(new WarningProcessor()).compile(DUMMY);
         assertEquals(1, results.warnings.size());
     }
-    
+
     @Test
     void processors_collection() {
-        var results = javac().processors(List.of(new WarningProcessor())).compile(DUMMY);
+        var results = javac(classes, sources).processors(List.of(new WarningProcessor())).compile(DUMMY);
         assertEquals(1, results.warnings.size());
     }
-    
-    
+
+
     @Test
-    void processors_generated_files() {
-         var results = javac().processors(List.of(new GeneratorProcessor())).compile(DUMMY);
-         assertEquals(1, results.generated.size());
+    void processors_generated_sources() throws IOException {
+         var results = javac(classes, sources).processors(List.of(new GeneratorProcessor())).compile(DUMMY);
+         assertEquals(1, results.generatedSources.size());
+         try (var reader = new BufferedReader(results.generatedSources.get(0).openReader(false))) {
+             assertEquals("class GeneratedFile {}", reader.readLine());
+         }
     }
-    
-    
+
+
     @Test
     void options_varargs() throws IOException, URISyntaxException {
-        var results = javac().options("-nowarn").processors(new WarningProcessor()).compile(DUMMY);
+        var results = javac(classes, sources).options("-nowarn").processors(new WarningProcessor()).compile(DUMMY);
         assertEquals(0, results.warnings.size());
     }
-    
+
     @Test
     void options_collection() throws IOException, URISyntaxException {
-        var results = javac().options(List.of("-nowarn")).processors(new WarningProcessor()).compile(DUMMY);
+        var results = javac(classes, sources).options(List.of("-nowarn")).processors(new WarningProcessor()).compile(DUMMY);
         assertEquals(0, results.warnings.size());
     }
-    
-    
-    
+
+
+
     @Test
     void module() {
-        var compiler = javac().module(Object.class.getModule());
+        var compiler = javac(classes, sources).module(Object.class.getModule());
         assertFalse(compiler.classpath.isEmpty());
     }
-    
+
     @Test
     void module_none() {
-        var compiler = javac().module(getClass().getModule()); // This assumes that we're not going to use modules anytime soon
+        var compiler = javac(classes, sources).module(getClass().getModule()); // This assumes that we're not going to use modules anytime soon
         assertNull(compiler.classpath);
     }
-    
-    
+
+
     @Test
     void classpath_classloader() throws MalformedURLException {
         var loader = new URLClassLoader(new URL[] {new URL("file", "", 0, "")}, getClass().getClassLoader());
-        var results = javac().classpath(loader).compile(DUMMY);
-        
+        var results = javac(classes, sources).classpath(loader).compile(DUMMY);
+
         assertTrue(results.diagnostics.isEmpty());
     }
-    
+
     @Test
     void classpath_platform_classloader() {
-        var results = javac().classpath(ClassLoader.getPlatformClassLoader()).compile(ofLines("Some", "import com.karuslabs.elementary.*; class Some {}"));
+        var results = javac(classes, sources).classpath(ClassLoader.getPlatformClassLoader()).compile(ofLines("Some", "import com.karuslabs.elementary.*; class Some {}"));
         assertEquals("package com.karuslabs.elementary does not exist", results.find().errors().one().getMessage(Locale.ENGLISH));
     }
-    
+
     @Test
     void classpath_invalid_classloader() {
         assertEquals(
             "Given ClassLoader and its parents must be a URLClassLoader",
-            assertThrows(IllegalArgumentException.class, () -> javac().classpath(mock(ClassLoader.class))).getMessage()
+            assertThrows(IllegalArgumentException.class, () -> javac(classes, sources).classpath(mock(ClassLoader.class))).getMessage()
         );
     }
-    
+
     @Test
     void classpath_invalid_url() throws MalformedURLException {
         var loader = new URLClassLoader(new URL[] {new URL("jar", "", 0, "")});
         assertEquals(
             "Given ClassLoader and its parents may not contain classpaths that consist of folders",
-            assertThrows(IllegalArgumentException.class, () -> javac().classpath(loader)).getMessage()
+            assertThrows(IllegalArgumentException.class, () -> javac(classes, sources).classpath(loader)).getMessage()
         );
     }
-    
+
     @Test
     void classpath_files() throws URISyntaxException {
         var file = new File(getClass().getClassLoader().getResource("com/karuslabs/elementary/junit").toURI());
-        var results = javac().classpath(List.of(file)).compile(ofLines("B", "class B { void b() {Placeholder.class.toString();} }"));
-        
+        var results = javac(this.classes, this.classes).classpath(List.of(file)).compile(ofLines("B", "class B { void b() {Placeholder.class.toString();} }"));
+
         assertTrue(results.find().list().isEmpty());
     }
     
@@ -147,7 +156,11 @@ class GeneratorProcessor extends AnnotationProcessor {
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment round) {
         if (round.processingOver()) {
             try {
-                processingEnv.getFiler().createSourceFile("GeneratedFile", elements.getTypeElement("java.util.ArrayList"));
+                var file = processingEnv.getFiler().createSourceFile("com.something.GeneratedFile");
+                try (var writer = file.openWriter()) {
+                    writer.write("class GeneratedFile {}");
+                }
+
                 
             } catch (IOException ex) {
                 return false;

@@ -45,21 +45,24 @@ import static com.karuslabs.elementary.file.FileObjects.scan;
  * 
  * @see com.karuslabs.elementary.junit.annotations
  */
-public class JavacExtension implements ParameterResolver {
+public class JavacExtension implements ParameterResolver, AfterEachCallback {
 
     private static final String[] EMPTY = new String[] {};
-    
+
     @Override
     public Object resolveParameter(ParameterContext parameter, ExtensionContext context) throws ParameterResolutionException {
         var type = context.getRequiredTestClass();
         var executable = parameter.getDeclaringExecutable();
         
-        var compiler = javac();
-        resolve(compiler, type);
-        resolve(compiler, executable);
+        var entry = Generations.initialize(context);
+        var compiler = javac(entry.getKey(), entry.getValue());
+        resolveOptions(compiler, type);
+        resolveOptions(compiler, executable);
         
         var files = scan(type);
         files.addAll(scan(executable));
+
+        context.getStore(ExtensionContext.Namespace.create(JavacExtension.class)).put(Compiler.class, compiler);
         
         return compiler.currentClasspath().compile(files);
     }
@@ -70,7 +73,7 @@ public class JavacExtension implements ParameterResolver {
      * @param compiler the compiler
      * @param annotated the annotated element
      */
-    void resolve(Compiler compiler, AnnotatedElement annotated) {
+    void resolveOptions(Compiler compiler, AnnotatedElement annotated) {
         var flags = annotated.getAnnotation(Options.class);
         compiler.options(flags == null ? EMPTY : flags.value().split(" "));
         
@@ -103,6 +106,12 @@ public class JavacExtension implements ParameterResolver {
     @Override
     public boolean supportsParameter(ParameterContext parameter, ExtensionContext context) {
         return parameter.getParameter().getType() == Results.class;
+    }
+
+
+    @Override
+    public void afterEach(ExtensionContext context) {
+        Generations.teardown(context);
     }
 
 }

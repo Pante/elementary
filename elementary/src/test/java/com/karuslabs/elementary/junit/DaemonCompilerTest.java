@@ -28,6 +28,7 @@ import com.karuslabs.elementary.Compiler;
 import com.karuslabs.elementary.junit.DaemonCompiler.DaemonProcessor;
 import com.karuslabs.elementary.junit.annotations.Inline;
 
+import java.io.File;
 import java.util.*;
 import java.util.concurrent.CompletionException;
 import javax.annotation.processing.*;
@@ -35,42 +36,49 @@ import javax.lang.model.SourceVersion;
 
 import com.sun.source.util.Trees;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 import org.mockito.MockedStatic;
 
+import static com.karuslabs.elementary.Compiler.javac;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @Inline(name = "invalid", source = "f")
 class DaemonCompilerTest {
 
+    @TempDir
+    File classes;
+    @TempDir
+    File sources;
+
     @Test
     void run() {
-        var compiler = DaemonCompiler.of(Object.class);
+        var compiler = DaemonCompiler.of(javac(classes, sources), Object.class);
         compiler.start();
-        
+
         var types = compiler.environment().typeMirrors;
         assertTrue(types.isSameType(types.type(String.class), types.type(String.class)));
-        
+
         compiler.shutdown();
     }
-    
+
     @Test
     void run_compiler_crash() {
         var compiler = mock(Compiler.class);
         when(compiler.processors(any(Processor[].class))).thenReturn(compiler);
         when(compiler.compile(any(List.class))).thenThrow(RuntimeException.class);
-        
+
         var daemon = new DaemonCompiler(compiler, List.of());
         daemon.start();
-        
+
         assertEquals(CompilationException.class, assertThrows(CompletionException.class, daemon::environment).getCause().getClass());
     }
-    
+
     @Test
     void run_invalid_source() {
-        var compiler = DaemonCompiler.of(DaemonCompilerTest.class);
+        var compiler = DaemonCompiler.of(javac(classes, sources), DaemonCompilerTest.class);
         compiler.start();
-        
+
         assertEquals(
             "com.karuslabs.elementary.CompilationException: invalid.java:1: error: reached end of file while parsing\n" +
             "f\n" +

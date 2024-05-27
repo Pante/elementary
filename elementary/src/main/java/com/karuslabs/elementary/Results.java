@@ -38,7 +38,7 @@ public final class Results {
     /**
      * The generated source files.
      */
-    public final List<JavaFileObject> generated;
+    public final List<JavaFileObject> generatedSources;
     /**
      * The diagnostic messages.
      */
@@ -64,13 +64,13 @@ public final class Results {
      * Creates a {@code Results} with the given arguments.
      * 
      * @param sources the sources which were compiled
-     * @param generated the generated sources
+     * @param generatedSources the generated sources
      * @param diagnostics the diagnostic messages
      * @param success whether compilation was successful
      */
-    public Results(List<JavaFileObject> sources, List<JavaFileObject> generated, Diagnostics diagnostics, boolean success) {
+    public Results(List<JavaFileObject> sources, List<JavaFileObject> generatedSources, Diagnostics diagnostics, boolean success) {
         this.sources = sources;
-        this.generated = generated;
+        this.generatedSources = generatedSources;
         this.diagnostics = diagnostics.all;
         errors = diagnostics.errors;
         warnings = diagnostics.warnings;

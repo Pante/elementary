@@ -41,7 +41,7 @@ Used by OSS projects such as Quarkus, Jenkins & Redis Spring OM.
   <dependency>
     <groupId>com.karuslabs</groupId>
     <artifactId>elementary</artifactId>
-    <version>2.0.1</version>
+    <version>3.0.0</version>
     <scope>test</scope>
   </dependency>
 </dependencies>
@@ -90,6 +90,6 @@ This project is mature. It requires Java 11.
 <dependency>
   <groupId>com.karuslabs</groupId>
   <artifactId>utilitary</artifactId>
-  <version>2.0.1</version>
+  <version>3.0.0</version>
 </dependency>
 ```
