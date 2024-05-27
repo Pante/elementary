@@ -62,14 +62,14 @@ class ToolsExtensionTest {
     
     
     @Test
-    void resolveParmeter_unsupported() {
+    void resolveParameter_unsupported() {
         var parameter = mock(Parameter.class);
         doReturn(String.class).when(parameter).getType();
-        
+
         ParameterContext context = when(mock(ParameterContext.class).getParameter()).thenReturn(parameter).getMock();
-        
+
         doReturn(mock(DaemonCompiler.class)).when(extension).compiler(any());
-        
+
         assertEquals(
             "Unable to resolve parameter of type: " + String.class.getName(),
             assertThrows(ParameterResolutionException.class, () -> extension.resolveParameter(context, new MockContext(Normal.class))).getMessage()
@@ -83,35 +83,35 @@ class ToolsExtensionTest {
             assertThrows(ParameterResolutionException.class, () -> extension.create(InvalidConstructor.class.getDeclaredConstructors()[0], null)).getMessage()
         );
     }
-    
+
     @Test
     void introspect_class(Labels labels) {
         assertEquals(2, labels.size());
     }
-    
+
     static class IntrospectMethod {
-        
+
         @Label("single")
         void test() {}
-        
+
     }
-    
-    
+
+
     @Test
     void labels(Labels labels) {
         assertNotNull(labels);
     }
-    
+
     @Test
     void round(RoundEnvironment round) {
         assertNotNull(round);
     }
-    
+
     @Test
     void elements(Elements elements) {
         assertNotNull(elements);
     }
-    
+
     @Test
     void types(Types types) {
         assertNotNull(types);
@@ -121,28 +121,29 @@ class ToolsExtensionTest {
     void types(Trees trees) {
         assertNotNull(trees);
     }
-    
+
     @Test
     void messager(Messager messager) {
         assertNotNull(messager);
     }
-    
+
     @Test
     void filer(Filer filer) {
         assertNotNull(filer);
     }
-    
+
     @Test
     void typeMirrors(TypeMirrors types) {
         assertNotNull(types);
     }
-    
+
     @Test
     void logger(Logger logger) {
         assertNotNull(logger);
     }
     
 }
+
 
 class ValidConstructor {
     

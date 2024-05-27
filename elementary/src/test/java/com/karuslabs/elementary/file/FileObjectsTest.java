@@ -30,6 +30,7 @@ import java.net.*;
 import java.util.List;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.TempDir;
 
 import static com.karuslabs.elementary.Compiler.javac;
 import static com.karuslabs.elementary.file.FileObjects.*;
@@ -42,30 +43,35 @@ import static org.mockito.Mockito.*;
 @Inline(name = "Dummy", source = "class Dummy {}")
 class FileObjectsTest {
 
+    @TempDir
+    File classes;
+    @TempDir
+    File sources;
+
     @Test
     void scan_nested_class() {
-        assertTrue(javac().compile(FileObjects.scan(Nested.class)).success);
+        assertTrue(javac(classes, sources).compile(FileObjects.scan(Nested.class)).success);
     }
-    
+
     @Introspect
     static class Nested {
-        
+
     }
-    
-    
+
+
     @Test
     void scan_element() {
-        assertTrue(javac().compile(FileObjects.scan(FileObjectsTest.class)).success);
+        assertTrue(javac(classes, sources).compile(FileObjects.scan(FileObjectsTest.class)).success);
     }
-    
+
     @Test
     void ofLines_varargs() {
-        assertTrue(javac().compile(ofLines("Dummy", new String[] {"class Dummy {}"})).success);
+        assertTrue(javac(classes, sources).compile(ofLines("Dummy", new String[] {"class Dummy {}"})).success);
     }
-    
+
     @Test
     void ofLines_iterable() {
-        assertTrue(javac().compile(ofLines("Dummy", List.of("class Dummy {}"))).success);
+        assertTrue(javac(classes, sources).compile(ofLines("Dummy", List.of("class Dummy {}"))).success);
     }
     
     
@@ -105,10 +111,15 @@ class FileObjectsTest {
 
 @Introspect("FileObjectsTest")
 class FileObjectsIntrospectTest {
-    
+
+    @TempDir
+    File classes;
+    @TempDir
+    File sources;
+
     @Test
     void scan_other_top_level_class() {
-        assertTrue(javac().compile(FileObjects.scan(FileObjectsIntrospectTest.class)).success);
+        assertTrue(javac(classes, sources).compile(FileObjects.scan(FileObjectsIntrospectTest.class)).success);
     }
     
 }

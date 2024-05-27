@@ -61,7 +61,7 @@ public class ToolsExtension extends Daemon implements ArgumentsProvider, Annotat
     }
     
     @Override
-    public Stream<? extends Arguments> provideArguments(ExtensionContext context) throws Exception {
+    public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
         var builder = Stream.<Arguments>builder();
         for (var group : source.groups()) {
             var elements = compiler(context).environment().labels.group(group);
@@ -100,7 +100,7 @@ public class ToolsExtension extends Daemon implements ArgumentsProvider, Annotat
     
     
     @Override
-    Object create(Constructor constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
+    Object create(Constructor<?> constructor, Environment environment) throws ParameterResolutionException, TestInstantiationException {
         var types = constructor.getParameterTypes();
         var parameters = new Object[types.length];
         

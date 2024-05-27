@@ -29,47 +29,16 @@ import java.nio.charset.Charset;
 import javax.tools.*;
 
 /**
- * An immutable {@code SimpleJavaFileObject}.
- */
-abstract class ImmutableFileObject extends SimpleJavaFileObject {
-    
-    /**
-     * The timestamp at which this {@code ImmutableFileObject} was created.
-     */
-    final long timestamp = System.currentTimeMillis();
-    
-    /**
-     * Creates an {@code ImmutableFileObject} with the given URI and kind.
-     * 
-     * @param uri the URI
-     * @param kind the kind
-     */
-    ImmutableFileObject(URI uri, JavaFileObject.Kind kind) {
-        super(uri, kind);
-    }
-    
-    @Override
-    public abstract InputStream openInputStream();
-
-    @Override
-    public abstract Reader openReader(boolean ignoreEncodingErrors);
-    
-    @Override
-    public abstract CharSequence getCharContent(boolean ignoreEncodingErrors);
-    
-}
-
-/**
  * An immutable {@code JavaFileObject} backed by a byte array.
  */
-class ByteFileObject extends ImmutableFileObject {
+class ByteFileObject extends SimpleJavaFileObject {
 
     private final byte[] bytes;
     private String string;
-    
+
     /**
      * Creates a {@code ByteFileObject} with the given parameters.
-     * 
+     *
      * @param uri the URI
      * @param kind the kind
      * @param bytes the backing byte array
@@ -78,7 +47,7 @@ class ByteFileObject extends ImmutableFileObject {
         super(uri, kind);
         this.bytes = bytes;
     }
-    
+
     @Override
     public InputStream openInputStream() {
         return new ByteArrayInputStream(bytes);
@@ -88,22 +57,22 @@ class ByteFileObject extends ImmutableFileObject {
     public Reader openReader(boolean ignoreEncodingErrors) {
         return new StringReader(toString());
     }
-    
+
     @Override
     public CharSequence getCharContent(boolean ignoreEncodingErrors) {
         if (string == null) {
             string =  new String(bytes, Charset.defaultCharset());
         }
-        
+
         return string;
     }
-    
+
 }
 
 /**
  * An immutable {@code JavaFileObject} backed by a string.
  */
-class StringFileObject extends ImmutableFileObject {
+class StringFileObject extends SimpleJavaFileObject {
     
     private final String string;
     private byte[] bytes;

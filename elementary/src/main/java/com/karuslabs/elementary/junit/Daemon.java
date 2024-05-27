@@ -28,16 +28,15 @@ import com.karuslabs.elementary.junit.annotations.*;
 
 import java.lang.reflect.*;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.api.extension.ExtensionContext.*;
-import org.junit.jupiter.api.extension.InvocationInterceptor.Invocation;
+
+import static com.karuslabs.elementary.Compiler.javac;
 
 /**
  * An extension that manages the lifecycle of a compiler.
  */
-abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, AfterAllCallback {
+abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, AfterEachCallback {
     
     private static final String PARALLEL = "junit.jupiter.execution.parallel.enabled";
     private static final String PARALLEL_CLASS_MODE = "junit.jupiter.execution.parallel.mode.classes.default";
@@ -64,8 +63,12 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
         if (parallel(context)) {
             throw new UnsupportedOperationException("ToolsExtension currently does not support parallel test execution");
         }
-        
-        return create(constructors[0], initialize(context));
+
+        var compiler = compiler(context);
+        var environment = compiler.environment();
+        Tools.environment = environment;
+
+        return create(constructors[0], environment);
     }
     
     /**
@@ -76,30 +79,27 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      * @return an instance of the test class
      * @throws TestInstantiationException if an instance could not be created
      */
-    abstract Object create(Constructor constructor, Environment environment) throws TestInstantiationException;
-    
+    abstract Object create(Constructor<?> constructor, Environment environment) throws TestInstantiationException;
+
     /**
-     * Initializes the environment for a given test class.
-     * 
-     * @param context the extension context
-     * @return a compiler's environment
+     * Returns the current compiler, creating one if it does not already exist.
+     *
+     * @param context the context
+     * @return the compiler
      */
-    Environment initialize(ExtensionContext context) {
-        var compiler = compiler(context);
-        
+    DaemonCompiler compiler(ExtensionContext context) {
+        var compiler = context.getStore(Namespace.create(getClass(), context.getRequiredTestClass())).get(COMPILER, DaemonCompiler.class);
         if (compiler == null) {
-            compiler = DaemonCompiler.of(context.getRequiredTestClass());
+            var outputs = Generations.initialize(context);
+            compiler = DaemonCompiler.of(javac(outputs.getKey(), outputs.getValue()), context.getRequiredTestClass());
             compiler.start();
-            
+
             context.getStore(Namespace.create(getClass(), context.getRequiredTestClass())).put(COMPILER, compiler);
         }
-        
-        var environment = compiler.environment();
-        Tools.environment = environment;
-        
-        return environment;
+
+        return compiler;
     }
-    
+
     /**
      * Determines if parallel test execution is enabled.
      * 
@@ -139,20 +139,17 @@ abstract class Daemon implements TestInstanceFactory, InvocationInterceptor, Aft
      * @param context the context
      */
     @Override
-    public void afterAll(ExtensionContext context) {
-        compiler(context).shutdown();        
-        Tools.environment = null;
+    public void afterEach(ExtensionContext context) {
+        var compiler = context.getStore(Namespace.create(getClass(), context.getRequiredTestClass())).remove(COMPILER, DaemonCompiler.class);
+        if (compiler != null) {
+            compiler.shutdown();
+            Tools.environment = null;
+        }
+
+        Generations.teardown(context);
     }
     
     
-    /**
-     * Returns a cached compiler for the test class.
-     * 
-     * @param context the context
-     * @return a cached instance of the compiler if available; else {@code null}
-     */
-    @Nullable DaemonCompiler compiler(ExtensionContext context) { 
-        return context.getStore(Namespace.create(getClass(), context.getRequiredTestClass())).get(COMPILER, DaemonCompiler.class);
-    }
+
     
 }

@@ -134,13 +134,8 @@ public class Labels implements Iterable<Map.Entry<String, Element>> {
                 if (all.put(annotation.value(), element) != null) {
                     throw new IllegalStateException("An element annotated with @Label(\"" + annotation.value() + "\") already exists. Labels must be unique in a single annotation processing round.");
                 }
-                
-                var group = groups.get(annotation.group());
-                if (group == null) {
-                    group = new HashMap<>();
-                    groups.put(annotation.group(), group);
-                }
-                
+
+                var group = groups.computeIfAbsent(annotation.group(), k -> new HashMap<>());
                 group.put(annotation.value(), element);
             }
         }

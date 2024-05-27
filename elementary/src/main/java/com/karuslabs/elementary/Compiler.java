@@ -23,10 +23,9 @@
  */
 package com.karuslabs.elementary;
 
-import com.karuslabs.elementary.file.MemoryFileManager;
-
 import java.io.*;
 import java.net.URLClassLoader;
+import java.nio.file.*;
 import java.util.*;
 import javax.annotation.processing.Processor;
 import javax.tools.*;
@@ -46,14 +45,22 @@ public class Compiler {
      * 
      * @return a Java compiler
      */
-    public static Compiler javac() {
-        return new Compiler(ToolProvider.getSystemJavaCompiler());
+    public static Compiler javac(File classOutput, File sourceOutput) {
+        return new Compiler(ToolProvider.getSystemJavaCompiler(), classOutput, sourceOutput);
     }
     
     private static final ClassLoader PLATFORM = ClassLoader.getPlatformClassLoader();
     private static final ClassLoader APPLICATION = ClassLoader.getSystemClassLoader();
-    
-    
+
+    /**
+     * The location of the generated classes.
+     */
+    public final File classOutput;
+    /**
+     * The location of the generated sources.
+     */
+    public final File sourceOutput;
+
     private final JavaCompiler compiler;
     private final List<Processor> processors = new ArrayList<>();
     private final List<String> options = new ArrayList<>();
@@ -64,8 +71,10 @@ public class Compiler {
      * 
      * @param compiler the Java compiler
      */
-    Compiler(JavaCompiler compiler) {
+    Compiler(JavaCompiler compiler, File classOutput, File sourceOutput) {
         this.compiler = compiler;
+        this.classOutput = classOutput;
+        this.sourceOutput = sourceOutput;
     }
     
     
@@ -85,19 +94,38 @@ public class Compiler {
      * @param files the Java source files to be compiled
      * @return the results of this compilation
      */
-    public Results compile(Iterable<? extends JavaFileObject> files) {
+    public Results compile(List<JavaFileObject> files) {
         var diagnostics = new Diagnostics();
-        var manager = new MemoryFileManager(compiler.getStandardFileManager(diagnostics, Locale.getDefault(), UTF_8));
-        
+        var manager = compiler.getStandardFileManager(diagnostics, Locale.getDefault(), UTF_8);
+
+        setLocation(manager, StandardLocation.CLASS_OUTPUT, List.of(classOutput));
+        setLocation(manager, StandardLocation.SOURCE_OUTPUT, List.of(sourceOutput));
         if (classpath != null) {
             setLocation(manager, StandardLocation.CLASS_PATH, classpath);
         }
         
         var task = compiler.getTask(null, manager, diagnostics, options, null, files);
         task.setProcessors(processors);
+
         var success = task.call();
-        
-        return new Results(manager.outputFiles(), manager.generatedSources(), diagnostics, success);
+        var generatedSources = new ArrayList<JavaFileObject>();
+
+        try {
+            var outputs = new ArrayList<File>();
+            for (var file : manager.getLocation(StandardLocation.SOURCE_OUTPUT)) {
+                Files.walk(file.toPath())
+                    .filter(Files::isRegularFile)
+                    .map(Path::toFile)
+                    .forEach(outputs::add);
+            }
+
+            manager.getJavaFileObjectsFromFiles(outputs).forEach(generatedSources::add);
+
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
+        return new Results(files, generatedSources, diagnostics, success);
     }
     
     /**

@@ -214,9 +214,8 @@ public class FileObjects {
                 return kind;
             }
         }
-        
-        
-        return null; // Will never occur
+
+        throw new IllegalStateException("This should never happen.");
     }
     
 }

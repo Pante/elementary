@@ -25,9 +25,7 @@ package example;
 
 import com.karuslabs.elementary.Results;
 import com.karuslabs.elementary.junit.JavacExtension;
-import com.karuslabs.elementary.junit.annotations.Classpath;
-import com.karuslabs.elementary.junit.annotations.Options;
-import com.karuslabs.elementary.junit.annotations.Processors;
+import com.karuslabs.elementary.junit.annotations.*;
 import com.karuslabs.utilitary.AnnotationProcessor;
 
 import java.util.Set;
@@ -49,11 +47,13 @@ import static org.junit.jupiter.api.Assertions.*;
  * Compiler flags can be configured via the @Options annotation. In this example,
  * we enable the "-Werror" flag which causes the compiler to treat all warnings as
  * errors.
+ *
+ * The location of generated classes and source files can be configured via the @Generation annotation.
  * 
  * We can specify annotation processors to be called during compilation via the
  * @Processors annotation.
  * 
- * The @Classpath, @Inline, @Options and @Processors annotations obey the same
+ * The @Classpath, @Generation, @Inline, @Options and @Processors annotations obey the same
  * variable scoping rules as Java. Annotations declared on the test class is applied
  * for all tests inside the annotated test class. On the other hand, annotations
  * declared on test methods are limited to that specific method.
@@ -64,6 +64,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Options("-Werror")
 @Processors({StringFieldProcessor.class})
 @Classpath("com.karuslabs.elementary.junit.example.ValidCase")
+@Generation(classes = "path/to/generated-classes", sources = "path/to/generated-sources")
 class JavacExtensionExampleTest {
     
     @Test
