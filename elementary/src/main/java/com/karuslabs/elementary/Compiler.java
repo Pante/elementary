@@ -42,6 +42,9 @@ public class Compiler {
     
     /**
      * Creates a Java compiler.
+     *
+     * @param classOutput the location of the generated classes
+     * @param sourceOutput the location of the generated sources
      * 
      * @return a Java compiler
      */

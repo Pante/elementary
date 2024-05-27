@@ -198,8 +198,6 @@
           <links>
             <link>https://checkerframework.org/api/</link>
             <link>https://junit.org/junit5/docs/current/api/</link>
-            <link>https://www.javadoc.io/doc/com.karuslabs/elementary/latest/</link>
-            <link>https://www.javadoc.io/doc/com.karuslabs/utilitary/latest/</link>
           </links>
         </configuration>
         <executions>

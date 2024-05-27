@@ -15,9 +15,9 @@ public @interface Generation {
     String DEFAULT_OUTPUT = "${DEFAULT_OUTPUT}";
 
     /**
-     * Whether to retain the generated classes & sources after each run. Defaults to false.
+     * Whether to retain the generated classes and sources after each run. Defaults to false.
      *
-     * @return true if the generated classes & sources should be retained
+     * @return true if the generated classes and sources should be retained
      */
     boolean retain() default false;
 
